@@ -1,0 +1,19 @@
+Buyer: completely free
+Seller:
+	+ Sales within the US:
+	    2.9% plus $0.30 per transaction.
+	+ Discounted Merchant Rate:
+            As low as 2.2% based on volume.
+	+ Discounted Rate for Eligible Nonprofits:
+            As low as 2.2% based on volume.
+	+ International Sales:
+            3.9% transaction fee plus a fixed fee
+            based on currency received.
+	+ PayPal Here card reader:
+            2.7% when you swipe a card. 3.5% plus
+            $0.15 per transaction when you type in
+            a card number.
+
+Reference:
+https://www.paypal.com/webapps/mpp/paypal-fees
+https://www.paypal.com/us/webapps/mpp/merchant-fees
