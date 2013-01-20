@@ -3,10 +3,8 @@ package vn.edu.fpt.capstone.busReservation.action;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
-import org.apache.struts2.interceptor.ServletResponseAware;
 import org.apache.struts2.interceptor.SessionAware;
 
 import urn.ebay.api.PayPalAPI.PayPalAPIInterfaceServiceService;
@@ -29,7 +27,6 @@ public class TestPayAction extends ActionSupport implements ServletRequestAware,
 	private static final long serialVersionUID = 5962554617409673584L;
 	
 	private HttpServletRequest request;
-	private HttpServletResponse response;
 	private Map<String, Object> session;
 	private String amount;
 	private String redirectUrl;
@@ -98,15 +95,10 @@ public class TestPayAction extends ActionSupport implements ServletRequestAware,
         return SUCCESS;
     }
 
-	public void setServletResponse(HttpServletResponse response) {
-		this.response = response;
-	}
-
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
 	}
 
-	@Override
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
 	}

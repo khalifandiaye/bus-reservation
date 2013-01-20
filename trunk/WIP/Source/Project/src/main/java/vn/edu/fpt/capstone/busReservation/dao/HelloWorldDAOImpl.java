@@ -1,24 +1,19 @@
 package vn.edu.fpt.capstone.busReservation.dao;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 public class HelloWorldDAOImpl implements HelloWorldDAO {
-	private static Log log = LogFactory.getLog(HelloWorldDAOImpl.class);
+//	private static Log log = LogFactory.getLog(HelloWorldDAOImpl.class);
 	/**
 	 * The session factory, mainly for getting current session
 	 */
-	private SessionFactory sessionFactory;
+//	private SessionFactory sessionFactory;
 
 	/**
 	 * @param sessionFactory the sessionFactory to set
 	 */
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
+//	public void setSessionFactory(SessionFactory sessionFactory) {
+//		this.sessionFactory = sessionFactory;
+//	}
 
 	public void doNothing() {
 		/*Session session = null;
@@ -44,16 +39,16 @@ public class HelloWorldDAOImpl implements HelloWorldDAO {
 	 * @param session
 	 *            the active session
 	 */
-	private void exceptionHandling(HibernateException e, Session session) {
-		try {
-			if (session.getTransaction().isActive()) {
-				log.debug("Trying to rollback database transaction after exception");
-				session.getTransaction().rollback();
-			}
-		} catch (Throwable rbEx) {
-			log.error("Could not rollback transaction after exception!", rbEx);
-		}
-		throw e;
-	}
+//	private void exceptionHandling(HibernateException e, Session session) {
+//		try {
+//			if (session.getTransaction().isActive()) {
+//				log.debug("Trying to rollback database transaction after exception");
+//				session.getTransaction().rollback();
+//			}
+//		} catch (Throwable rbEx) {
+//			log.error("Could not rollback transaction after exception!", rbEx);
+//		}
+//		throw e;
+//	}
 
 }
