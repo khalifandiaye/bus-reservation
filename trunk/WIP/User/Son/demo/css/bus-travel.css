@@ -1,0 +1,61 @@
+html{
+    background: url("../img/background.png") repeat;
+}
+body{
+    background: url("../img/background-top-shadow.png") repeat-x;
+    font-family: Arial;
+}
+.radio{
+    padding-left: 0px;
+}
+#wrapper{
+    padding-bottom: 20px;
+}
+#container{
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 15px;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 5px;
+}
+.bus-travel-logo{
+    border: 1px solid red;
+    width: 300px;
+    height: 100px;
+    color: red;
+    text-align: center;
+    line-height: 100px;
+    margin-bottom: 10px;
+}
+.left-col{
+    float: left;
+}
+.promotion-wapper{
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+.bus-from{
+    font-size: 22px;
+}
+.bus-to{
+    font-size: 20px;
+    color: #FE5815;
+}
+.bus-price{
+    color: #bbb;
+}
+.bus-promotion{
+    font-weight: bold;
+    padding: 10px;
+}
+.ads-wrapper{
+    padding-top: 15px;
+}
+.ads{
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    color: red;
+    border: 1px solid red;
+}

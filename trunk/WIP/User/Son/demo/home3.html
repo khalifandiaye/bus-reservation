@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Travel</title>
+    <!-- Fonts -->
+    <link href = 'http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,800' rel = 'stylesheet' type = 'text/css'>
+    <!-- CSS Stylesheets -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        function showMore(){
+            $("#radio-ticket,#select-pas,#input-depart,#input-return,#select-bus-type,#guide-booking").slideToggle(500);
+        }
+    </script>
+</head>
+<body>
+<!-- Start header -->
+<header class="header">
+    <div class="container">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="brand-wrapper">
+                    <a class="brand" href="index.html"><img src="images/Coach-logo.png" alt="" style="background:rgb(34, 170, 238);border-radius: 23px;"> TRAVEL<span>BUS</span></a>
+                </div>
+                <ul class="nav">
+                    <li class="active"><a href="#">TRANG CHỦ</a></li>
+                    <li><a href="#">ĐẶT VÉ</a></li>
+                    <li><a href="#">VỀ CHÚNG TÔI</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">TÀI KHOẢN <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="blog_1.html">Đăng Nhập</a></li>
+                            <li><a href="blog_2.html">Đăng Kí</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- End header -->
+<!-- Start slider -->
+<section class="slider-search" >
+    <div class="container">
+        <div class="slider span8" style="margin-left: 0px;">
+            <div class="well" id="guide-booking">
+                <img src="images/guide.png" alt="" >
+            </div>
+            <div class="well">
+                <div id="myCarousel" class="carousel slide">
+                    <div class="carousel-inner">
+                        <div class="active item">
+                            <img src="http://wbpreview.com/previews/WB03P6MDJ/images/slides/slide_3.jpg" />
+                        </div>
+                        <div class="item">
+                            <img src="http://wbpreview.com/previews/WB03P6MDJ/images/slides/slide_1.jpg" />
+                        </div>
+                    </div>
+                    <!-- Carousel nav -->
+                    <a class="carousel-control left" href="#myCarousel" data-slide="prev"><i class="icon-chevron-left"></i></a>
+                    <a class="carousel-control right" href="#myCarousel" data-slide="next"><i class="icon-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="search span4 ">
+            <form class="well">
+                <fieldset>
+                    <legend>ĐẶT VÉ </legend>
+                    <div class="controls controls-row" id="radio-ticket">
+                        <label>Loại vé</label>
+                        <div class="radio-ticket-type">
+                            <label class="radio">
+                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                                Vé khứ hồi
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                                Vé một chiều
+                            </label>
+                        </div>
+                    </div>
+                    <div class="controls controls-row">
+                        <label>Trạm khởi hành</label>
+                        <select>
+                            <option>Ho Chi Minh City</option>
+                            <option>Bien Hoa City</option>
+                        </select>
+                    </div>
+                    <div class="controls controls-row">
+                        <label>Trạm kết thúc</label>
+                        <select>
+                            <option>Ho Chi Minh City</option>
+                            <option>Bien Hoa City</option>
+                        </select>
+                    </div>
+                    <div class="controls controls-row" id="select-pas">
+                        <label>Số lượng hành khách</label>
+                        <div class="custom-select">
+                            <label>Người Lớn</label>
+                            <select>
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                            </select>
+                        </div>
+                        <div class="custom-select">
+                            <label>Trẻ em</label>
+                            <select>
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="controls controls-row" id="input-depart">
+                        <label>Ngày đi</label>
+                        <input type="text" value="01-01-2013" id="dp1">
+                    </div>
+                    <div class="controls controls-row" id="input-return">
+                        <label>Ngày về</label>
+                        <input type="text" value="01-01-2013" id="dp2">
+                    </div>
+                    <div class="controls controls-row" id="select-bus-type">
+                        <label>Loại xe bus</label>
+                        <select>
+                            <option>Type 1</option>
+                            <option>Type 2</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="pull-right btn btn-large" style="width: 100%;margin-top: 9px;">Đặt Vé</button>
+                    <a id="btn-change" href="#" class="pull-right" style="color: #fff;padding-top: 15px;" onclick="showMore()">Đặt vé chi tiết</a>
+                </fieldset>
+            </form>
+            <script type="text/javascript">
+                $(function(){
+                    $('#dp1').datepicker();
+                    $('#dp2').datepicker()
+                })
+            </script>
+        </div>
+    </div>
+</section>
+
+
+<!-- End slider -->
+<!-- Start services -->
+<section class="services">
+    <div class="container">
+        <div class="row">
+            <div class="span3">
+                <div class="well well-small">
+                    <h5>Tp.Hồ Chí Minh - Biên Hòa</h5>
+                    <p>Nhân dịp nghỉ tết giá vé tăng 100%</p>
+                    <a class="btn btn-mini" href="#">Đặt vé ngay</a>
+                </div>
+            </div>
+            <div class="span3">
+                <div class="well well-small">
+                    <h5>Biên Hòa - Tp.Hồ Chí Minh</h5>
+                    <p>Nhân dịp tết giảm 50%</p>
+                    <a class="btn btn-mini" href="#">Đặt vé ngay</a>
+                </div>
+            </div>
+            <div class="span3">
+                <div class="well well-small">
+                    <h5>Tp.Hồ Chí Minh - Vũng Tàu</h5>
+                    <p>Nhân dịp nghỉ tết giá vé tăng 100%</p>
+                    <a class="btn btn-mini" href="#">Đặt vé ngay</a>
+                </div>
+            </div>
+            <div class="span3">
+                <div class="well well-small">
+                    <h5>Tp.Hồ Chí Minh - Vũng Tàu</h5>
+                    <p>Nhân dịp nghỉ tết giá vé tăng 100%</p>
+                    <a class="btn btn-mini" href="#">Đặt vé ngay</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End services -->
+<!-- Start footer -->
+<footer class="footer">
+    <div class="container">
+            <div class="about">
+                <h5>Địa chỉ liên hệ</h5>
+                <p>Lorem ipsum dolor sit amet nec, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
+                <dl>
+                    <dt>Văn phòng:</dt>
+                    <dd>
+                        <strong>FPT University</strong><br>
+                    </dd>
+                    <dt>Điện thoại:</dt>
+                    <dd>
+                        +1 0198 432 4567
+                    </dd>
+                    <dt>E-mail:</dt>
+                    <dd><a href="mailto:mail@domain.com">mail@domain.com</a></dd>
+                </dl>
+            </div>
+    </div>
+</footer>
+<!-- End footer -->
+<!-- Start socket -->
+<section class="socket">
+    <div class="container">
+        <div class="row">
+            <div class="span6">
+                <span></span>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End socket -->
+</body>
+</html>
