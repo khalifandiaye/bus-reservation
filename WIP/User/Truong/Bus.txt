@@ -1,0 +1,66 @@
+﻿Station													
+	- ID
+	- Station Name
+	- Status
+
+Segment
+	- ID
+	- Status
+
+Route
+	- ID
+	- Status
+	
+Bus
+	- ID
+	- Biển số
+	- Status
+
+Bus Type
+	- ID
+	- Type Name
+
+Seat Position
+	- ID
+	- Name
+	
+Trip
+	- ID
+	- Dep time
+	- Arr time
+	- Status
+
+Customer
+	- Username
+	- Password
+	- First Name
+	- Last Name
+	- Phone
+	- Email
+	- CMND
+	- Status
+
+Tariff (w)
+	- ValidFrom
+	- Fare
+
+Segment of Route (w)
+
+Reservation (w)
+	- Id
+	- Code
+	- Resv time
+	- Status
+
+Relationship:
+Station 1-n/1-n Segment: arrival/departure
+Route 1-n Segment of route
+Segment 1-n Segment of route
+Trip n-1 Segment of route
+Trip n-1 Bus
+Trip n-n Reservation
+Seat Position n-n Reservation
+Customer 1-n Reservation
+
+
+
