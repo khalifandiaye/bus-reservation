@@ -187,7 +187,11 @@ CREATE TABLE `segment` (
   `startAt` int(11) NOT NULL,
   `endAt` int(11) NOT NULL,
   `status` varchar(10) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `segment_arrive_station_id_idx` (`startAt`),
+  KEY `segment_depart_station_id_idx` (`endAt`),
+  CONSTRAINT `segment_arrive_station_id` FOREIGN KEY (`startAt`) REFERENCES `station` (`id`),
+  CONSTRAINT `segment_depart_station_id` FOREIGN KEY (`endAt`) REFERENCES `station` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -295,4 +299,4 @@ CREATE TABLE `trip_in_reservation` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-20 22:36:31
+-- Dump completed on 2013-01-20 22:44:39
