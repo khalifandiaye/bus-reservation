@@ -5,24 +5,24 @@
 	
 <beans>
 	<!-- define Action here -->
-    <bean id="helloWorldAction" class="vn.edu.fpt.capstone.busReservation.action.HelloWorldAction">
+    <!-- <bean id="helloWorldAction" class="vn.edu.fpt.capstone.busReservation.action.HelloWorldAction">
     	<property name="helloWorldLogic" ref="helloWorldLogic" />
-    </bean>
-    <bean id="indexAction" class="vn.edu.fpt.capstone.busReservation.action.IndexAction">
-    </bean>
-    <bean id="successAction" class="vn.edu.fpt.capstone.busReservation.action.SuccessAction">
+    </bean> -->
+    <!-- <bean id="indexAction" class="vn.edu.fpt.capstone.busReservation.action.IndexAction">
+    </bean> -->
+    <!-- <bean id="successAction" class="vn.edu.fpt.capstone.busReservation.action.SuccessAction">
     </bean>
     <bean id="testPayAction" class="vn.edu.fpt.capstone.busReservation.action.TestPayAction">
     </bean>
     <bean id="testPaySuccessAction" class="vn.edu.fpt.capstone.busReservation.action.TestPayReturnAction">
-    </bean>
+    </bean> -->
     <!-- <bean id="listEmployeeAction" class="vn.edu.fpt.capstone.busReservation.action.EmployeeListAction">
     </bean> -->
-	<!-- define Logic here -->
+	<!-- ****************define Logic here**************** -->
     <bean id="helloWorldLogic" class="vn.edu.fpt.capstone.busReservation.logic.HelloWorldLogicImpl">
     	<property name="helloWorldDAO" ref="helloWorldDAO" />
     </bean>
-	<!-- define DAO here -->
+	<!-- *****************define DAO here***************** -->
     <bean id="helloWorldDAO" class="vn.edu.fpt.capstone.busReservation.dao.HelloWorldDAOImpl">
     	<!-- <property name="sessionFactory" ref="sessionFactory" /> -->
     </bean>

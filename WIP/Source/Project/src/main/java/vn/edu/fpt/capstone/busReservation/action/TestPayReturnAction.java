@@ -108,7 +108,6 @@ public class TestPayReturnAction extends ActionSupport implements SessionAware {
 		return SUCCESS;
 	}
 
-	@Override
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
 	}

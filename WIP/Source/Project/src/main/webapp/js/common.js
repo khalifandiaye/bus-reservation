@@ -17,7 +17,7 @@
 //});
 $(document).ready(function() {
 	$('input[type="submit"]').bind('click.submit', function(event) {
-		$('form').prop("action", event.target.id + '.action');
+		$('form').prop("action", event.target.id + '.html');
 		return true;
 	});
 });

@@ -1,5 +1,7 @@
 package vn.edu.fpt.capstone.busReservation.action;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import vn.edu.fpt.capstone.busReservation.logic.HelloWorldLogic;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -33,16 +35,10 @@ public class HelloWorldAction extends ActionSupport {
 	}
 
 	/**
-	 * @return the helloWorldLogic
-	 */
-	public HelloWorldLogic getHelloWorldLogic() {
-		return helloWorldLogic;
-	}
-
-	/**
 	 * @param helloWorldLogic
 	 *            the helloWorldLogic to set
 	 */
+	@Autowired
 	public void setHelloWorldLogic(HelloWorldLogic helloWorldLogic) {
 		this.helloWorldLogic = helloWorldLogic;
 	}

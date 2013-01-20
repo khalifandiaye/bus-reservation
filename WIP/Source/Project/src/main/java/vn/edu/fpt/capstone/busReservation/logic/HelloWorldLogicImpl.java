@@ -1,5 +1,7 @@
 package vn.edu.fpt.capstone.busReservation.logic;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import vn.edu.fpt.capstone.busReservation.dao.HelloWorldDAO;
 
 /**
