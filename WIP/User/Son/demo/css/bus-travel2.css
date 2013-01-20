@@ -1,0 +1,93 @@
+#container{
+    padding: 30px 20px 30px 20px;
+}
+.radio{
+    padding-left: 0px;
+}
+#wrapper{
+    background: #5391de;
+}
+.bus-travel-logo{
+    border: 1px solid red;
+    width: 300px;
+    height: 100px;
+    color: red;
+    text-align: center;
+    line-height: 100px;
+    margin-bottom: 10px;
+    background: #fff;
+}
+.left-col{
+    float: left;
+}
+.promotion-wapper{
+    padding-bottom: 20px;
+}
+.bus-from{
+    font-size: 22px;
+}
+.bus-to{
+    font-size: 20px;
+    color: #FE5815;
+}
+.bus-price{
+    color: #bbb;
+}
+.bus-promotion{
+    font-weight: bold;
+    padding: 10px;
+    background: #fff;
+}
+.ads-wrapper{
+    padding-top: 15px;
+}
+.ads{
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    color: red;
+    border: 1px solid red;
+    background: #fff;
+}
+.nav-bar{
+    background: #fff;
+}
+.nav-bar .nav-bar-inner .element, .nav-bar .nav-bar-inner a .element{
+    color: #000;
+    font-weight: bold;
+    font-family: arial;
+}
+.nav-bar .nav-bar-inner > ul.menu > li a{
+    color: #000;
+    font-size: 105%;
+}
+a, .link{
+    font-family: arial;
+    font-weight: bold;
+}
+.nav-bar .nav-bar-inner > .divider, .nav-bar .nav-bar-inner > ul.menu > li.divider{
+    border: 1px #000 solid;
+    box-shadow: none;
+}
+.custom-select{
+    width: 150px;
+    float: left;
+}
+.custom-select .helper{
+    float: left;
+    margin-top: 5px;
+}
+.custom-select select{
+    float: left;
+    margin-left: 20px !important;
+    width: 60px;
+}
+.helper-example{
+    color: #00a300;
+    float: right;
+}
+button, .button{
+    font-family: arial;
+    font-size: 105%;
+    font-weight: bold
+}

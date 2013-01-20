@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Bus Travel</title>
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="javascript/pagecontrol.js"></script>
+    <script type="text/javascript" src="javascript/carousel.js"></script>
+    <script type="text/javascript" src="javascript/input-control.js"></script>
+    <script type="text/javascript" src="javascript/buttonset.js"></script>
+    <script type="text/javascript" src="javascript/dropdown.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/modern.css">
+    <link rel="stylesheet" type="text/css" href="css/modern-responsive.css">
+
+    <link rel="stylesheet" type="text/css" href="css/bus-travel2.css">
+</head>
+<body>
+<div id="wrapper" class="page">
+    <div id="header">
+        <div class="bus-travel-logo">
+            LOGO
+        </div>
+        <div class="nav-bar">
+            <div class="nav-bar-inner padding10">
+                <span class="element"><i class="icon-bus"></i>BUS TRAVEL</span>
+                <span class="divider"></span>
+                <ul class="menu">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Booking</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="page-region-content">
+    <div id="container" class="grid">
+        <div class="row" style="width: 960px;margin: 0 auto;">
+            <div class="span7" style="border-bottom: 1px solid #fff">
+                <div class="carousel span7"  style="padding-bottom: 20px;background: #fff; height: 230px; padding: 4px;" data-role="carousel" data-param-effect="slide">
+                    <div class="slides">
+                        <div class="slide image" id="slide1">
+                            <img src="http://hoanglongasia.com/images/xe%20trang2-full.jpg" alt="">
+                        </div>
+                        <div class="slide image" id="slide2">
+                            <img src="http://hoanglongasia.com/images/xe%20trang2-full.jpg" alt="">
+                        </div>
+                        <div class="slide image" id="slide3">
+                            <img src="http://hoanglongasia.com/images/xe%20trang2-full.jpg" alt="">
+                        </div>
+                    </div>
+                    <span class="control left"><i class="icon-arrow-left-3"></i></span>
+                    <span class="control right" style="margin-right: 25px;"><i class="icon-arrow-right-3" ></i></span>
+                </div>
+                <div class="promotion-wapper span7" style="padding-top: 20px;">
+                    <div class="bus-promotion span3">
+                        <div class="bus-from">From Bien Hoa</div>
+                        <div class="bus-to">To Ho Chi Minh</div>
+                        <div class="bus-price">Only 15.000</div>
+                    </div>
+                    <div class="bus-promotion offset1 span3">
+                        <div class="bus-from">From Bien Hoa</div>
+                        <div class="bus-to">To Ho Chi Minh</div>
+                        <div class="bus-price">Only 15.000</div>
+                    </div>
+                </div>
+                <div class="promotion-wapper span7">
+                    <div class="bus-promotion span3">
+                        <div class="bus-from">From Bien Hoa</div>
+                        <div class="bus-to">To Ho Chi Minh</div>
+                        <div class="bus-price">Only 15.000</div>
+                    </div>
+                    <div class="bus-promotion offset1 span3">
+                        <div class="bus-from">From Bien Hoa</div>
+                        <div class="bus-to">To Ho Chi Minh</div>
+                        <div class="bus-price">Only 15.000</div>
+                    </div>
+                </div>
+            </div>
+            <div class="span5" style="background: #fff !important;padding: 20px;">
+                <form>
+                    <label class="input-control radio">
+                        <input type="radio" name="r1">
+                        <span class="helper">One-way</span>
+                    </label>
+                    <label class="input-control radio">
+                        <input type="radio" name="r1">
+                        <span class="helper">Round-trip</span>
+                    </label>
+                    <div class="input-control select">
+                        <span class="helper">From </span><span class="helper-example">Ex: Ho Chi Minh City</span>
+                        <select class="span7">
+                            <option>Ho Chi Minh City</option>
+                            <option>Bien Hoa City</option>
+                        </select>
+                    </div>
+                    <div class="input-control select">
+                        <span class="helper">To</span><span class="helper-example">Ex: Ho Chi Minh City</span>
+                        <select class="span7">
+                            <option>Ho Chi Minh City</option>
+                            <option>Bien Hoa City</option>
+                        </select>
+                    </div>
+                    <div class="input-control">
+                        <div class="helper" style="padding-bottom: 8px;">No.Of Passengers</div>
+                        <div class="input-control custom-select">
+                        <div class="helper">Adult</div>
+                        <select>
+                            <option>0</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                        </select>
+                        </div>
+                        <div class="input-control custom-select">
+                            <div class="helper">Child</div>
+                            <select>
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <label class="helper">Depart</label><span class="helper-example">Ex: 01/01/2013</span>
+                    <div class="input-control text">
+                        <input type="text" />
+                        <button class="helper"></button>
+                    </div>
+                    <label class="helper">Return</label><span class="helper-example">Ex: 01/01/2013</span>
+                    <div class="input-control text">
+                        <input type="text" />
+                        <button class="helper"></button>
+                    </div>
+                    <div class="input-control select">
+                        <span class="helper">Bus Type</span>
+                        <select>
+                            <option>Type 1</option>
+                            <option>Type 2</option>
+                        </select>
+                    </div>
+                    <button class="default" style="float: right;">Search Bus</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div id="footer" style="height: 100px; background: #fff">
+    </div>
+</div>
+</body>
+</html>
