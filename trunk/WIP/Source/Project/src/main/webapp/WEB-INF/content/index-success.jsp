@@ -13,15 +13,18 @@
 </head>
 	<body>
 	<jsp:include page="common/header.jsp" />
-	<jsp:include page="common/menu.jsp" />
-			<div id="page">
-				<div class="post">
-					<h2 class="title">Temporary Section</h2>
-					<p>Name&nbsp;<input type="text" name="name" />
-					<input type="submit" id="hello-world" value="Say Hello World" /><br />
-					<input type="submit" id="testPaypalStart" value="Test paypal" /></p>
-				</div>
+	<form method="post">
+		<section class="body">
+			<div class="container">
+			<div class="well span11">
+				<legend>Temporary Section</legend>
+				<p>Name&nbsp;<input type="text" name="name" />
+				<input type="submit" id="hello-world" value="Say Hello World" /><br />
+				<a href="pay/test-pay.html">Test Pay</a></p>
 			</div>
+			</div>
+		</section>
+	</form>
 	<jsp:include page="common/footer.jsp" />
 	</body>
 </html>
