@@ -57,6 +57,7 @@ DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer` (
+  `id` int(11) NOT NULL,
   `username` varchar(20) NOT NULL,
   `password` varchar(20) NOT NULL,
   `first_name` varchar(45) DEFAULT NULL,
@@ -66,7 +67,25 @@ CREATE TABLE `customer` (
   `email` varchar(45) DEFAULT NULL,
   `civil_id` varchar(20) DEFAULT NULL,
   `status` varchar(10) NOT NULL,
-  PRIMARY KEY (`username`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username_UNIQUE` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `employee`
+--
+
+DROP TABLE IF EXISTS `employee`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `employee` (
+  `id` int(11) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(20) NOT NULL,
+  `isAdmin` binary(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username_UNIQUE` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -82,26 +101,10 @@ CREATE TABLE `payment` (
   `reservation_id` int(11) NOT NULL,
   `pay_amount` double NOT NULL,
   `service_fee` double NOT NULL,
-  `payment_method_id` int(11) NOT NULL,
+  `payment_method_id` varchar(10) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `payment_payment_method_id_idx` (`payment_method_id`),
   KEY `payment_reservation_id_idx` (`reservation_id`),
-  CONSTRAINT `payment_payment_method_id` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_method` (`id`),
   CONSTRAINT `payment_reservation_id` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `payment_method`
---
-
-DROP TABLE IF EXISTS `payment_method`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `payment_method` (
-  `id` int(11) NOT NULL,
-  `name` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -114,14 +117,14 @@ DROP TABLE IF EXISTS `reservation`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reservation` (
   `id` int(11) NOT NULL,
-  `booker_id` varchar(20) NOT NULL,
+  `booker_id` int(11) NOT NULL,
   `code` varchar(12) DEFAULT NULL,
   `book_time` datetime NOT NULL,
   `status` varchar(10) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
-  KEY `reservation_booker_id` (`booker_id`),
-  CONSTRAINT `reservation_booker_id` FOREIGN KEY (`booker_id`) REFERENCES `customer` (`username`)
+  KEY `reservation_booker_id_idx` (`booker_id`),
+  CONSTRAINT `reservation_booker_id` FOREIGN KEY (`booker_id`) REFERENCES `customer` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -186,6 +189,7 @@ CREATE TABLE `segment` (
   `id` int(11) NOT NULL,
   `startAt` int(11) NOT NULL,
   `endAt` int(11) NOT NULL,
+  `travel_time` time NOT NULL,
   `status` varchar(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `segment_arrive_station_id_idx` (`startAt`),
@@ -299,4 +303,4 @@ CREATE TABLE `trip_in_reservation` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-20 22:44:39
+-- Dump completed on 2013-01-21 10:20:53
