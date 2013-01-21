@@ -1,8 +1,35 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-	<!-- <div id="footer">
-	<p>Copyright © 2013 Unknown Cinema. All rights reserved. Design by <a href="http://www.freecsstemplates.org/">FCT</a>. Photos by <a href="http://fotogrph.com/">fotogrph</a>.</p>
-	</div> -->
-	<!-- end #footer --> 
-	</form>
-</div>
+<!-- Start footer -->
+<footer class="footer">
+    <div class="container">
+            <div class="about">
+                <h5>Địa chỉ liên hệ</h5>
+                <p>Lorem ipsum dolor sit amet nec, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
+                <dl>
+                    <dt>Văn phòng:</dt>
+                    <dd>
+                        <strong>FPT University</strong><br>
+                    </dd>
+                    <dt>Điện thoại:</dt>
+                    <dd>
+                        +1 0198 432 4567
+                    </dd>
+                    <dt>E-mail:</dt>
+                    <dd><a href="mailto:mail@domain.com">mail@domain.com</a></dd>
+                </dl>
+            </div>
+    </div>
+</footer>
+<!-- End footer -->
+<!-- Start socket -->
+<section class="socket">
+    <div class="container">
+        <div class="row">
+            <div class="span6">
+                <span></span>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End socket -->

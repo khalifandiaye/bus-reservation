@@ -12,14 +12,16 @@
 </head>
 <body>
 	<jsp:include page="common/header.jsp" />
-	<jsp:include page="common/menu.jsp" />
-	<div id="page">
-		<div class="post">
-			<h2 class="title">Hello World</h2>
-			Attribute: <%=request.getAttribute("name") %>
+	<form method="post">
+		<section class="body">
+			<div class="container">
+			<legend>Hello World</legend>
+			Attribute: <%=request.getAttribute("name") %><br/>
+			Parameter: <%=request.getParameter("name") %>
 			<p>Hello ${name}</p>
-		</div>
-	</div>
+			</div>
+		</section>
+	</form>
 	<jsp:include page="common/footer.jsp" />
 </body>
 </html>
