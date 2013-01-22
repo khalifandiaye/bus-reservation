@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Travel</title>
+    <!-- Fonts -->
+    <link href = 'http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,800' rel = 'stylesheet' type = 'text/css'>
+    <!-- CSS Stylesheets -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        function showMore(){
+            $("#radio-ticket,#select-pas,#input-depart,#input-return,#select-bus-type,#guide-booking").slideToggle(500);
+        }
+       
+    </script>
+</head>
+<body>
+<!-- Start header -->
+<header class="header">
+    <div class="container">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="brand-wrapper">
+                    <a class="brand" href="index.html"><img src="images/Coach-logo.png" alt="" style="background:rgb(34, 170, 238);border-radius: 23px;"> TRAVEL<span>BUS</span></a>
+                </div>
+                <ul class="nav">
+                    <li class="active"><a href="#">TRANG CHỦ</a></li>
+                    <li><a href="#">ĐẶT VÉ</a></li>
+                    <li><a href="#">VỀ CHÚNG TÔI</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">TÀI KHOẢN <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="blog_1.html">Đăng Nhập</a></li>
+                            <li><a href="blog_2.html">Đăng Kí</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- End header -->
+<!-- Start small nav -->
+<section class="small-nav">
+    <div class="container">
+        <div class="nav-step-wrapper">
+            <div class="nav-step nav-done">
+                <span class="nav-step-num">1</span>
+                <div class="nav-step-header">Bước 1:</div>
+                <div class="nav-step-des">Chọn xe</div>
+            </div>
+            <div class="nav-step nav-in-progress" style="margin-left: 100px;">
+                <span class="nav-step-num">2</span>
+                <div class="nav-step-header">Bước 2:</div>
+                <div class="nav-step-des">Chọn ghế</div>
+            </div>
+            <div class="nav-step nav-undone" style="margin-left: 100px;">
+                <span class="nav-step-num">3</span>
+                <div class="nav-step-header">Bước 3:</div>
+                <div class="nav-step-des">Điền thông tin</div>
+            </div>
+            <div class="nav-step nav-undone" style="margin-left: 100px;">
+                <span class="nav-step-num">4</span>
+                <div class="nav-step-header">Bước 4:</div>
+                <div class="nav-step-des">Thanh Toán</div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End small nav -->
+<!-- Start Boooking bus seat -->
+<setion class="booking-bus-seat">
+    <div class="container">
+        <div class="span8 seat-map-wrapper" style="margin-left: 0px;">
+            <div class="seat-map well">
+                <img src="images/bus-seat-map.png" alt="" class="seat-map-img">
+            </div>
+        </div>
+        <div class="span4 booking-wrapper">
+            <form class="booking well well-custom">
+                <fieldset>
+                    <legend>Chọn Ghế</legend>
+                    <div>Bạn đã chọn 0 trên tổng số 5 ghế được chọn</div>
+                    <button class="btn btn-large" style="width: 100%;margin-top: 9px;">Thanh Toán</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</setion>
+<!-- End Booking bus seat -->
+<!-- Start footer -->
+<footer class="footer">
+    <div class="container">
+            <div class="about">
+                <h5>Địa chỉ liên hệ</h5>
+                <p>Lorem ipsum dolor sit amet nec, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
+                <dl>
+                    <dt>Văn phòng:</dt>
+                    <dd>
+                        <strong>FPT University</strong><br>
+                    </dd>
+                    <dt>Điện thoại:</dt>
+                    <dd>
+                        +1 0198 432 4567
+                    </dd>
+                    <dt>E-mail:</dt>
+                    <dd><a href="mailto:mail@domain.com">mail@domain.com</a></dd>
+                </dl>
+            </div>
+    </div>
+</footer>
+<!-- End footer -->
+<!-- Start socket -->
+<section class="socket">
+    <div class="container">
+        <div class="row">
+            <div class="span6">
+                <span></span>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End socket -->
+</body>
+</html>
