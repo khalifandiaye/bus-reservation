@@ -36,6 +36,26 @@ CREATE TABLE `bus` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `bus_status`
+--
+
+DROP TABLE IF EXISTS `bus_status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bus_status` (
+  `id` int(11) NOT NULL,
+  `bus_id` int(11) NOT NULL,
+  `status` varchar(20) NOT NULL,
+  `fromDate` datetime NOT NULL,
+  `toDate` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `bus_status_unique_key` (`bus_id`,`fromDate`),
+  KEY `bus_status_bus_id_idx` (`bus_id`),
+  CONSTRAINT `bus_status_bus_id` FOREIGN KEY (`bus_id`) REFERENCES `bus` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `bus_type`
 --
 
@@ -303,4 +323,4 @@ CREATE TABLE `trip_in_reservation` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-21 10:20:53
+-- Dump completed on 2013-01-22  9:45:45
