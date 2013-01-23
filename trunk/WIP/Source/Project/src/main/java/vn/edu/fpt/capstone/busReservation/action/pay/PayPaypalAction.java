@@ -76,8 +76,6 @@ public class PayPaypalAction extends ActionSupport implements
 		PaymentDetailsType paymentDetails = null;
 		List<PaymentDetailsItemType> items = null;
 		PaymentDetailsItemType item = null;
-		// must use BigDecimal to calculate precisely
-		BigDecimal totalAmount = null;
 
 		reservationInfo = (ReservationInfo) session.get("reservationInfo");
 		checkoutRequest = new SetExpressCheckoutRequestType();
@@ -98,20 +96,24 @@ public class PayPaypalAction extends ActionSupport implements
 		item = new PaymentDetailsItemType();
 		item.setName("Ticket");
 		item.setQuantity(Integer.parseInt(reservationInfo.getQuantity()));
-		item.setAmount(new BasicAmountType(CurrencyCodeType
-				.fromValue(reservationInfo.getCurrency()), reservationInfo
-				.getBasePrice()));
+		item.setAmount(new BasicAmountType(CurrencyCodeType.USD,
+				reservationInfo.getBasePriceInUSD()));
+		item.setItemCategory(ItemCategoryType.DIGITAL);
+		items.add(item);
+		item = new PaymentDetailsItemType();
+		item.setName("Fee");
+		item.setQuantity(1);
+		item.setAmount(new BasicAmountType(CurrencyCodeType.USD,
+				reservationInfo.getTransactionFeeInUSD()));
 		item.setItemCategory(ItemCategoryType.DIGITAL);
 		items.add(item);
 		paymentDetails.setPaymentDetailsItem(items);
 		paymentDetailsList.add(paymentDetails);
 		details.setPaymentDetails(paymentDetailsList);
 		// set total amount
-		totalAmount = new BigDecimal(reservationInfo.getBasePrice());
-		totalAmount = totalAmount.multiply(new BigDecimal(reservationInfo.getQuantity()));
 		orderTotal = new BasicAmountType();
 		orderTotal.setCurrencyID(CurrencyCodeType.USD);
-		orderTotal.setValue(totalAmount.toString());
+		orderTotal.setValue(reservationInfo.getTotalAmountInUSD());
 		details.setOrderTotal(orderTotal);
 		details.setPaymentAction(PaymentActionCodeType.SALE);
 		// set details to request
