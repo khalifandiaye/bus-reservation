@@ -30,7 +30,12 @@
 				<label>Số ghế</label>
 				<span><s:property value="reservationInfo.seatNumbers" /></span>
 				<label>Giá vé</label>
-				<span><s:property value="reservationInfo.currency" /> <s:property value="reservationInfo.amount" /></span>
+				<span><s:property value="reservationInfo.basePrice" /> <s:property value="reservationInfo.currency" /></span>
+				<label>Phí thanh toán trực tuyến</label>
+				<span><s:property value="reservationInfo.transactionFee" /> <s:property value="reservationInfo.currency" /></span>
+				<label>Thành tiền</label>
+				<span><s:property value="reservationInfo.totalAmount" /> <s:property value="reservationInfo.currency" /><br />
+				= $<s:property value="reservationInfo.totalAmountInUSD" /></span>
 				</div>
 				<input class="paypal_checkout" type="submit" id="pay-paypal" value="" />
 			</div>

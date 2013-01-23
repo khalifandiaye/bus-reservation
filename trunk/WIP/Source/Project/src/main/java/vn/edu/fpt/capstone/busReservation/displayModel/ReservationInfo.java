@@ -19,12 +19,34 @@ public class ReservationInfo implements Serializable {
 	private String departureDate;
 	private String arrivalDate;
 	private String seatNumbers;
-	// number of tickets
+	/**
+	 * number of tickets
+	 */
 	private String quantity;
-	// price of each ticket
-	private String amount;
-	// price tag currency
+	/**
+	 * base price of each ticket
+	 */
+	private String basePrice;
+	/**
+	 * online transaction fee
+	 */
+	private String transactionFee;
+	/**
+	 * total amount that must be paid
+	 */
+	private String totalAmount;
+	/**
+	 * currency in price list
+	 */
 	private String currency;
+	/**
+	 * conversion rate from USD
+	 */
+	private String conversionRate;
+	/**
+	 * total amount that must be paid in USD
+	 */
+	private String totalAmountInUSD;
 	/**
 	 * @return the routeName
 	 */
@@ -98,16 +120,40 @@ public class ReservationInfo implements Serializable {
 		this.quantity = quantity;
 	}
 	/**
-	 * @return the amount
+	 * @return the basePrice
 	 */
-	public String getAmount() {
-		return amount;
+	public String getBasePrice() {
+		return basePrice;
 	}
 	/**
-	 * @param amount the amount to set
+	 * @param basePrice the basePrice to set
 	 */
-	public void setAmount(String amount) {
-		this.amount = amount;
+	public void setBasePrice(String basePrice) {
+		this.basePrice = basePrice;
+	}
+	/**
+	 * @return the transactionFee
+	 */
+	public String getTransactionFee() {
+		return transactionFee;
+	}
+	/**
+	 * @param transactionFee the transactionFee to set
+	 */
+	public void setTransactionFee(String transactionFee) {
+		this.transactionFee = transactionFee;
+	}
+	/**
+	 * @return the totalAmount
+	 */
+	public String getTotalAmount() {
+		return totalAmount;
+	}
+	/**
+	 * @param totalAmount the totalAmount to set
+	 */
+	public void setTotalAmount(String totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 	/**
 	 * @return the currency
@@ -121,5 +167,28 @@ public class ReservationInfo implements Serializable {
 	public void setCurrency(String currency) {
 		this.currency = currency;
 	}
-	
+	/**
+	 * @return the conversionRate
+	 */
+	public String getConversionRate() {
+		return conversionRate;
+	}
+	/**
+	 * @param conversionRate the conversionRate to set
+	 */
+	public void setConversionRate(String conversionRate) {
+		this.conversionRate = conversionRate;
+	}
+	/**
+	 * @return the totalAmountInUSD
+	 */
+	public String getTotalAmountInUSD() {
+		return totalAmountInUSD;
+	}
+	/**
+	 * @param totalAmountInUSD the totalAmountInUSD to set
+	 */
+	public void setTotalAmountInUSD(String totalAmountInUSD) {
+		this.totalAmountInUSD = totalAmountInUSD;
+	}
 }

@@ -11,9 +11,11 @@ import javax.servlet.ServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StaleObjectStateException;
 
+//unused, for now
 public class HibernateSessionRequestFilter implements Filter {
 	
 	private static Log log = LogFactory.getLog(HibernateSessionRequestFilter.class);
@@ -21,8 +23,6 @@ public class HibernateSessionRequestFilter implements Filter {
     private SessionFactory sessionFactory;
     
 	public void init(FilterConfig filterConfig) throws ServletException {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void doFilter(ServletRequest request, ServletResponse response,
@@ -36,8 +36,12 @@ public class HibernateSessionRequestFilter implements Filter {
             chain.doFilter(request, response);
  
             // Commit and cleanup
-            log.debug("Committing the database transaction");
-            sessionFactory.getCurrentSession().getTransaction().commit();
+        	log.debug("Committing the database transaction");
+            if (sessionFactory.getCurrentSession().getTransaction().isActive() && !sessionFactory.getCurrentSession().getTransaction().wasCommitted()) {
+            	sessionFactory.getCurrentSession().getTransaction().commit();
+            } else {
+            	log.debug("The database transaction has been comnitted somewhere else");
+            }
  
         } catch (StaleObjectStateException staleEx) {
             log.error("This interceptor does not implement optimistic concurrency control!");
@@ -74,8 +78,6 @@ public class HibernateSessionRequestFilter implements Filter {
 	}
 
 	public void destroy() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

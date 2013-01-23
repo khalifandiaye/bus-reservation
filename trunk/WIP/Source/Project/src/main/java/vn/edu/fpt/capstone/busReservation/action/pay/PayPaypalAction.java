@@ -100,14 +100,14 @@ public class PayPaypalAction extends ActionSupport implements
 		item.setQuantity(Integer.parseInt(reservationInfo.getQuantity()));
 		item.setAmount(new BasicAmountType(CurrencyCodeType
 				.fromValue(reservationInfo.getCurrency()), reservationInfo
-				.getAmount()));
+				.getBasePrice()));
 		item.setItemCategory(ItemCategoryType.DIGITAL);
 		items.add(item);
 		paymentDetails.setPaymentDetailsItem(items);
 		paymentDetailsList.add(paymentDetails);
 		details.setPaymentDetails(paymentDetailsList);
 		// set total amount
-		totalAmount = new BigDecimal(reservationInfo.getAmount());
+		totalAmount = new BigDecimal(reservationInfo.getBasePrice());
 		totalAmount = totalAmount.multiply(new BigDecimal(reservationInfo.getQuantity()));
 		orderTotal = new BasicAmountType();
 		orderTotal.setCurrencyID(CurrencyCodeType.USD);

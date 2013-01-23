@@ -642,6 +642,7 @@ fieldset {
 	font-size: 14px;
 	font-weight: bold;
 	min-width: 180px;
+	cursor: default;
 }
 
 .labeled_list span {

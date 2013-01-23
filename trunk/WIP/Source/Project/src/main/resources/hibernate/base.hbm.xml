@@ -3,159 +3,140 @@
       "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
           "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping package="vn.edu.fpt.ad.project">
-<!-- 	<class name="vn.edu.fpt.ad.project.model.Movie" table="movie"> -->
-<!-- 		<id name="id" unsaved-value="0" type="integer"> -->
-<!-- 			<generator class="native" /> -->
-<!-- 		</id> -->
-<!-- 		<property name="name" type="string" not-null="true" /> -->
-<!-- 		<property name="director" type="string" not-null="false" /> -->
-<!-- 		<property name="cast" type="string" not-null="false" /> -->
-<!-- 		<property name="deleted" type="boolean" not-null="true" /> -->
-<!-- 	</class> -->
-
-<!-- 	<class name="vn.edu.fpt.ad.project.model.Theater" table="theater"> -->
-<!-- 		<id name="id" unsaved-value="0" type="integer"> -->
-<!-- 			<generator class="native" /> -->
-<!-- 		</id> -->
-<!-- 		<property name="name" type="string" not-null="true" /> -->
-<!-- 		<property name="address" type="string" not-null="false" /> -->
-<!-- 		<property name="deleted" type="boolean" not-null="true" /> -->
-<!-- 	</class> -->
-
-<!-- 	<class name="vn.edu.fpt.ad.project.model.DayOfWeek" table="day_of_week"> -->
-<!-- 		<id name="id" unsaved-value="0" type="integer"> -->
-<!-- 			<generator class="native" /> -->
-<!-- 		</id> -->
-<!-- 		<property name="name" type="string" not-null="true" /> -->
-<!-- 	</class> -->
-
-<!-- 	<class name="vn.edu.fpt.ad.project.model.TimeSlot" table="time_slot"> -->
-<!-- 		<id name="id" unsaved-value="0" type="integer"> -->
-<!-- 			<generator class="native" /> -->
-<!-- 		</id> -->
-<!-- 		<property name="startTime" column="start_time" type="time" -->
-<!-- 			not-null="true" /> -->
-<!-- 		<property name="deleted" type="boolean" not-null="true" /> -->
-<!-- 	</class> -->
-
-<!-- 	<class name="vn.edu.fpt.ad.project.model.Show" table="`show`"> -->
-<!-- 		<id name="id" unsaved-value="0" type="integer"> -->
-<!-- 			<generator class="native" /> -->
-<!-- 		</id> -->
-<!-- 		<property name="showDate" column="date" type="date" not-null="true" /> -->
-<!-- 		<property name="deleted" type="boolean" not-null="true" /> -->
-<!-- 		<many-to-one name="movie" column="movie_id" /> -->
-<!-- 		<many-to-one name="theater" column="theater_id" /> -->
-<!-- 		<many-to-one name="timeSlot" column="time_slot_id" /> -->
-<!-- 		<many-to-one name="dayOfWeek" column="day_of_week_id" /> -->
-<!-- 		<bag name="ticketTypes" table="show_ticket_type"> -->
-<!-- 			<key column="show_id" /> -->
-<!-- 			<many-to-many class="vn.edu.fpt.ad.project.model.TicketType" -->
-<!-- 				column="ticket_type_id" /> -->
-<!-- 		</bag> -->
-<!-- 	</class> -->
-
-<!-- 	<class name="vn.edu.fpt.ad.project.model.pojo.Booker" table="booker"> -->
-<!-- 		<id name="id" unsaved-value="0" type="integer"> -->
-<!-- 			<generator class="native" /> -->
-<!-- 		</id> -->
-<!-- 		<property name="deleted" type="boolean" not-null="true" /> -->
-<!-- 		<joined-subclass name="vn.edu.fpt.ad.project.model.Member" table="member" > -->
-<!-- 			<key column="id" /> -->
-<!-- 			<property name="civilId" column="civil_id" type="string" not-null="true"/> -->
-<!-- 			<property name="name" type="string" not-null="true" /> -->
-<!-- 			<property name="point" type="string" not-null="true" /> -->
-<!-- 		</joined-subclass> -->
-<!-- 		<joined-subclass name="vn.edu.fpt.ad.project.model.Guest" table="guest" > -->
-<!-- 			<key column="id" /> -->
-<!-- 			<property name="civilId" column="civil_id" type="integer" not-null="true"/> -->
-<!-- 			<property name="ip" type="string" not-null="false" /> -->
-<!-- 		</joined-subclass> -->
-<!-- 		<joined-subclass name="vn.edu.fpt.ad.project.model.Employee" table="employee" > -->
-<!-- 			<key column="id" /> -->
-<!-- 			<property name="name" type="string" not-null="true"/> -->
-<!-- 		</joined-subclass> -->
-<!-- 	</class> -->
-
-<!-- 	<class name="vn.edu.fpt.ad.project.model.PaymentMethod" table="payment_method"> -->
-<!-- 		<id name="id" unsaved-value="0" type="integer"> -->
-<!-- 			<generator class="native" /> -->
-<!-- 		</id> -->
-<!-- 		<property name="name" type="string"	not-null="true" /> -->
-<!-- 		<property name="info" type="string" not-null="false" /> -->
-<!-- 		<property name="deleted" type="boolean" not-null="true" /> -->
-<!-- 	</class> -->
-
-<!-- 	<class name="vn.edu.fpt.ad.project.model.Payment" table="payment"> -->
-<!-- 		<id name="id" unsaved-value="0" type="integer"> -->
-<!-- 			<generator class="native" /> -->
-<!-- 		</id> -->
-<!-- 		<property name="amount" type="double" not-null="true" /> -->
-<!-- 		<many-to-one name="method" column="payment_method_id" not-null="true" /> -->
-<!-- 		<many-to-one name="refund" column="refund_id" unique="true" not-null="false" /> -->
-<!-- 	</class> -->
-
-<!-- 	<class name="vn.edu.fpt.ad.project.model.pojo.SeatBlock" table="seat_block"> -->
-<!-- 		<id name="id" unsaved-value="0" type="integer"> -->
-<!-- 			<generator class="native" /> -->
-<!-- 		</id> -->
-<!-- 		<property name="name" type="string" not-null="true" /> -->
-<!-- 		<property name="position" type="int" not-null="true" /> -->
-<!-- 		<property name="deleted" type="boolean" not-null="true" /> -->
-<!-- 		<many-to-one name="theatre" column="theater_id" not-null="true" /> -->
-<!-- 		<bag name="seats" inverse="true" > -->
-<!-- 			<key column="seat_block_id"/> -->
-<!-- 			<one-to-many class="vn.edu.fpt.ad.project.model.Seat"/> -->
-<!-- 		</bag> -->
-<!-- 	</class> -->
-
-<!-- 	<class name="vn.edu.fpt.ad.project.model.Seat" table="seat"> -->
-<!-- 		<id name="id" unsaved-value="0" type="integer"> -->
-<!-- 			<generator class="native" /> -->
-<!-- 		</id> -->
-<!-- 		<property name="name" type="string" not-null="true" /> -->
-<!-- 		<property name="row" type="int" not-null="true" /> -->
-<!-- 		<property name="column" type="int" not-null="true" /> -->
-<!-- 		<property name="deleted" type="boolean" not-null="true" /> -->
-<!-- 		<many-to-one name="block" column="seat_block_id" not-null="true" /> -->
-<!-- 	</class> -->
-
-<!-- 	<class name="vn.edu.fpt.ad.project.model.TicketType" table="ticket_type"> -->
-<!-- 		<id name="id" unsaved-value="0" type="integer"> -->
-<!-- 			<generator class="native" /> -->
-<!-- 		</id> -->
-<!-- 		<property name="name" type="string" not-null="true" /> -->
-<!-- 		<property name="basePrice" column="base_price" type="double" -->
-<!-- 			not-null="true" /> -->
-<!-- 		<property name="deleted" type="boolean" not-null="true" /> -->
-<!-- 	</class> -->
-
-<!-- 	<class name="vn.edu.fpt.ad.project.model.pojo.Booking" table="booking"> -->
-<!-- 		<id name="id" unsaved-value="0" type="integer"> -->
-<!-- 			<generator class="native" /> -->
-<!-- 		</id> -->
-<!-- 		<property name="bookDate" column="date" type="date" not-null="true" /> -->
-<!-- 		<property name="canceled" type="boolean" not-null="true" /> -->
-<!-- 		<many-to-one name="show" column="show_id" not-null="true" /> -->
-<!-- 		<many-to-one name="booker" column="booker_id" not-null="true" /> -->
-<!-- 		<many-to-one name="payment" column="payment_id" not-null="false" unique="true" /> -->
-<!-- 		<bag name="bookingTicketTypes" table="booking_ticket_type" inverse="true"> -->
-<!-- 			<key column="booking_id" /> -->
-<!-- 			<one-to-many class="vn.edu.fpt.ad.project.model.pojo.BookingTicketType" /> -->
-<!-- 		</bag> -->
-<!-- 		<bag name="seats" table="booking_seat"> -->
-<!-- 			<key column="booking_id" /> -->
-<!-- 			<many-to-many column="seat_id" class="vn.edu.fpt.ad.project.model.Seat" /> -->
-<!-- 		</bag> -->
-<!-- 	</class> -->
-
-<!-- 	<class name="vn.edu.fpt.ad.project.model.pojo.BookingTicketType" table="booking_ticket_type"> -->
-<!-- 		<id name="id" unsaved-value="0" type="integer"> -->
-<!-- 			<generator class="native" /> -->
-<!-- 		</id> -->
-<!-- 		<many-to-one name="booking" column="booking_id" not-null="true" /> -->
-<!-- 		<many-to-one name="ticketType" column="ticket_type_id" not-null="true" /> -->
-<!-- 		<property name="quantity" column="quantity" type="integer" not-null="true" /> -->
-<!-- 	</class> -->
+<hibernate-mapping package="vn.edu.fpt.capstone.busReservation">
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.StationBean" table="station">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string" not-null="true" />
+		<property name="city" type="string" not-null="true" />
+		<property name="status" type="string" not-null="true" />
+	</class>
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean" table="segment">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="travelTime" column="travel_time" type="time" not-null="true" />
+		<property name="status" type="string" not-null="true" />
+		<many-to-one name="startAt" column="start_at" />
+		<many-to-one name="endAt" column="end_at" />
+	</class>
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean" table="route">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string" not-null="true" />
+		<property name="status" type="string" not-null="true" />
+	</class>
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.SegmentInRouteBean" table="segment_in_route">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<many-to-one name="segment" column="segment_id" />
+		<many-to-one name="route" column="route_id" />
+	</class>
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean" table="bus_type">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string" not-null="true" />
+	</class>
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" table="bus">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="plateNumber" column="plate_number" type="string" not-null="true" unique="true" />
+		<many-to-one name="busType" column="bus_type_id" />
+	</class>
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean" table="bus_status">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="busStatus" column="bus_status" type="string" not-null="true" />
+		<property name="fromDate" column="from_date" type="timestamp" not-null="true" />
+		<property name="toDate" column="to_date" type="timestamp" not-null="true" />
+		<property name="status" type="string" not-null="true" />
+		<many-to-one name="bus" column="bus_id" />
+	</class>
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" table="trip">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="departureTime" column="departure_time" type="timestamp" not-null="true" />
+		<property name="arrivalTime" column="arrival_time" type="timestamp" not-null="true" />
+		<property name="status" type="string" not-null="true" />
+		<many-to-one name="busStatus" column="bus_status_id" />
+		<many-to-one name="segmentInRoute" column="segment_in_route_id" />
+		<bag name="reservations" table="trip_in_reservation">
+			<key column="trip_id" />
+			<many-to-many column="reservation_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean" />
+		</bag>
+	</class>
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean" table="tariff">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="validFrom" column="valid_from" type="timestamp" not-null="true" />
+		<property name="fare" type="double" not-null="true" />
+		<many-to-one name="segmentInRoute" column="segment_in_route_id" />
+	</class>
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" table="seat_position">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string" not-null="true" />
+		<many-to-one name="busType" column="bus_type_id" />
+	</class>
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.CustomerBean" table="customer">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="username" type="string" not-null="true" unique="true" />
+		<property name="password" type="string" not-null="true" />
+		<property name="firstName" column="first_name" type="string" not-null="false" />
+		<property name="lastName" column="last_name" type="string" not-null="false" />
+		<property name="phoneNumber" column="phone_number" type="string" not-null="false" />
+		<property name="mobileNumber" column="mobile_number" type="string" not-null="false" />
+		<property name="email" type="string" not-null="false" />
+		<property name="civilId" column="civil_id" type="string" not-null="false" />
+		<property name="status" type="string" not-null="true" />
+	</class>
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean" table="reservation">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="code" type="string" not-null="false" unique="true" />
+		<property name="bookTime" column="book_time" type="timestamp" not-null="true" />
+		<property name="status" type="string" not-null="true" />
+		<many-to-one name="booker" column="booker_id" />
+		<bag name="seatPositions" table="seat_position_in_reservation">
+			<key column="reservation_id" />
+			<many-to-many column="seat_position_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" />
+		</bag>
+		<bag name="trips" inverse="true" table="trip_in_reservation">
+			<key column="reservation_id" />
+			<many-to-many column="trip_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
+		</bag>
+		<bag name="payments" inverse="true">
+			<key column="reservation_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean" />
+		</bag>
+	</class>
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean" table="payment">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="payAmount" column="pay_amount" type="double" not-null="true" />
+		<property name="serviceFee" column="service_fee" type="double" not-null="true" />
+		<property name="paymentMethod" column="payment_method" type="string" not-null="true" />
+		<many-to-one name="reservation" column="reservation_id" />
+	</class>
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.EmployeeBean" table="employee">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="username" type="string" not-null="true" unique="true" />
+		<property name="password" type="string" not-null="true" />
+		<property name="status" type="string" not-null="true" />
+	</class>
 </hibernate-mapping>
