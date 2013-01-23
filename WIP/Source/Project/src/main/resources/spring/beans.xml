@@ -26,5 +26,17 @@
     <bean id="helloWorldDAO" class="vn.edu.fpt.capstone.busReservation.dao.HelloWorldDAOImpl">
     	<!-- <property name="sessionFactory" ref="sessionFactory" /> -->
     </bean>
+    <bean id="stationDAO" class="vn.edu.fpt.capstone.busReservation.dao.StationDAO">
+    	<property name="sessionFactory" ref="sessionFactory" />
+    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.StationBean" />
+    </bean>
+    <bean id="reservationDAO" class="vn.edu.fpt.capstone.busReservation.dao.ReservationDAO">
+    	<property name="sessionFactory" ref="sessionFactory" />
+    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean" />
+    </bean>
+    <bean id="tariffDAO" class="vn.edu.fpt.capstone.busReservation.dao.TariffDAO">
+    	<property name="sessionFactory" ref="sessionFactory" />
+    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean" />
+    </bean>
 </beans>
 
