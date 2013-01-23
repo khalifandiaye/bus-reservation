@@ -55,11 +55,12 @@ DROP TABLE IF EXISTS `bus_status`;
 CREATE TABLE `bus_status` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `bus_id` int(11) NOT NULL,
-  `status` varchar(20) NOT NULL,
-  `fromDate` datetime NOT NULL,
-  `toDate` datetime NOT NULL,
+  `bus_status` varchar(20) NOT NULL,
+  `from_date` datetime NOT NULL,
+  `to_date` datetime NOT NULL,
+  `status` varchar(10) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `bus_status_unique_key` (`bus_id`,`fromDate`),
+  UNIQUE KEY `bus_status_unique_key` (`bus_id`,`from_date`),
   KEY `bus_status_bus_id_idx` (`bus_id`),
   CONSTRAINT `bus_status_bus_id` FOREIGN KEY (`bus_id`) REFERENCES `bus` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
@@ -71,7 +72,7 @@ CREATE TABLE `bus_status` (
 
 LOCK TABLES `bus_status` WRITE;
 /*!40000 ALTER TABLE `bus_status` DISABLE KEYS */;
-INSERT INTO `bus_status` VALUES (1,1,'ontrip','2013-02-28 07:00:00','2013-02-28 08:30:00'),(2,1,'ontrip','2013-02-28 13:30:00','2013-02-28 15:00:00');
+INSERT INTO `bus_status` VALUES (1,1,'ontrip','2013-02-28 07:00:00','2013-02-28 08:30:00',''),(2,1,'ontrip','2013-02-28 13:30:00','2013-02-28 15:00:00','');
 /*!40000 ALTER TABLE `bus_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,7 +171,7 @@ CREATE TABLE `payment` (
   `reservation_id` int(11) NOT NULL,
   `pay_amount` double NOT NULL,
   `service_fee` double NOT NULL,
-  `payment_method_id` varchar(10) NOT NULL,
+  `payment_method` varchar(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `payment_reservation_id_idx` (`reservation_id`),
   CONSTRAINT `payment_reservation_id` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
@@ -305,15 +306,15 @@ DROP TABLE IF EXISTS `segment`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `segment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `startAt` int(11) NOT NULL,
-  `endAt` int(11) NOT NULL,
+  `start_at` int(11) NOT NULL,
+  `end_at` int(11) NOT NULL,
   `travel_time` time NOT NULL,
   `status` varchar(10) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `segment_arrive_station_id_idx` (`startAt`),
-  KEY `segment_depart_station_id_idx` (`endAt`),
-  CONSTRAINT `segment_arrive_station_id` FOREIGN KEY (`startAt`) REFERENCES `station` (`id`),
-  CONSTRAINT `segment_depart_station_id` FOREIGN KEY (`endAt`) REFERENCES `station` (`id`)
+  KEY `segment_arrive_station_id_idx` (`start_at`),
+  KEY `segment_depart_station_id_idx` (`end_at`),
+  CONSTRAINT `segment_arrive_station_id` FOREIGN KEY (`start_at`) REFERENCES `station` (`id`),
+  CONSTRAINT `segment_depart_station_id` FOREIGN KEY (`end_at`) REFERENCES `station` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -481,4 +482,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-23 13:24:39
+-- Dump completed on 2013-01-23 22:34:24
