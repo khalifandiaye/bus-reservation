@@ -5,7 +5,6 @@ package vn.edu.fpt.capstone.busReservation.action.pay;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -72,7 +71,6 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 		BigDecimal fee = null;
 		BigDecimal totalAmount = null;
 		BigDecimal conversionRate = null;
-		BigDecimal totalAmountInUSD = null;
 		ReservationBean reservationBean = null;
 		TripBean[] startEndTrips = null;
 		reservationBean = reservationDAO.getById(1);
@@ -86,35 +84,40 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 				+ startEndTrips[1].getSegmentInRoute().getSegment().getEndAt()
 						.getCity());
 		reservationInfo.setDepartureDate(FormatUtils.formatDate(
-				startEndTrips[0].getDepartureTime(), "EE dd/MM/yyyy hh:mm aa",
-				new Locale("vie", "VN")));
+				startEndTrips[0].getDepartureTime(),
+				"EEEEE dd/MM/yyyy hh:mm aa", new Locale("vi", "VN")));
 		reservationInfo.setArrivalDate(FormatUtils.formatDate(
-				startEndTrips[1].getArrivalTime(), "EE dd/MM/yyyy hh:mm aa",
-				new Locale("vie", "VN")));
+				startEndTrips[1].getArrivalTime(), "EEEEE dd/MM/yyyy hh:mm aa",
+				new Locale("vi", "VN")));
 		reservationInfo.setSeatNumbers(getSeatNumbers(reservationBean
 				.getSeatPositions()));
 		quantity = BigDecimal
 				.valueOf(reservationBean.getSeatPositions().size());
 		reservationInfo.setQuantity(quantity.toString());
 		conversionRate = BigDecimal.valueOf(20000);
+		reservationInfo.setConversionRate(FormatUtils.formatNumber(
+				conversionRate, 0, Locale.US));
 		basePrice = calculateTicketPrice(tariffDAO.getFares(reservationBean))
 				.divide(BigDecimal.valueOf(500), 0, RoundingMode.CEILING)
 				.multiply(BigDecimal.valueOf(500));
-		reservationInfo.setBasePrice(FormatUtils.formatNumber(basePrice, 0,
-				Locale.US));
 		fee = calculateFee(basePrice, quantity, conversionRate).divide(
 				BigDecimal.valueOf(500), 0, RoundingMode.CEILING).multiply(
 				BigDecimal.valueOf(500));
-		reservationInfo.setTransactionFee(FormatUtils.formatNumber(fee, 0,
-				Locale.US));
 		totalAmount = calculateTotal(basePrice, quantity, fee).divide(
 				BigDecimal.valueOf(500), 0, RoundingMode.CEILING).multiply(
 				BigDecimal.valueOf(500));
+		reservationInfo.setBasePrice(FormatUtils.formatNumber(basePrice, 0,
+				Locale.US));
+		reservationInfo.setBasePriceInUSD(FormatUtils.formatNumber(
+				convert(basePrice, conversionRate), 2, Locale.US));
+		reservationInfo.setTransactionFee(FormatUtils.formatNumber(fee, 0,
+				Locale.US));
+		reservationInfo.setTransactionFeeInUSD(FormatUtils.formatNumber(
+				convert(fee, conversionRate), 2, Locale.US));
 		reservationInfo.setTotalAmount(FormatUtils.formatNumber(totalAmount, 0,
 				Locale.US));
-		totalAmountInUSD = convert(totalAmount, conversionRate);
 		reservationInfo.setTotalAmountInUSD(FormatUtils.formatNumber(
-				totalAmountInUSD, 2, Locale.US));
+				convert(totalAmount, conversionRate), 2, Locale.US));
 		session.put("reservationInfo", reservationInfo);
 		return SUCCESS;
 	}

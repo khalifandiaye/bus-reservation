@@ -24,13 +24,25 @@ public class ReservationInfo implements Serializable {
 	 */
 	private String quantity;
 	/**
+	 * conversion rate from USD
+	 */
+	private String conversionRate;
+	/**
 	 * base price of each ticket
 	 */
 	private String basePrice;
 	/**
+	 * base price of each ticket in USD
+	 */
+	private String basePriceInUSD;
+	/**
 	 * online transaction fee
 	 */
 	private String transactionFee;
+	/**
+	 * online transaction fee in USD
+	 */
+	private String transactionFeeInUSD;
 	/**
 	 * total amount that must be paid
 	 */
@@ -39,10 +51,6 @@ public class ReservationInfo implements Serializable {
 	 * currency in price list
 	 */
 	private String currency;
-	/**
-	 * conversion rate from USD
-	 */
-	private String conversionRate;
 	/**
 	 * total amount that must be paid in USD
 	 */
@@ -120,6 +128,18 @@ public class ReservationInfo implements Serializable {
 		this.quantity = quantity;
 	}
 	/**
+	 * @return the conversionRate
+	 */
+	public String getConversionRate() {
+		return conversionRate;
+	}
+	/**
+	 * @param conversionRate the conversionRate to set
+	 */
+	public void setConversionRate(String conversionRate) {
+		this.conversionRate = conversionRate;
+	}
+	/**
 	 * @return the basePrice
 	 */
 	public String getBasePrice() {
@@ -132,6 +152,18 @@ public class ReservationInfo implements Serializable {
 		this.basePrice = basePrice;
 	}
 	/**
+	 * @return the basePriceInUSD
+	 */
+	public String getBasePriceInUSD() {
+		return basePriceInUSD;
+	}
+	/**
+	 * @param basePriceInUSD the basePriceInUSD to set
+	 */
+	public void setBasePriceInUSD(String basePriceInUSD) {
+		this.basePriceInUSD = basePriceInUSD;
+	}
+	/**
 	 * @return the transactionFee
 	 */
 	public String getTransactionFee() {
@@ -142,6 +174,18 @@ public class ReservationInfo implements Serializable {
 	 */
 	public void setTransactionFee(String transactionFee) {
 		this.transactionFee = transactionFee;
+	}
+	/**
+	 * @return the transactionFeeInUSD
+	 */
+	public String getTransactionFeeInUSD() {
+		return transactionFeeInUSD;
+	}
+	/**
+	 * @param transactionFeeInUSD the transactionFeeInUSD to set
+	 */
+	public void setTransactionFeeInUSD(String transactionFeeInUSD) {
+		this.transactionFeeInUSD = transactionFeeInUSD;
 	}
 	/**
 	 * @return the totalAmount
@@ -166,18 +210,6 @@ public class ReservationInfo implements Serializable {
 	 */
 	public void setCurrency(String currency) {
 		this.currency = currency;
-	}
-	/**
-	 * @return the conversionRate
-	 */
-	public String getConversionRate() {
-		return conversionRate;
-	}
-	/**
-	 * @param conversionRate the conversionRate to set
-	 */
-	public void setConversionRate(String conversionRate) {
-		this.conversionRate = conversionRate;
 	}
 	/**
 	 * @return the totalAmountInUSD
