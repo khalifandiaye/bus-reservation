@@ -644,3 +644,27 @@ fieldset{
 .nav-in-progress{
     border: #F57A00 3px solid;
 }
+
+.seat-map-wrapper{
+    overflow: hidden;
+    background: url("../images/bus-seat-map.png") no-repeat;
+    background-size: contain;
+}
+.seat-map-inner{
+    width: 75%;
+    padding-top: 3%;
+    padding-bottom: 4%;
+    padding-left: 4%;
+    overflow: hidden;
+}
+.seat-map-row{
+    width: 100%;
+    clear: both;
+}
+.seat{
+    width: 9%;
+    float: left;
+}
+.seat img{
+    cursor: pointer;
+}
