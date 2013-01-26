@@ -15,6 +15,7 @@
 	<jsp:include page="../common/header.jsp" />
 	<div class="container">
 		<h4>Payment success</h4>
+		Reservation Code: <s:property value="reservationCode"/>
 	</div>
 	<jsp:include page="../common/footer.jsp" />
 </body>

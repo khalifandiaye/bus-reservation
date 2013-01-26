@@ -29,6 +29,7 @@ public class HibernateSessionRequestFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
  
         try {
+        	long time = System.nanoTime();
             log.debug("Starting a database transaction");
             sessionFactory.getCurrentSession().beginTransaction();
  
@@ -39,6 +40,8 @@ public class HibernateSessionRequestFilter implements Filter {
         	log.debug("Committing the database transaction");
             if (sessionFactory.getCurrentSession().getTransaction().isActive() && !sessionFactory.getCurrentSession().getTransaction().wasCommitted()) {
             	sessionFactory.getCurrentSession().getTransaction().commit();
+            	time = System.nanoTime() - time;
+            	log.debug("Transaction was opened in " + time);
             } else {
             	log.debug("The database transaction has been comnitted somewhere else");
             }

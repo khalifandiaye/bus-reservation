@@ -37,6 +37,7 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 
 	private Map<String, Object> session;
 
+	// =====================Database Access Object=====================
 	private ReservationDAO reservationDAO;
 	private TariffDAO tariffDAO;
 
@@ -56,6 +57,7 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 		this.tariffDAO = tariffDAO;
 	}
 
+	// ==========================Action output=========================
 	private ReservationInfo reservationInfo;
 
 	/**
@@ -73,7 +75,14 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 		BigDecimal conversionRate = null;
 		ReservationBean reservationBean = null;
 		TripBean[] startEndTrips = null;
-		reservationBean = reservationDAO.getById(1);
+		int reservationId = 0;
+		// ****TEST CODE****
+		// reservationId = (Integer) session.get("reservationId");
+		reservationId = 1;
+		session.put("reservationId", reservationId);
+		// ****TEST CODE****
+
+		reservationBean = reservationDAO.getById(reservationId);
 		reservationInfo = new ReservationInfo();
 		startEndTrips = getStartEndTrips(reservationBean.getTrips());
 		reservationInfo.setRouteName(reservationBean.getTrips().get(0)
@@ -139,9 +148,16 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 	private BigDecimal calculateFee(BigDecimal basePrice, BigDecimal quantity,
 			BigDecimal conversionRate) {
 		BigDecimal result = null;
+		BigDecimal constantFee = null;
+		BigDecimal feeRatio = null;
+		constantFee = BigDecimal.valueOf(0.3)
+				.multiply(conversionRate);
+		feeRatio = BigDecimal.valueOf(0.039);
 		result = BigDecimal.ZERO.add(basePrice.multiply(quantity))
-				.multiply(BigDecimal.valueOf(0.039))
-				.add(BigDecimal.valueOf(0.3).multiply(conversionRate));
+				.add(constantFee)
+				.divide(BigDecimal.ONE.subtract(feeRatio), 0, RoundingMode.CEILING)
+				.multiply(feeRatio)
+				.add(constantFee);
 		return result;
 	}
 

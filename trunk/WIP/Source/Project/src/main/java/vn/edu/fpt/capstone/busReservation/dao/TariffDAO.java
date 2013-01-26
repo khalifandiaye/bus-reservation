@@ -3,17 +3,12 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
-import vn.edu.fpt.capstone.busReservation.dao.GenericDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
 
