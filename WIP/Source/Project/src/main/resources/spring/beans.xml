@@ -38,5 +38,9 @@
     	<property name="sessionFactory" ref="sessionFactory" />
     	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean" />
     </bean>
+    <bean id="paymentDAO" class="vn.edu.fpt.capstone.busReservation.dao.PaymentDAO">
+    	<property name="sessionFactory" ref="sessionFactory" />
+    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean" />
+    </bean>
 </beans>
 

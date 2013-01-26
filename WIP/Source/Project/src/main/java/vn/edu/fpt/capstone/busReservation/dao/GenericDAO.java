@@ -101,5 +101,33 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
 		// return result, if needed
 		return result;
 	}
+	
+	public K save(T t) {
+		K result = null;
+		Session session = null;
+		// get the current session
+		session = sessionFactory.getCurrentSession();
+		try {
+			// perform database access (query, insert, update, etc) here
+			session.save(t);
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+	
+	public K update(T t) {
+		K result = null;
+		Session session = null;
+		// get the current session
+		session = sessionFactory.getCurrentSession();
+		try {
+			// perform database access (query, insert, update, etc) here
+			session.update(t);
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
 
 }
