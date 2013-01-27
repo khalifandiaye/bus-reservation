@@ -34,6 +34,10 @@
 		</id>
 		<many-to-one name="segment" column="segment_id" />
 		<many-to-one name="route" column="route_id" />
+		<bag name="tariffs" table="tariff" inverse="true">
+			<key column="route_details_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean" />
+		</bag>
 	</class>
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean" table="bus_type">
 		<id name="id" unsaved-value="0" type="integer">
@@ -80,6 +84,7 @@
 		<property name="validFrom" column="valid_from" type="timestamp" not-null="true" />
 		<property name="fare" type="double" not-null="true" />
 		<many-to-one name="routeDetails" column="route_details_id" />
+		<many-to-one name="busType" column="bus_type_id" />
 	</class>
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" table="seat_position">
 		<composite-id>

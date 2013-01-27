@@ -15,6 +15,7 @@ public class TariffBean extends AbstractBean<Integer> {
 	 */
 	private static final long serialVersionUID = 9170351175544644640L;
 	private RouteDetailsBean routeDetails;
+	private BusTypeBean busType;
 	private Date validFrom;
 	private double fare;
 	/**
@@ -28,6 +29,18 @@ public class TariffBean extends AbstractBean<Integer> {
 	 */
 	public void setRouteDetails(RouteDetailsBean routeDetails) {
 		this.routeDetails = routeDetails;
+	}
+	/**
+	 * @return the busType
+	 */
+	public BusTypeBean getBusType() {
+		return busType;
+	}
+	/**
+	 * @param busType the busType to set
+	 */
+	public void setBusType(BusTypeBean busType) {
+		this.busType = busType;
 	}
 	/**
 	 * @return the validFrom
