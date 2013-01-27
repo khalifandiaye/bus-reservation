@@ -24,7 +24,7 @@ public class HelloWorldLogicImpl implements HelloWorldLogic {
 	public String processName(String name) {
 		// Access database (if needed)
 		helloWorldDAO.doNothing();
-		return name.trim();
+		return "dsadsad" + name.trim();
 	}
 
 }
