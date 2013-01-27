@@ -106,5 +106,11 @@ public class ReservationBean extends AbstractBean<Integer> {
 	public void setPayments(List<PaymentBean> payments) {
 		this.payments = payments;
 	}
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 11 * hash + this.getId();
+		return hash;
+	}
 
 }

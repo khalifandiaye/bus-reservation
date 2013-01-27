@@ -14,7 +14,7 @@ public class EmployeeBean extends AbstractBean<Integer> {
 	private static final long serialVersionUID = 3350278777199103062L;
 	private String username;
 	private String password;
-	private String status;
+	private boolean admin;
 	/**
 	 * @return the username
 	 */
@@ -40,16 +40,16 @@ public class EmployeeBean extends AbstractBean<Integer> {
 		this.password = password;
 	}
 	/**
-	 * @return the status
+	 * @return the admin
 	 */
-	public String getStatus() {
-		return status;
+	public boolean isAdmin() {
+		return admin;
 	}
 	/**
-	 * @param status the status to set
+	 * @param admin the admin to set
 	 */
-	public void setStatus(String status) {
-		this.status = status;
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 
 }

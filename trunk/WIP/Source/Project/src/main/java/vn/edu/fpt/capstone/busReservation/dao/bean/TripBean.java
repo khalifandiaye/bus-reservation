@@ -16,7 +16,7 @@ public class TripBean extends AbstractBean<Integer> {
 	 */
 	private static final long serialVersionUID = -2386352728008778873L;
 	private BusStatusBean busStatus;
-	private SegmentInRouteBean segmentInRoute;
+	private RouteDetailsBean routeDetails;
 	private Date departureTime;
 	private Date arrivalTime;
 	private String status;
@@ -34,16 +34,16 @@ public class TripBean extends AbstractBean<Integer> {
 		this.busStatus = busStatus;
 	}
 	/**
-	 * @return the segmentInRoute
+	 * @return the routeDetails
 	 */
-	public SegmentInRouteBean getSegmentInRoute() {
-		return segmentInRoute;
+	public RouteDetailsBean getRouteDetails() {
+		return routeDetails;
 	}
 	/**
-	 * @param segmentInRoute the segmentInRoute to set
+	 * @param routeDetails the routeDetails to set
 	 */
-	public void setSegmentInRoute(SegmentInRouteBean segmentInRoute) {
-		this.segmentInRoute = segmentInRoute;
+	public void setRouteDetails(RouteDetailsBean routeDetails) {
+		this.routeDetails = routeDetails;
 	}
 	/**
 	 * @return the departureTime
