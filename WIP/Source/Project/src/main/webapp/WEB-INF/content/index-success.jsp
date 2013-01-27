@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <!DOCTYPE html PUBLIC 
 	"-//W3C//DTD XHTML 1.1 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -18,8 +19,10 @@
 			<div class="container">
 			<div class="well span11">
 				<legend>Temporary Section</legend>
-				<p>Name&nbsp;<input type="text" name="name" />
+				
 				<input type="submit" id="hello-world" value="Say Hello World" /><br />
+				<a href="trip/create.html">Test Create Trip</a></p>
+				<a href="trip/updateTripTime.html">Test Get Trip Time</a></p>
 				<a href="pay/test-pay.html">Test Pay</a></p>
 			</div>
 			</div>
