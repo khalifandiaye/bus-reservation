@@ -7,12 +7,12 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentInRouteBean;
 
-public class SegmentInRouteDAO extends GenericDAO<Integer, SegmentInRouteBean>{
+public class RouteDetailsDAO extends GenericDAO<Integer, RouteDetailsBean>{
 
-	public SegmentInRouteDAO(Class<SegmentInRouteBean> clazz) {
+	public RouteDetailsDAO(Class<RouteDetailsBean> clazz) {
 		super(clazz);
 		// TODO Auto-generated constructor stub
 	}

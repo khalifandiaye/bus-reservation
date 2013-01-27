@@ -53,9 +53,9 @@
 		<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean" />
 	</bean>
 	
-	<bean id="segmentInRouteDAO" class="vn.edu.fpt.capstone.busReservation.dao.SegmentInRouteDAO">
+	<bean id="routeDetailsDAO" class="vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
-		<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.SegmentInRouteBean" />
+		<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean" />
 	</bean>
 	
     <bean id="paymentDAO" class="vn.edu.fpt.capstone.busReservation.dao.PaymentDAO">
