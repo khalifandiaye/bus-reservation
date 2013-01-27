@@ -19,6 +19,7 @@ public class BusStatusBean extends AbstractBean<Integer> {
 	private Date fromDate;
 	private Date toDate;
 	private String status;
+	private EmployeeBean scheduler;
 	/**
 	 * @return the bus
 	 */
@@ -78,5 +79,17 @@ public class BusStatusBean extends AbstractBean<Integer> {
 	 */
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	/**
+	 * @return the scheduler
+	 */
+	public EmployeeBean getScheduler() {
+		return scheduler;
+	}
+	/**
+	 * @param scheduler the scheduler to set
+	 */
+	public void setScheduler(EmployeeBean scheduler) {
+		this.scheduler = scheduler;
 	}
 }

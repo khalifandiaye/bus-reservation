@@ -86,11 +86,11 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 		reservationInfo = new ReservationInfo();
 		startEndTrips = getStartEndTrips(reservationBean.getTrips());
 		reservationInfo.setRouteName(reservationBean.getTrips().get(0)
-				.getSegmentInRoute().getRoute().getName());
-		reservationInfo.setSubRouteName(startEndTrips[0].getSegmentInRoute()
+				.getRouteDetails().getRoute().getName());
+		reservationInfo.setSubRouteName(startEndTrips[0].getRouteDetails()
 				.getSegment().getStartAt().getCity()
 				+ " - "
-				+ startEndTrips[1].getSegmentInRoute().getSegment().getEndAt()
+				+ startEndTrips[1].getRouteDetails().getSegment().getEndAt()
 						.getCity());
 		reservationInfo.setDepartureDate(FormatUtils.formatDate(
 				startEndTrips[0].getDepartureTime(),
@@ -189,13 +189,13 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 		startMap = new HashMap<StationBean, TripBean>();
 		endMap = new HashMap<StationBean, TripBean>();
 		for (TripBean trip : trips) {
-			startMap.put(trip.getSegmentInRoute().getSegment().getStartAt(),
+			startMap.put(trip.getRouteDetails().getSegment().getStartAt(),
 					trip);
-			endMap.put(trip.getSegmentInRoute().getSegment().getEndAt(), trip);
+			endMap.put(trip.getRouteDetails().getSegment().getEndAt(), trip);
 		}
 		for (TripBean trip : trips) {
-			startMap.remove(trip.getSegmentInRoute().getSegment().getEndAt());
-			endMap.remove(trip.getSegmentInRoute().getSegment().getStartAt());
+			startMap.remove(trip.getRouteDetails().getSegment().getEndAt());
+			endMap.remove(trip.getRouteDetails().getSegment().getStartAt());
 		}
 		startTrip = startMap.values().iterator().next();
 		endTrip = endMap.values().iterator().next();
@@ -209,7 +209,7 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 		StringBuilder result = null;
 		result = new StringBuilder();
 		for (SeatPositionBean seatPosition : seatPositions) {
-			result.append(" " + seatPosition.getName());
+			result.append(" " + seatPosition.getId().getName());
 		}
 		// remove first space
 		result.delete(0, 1);

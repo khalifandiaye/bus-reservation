@@ -7,35 +7,33 @@ package vn.edu.fpt.capstone.busReservation.dao.bean;
  * @author Yoshimi
  *
  */
-public class SeatPositionBean extends AbstractBean<Integer> {
+public class SeatPositionBean extends AbstractBean<SeatPositionKey> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6583091312608772197L;
-	private String name;
-	private BusTypeBean busType;
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return getId().getName();
 	}
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
-		this.name = name;
+		this.getId().setName(name);
 	}
 	/**
-	 * @return the busType
+	 * @return the reservation
 	 */
-	public BusTypeBean getBusType() {
-		return busType;
+	public ReservationBean getReservation() {
+		return getId().getReservation();
 	}
 	/**
-	 * @param busType the busType to set
+	 * @param reservation the reservation to set
 	 */
-	public void setBusType(BusTypeBean busType) {
-		this.busType = busType;
+	public void setReservation(ReservationBean reservation) {
+		this.getId().setReservation(reservation);
 	}
 }

@@ -14,20 +14,20 @@ public class TariffBean extends AbstractBean<Integer> {
 	 * 
 	 */
 	private static final long serialVersionUID = 9170351175544644640L;
-	private SegmentInRouteBean segmentInRoute;
+	private RouteDetailsBean routeDetails;
 	private Date validFrom;
 	private double fare;
 	/**
-	 * @return the segmentInRoute
+	 * @return the routeDetails
 	 */
-	public SegmentInRouteBean getSegmentInRoute() {
-		return segmentInRoute;
+	public RouteDetailsBean getRouteDetails() {
+		return routeDetails;
 	}
 	/**
-	 * @param segmentInRoute the segmentInRoute to set
+	 * @param routeDetails the routeDetails to set
 	 */
-	public void setSegmentInRoute(SegmentInRouteBean segmentInRoute) {
-		this.segmentInRoute = segmentInRoute;
+	public void setRouteDetails(RouteDetailsBean routeDetails) {
+		this.routeDetails = routeDetails;
 	}
 	/**
 	 * @return the validFrom

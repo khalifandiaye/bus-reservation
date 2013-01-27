@@ -7,7 +7,7 @@ package vn.edu.fpt.capstone.busReservation.dao.bean;
  * @author Yoshimi
  *
  */
-public class SegmentInRouteBean extends AbstractBean<Integer> {
+public class RouteDetailsBean extends AbstractBean<Integer> {
 	/**
 	 * 
 	 */
