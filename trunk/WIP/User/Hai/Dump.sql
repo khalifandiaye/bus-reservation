@@ -59,9 +59,12 @@ CREATE TABLE `bus_status` (
   `from_date` datetime NOT NULL,
   `to_date` datetime NOT NULL,
   `status` varchar(10) NOT NULL,
+  `scheduler` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `bus_status_unique_key` (`bus_id`,`from_date`),
   KEY `bus_status_bus_id_idx` (`bus_id`),
+  KEY `bus_status_schedule_idx` (`scheduler`),
+  CONSTRAINT `bus_status_schedule` FOREIGN KEY (`scheduler`) REFERENCES `employee` (`id`),
   CONSTRAINT `bus_status_bus_id` FOREIGN KEY (`bus_id`) REFERENCES `bus` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -72,7 +75,7 @@ CREATE TABLE `bus_status` (
 
 LOCK TABLES `bus_status` WRITE;
 /*!40000 ALTER TABLE `bus_status` DISABLE KEYS */;
-INSERT INTO `bus_status` VALUES (1,1,'ontrip','2013-02-28 07:00:00','2013-02-28 08:30:00',''),(2,1,'ontrip','2013-02-28 13:30:00','2013-02-28 15:00:00','');
+INSERT INTO `bus_status` VALUES (1,1,'ontrip','2013-02-28 07:00:00','2013-02-28 08:30:00','',1),(2,1,'ontrip','2013-02-28 13:30:00','2013-02-28 15:00:00','',1);
 /*!40000 ALTER TABLE `bus_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -144,10 +147,10 @@ CREATE TABLE `employee` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(20) NOT NULL,
   `password` varchar(20) NOT NULL,
-  `isAdmin` binary(1) NOT NULL DEFAULT '0',
+  `is_admin` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,6 +159,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
+INSERT INTO `employee` VALUES (1,'truong','truong','');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -243,6 +247,36 @@ INSERT INTO `route` VALUES (1,'City 1 - City 2','active'),(2,'City 2 - City 1','
 UNLOCK TABLES;
 
 --
+-- Table structure for table `route_details`
+--
+
+DROP TABLE IF EXISTS `route_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `route_details` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `segment_id` int(11) NOT NULL,
+  `route_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `segment_in_route_id` (`segment_id`,`route_id`),
+  KEY `segment_in_route_route_id_idx` (`route_id`),
+  KEY `segment_in_route_segment_id_idx` (`segment_id`),
+  CONSTRAINT `segment_in_route_route_id` FOREIGN KEY (`route_id`) REFERENCES `route` (`id`),
+  CONSTRAINT `segment_in_route_segment_id` FOREIGN KEY (`segment_id`) REFERENCES `segment` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `route_details`
+--
+
+LOCK TABLES `route_details` WRITE;
+/*!40000 ALTER TABLE `route_details` DISABLE KEYS */;
+INSERT INTO `route_details` VALUES (1,1,1),(2,2,2);
+/*!40000 ALTER TABLE `route_details` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `seat_position`
 --
 
@@ -250,13 +284,12 @@ DROP TABLE IF EXISTS `seat_position`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `seat_position` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(10) NOT NULL,
-  `bus_type_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `seat_position_bus_type_id_idx` (`bus_type_id`),
-  CONSTRAINT `seat_position_bus_type_id` FOREIGN KEY (`bus_type_id`) REFERENCES `bus_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  `reservation_id` int(11) NOT NULL,
+  `seat_name` varchar(5) NOT NULL,
+  PRIMARY KEY (`reservation_id`,`seat_name`),
+  KEY `seat_position_in_reservation_reservation_id_idx` (`reservation_id`),
+  CONSTRAINT `seat_position_in_reservation_reservation_id` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -265,36 +298,8 @@ CREATE TABLE `seat_position` (
 
 LOCK TABLES `seat_position` WRITE;
 /*!40000 ALTER TABLE `seat_position` DISABLE KEYS */;
-INSERT INTO `seat_position` VALUES (1,'A1',1),(2,'A2',1),(3,'B1',1),(4,'B2',1);
+INSERT INTO `seat_position` VALUES (1,'A1'),(1,'A2');
 /*!40000 ALTER TABLE `seat_position` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `seat_position_in_reservation`
---
-
-DROP TABLE IF EXISTS `seat_position_in_reservation`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `seat_position_in_reservation` (
-  `reservation_id` int(11) NOT NULL,
-  `seat_position_id` int(11) NOT NULL,
-  PRIMARY KEY (`reservation_id`,`seat_position_id`),
-  KEY `seat_position_in_reservation_reservation_id_idx` (`reservation_id`),
-  KEY `seat_position_in_reservation_seat_position_id_idx` (`seat_position_id`),
-  CONSTRAINT `seat_position_in_reservation_reservation_id` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`),
-  CONSTRAINT `seat_position_in_reservation_seat_position_id` FOREIGN KEY (`seat_position_id`) REFERENCES `seat_position` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `seat_position_in_reservation`
---
-
-LOCK TABLES `seat_position_in_reservation` WRITE;
-/*!40000 ALTER TABLE `seat_position_in_reservation` DISABLE KEYS */;
-INSERT INTO `seat_position_in_reservation` VALUES (1,1),(1,2);
-/*!40000 ALTER TABLE `seat_position_in_reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -326,36 +331,6 @@ LOCK TABLES `segment` WRITE;
 /*!40000 ALTER TABLE `segment` DISABLE KEYS */;
 INSERT INTO `segment` VALUES (1,1,2,'01:30:00','active'),(2,2,1,'01:30:00','active');
 /*!40000 ALTER TABLE `segment` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `segment_in_route`
---
-
-DROP TABLE IF EXISTS `segment_in_route`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `segment_in_route` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `segment_id` int(11) NOT NULL,
-  `route_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `segment_in_route_id` (`segment_id`,`route_id`),
-  KEY `segment_in_route_route_id_idx` (`route_id`),
-  KEY `segment_in_route_segment_id_idx` (`segment_id`),
-  CONSTRAINT `segment_in_route_route_id` FOREIGN KEY (`route_id`) REFERENCES `route` (`id`),
-  CONSTRAINT `segment_in_route_segment_id` FOREIGN KEY (`segment_id`) REFERENCES `segment` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `segment_in_route`
---
-
-LOCK TABLES `segment_in_route` WRITE;
-/*!40000 ALTER TABLE `segment_in_route` DISABLE KEYS */;
-INSERT INTO `segment_in_route` VALUES (1,1,1),(2,2,2);
-/*!40000 ALTER TABLE `segment_in_route` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -399,7 +374,7 @@ CREATE TABLE `tariff` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `segment_in_route_id` (`segment_in_route_id`,`valid_from`),
   KEY `tariff_segment_in_route_id_idx` (`segment_in_route_id`),
-  CONSTRAINT `tariff_segment_in_route_id` FOREIGN KEY (`segment_in_route_id`) REFERENCES `segment_in_route` (`id`)
+  CONSTRAINT `tariff_segment_in_route_id` FOREIGN KEY (`segment_in_route_id`) REFERENCES `route_details` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -431,7 +406,7 @@ CREATE TABLE `trip` (
   KEY `trip_bus_id_idx` (`bus_status_id`),
   KEY `trip_segment_in_route_id_idx` (`segment_in_route_id`),
   CONSTRAINT `trip_bus_status_id` FOREIGN KEY (`bus_status_id`) REFERENCES `bus_status` (`id`),
-  CONSTRAINT `trip_segment_in_route_id` FOREIGN KEY (`segment_in_route_id`) REFERENCES `segment_in_route` (`id`)
+  CONSTRAINT `trip_segment_in_route_id` FOREIGN KEY (`segment_in_route_id`) REFERENCES `route_details` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -482,4 +457,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-23 22:34:24
+-- Dump completed on 2013-01-27 12:13:19
