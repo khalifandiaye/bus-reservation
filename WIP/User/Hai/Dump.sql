@@ -401,15 +401,15 @@ DROP TABLE IF EXISTS `trip`;
 CREATE TABLE `trip` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `bus_status_id` int(11) NOT NULL,
-  `segment_in_route_id` int(11) NOT NULL,
+  `route_details_id` int(11) NOT NULL,
   `departure_time` datetime NOT NULL,
   `arrival_time` datetime NOT NULL,
   `status` varchar(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `trip_bus_id_idx` (`bus_status_id`),
-  KEY `trip_segment_in_route_id_idx` (`segment_in_route_id`),
-  CONSTRAINT `trip_bus_status_id` FOREIGN KEY (`bus_status_id`) REFERENCES `bus_status` (`id`),
-  CONSTRAINT `trip_segment_in_route_id` FOREIGN KEY (`segment_in_route_id`) REFERENCES `route_details` (`id`)
+  KEY `trip_segment_in_route_id_idx` (`route_details_id`),
+  CONSTRAINT `trip_segment_in_route_id` FOREIGN KEY (`route_details_id`) REFERENCES `route_details` (`id`),
+  CONSTRAINT `trip_bus_status_id` FOREIGN KEY (`bus_status_id`) REFERENCES `bus_status` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -460,4 +460,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-27 19:08:09
+-- Dump completed on 2013-01-28  0:32:11
