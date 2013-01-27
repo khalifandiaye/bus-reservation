@@ -3,6 +3,8 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao.bean;
 
+import java.util.List;
+
 /**
  * @author Yoshimi
  *
@@ -14,6 +16,7 @@ public class RouteDetailsBean extends AbstractBean<Integer> {
 	private static final long serialVersionUID = -370430165090983593L;
 	private SegmentBean segment;
 	private RouteBean route;
+	private List<TariffBean> tariffs;
 	/**
 	 * @return the segment
 	 */
@@ -37,5 +40,17 @@ public class RouteDetailsBean extends AbstractBean<Integer> {
 	 */
 	public void setRoute(RouteBean route) {
 		this.route = route;
+	}
+	/**
+	 * @return the tariffs
+	 */
+	public List<TariffBean> getTariffs() {
+		return tariffs;
+	}
+	/**
+	 * @param tariffs the tariffs to set
+	 */
+	public void setTariffs(List<TariffBean> tariffs) {
+		this.tariffs = tariffs;
 	}
 }
