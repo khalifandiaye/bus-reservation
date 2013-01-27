@@ -12,6 +12,9 @@ public class SeatPositionBean extends AbstractBean<SeatPositionKey> {
 	 * 
 	 */
 	private static final long serialVersionUID = 6583091312608772197L;
+	public SeatPositionBean() {
+		setId(new SeatPositionKey());
+	}
 	/**
 	 * @return the name
 	 */

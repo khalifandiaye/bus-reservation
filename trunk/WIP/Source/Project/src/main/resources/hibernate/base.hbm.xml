@@ -88,7 +88,7 @@
 	</class>
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" table="seat_position">
 		<composite-id>
-			<key-property name="name" />
+			<key-property name="name" column="seat_name" />
 			<key-many-to-one name="reservation" column="reservation_id" />
 		</composite-id>
 	</class>
