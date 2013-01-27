@@ -10,7 +10,7 @@
                 </div>
                 <ul class="nav">
                     <li class="active"><a href="#">TRANG CHỦ</a></li>
-                    <li><a href="#">ĐẶT VÉ</a></li>
+                    <li><a href="booking/booking.html">ĐẶT VÉ</a></li>
                     <li><a href="#">VỀ CHÚNG TÔI</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">TÀI KHOẢN <b class="caret"></b></a>
