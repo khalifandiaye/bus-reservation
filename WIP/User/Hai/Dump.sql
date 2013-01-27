@@ -64,8 +64,8 @@ CREATE TABLE `bus_status` (
   UNIQUE KEY `bus_status_unique_key` (`bus_id`,`from_date`),
   KEY `bus_status_bus_id_idx` (`bus_id`),
   KEY `bus_status_schedule_idx` (`scheduler_id`),
-  CONSTRAINT `bus_status_schedule` FOREIGN KEY (`scheduler_id`) REFERENCES `employee` (`id`),
-  CONSTRAINT `bus_status_bus_id` FOREIGN KEY (`bus_id`) REFERENCES `bus` (`id`)
+  CONSTRAINT `bus_status_bus_id` FOREIGN KEY (`bus_id`) REFERENCES `bus` (`id`),
+  CONSTRAINT `bus_status_schedule` FOREIGN KEY (`scheduler_id`) REFERENCES `employee` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -369,11 +369,14 @@ DROP TABLE IF EXISTS `tariff`;
 CREATE TABLE `tariff` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `route_details_id` int(11) NOT NULL,
+  `bus_type_id` int(11) NOT NULL,
   `valid_from` datetime NOT NULL,
   `fare` double NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `segment_in_route_id` (`route_details_id`,`valid_from`),
   KEY `tariff_segment_in_route_id_idx` (`route_details_id`),
+  KEY `tariff_bus_type_id_idx` (`bus_type_id`),
+  CONSTRAINT `tariff_bus_type_id` FOREIGN KEY (`bus_type_id`) REFERENCES `bus_type` (`id`),
   CONSTRAINT `tariff_segment_in_route_id` FOREIGN KEY (`route_details_id`) REFERENCES `route_details` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -384,7 +387,7 @@ CREATE TABLE `tariff` (
 
 LOCK TABLES `tariff` WRITE;
 /*!40000 ALTER TABLE `tariff` DISABLE KEYS */;
-INSERT INTO `tariff` VALUES (1,1,'2012-01-01 00:00:00',100000),(2,2,'2012-01-01 00:00:00',100000);
+INSERT INTO `tariff` VALUES (1,1,1,'2012-01-01 00:00:00',100000),(2,2,1,'2012-01-01 00:00:00',100000);
 /*!40000 ALTER TABLE `tariff` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -457,4 +460,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-27 14:13:39
+-- Dump completed on 2013-01-27 19:08:09
