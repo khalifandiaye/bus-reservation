@@ -15,12 +15,6 @@
 		</bean> -->
 	<!-- <bean id="listEmployeeAction" class="vn.edu.fpt.capstone.busReservation.action.EmployeeListAction"> 
 		</bean> -->
-	<bean id="createAction"
-		class="vn.edu.fpt.capstone.busReservation.action.trip.CreateAction">
-	</bean>
-	<bean id="updateTripTime"
-		class="vn.edu.fpt.capstone.busReservation.action.trip.UpdateTripTime">
-	</bean>
 
 	<!-- ****************define Logic here**************** -->
 	<bean id="helloWorldLogic"
