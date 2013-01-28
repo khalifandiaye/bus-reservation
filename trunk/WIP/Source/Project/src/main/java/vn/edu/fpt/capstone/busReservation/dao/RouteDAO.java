@@ -1,14 +1,10 @@
 package vn.edu.fpt.capstone.busReservation.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 
 public class RouteDAO extends GenericDAO<Integer, RouteBean>{
 
@@ -16,17 +12,16 @@ public class RouteDAO extends GenericDAO<Integer, RouteBean>{
 		super(clazz);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<SegmentBean> getAllSegmentByRouteId(int routeId) {
+	public String getAllSegmentByRouteId(int routeId) {
 		
-		String hql = "select sir.segment from RouteDetailsBean sir where sir.route.id = :id";
+		String hql = "select sum(sir.segment.travelTime) from RouteDetailsBean sir where sir.route.id = :id";
 		Session session = sessionFactory.getCurrentSession();
-		List<SegmentBean> result = new ArrayList<SegmentBean>();
+		String result = "";
 		try {
 			// must have to start any transaction
 			Query query = session.createQuery(hql);
 			query.setParameter("id", routeId);
-			result = query.list();
+			result = query.list().get(0).toString();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
 		}
