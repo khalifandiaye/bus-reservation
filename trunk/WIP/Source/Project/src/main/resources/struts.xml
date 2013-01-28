@@ -48,7 +48,7 @@
 			<result>/jsp/createTrip.jsp</result>
 			<result name="error">/jsp/error.jsp</result>
 		</action>
-		<action name="createTrip" class="vn.edu.fpt.capstone.busReservation.action.trip.DataProcessAction">
+		<action name="insertNewTrip" class="vn.edu.fpt.capstone.busReservation.action.trip.InsertNewTripAction">
 			<result>/jsp/index.jsp</result>
 			<result name="error">/jsp/error.jsp</result>
 		</action>

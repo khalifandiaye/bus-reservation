@@ -14,7 +14,6 @@
 <script src="<%=request.getContextPath()%>/js/index.js"></script>
 <script src="<%=request.getContextPath()%>/js/trip/jquery-1.8.3.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/trip/bootstrap-datetimepicker.js"></script>
-<script src="<%=request.getContextPath()%>/js/trip/moment.min.js"></script>
 <link href="<%=request.getContextPath()%>/styles/trip/datetimepicker.css" rel="stylesheet">
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -37,7 +36,6 @@
 	    					// process over response data
 	    					// add new avaible bus plateNumber
 	    					$.each(data.busBeans, function() {
-	    						
 	    						$('#busPlateSelect').append('<option value="test1">'+this.plateNumber+'</option>');
 	    					});
 	    				});
@@ -55,30 +53,37 @@
 	<jsp:include page="../common/menu.jsp" />
 	<div id="page">
 		<div class="post">
-			<div id="trip-add-content" style="margin-left: 20px; width: 45%">
-				<div id="trip-title"><h2 class="title">Create Trip</h2></div>
-				<div id="trip-route">
-					<label id="trip-route-label" style="float: left; width: 25%" for="routeSelect">Select Route</label> 
-					<select id='routeSelect' name='routeSelect'>
-						<c:forEach items="${routeDetailsInfos}" var="route">
-							<option value="${route.id}" data-travelTime="${route.travelTime}">${route.routeName}</option>
-						</c:forEach>
-					</select>
+			<form action="insertNewTrip" method="post">
+				<div id="trip-add-content" style="margin-left: 20px; width: 45%">
+					<div id="trip-title">
+						<h2 class="title">Create Trip</h2>
+					</div>
+					<div id="trip-route">
+						<label id="trip-route-label" style="float: left; width: 25%" for="routeSelect">Select Route</label> 
+						<select id='routeSelect' name='routeSelect'>
+							<c:forEach items="${routeDetailsInfos}" var="route">
+								<option value="${route.id}"
+									data-travelTime="${route.travelTime}">${route.routeName}</option>
+							</c:forEach>
+						</select>
+					</div>
+					<div id="trip-departure">
+						<label id="trip-departDate-label" style="float: left; width: 25%" for="routeSelect">Departure date</label> 
+						<input type="text" value="" id="departDate" name="departDate">
+					</div>
+					<div id="trip-arrival">
+						<label id="trip-arrivalDate-label" style="float: left; width: 25%" for="routeSelect">Arrival date</label> 
+						<input type="text" value="" id="arrivalDate" name="arrivalDate" disabled="disabled">
+					</div>
+					<div id="trip-plate-number">
+						<label id="trip-arrivalDate-label" style="float: left; width: 25%" for="routeSelect">Bus Plate Number</label>
+						<select id='busPlateSelect' name='busPlateSelect'></select>
+					</div>
+					<div>
+						<input type="submit" style="height: 27px; margin-left: 44%;" id="insertNewTrip" value="Add This Trip">
+					</div>
 				</div>
-				<div id="trip-departure">
-					<label id="trip-departDate-label" style="float: left; width: 25%" for="routeSelect">Departure date</label> 
-					<input type="text" value="" id="departDate">
-				</div>
-				<div id="trip-arrival">
-					<label id="trip-arrivalDate-label" style="float: left; width: 25%" for="routeSelect">Arrival date</label>
-					<input type="text" value="" id="arrivalDate" disabled="disabled">
-				</div>
-				<div id="trip-plate-number">
-					<label id="trip-arrivalDate-label" style="float: left; width: 25%" for="routeSelect">Bus Plate Number</label>
-					<select id='busPlateSelect' name='busPlateSelect'></select>
-				</div>
-				<div><input type="submit" id="trip-add-button" value="Add This Trip"></div>
-			</div>
+			</form>
 		</div>
 	</div>
 	<jsp:include page="../common/footer.jsp" />
