@@ -1,9 +1,7 @@
 package vn.edu.fpt.capstone.busReservation.action.trip;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
