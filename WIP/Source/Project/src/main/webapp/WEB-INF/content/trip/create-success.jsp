@@ -19,7 +19,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#departDate").datetimepicker({
-	        format: "dd MM yyyy - hh:ii",
+	        format: "yyyy/mm/dd hh:ii",
 	        autoclose: true,
 	        todayBtn: true,
 	    }).on('changeDate', function(ev){
@@ -28,6 +28,19 @@
 	    		if (routeId != "" && departDate != "") {
 	    			var travelTime = $("option[value="+routeId+"]").data('traveltime');
 	    			// calculate arriveTime here
+	    			$.ajax({
+	    				  url: "updateTripTime.html?date=" + departDate,
+	    				}).done(function(data) {
+	    					// cleare bus selection
+	    					$('#busPlateSelect').empty();
+	    					
+	    					// process over response data
+	    					// add new avaible bus plateNumber
+	    					$.each(data.busBeans, function() {
+	    						
+	    						$('#busPlateSelect').append('<option value="test1">'+this.plateNumber+'</option>');
+	    					});
+	    				});
 	        };
 	    });
 		
@@ -62,7 +75,7 @@
 				</div>
 				<div id="trip-plate-number">
 					<label id="trip-arrivalDate-label" style="float: left; width: 25%" for="routeSelect">Bus Plate Number</label>
-					<input type="text" id="busPlate">
+					<select id='busPlateSelect' name='busPlateSelect'></select>
 				</div>
 				<div><input type="submit" id="trip-add-button" value="Add This Trip"></div>
 			</div>
