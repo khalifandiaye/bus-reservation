@@ -9,7 +9,7 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author Yoshimi
  *
  */
-public class PaypalCancelAction extends ActionSupport {
+public class Pay01031Action extends ActionSupport {
 
 	/**
 	 * 

@@ -44,7 +44,7 @@ import com.paypal.sdk.exceptions.OAuthException;
  * @author Yoshimi
  * 
  */
-public class PaypalSuccessAction extends ActionSupport implements SessionAware {
+public class Pay01030Action extends ActionSupport implements SessionAware {
 
 	/**
 	 * 
