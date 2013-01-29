@@ -42,7 +42,7 @@ import com.paypal.sdk.exceptions.OAuthException;
  * @author Yoshimi
  * 
  */
-public class PayPaypalAction extends ActionSupport implements
+public class Pay01020Action extends ActionSupport implements
 		ServletRequestAware, SessionAware {
 
 	/**
@@ -85,8 +85,8 @@ public class PayPaypalAction extends ActionSupport implements
 		url.append("localhost:8080");
 		url.append(request.getContextPath());
 		// set return pages
-		details.setReturnURL(url.toString() + "/pay/paypal-success.html");
-		details.setCancelURL(url.toString() + "/pay/paypal-cancel.html");
+		details.setReturnURL(url.toString() + "/pay/pay01030.html");
+		details.setCancelURL(url.toString() + "/pay/pay01031.html");
 		// set payment details
 		paymentDetailsList = new ArrayList<PaymentDetailsType>();
 		paymentDetails = new PaymentDetailsType();

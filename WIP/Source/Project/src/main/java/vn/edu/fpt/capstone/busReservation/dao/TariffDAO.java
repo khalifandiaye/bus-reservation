@@ -32,7 +32,7 @@ public class TariffDAO extends GenericDAO<Integer, TariffBean> {
 		session = sessionFactory.getCurrentSession();
 		try {
 			// perform database access (query, insert, update, etc) here
-			queryString = "SELECT ta1 FROM TariffBean AS ta1 INNER JOIN ta1.segmentInRoute AS se1, ReservationBean AS res INNER JOIN res.trips AS trp INNER JOIN trp.segmentInRoute AS se2 WHERE res = ? AND se1 = se2 AND ta1.validFrom <= res.bookTime AND ta1.validFrom >= (SELECT MAX(ta2.validFrom) FROM TariffBean ta2 WHERE ta2.segmentInRoute = ta1.segmentInRoute AND ta2.validFrom <= res.bookTime)";
+			queryString = "SELECT ta1 FROM TariffBean AS ta1 INNER JOIN ta1.routeDetails AS se1, ReservationBean AS res INNER JOIN res.trips AS trp INNER JOIN trp.routeDetails AS se2 WHERE res = ? AND se1 = se2 AND ta1.validFrom <= res.bookTime AND ta1.validFrom >= (SELECT MAX(ta2.validFrom) FROM TariffBean ta2 WHERE ta2.routeDetails = ta1.routeDetails AND ta2.validFrom <= res.bookTime)";
 			query = session.createQuery(queryString);
 			query.setEntity(0, reservationBean);
 			result = query.list();

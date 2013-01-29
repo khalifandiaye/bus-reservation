@@ -20,6 +20,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
+import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
 import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -28,7 +29,7 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author Yoshimi
  * 
  */
-public class TestPayAction extends ActionSupport implements SessionAware {
+public class Pay01010Action extends ActionSupport implements SessionAware {
 
 	/**
 	 * 
@@ -36,6 +37,10 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 	private static final long serialVersionUID = 5713118155580163291L;
 
 	private Map<String, Object> session;
+
+	public void setSession(Map<String, Object> session) {
+		this.session = session;
+	}
 
 	// =====================Database Access Object=====================
 	private ReservationDAO reservationDAO;
@@ -57,7 +62,17 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 		this.tariffDAO = tariffDAO;
 	}
 
-	// ==========================Action output=========================
+	// ==========================Action Input==========================
+	private String reservationId;
+
+	/**
+	 * @param reservationId the reservationId to set
+	 */
+	public void setReservationId(String reservationId) {
+		this.reservationId = reservationId;
+	}
+
+	// ==========================Action Output=========================
 	private ReservationInfo reservationInfo;
 
 	/**
@@ -65,6 +80,16 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 	 */
 	public ReservationInfo getReservationInfo() {
 		return reservationInfo;
+	}
+	
+	@Override
+	public void validate() {
+		if (CheckUtils.isNullOrBlank(reservationId)) {
+			addFieldError("reservationId", "Please choose an id");
+		}
+		if (!CheckUtils.isPositiveInteger(reservationId)) {
+			addFieldError("reservationId", "System error, please wait for update");
+		}
 	}
 
 	public String execute() {
@@ -78,8 +103,7 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 		int reservationId = 0;
 		// ****TEST CODE****
 		// reservationId = (Integer) session.get("reservationId");
-		reservationId = 1;
-		session.put("reservationId", reservationId);
+		reservationId = Integer.parseInt(this.reservationId);
 		// ****TEST CODE****
 
 		reservationBean = reservationDAO.getById(reservationId);
@@ -214,10 +238,6 @@ public class TestPayAction extends ActionSupport implements SessionAware {
 		// remove first space
 		result.delete(0, 1);
 		return result.toString();
-	}
-
-	public void setSession(Map<String, Object> session) {
-		this.session = session;
 	}
 
 }

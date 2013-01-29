@@ -39,7 +39,7 @@
 				<span><s:property value="reservationInfo.totalAmount" /> <s:property value="reservationInfo.currency" /><br />
 				= $<s:property value="reservationInfo.totalAmountInUSD" /></span>
 				</div>
-				<input class="paypal_checkout" type="submit" id="pay-paypal" value="" />
+				<input class="paypal_checkout" type="submit" id="pay01020" value="" />
 			</div>
 		</section>
 	</form>
