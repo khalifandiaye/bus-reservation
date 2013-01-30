@@ -4,6 +4,7 @@
 package vn.edu.fpt.capstone.busReservation.dao.bean;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Yoshimi
@@ -18,6 +19,7 @@ public class BusStatusBean extends AbstractBean<Integer> {
 	private String busStatus;
 	private Date fromDate;
 	private Date toDate;
+	private List<TripBean> trips;
 	private String status;
 	private EmployeeBean scheduler;
 	/**
@@ -67,6 +69,18 @@ public class BusStatusBean extends AbstractBean<Integer> {
 	 */
 	public void setToDate(Date toDate) {
 		this.toDate = toDate;
+	}
+	/**
+	 * @return the trips
+	 */
+	public List<TripBean> getTrips() {
+		return trips;
+	}
+	/**
+	 * @param trips the trips to set
+	 */
+	public void setTrips(List<TripBean> trips) {
+		this.trips = trips;
 	}
 	/**
 	 * @return the status
