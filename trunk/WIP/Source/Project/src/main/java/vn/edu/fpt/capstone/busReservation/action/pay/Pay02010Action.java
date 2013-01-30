@@ -5,23 +5,24 @@ package vn.edu.fpt.capstone.busReservation.action.pay;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.SessionAware;
 
 import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TariffDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
 import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
+import vn.edu.fpt.capstone.busReservation.util.TripUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -29,7 +30,8 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author Yoshimi
  * 
  */
-public class Pay01010Action extends ActionSupport implements SessionAware {
+@Action(results = {@Result(name="input", location="pay02000-success.jsp" )})
+public class Pay02010Action extends ActionSupport implements SessionAware {
 
 	/**
 	 * 
@@ -63,13 +65,13 @@ public class Pay01010Action extends ActionSupport implements SessionAware {
 	}
 
 	// ==========================Action Input==========================
-	private String reservationId;
+	private String reservationCode;
 
 	/**
-	 * @param reservationId the reservationId to set
+	 * @param reservationCode the reservationCode to set
 	 */
-	public void setReservationId(String reservationId) {
-		this.reservationId = reservationId;
+	public void setReservationCode(String reservationCode) {
+	    this.reservationCode = reservationCode;
 	}
 
 	// ==========================Action Output=========================
@@ -81,14 +83,11 @@ public class Pay01010Action extends ActionSupport implements SessionAware {
 	public ReservationInfo getReservationInfo() {
 		return reservationInfo;
 	}
-	
+
 	@Override
 	public void validate() {
-		if (CheckUtils.isNullOrBlank(reservationId)) {
-			addFieldError("reservationId", "Please choose an id");
-		}
-		if (!CheckUtils.isPositiveInteger(reservationId)) {
-			addFieldError("reservationId", "System error, please wait for update");
+		if (CheckUtils.isNullOrBlank(reservationCode)) {
+			addFieldError("reservationCode", "Please enter a reservation code");
 		}
 	}
 
@@ -100,16 +99,15 @@ public class Pay01010Action extends ActionSupport implements SessionAware {
 		BigDecimal conversionRate = null;
 		ReservationBean reservationBean = null;
 		TripBean[] startEndTrips = null;
-		int reservationId = 0;
-		// ****TEST CODE****
-		// reservationId = (Integer) session.get("reservationId");
-		reservationId = Integer.parseInt(this.reservationId);
-		session.put("reservationId", reservationId);
-		// ****TEST CODE****
 
-		reservationBean = reservationDAO.getById(reservationId);
+		reservationBean = reservationDAO.getByCode(reservationCode);
+		if (reservationBean == null) {
+		    addFieldError("reservationCode", "Can not retrieve reservation");
+		    return INPUT;
+		}
 		reservationInfo = new ReservationInfo();
-		startEndTrips = getStartEndTrips(reservationBean.getTrips());
+		startEndTrips = TripUtils.getStartEndTrips(
+				reservationBean.getTrips()).values().iterator().next();
 		reservationInfo.setRouteName(reservationBean.getTrips().get(0)
 				.getRouteDetails().getRoute().getName());
 		reservationInfo.setSubRouteName(startEndTrips[0].getRouteDetails()
@@ -175,13 +173,13 @@ public class Pay01010Action extends ActionSupport implements SessionAware {
 		BigDecimal result = null;
 		BigDecimal constantFee = null;
 		BigDecimal feeRatio = null;
-		constantFee = BigDecimal.valueOf(0.3)
-				.multiply(conversionRate);
+		constantFee = BigDecimal.valueOf(0.3).multiply(conversionRate);
 		feeRatio = BigDecimal.valueOf(0.039);
-		result = BigDecimal.ZERO.add(basePrice.multiply(quantity))
+		result = BigDecimal.ZERO
+				.add(basePrice.multiply(quantity))
 				.add(constantFee)
-				.divide(BigDecimal.ONE.subtract(feeRatio), 0, RoundingMode.CEILING)
-				.multiply(feeRatio)
+				.divide(BigDecimal.ONE.subtract(feeRatio), 0,
+						RoundingMode.CEILING).multiply(feeRatio)
 				.add(constantFee);
 		return result;
 	}
@@ -192,41 +190,6 @@ public class Pay01010Action extends ActionSupport implements SessionAware {
 		for (TariffBean fare : fares) {
 			result = result.add(BigDecimal.valueOf(fare.getFare()));
 		}
-		return result;
-	}
-
-	/**
-	 * Get the first and last trips from a list of continuous trips.<br>
-	 * Note that each trip in the list must be connected with exactly two other<br>
-	 * trips, except for the first and last trips, which are connected with<br>
-	 * exactly one other trip
-	 * 
-	 * @param trips
-	 *            a list of continuous trips
-	 * @return an array of the first and the last trips, in that order
-	 */
-	private TripBean[] getStartEndTrips(List<TripBean> trips) {
-		TripBean[] result = null;
-		TripBean startTrip = null;
-		TripBean endTrip = null;
-		Map<StationBean, TripBean> startMap = null;
-		Map<StationBean, TripBean> endMap = null;
-		startMap = new HashMap<StationBean, TripBean>();
-		endMap = new HashMap<StationBean, TripBean>();
-		for (TripBean trip : trips) {
-			startMap.put(trip.getRouteDetails().getSegment().getStartAt(),
-					trip);
-			endMap.put(trip.getRouteDetails().getSegment().getEndAt(), trip);
-		}
-		for (TripBean trip : trips) {
-			startMap.remove(trip.getRouteDetails().getSegment().getEndAt());
-			endMap.remove(trip.getRouteDetails().getSegment().getStartAt());
-		}
-		startTrip = startMap.values().iterator().next();
-		endTrip = endMap.values().iterator().next();
-		result = new TripBean[2];
-		result[0] = startTrip;
-		result[1] = endTrip;
 		return result;
 	}
 
