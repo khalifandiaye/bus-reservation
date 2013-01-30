@@ -1,0 +1,3 @@
+TODO
+	[db] add payment.transaction_id
+	[db] add payment_method{id, name, ratio, addition}

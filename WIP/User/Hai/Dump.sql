@@ -32,7 +32,7 @@ CREATE TABLE `bus` (
   PRIMARY KEY (`id`),
   KEY `bus_bus_type_id_idx` (`bus_type_id`),
   CONSTRAINT `bus_bus_type_id` FOREIGN KEY (`bus_type_id`) REFERENCES `bus_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `bus` (
 
 LOCK TABLES `bus` WRITE;
 /*!40000 ALTER TABLE `bus` DISABLE KEYS */;
-INSERT INTO `bus` VALUES (1,1,'1111-1111','active'),(2,2,'2222-2222','active');
+INSERT INTO `bus` VALUES (1,1,'1111-1111','active'),(2,2,'2222-2222','active'),(3,1,'47H1-123.45','active'),(4,1,'59F1-123.45','active');
 /*!40000 ALTER TABLE `bus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,9 +64,9 @@ CREATE TABLE `bus_status` (
   UNIQUE KEY `bus_status_unique_key` (`bus_id`,`from_date`),
   KEY `bus_status_bus_id_idx` (`bus_id`),
   KEY `bus_status_schedule_idx` (`scheduler_id`),
-  CONSTRAINT `bus_status_bus_id` FOREIGN KEY (`bus_id`) REFERENCES `bus` (`id`),
-  CONSTRAINT `bus_status_schedule` FOREIGN KEY (`scheduler_id`) REFERENCES `employee` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  CONSTRAINT `bus_status_schedule` FOREIGN KEY (`scheduler_id`) REFERENCES `employee` (`id`),
+  CONSTRAINT `bus_status_bus_id` FOREIGN KEY (`bus_id`) REFERENCES `bus` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +75,7 @@ CREATE TABLE `bus_status` (
 
 LOCK TABLES `bus_status` WRITE;
 /*!40000 ALTER TABLE `bus_status` DISABLE KEYS */;
-INSERT INTO `bus_status` VALUES (1,1,'ontrip','2013-02-28 07:00:00','2013-02-28 08:30:00','',1),(2,1,'ontrip','2013-02-28 13:30:00','2013-02-28 15:00:00','',1);
+INSERT INTO `bus_status` VALUES (1,1,'ontrip','2013-02-28 07:00:00','2013-02-28 08:30:00','',1),(2,1,'ontrip','2013-02-28 13:30:00','2013-02-28 15:00:00','',1),(3,3,'ontrip','2013-02-10 06:30:00','2013-02-11 13:00:00','active',1);
 /*!40000 ALTER TABLE `bus_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,6 +89,7 @@ DROP TABLE IF EXISTS `bus_type`;
 CREATE TABLE `bus_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
+  `number_of_seats` int(3) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -99,7 +100,7 @@ CREATE TABLE `bus_type` (
 
 LOCK TABLES `bus_type` WRITE;
 /*!40000 ALTER TABLE `bus_type` DISABLE KEYS */;
-INSERT INTO `bus_type` VALUES (1,'Ghế ngồi'),(2,'Giường nằm');
+INSERT INTO `bus_type` VALUES (1,'Ghế ngồi',45),(2,'Giường nằm',40);
 /*!40000 ALTER TABLE `bus_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,7 +234,7 @@ CREATE TABLE `route` (
   `name` varchar(45) DEFAULT NULL,
   `status` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +243,7 @@ CREATE TABLE `route` (
 
 LOCK TABLES `route` WRITE;
 /*!40000 ALTER TABLE `route` DISABLE KEYS */;
-INSERT INTO `route` VALUES (1,'City 1 - City 2','active'),(2,'City 2 - City 1','active');
+INSERT INTO `route` VALUES (1,'City 1 - City 2','active'),(2,'City 2 - City 1','active'),(3,'TP. Hồ Chí Minh - Hà Nội','active');
 /*!40000 ALTER TABLE `route` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -263,7 +264,7 @@ CREATE TABLE `route_details` (
   KEY `segment_in_route_segment_id_idx` (`segment_id`),
   CONSTRAINT `segment_in_route_route_id` FOREIGN KEY (`route_id`) REFERENCES `route` (`id`),
   CONSTRAINT `segment_in_route_segment_id` FOREIGN KEY (`segment_id`) REFERENCES `segment` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -272,7 +273,7 @@ CREATE TABLE `route_details` (
 
 LOCK TABLES `route_details` WRITE;
 /*!40000 ALTER TABLE `route_details` DISABLE KEYS */;
-INSERT INTO `route_details` VALUES (1,1,1),(2,2,2);
+INSERT INTO `route_details` VALUES (1,1,1),(2,2,2),(3,3,3),(4,4,3),(5,5,3),(6,6,3);
 /*!40000 ALTER TABLE `route_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -320,7 +321,7 @@ CREATE TABLE `segment` (
   KEY `segment_depart_station_id_idx` (`end_at`),
   CONSTRAINT `segment_arrive_station_id` FOREIGN KEY (`start_at`) REFERENCES `station` (`id`),
   CONSTRAINT `segment_depart_station_id` FOREIGN KEY (`end_at`) REFERENCES `station` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -329,7 +330,7 @@ CREATE TABLE `segment` (
 
 LOCK TABLES `segment` WRITE;
 /*!40000 ALTER TABLE `segment` DISABLE KEYS */;
-INSERT INTO `segment` VALUES (1,1,2,'01:30:00','active'),(2,2,1,'01:30:00','active');
+INSERT INTO `segment` VALUES (1,1,2,'01:30:00','active'),(2,2,1,'01:30:00','active'),(3,3,5,'10:00:00','active'),(4,5,7,'06:00:00','active'),(5,7,6,'09:00:00','active'),(6,6,8,'04:00:00','active');
 /*!40000 ALTER TABLE `segment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -346,7 +347,7 @@ CREATE TABLE `station` (
   `city` varchar(45) NOT NULL,
   `status` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -355,7 +356,7 @@ CREATE TABLE `station` (
 
 LOCK TABLES `station` WRITE;
 /*!40000 ALTER TABLE `station` DISABLE KEYS */;
-INSERT INTO `station` VALUES (1,'Station 1','City 1','active'),(2,'Station 2','City 2','active');
+INSERT INTO `station` VALUES (1,'Station 1','City 1','active'),(2,'Station 2','City 2','active'),(3,'Bến xe Miền Đông','TP. Hồ Chí Minh','active'),(5,'Bến xe A','Đà Nẵng','active'),(6,'Bến xe B','Hải Phòng','active'),(7,'Bến xe C','Huế','active'),(8,'Bến xe D','Hà Nội','active');
 /*!40000 ALTER TABLE `station` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -375,10 +376,8 @@ CREATE TABLE `tariff` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `segment_in_route_id` (`route_details_id`,`valid_from`),
   KEY `tariff_segment_in_route_id_idx` (`route_details_id`),
-  KEY `tariff_bus_type_id_idx` (`bus_type_id`),
-  CONSTRAINT `tariff_bus_type_id` FOREIGN KEY (`bus_type_id`) REFERENCES `bus_type` (`id`),
   CONSTRAINT `tariff_segment_in_route_id` FOREIGN KEY (`route_details_id`) REFERENCES `route_details` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -387,7 +386,7 @@ CREATE TABLE `tariff` (
 
 LOCK TABLES `tariff` WRITE;
 /*!40000 ALTER TABLE `tariff` DISABLE KEYS */;
-INSERT INTO `tariff` VALUES (1,1,1,'2012-01-01 00:00:00',100000),(2,2,1,'2012-01-01 00:00:00',100000);
+INSERT INTO `tariff` VALUES (1,1,0,'2012-01-01 00:00:00',100000),(2,2,0,'2012-01-01 00:00:00',100000),(3,3,1,'2013-01-01 00:00:00',150000),(4,4,1,'2013-01-01 00:00:00',65000),(5,5,1,'2013-01-01 00:00:00',30000),(6,6,1,'2013-01-01 00:00:00',90000);
 /*!40000 ALTER TABLE `tariff` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -410,7 +409,7 @@ CREATE TABLE `trip` (
   KEY `trip_segment_in_route_id_idx` (`route_details_id`),
   CONSTRAINT `trip_segment_in_route_id` FOREIGN KEY (`route_details_id`) REFERENCES `route_details` (`id`),
   CONSTRAINT `trip_bus_status_id` FOREIGN KEY (`bus_status_id`) REFERENCES `bus_status` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -419,7 +418,7 @@ CREATE TABLE `trip` (
 
 LOCK TABLES `trip` WRITE;
 /*!40000 ALTER TABLE `trip` DISABLE KEYS */;
-INSERT INTO `trip` VALUES (1,1,1,'2013-02-28 07:00:00','2013-02-28 08:30:00','active'),(2,2,2,'2013-02-28 13:30:00','2013-02-28 15:00:00','active');
+INSERT INTO `trip` VALUES (1,1,1,'2013-02-28 07:00:00','2013-02-28 08:30:00','active'),(2,2,2,'2013-02-28 13:30:00','2013-02-28 15:00:00','active'),(3,3,3,'2013-02-10 06:30:00','2013-02-10 16:30:00','active'),(4,3,4,'2013-02-10 17:00:00','2013-02-10 23:00:00','active'),(5,3,5,'2013-02-10 23:30:00','2013-02-11 08:30:00','active'),(6,3,6,'2013-02-11 09:00:00','2013-02-11 13:00:00','active');
 /*!40000 ALTER TABLE `trip` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -460,4 +459,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-28  0:32:11
+-- Dump completed on 2013-01-30 23:31:14
