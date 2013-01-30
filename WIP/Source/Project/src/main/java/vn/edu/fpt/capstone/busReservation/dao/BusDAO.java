@@ -8,15 +8,13 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Restrictions;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 
-public class BusDAO extends GenericDAO<Integer, TripBean>{
+public class BusDAO extends GenericDAO<Integer, BusBean>{
 
-	public BusDAO(Class<TripBean> clazz) {
+	public BusDAO(Class<BusBean> clazz) {
 		super(clazz);
 		// TODO Auto-generated constructor stub
 	}

@@ -17,6 +17,7 @@ public class RouteDetailsBean extends AbstractBean<Integer> {
 	private SegmentBean segment;
 	private RouteBean route;
 	private List<TariffBean> tariffs;
+	
 	/**
 	 * @return the segment
 	 */

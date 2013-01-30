@@ -36,7 +36,7 @@
 	    					// process over response data
 	    					// add new avaible bus plateNumber
 	    					$.each(data.busBeans, function() {
-	    						$('#busPlateSelect').append('<option value="test1">'+this.plateNumber+'</option>');
+	    						$('#busPlateSelect').append('<option value="'+this.id+'">'+this.plateNumber+'</option>');
 	    					});
 	    				});
 	        };
