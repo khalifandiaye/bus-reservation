@@ -61,5 +61,10 @@
     	<property name="sessionFactory" ref="sessionFactory" />
     	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
     </bean>
+    
+    <bean id="tripDAO" class="vn.edu.fpt.capstone.busReservation.dao.TripDAO">
+    	<property name="sessionFactory" ref="sessionFactory" />
+    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
+    </bean>
 </beans>
 
