@@ -149,8 +149,8 @@
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
-		<property name="username" type="string" not-null="true" unique="true" />
-		<property name="password" type="string" not-null="true" />
-		<property name="admin" type="boolean" not-null="true" />
+		<property name="username" column="username" type="string" not-null="true" unique="true" />
+		<property name="password" column="password" type="string" not-null="true" />
+		<property name="admin" column="is_admin" type="boolean" not-null="true" />
 	</class>
 </hibernate-mapping>
