@@ -22,7 +22,7 @@ public class CreateAction extends ActionSupport {
 			if (routeBean.getStatus() != null && routeBean.getStatus().equals("active")) {
 				RouteDetailsInfo routeDetailsInfo = new RouteDetailsInfo();
 				int routeId = routeBean.getId();
-				String travelTime = "";//routeDAO.getAllSegmentByRouteId(routeId);
+				String travelTime = routeDAO.getAllSegmentByRouteId(routeId);
 				routeDetailsInfo.setId(routeId);
 				routeDetailsInfo.setRouteName(routeBean.getName());
 				routeDetailsInfo.setTravelTime(travelTime);

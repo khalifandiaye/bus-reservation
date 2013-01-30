@@ -13,7 +13,7 @@ public class RouteDAO extends GenericDAO<Integer, RouteBean>{
 	}
 	
 	public String getAllSegmentByRouteId(int routeId) {
-		String hql = "select sum(sir.segment.travelTime) from RouteDetailsBean sir where sir.route.id = :id";
+		String hql = "select SEC_TO_TIME(SUM(TIME_TO_SEC(sir.segment.travelTime))) from RouteDetailsBean sir where sir.route.id = :id";
 		Session session = sessionFactory.getCurrentSession();
 		String result = "";
 		try {
