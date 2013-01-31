@@ -72,6 +72,16 @@
     	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
     </bean>
     
+    <bean id="customerDAO" class="vn.edu.fpt.capstone.busReservation.dao.CustomerDAO">
+    	<property name="sessionFactory" ref="sessionFactory" />
+    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.CustomerBean" />
+    </bean>
+    
+    <bean id="seatPositionDAO" class="vn.edu.fpt.capstone.busReservation.dao.SeatPositionDAO">
+    	<property name="sessionFactory" ref="sessionFactory" />
+    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" />
+    </bean>
+    
     <bean id="tripDAO" class="vn.edu.fpt.capstone.busReservation.dao.TripDAO">
     	<property name="sessionFactory" ref="sessionFactory" />
     	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />

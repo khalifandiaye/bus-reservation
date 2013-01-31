@@ -6,7 +6,7 @@
         <div class="navbar">
             <div class="navbar-inner">
                 <div class="brand-wrapper">
-                    <a class="brand" href="index.html"><img src="images/Coach-logo.png" alt="" style="background:rgb(34, 170, 238);border-radius: 23px;"> TRAVEL<span>BUS</span></a>
+                    <a class="brand" href="index.html"><img src="<%=request.getContextPath()%>/images/Coach-logo.png" alt="" style="background:rgb(34, 170, 238);border-radius: 23px;"> TRAVEL<span>BUS</span></a>
                 </div>
                 <ul class="nav">
                     <li class="active"><a href="#">TRANG CHỦ</a></li>

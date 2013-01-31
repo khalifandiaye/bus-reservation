@@ -75,19 +75,20 @@
 }
 .seat-map-inner{
     width: 75%;
-    padding-top: 3%;
+    padding-top: 2.85%;
     padding-bottom: 4%;
     padding-left: 4%;
     overflow: hidden;
 }
-.seat-map-row{
-    width: 100%;
-    clear: both;
+.seat-map-col{
+    width: 9%;
+    float:right;
 }
 .seat{
-    width: 9%;
+    width: 100%;
     float: left;
 }
 .seat img{
+	float:left;
     cursor: pointer;
 }
