@@ -1,3 +1,6 @@
 TODO
-	[db] add payment.transaction_id
-	[db] add payment_method{id, name, ratio, addition}
+	[db] add payment.transaction_id <- refund
+	[db] add payment.type <- refund
+	[db] add payment_method{id, name, ratio, addition} <- calculate additional fee
+	[db] add reservation{booker_first_name, booker_last_name, phone, email} <- detached reservation from customer
+	[db] modify reservation.customer_id NULLABLE <- detached reservation from customer
