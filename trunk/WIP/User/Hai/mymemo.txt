@@ -8,6 +8,14 @@ TODO
 	[db] add city {id, name}
 	[db] remove employee
 	[db] modify customer > user
+	[db] modify segment.start_at -> segment.departure_station_id
+	[db] modify segment.end_at -> segment.arrival_station_id
+	[db] add role{id, name}
+	[db] modify user.role -> user.role_id
+	[db] add bus_status.end_station_id
+	[db] add bus{route1_id, route2_id}
+	[db] remove trip.employee_id
+	[db] modify tariff.route_details_id -> tariff.segment_id
 	[db?] system_settings {name, value}
 	[dm] check inverse
 	[do] list all javascript functions
