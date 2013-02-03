@@ -6,8 +6,12 @@ TODO
 	[db] modify reservation.customer_id NULLABLE <- detached reservation from customer
 	[db] add station.address
 	[db] add city {id, name}
+	[db] remove employee
+	[db] modify customer > user
 	[db?] system_settings {name, value}
+	[dm] check inverse
 	[do] list all javascript functions
 NOTE
 	db: database
+	dm: database mapping
 	do: document
