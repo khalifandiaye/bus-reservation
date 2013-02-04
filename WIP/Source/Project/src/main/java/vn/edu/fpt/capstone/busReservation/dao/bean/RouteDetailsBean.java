@@ -16,8 +16,7 @@ public class RouteDetailsBean extends AbstractBean<Integer> {
 	private static final long serialVersionUID = -370430165090983593L;
 	private SegmentBean segment;
 	private RouteBean route;
-	private List<TariffBean> tariffs;
-	
+	private List<TripBean> trips;
 	/**
 	 * @return the segment
 	 */
@@ -43,15 +42,15 @@ public class RouteDetailsBean extends AbstractBean<Integer> {
 		this.route = route;
 	}
 	/**
-	 * @return the tariffs
+	 * @return the trips
 	 */
-	public List<TariffBean> getTariffs() {
-		return tariffs;
+	public List<TripBean> getTrips() {
+	    return trips;
 	}
 	/**
-	 * @param tariffs the tariffs to set
+	 * @param trips the trips to set
 	 */
-	public void setTariffs(List<TariffBean> tariffs) {
-		this.tariffs = tariffs;
+	public void setTrips(List<TripBean> trips) {
+	    this.trips = trips;
 	}
 }

@@ -15,8 +15,10 @@ public class RouteBean extends AbstractBean<Integer> {
 	 */
 	private static final long serialVersionUID = 248904229492636837L;
 	private String name;
-	private List<RouteDetailsBean> routeDetails;
 	private String status;
+	private List<RouteDetailsBean> routeDetails;
+	private List<BusBean> assignedForwardBuses;
+	private List<BusBean> assignedReturnBuses;
 	/**
 	 * @return the name
 	 */
@@ -28,6 +30,18 @@ public class RouteBean extends AbstractBean<Integer> {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	/**
 	 * @return the routeDetails
@@ -42,15 +56,27 @@ public class RouteBean extends AbstractBean<Integer> {
 		this.routeDetails = routeDetails;
 	}
 	/**
-	 * @return the status
+	 * @return the assignedForwardBuses
 	 */
-	public String getStatus() {
-		return status;
+	public List<BusBean> getAssignedForwardBuses() {
+	    return assignedForwardBuses;
 	}
 	/**
-	 * @param status the status to set
+	 * @param assignedForwardBuses the assignedForwardBuses to set
 	 */
-	public void setStatus(String status) {
-		this.status = status;
+	public void setAssignedForwardBuses(List<BusBean> assignedForwardBuses) {
+	    this.assignedForwardBuses = assignedForwardBuses;
+	}
+	/**
+	 * @return the assignedReturnBuses
+	 */
+	public List<BusBean> getAssignedReturnBuses() {
+	    return assignedReturnBuses;
+	}
+	/**
+	 * @param assignedReturnBuses the assignedReturnBuses to set
+	 */
+	public void setAssignedReturnBuses(List<BusBean> assignedReturnBuses) {
+	    this.assignedReturnBuses = assignedReturnBuses;
 	}
 }

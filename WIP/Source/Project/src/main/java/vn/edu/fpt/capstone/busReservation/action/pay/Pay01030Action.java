@@ -243,7 +243,7 @@ public class Pay01030Action extends ActionSupport implements SessionAware {
 		reservation = reservationDAO.getById(reservationId);
 		payment = new PaymentBean();
 		payment.setReservation(reservation);
-		payment.setPaymentMethod("PAYPAL");
+//		payment.setPaymentMethod("PAYPAL");
 		// get amount from paypal's response
 		for (PaymentDetailsItemType item : checkoutDetailsResponse.getGetExpressCheckoutDetailsResponseDetails().getPaymentDetails().get(0).getPaymentDetailsItem()) {
 			if (item.getName().contains("Ticket")) {
@@ -252,7 +252,7 @@ public class Pay01030Action extends ActionSupport implements SessionAware {
 				payment.setServiceFee(Double.parseDouble(item.getAmount().getValue()) + payment.getServiceFee());
 			}
 		}
-		paymentDAO.save(payment);
+		paymentDAO.insert(payment);
 		// Generate reservation code
 		try {
 			reservationCode = CryptUtils.generateCode(reservation.getId(), 6);

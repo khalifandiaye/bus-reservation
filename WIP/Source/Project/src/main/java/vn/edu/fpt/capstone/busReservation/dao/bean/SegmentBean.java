@@ -4,6 +4,7 @@
 package vn.edu.fpt.capstone.busReservation.dao.bean;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Yoshimi
@@ -18,6 +19,8 @@ public class SegmentBean extends AbstractBean<Integer> {
 	private StationBean endAt;
 	private Date travelTime;
 	private String status;
+	private List<TariffBean> tariffs;
+	private List<RouteDetailsBean> routeDetails;
 	/**
 	 * @return the startAt
 	 */
@@ -65,5 +68,29 @@ public class SegmentBean extends AbstractBean<Integer> {
 	 */
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	/**
+	 * @return the tariffs
+	 */
+	public List<TariffBean> getTariffs() {
+	    return tariffs;
+	}
+	/**
+	 * @param tariffs the tariffs to set
+	 */
+	public void setTariffs(List<TariffBean> tariffs) {
+	    this.tariffs = tariffs;
+	}
+	/**
+	 * @return the routeDetails
+	 */
+	public List<RouteDetailsBean> getRouteDetails() {
+	    return routeDetails;
+	}
+	/**
+	 * @param routeDetails the routeDetails to set
+	 */
+	public void setRouteDetails(List<RouteDetailsBean> routeDetails) {
+	    this.routeDetails = routeDetails;
 	}
 }

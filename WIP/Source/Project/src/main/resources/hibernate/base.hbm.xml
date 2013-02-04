@@ -4,23 +4,54 @@
           "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="vn.edu.fpt.capstone.busReservation">
+	<!-- CITY -->
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.CityBean" table="city">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string" not-null="true" />
+		<bag name="stations" table="station" inverse="true">
+			<key column="city_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.StationBean" />
+		</bag>
+	</class>
+	<!-- STATION -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.StationBean" table="station">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
 		<property name="name" type="string" not-null="true" />
-		<property name="city" type="string" not-null="true" />
+		<many-to-one name="city" column="city_id" />
+		<property name="address" type="string" not-null="true" />
 		<property name="status" type="string" not-null="true" />
+		<bag name="inSegments" table="segment" inverse="true">
+			<key column="arrival_station_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean" />
+		</bag>
+		<bag name="outSegments" table="segment" inverse="true">
+			<key column="departure_station_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean" />
+		</bag>
 	</class>
+	<!-- SEGMENT -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean" table="segment">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
+		<many-to-one name="startAt" column="departure_station_id" />
+		<many-to-one name="endAt" column="arrival_station_id" />
 		<property name="travelTime" column="travel_time" type="time" not-null="true" />
 		<property name="status" type="string" not-null="true" />
-		<many-to-one name="startAt" column="start_at" />
-		<many-to-one name="endAt" column="end_at" />
+		<bag name="tariffs" table="tariff" inverse="true">
+			<key column="segment_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean" />
+		</bag>
+		<bag name="routeDetails" table="route_details" inverse="true">
+			<key column="segment_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean" />
+		</bag>
 	</class>
+	<!-- ROUTE -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean" table="route">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
@@ -31,82 +62,118 @@
 			<key column="route_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean" />
 		</bag>
+		<bag name="assignedForwardBuses" table="bus" inverse="true">
+			<key column="assigned_route_forward_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
+		</bag>
+		<bag name="assignedReturnBuses" table="bus" inverse="true">
+			<key column="assigned_route_return_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
+		</bag>
 	</class>
+	<!-- ROUTE_DETAILS -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean" table="route_details">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
 		<many-to-one name="segment" column="segment_id" />
 		<many-to-one name="route" column="route_id" />
-		<bag name="tariffs" table="tariff" inverse="true">
+		<bag name="trips" table="trip" inverse="true">
 			<key column="route_details_id" />
-			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
 		</bag>
 	</class>
+	<!-- BUS_TYPE -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean" table="bus_type">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
 		<property name="name" type="string" not-null="true" />
 		<property name="numberOfSeats" column="number_of_seats" type="integer" not-null="true" />
+		<bag name="buses" table="bus" inverse="true">
+			<key column="bus_type_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
+		</bag>
+		<bag name="tariffs" table="tariff" inverse="true">
+			<key column="bus_type_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean" />
+		</bag>
 	</class>
+	<!-- BUS -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" table="bus">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
-		<property name="plateNumber" column="plate_number" type="string" not-null="true" unique="true" />
 		<many-to-one name="busType" column="bus_type_id" />
+		<property name="plateNumber" column="plate_number" type="string" not-null="true" unique="true" />
+		<property name="status" type="string" not-null="true" />
+		<many-to-one name="forwardRoute" column="assigned_route_forward_id" />
+		<many-to-one name="returnRoute" column="assigned_route_return_id" />
+		<bag name="statusList" table="bus_status" inverse="true">
+			<key column="bus_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean" />
+		</bag>
 	</class>
+	<!-- TARIFF -->
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean" table="tariff">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<many-to-one name="segment" column="segment_id" />
+		<many-to-one name="busType" column="bus_type_id" />
+		<property name="validFrom" column="valid_from" type="timestamp" not-null="true" />
+		<property name="fare" type="double" not-null="true" />
+	</class>
+	<!-- BUS_STATUS -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean" table="bus_status">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
+		<many-to-one name="bus" column="bus_id" />
 		<property name="busStatus" column="bus_status" type="string" not-null="true" />
 		<property name="fromDate" column="from_date" type="timestamp" not-null="true" />
 		<property name="toDate" column="to_date" type="timestamp" not-null="true" />
+		<many-to-one name="endStation" column="end_station_id" />
 		<property name="status" type="string" not-null="true" />
 		<bag name="trips" table="trip" inverse="true">
 			<key column="bus_status_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
 		</bag>
-		<many-to-one name="bus" column="bus_id" />
-		<many-to-one name="scheduler" column="scheduler_id" />
 	</class>
+	<!-- TRIP -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" table="trip">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
+		<many-to-one name="busStatus" column="bus_status_id" />
+		<many-to-one name="routeDetails" column="route_details_id" />
 		<property name="departureTime" column="departure_time" type="timestamp" not-null="true" />
 		<property name="arrivalTime" column="arrival_time" type="timestamp" not-null="true" />
 		<property name="status" type="string" not-null="true" />
-		<many-to-one name="busStatus" column="bus_status_id" />
-		<many-to-one name="routeDetails" column="route_details_id" />
-		<bag name="reservations" table="trip_in_reservation">
+		<bag name="reservations" table="trip_in_reservation" inverse="true">
 			<key column="trip_id" />
 			<many-to-many column="reservation_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean" />
 		</bag>
 	</class>
-	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean" table="tariff">
+	<!-- ROLE -->
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.RoleBean" table="role">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
-		<property name="validFrom" column="valid_from" type="timestamp" not-null="true" />
-		<property name="fare" type="double" not-null="true" />
-		<many-to-one name="routeDetails" column="route_details_id" />
-		<many-to-one name="busType" column="bus_type_id" />
+		<property name="name" type="string" not-null="true" />
+		<bag name="users" table="user" inverse="true">
+			<key column="role_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.UserBean" />
+		</bag>
 	</class>
-	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" table="seat_position">
-		<composite-id>
-			<key-property name="name" column="seat_name" />
-			<key-many-to-one name="reservation" column="reservation_id" />
-		</composite-id>
-	</class>
-	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.CustomerBean" table="customer">
+	<!-- USER -->
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.UserBean" table="user">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
 		<property name="username" type="string" not-null="true" unique="true" />
 		<property name="password" type="string" not-null="true" />
+		<many-to-one name="role"  column="role_id"/>
 		<property name="firstName" column="first_name" type="string" not-null="false" />
 		<property name="lastName" column="last_name" type="string" not-null="false" />
 		<property name="phoneNumber" column="phone_number" type="string" not-null="false" />
@@ -115,19 +182,24 @@
 		<property name="civilId" column="civil_id" type="string" not-null="false" />
 		<property name="status" type="string" not-null="true" />
 	</class>
+	<!-- RESERVATION -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean" table="reservation">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
+		<many-to-one name="booker" column="user_id" not-null="false" />
 		<property name="code" type="string" not-null="false" unique="true" />
 		<property name="bookTime" column="book_time" type="timestamp" not-null="true" />
 		<property name="status" type="string" not-null="true" />
-		<many-to-one name="booker" column="booker_id" />
+		<property name="bookerFirstName" column="booker_first_name" type="string" not-null="true" />
+		<property name="bookerLastName" column="booker_last_name" type="string" not-null="true" />
+		<property name="phone" type="string" not-null="true" />
+		<property name="email" type="string" not-null="true" />
 		<bag name="seatPositions" table="seat_position" inverse="true">
 			<key column="reservation_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" />
 		</bag>
-		<bag name="trips" inverse="true" table="trip_in_reservation">
+		<bag name="trips" table="trip_in_reservation">
 			<key column="reservation_id" />
 			<many-to-many column="trip_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
 		</bag>
@@ -136,21 +208,32 @@
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean" />
 		</bag>
 	</class>
+	<!-- SEAT_POSITION -->
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" table="seat_position">
+		<composite-id>
+			<key-property name="name" column="seat_name" />
+			<key-many-to-one name="reservation" column="reservation_id" />
+		</composite-id>
+	</class>
+	<!-- PAYMENT_METHOD -->
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean" table="payment_method">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string" not-null="true" />
+		<property name="ratio" type="double" not-null="true" />
+		<property name="addition" type="double" not-null="true" />
+	</class>
+	<!-- PAYMENT -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean" table="payment">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
+		<many-to-one name="reservation" column="reservation_id" />
 		<property name="payAmount" column="pay_amount" type="double" not-null="true" />
 		<property name="serviceFee" column="service_fee" type="double" not-null="true" />
-		<property name="paymentMethod" column="payment_method" type="string" not-null="true" />
-		<many-to-one name="reservation" column="reservation_id" />
-	</class>
-	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.EmployeeBean" table="employee">
-		<id name="id" unsaved-value="0" type="integer">
-			<generator class="native" />
-		</id>
-		<property name="username" column="username" type="string" not-null="true" unique="true" />
-		<property name="password" column="password" type="string" not-null="true" />
-		<property name="admin" column="is_admin" type="boolean" not-null="true" />
+		<many-to-one name="paymentMethod" column="payment_method_id" />
+		<property name="transactionId" column="transaction_id" type="string" not-null="true" />
+		<property name="type" type="string" not-null="true" />
 	</class>
 </hibernate-mapping>
