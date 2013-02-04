@@ -21,113 +21,125 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.AbstractBean;
  */
 public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
 
-	protected final Class<T> clazz;
-	private static Log log = LogFactory.getLog(GenericDAO.class);
-	/**
-	 * The session factory, mainly for getting current session
-	 */
-	protected SessionFactory sessionFactory;
+    protected final Class<T> clazz;
+    private static Log log = LogFactory.getLog(GenericDAO.class);
+    /**
+     * The session factory, mainly for getting current session
+     */
+    protected SessionFactory sessionFactory;
 
-	public GenericDAO(Class<T> clazz) {
-		this.clazz = clazz;
-	}
+    public GenericDAO(Class<T> clazz) {
+	this.clazz = clazz;
+    }
 
-	/**
-	 * @param sessionFactory
-	 *            the sessionFactory to set
-	 */
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
+    /**
+     * @param sessionFactory
+     *            the sessionFactory to set
+     */
+    public void setSessionFactory(SessionFactory sessionFactory) {
+	this.sessionFactory = sessionFactory;
+    }
 
-	/**
-	 * Common exception handling
-	 * 
-	 * @param e
-	 *            the occurred exception
-	 * @param session
-	 *            the active session
-	 */
-	protected void exceptionHandling(HibernateException e, Session session) {
-		try {
-			if (session.getTransaction().isActive()) {
-				log.debug("Trying to rollback database transaction after exception");
-				session.getTransaction().rollback();
-			}
-		} catch (Throwable rbEx) {
-			log.error("Could not rollback transaction after exception!", rbEx);
-		}
-		throw e;
+    /**
+     * Common exception handling
+     * 
+     * @param e
+     *            the occurred exception
+     * @param session
+     *            the active session
+     */
+    protected void exceptionHandling(HibernateException e, Session session) {
+	try {
+	    if (session.getTransaction().isActive()) {
+		log.debug("Trying to rollback database transaction after exception");
+		session.getTransaction().rollback();
+	    }
+	} catch (Throwable rbEx) {
+	    log.error("Could not rollback transaction after exception!", rbEx);
 	}
+	throw e;
+    }
 
-	@SuppressWarnings("unchecked")
-	public List<T> getAll() {
-		List<T> list = null;
-		Session session = null;
-		Criteria criteria = null;
-		// get the current session
-		session = sessionFactory.getCurrentSession();
-		try {
-			// must have to start any transaction
-//			sessionFactory.getCurrentSession().beginTransaction();
-			// perform database access (query, insert, update, etc) here
-			criteria = session.createCriteria(clazz);
-			list = criteria.list();
-			// commit transaction
-//			session.getTransaction().commit();
-		} catch (HibernateException e) {
-			exceptionHandling(e, session);
-		}
-		// return result, if needed
-		return list;
+    @SuppressWarnings("unchecked")
+    public List<T> getAll() {
+	List<T> list = null;
+	Session session = null;
+	Criteria criteria = null;
+	// get the current session
+	session = sessionFactory.getCurrentSession();
+	try {
+	    // must have to start any transaction
+	    // sessionFactory.getCurrentSession().beginTransaction();
+	    // perform database access (query, insert, update, etc) here
+	    criteria = session.createCriteria(clazz);
+	    list = criteria.list();
+	    // commit transaction
+	    // session.getTransaction().commit();
+	} catch (HibernateException e) {
+	    exceptionHandling(e, session);
 	}
-	
-	@SuppressWarnings("unchecked")
-	public T getById(K id) {
-		T result = null;
-		Session session = null;
-		// get the current session
-		session = sessionFactory.getCurrentSession();
-		try {
-			// must have to start any transaction
-//			session.beginTransaction();
-			// perform database access (query, insert, update, etc) here
-			result = (T) session.get(clazz, id);
-			// commit transaction
-//			session.getTransaction().commit();
-		} catch (HibernateException e) {
-			exceptionHandling(e, session);
-		}
-		// return result, if needed
-		return result;
+	// return result, if needed
+	return list;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T getById(K id) {
+	T result = null;
+	Session session = null;
+	// get the current session
+	session = sessionFactory.getCurrentSession();
+	try {
+	    // must have to start any transaction
+	    // session.beginTransaction();
+	    // perform database access (query, insert, update, etc) here
+	    result = (T) session.get(clazz, id);
+	    // commit transaction
+	    // session.getTransaction().commit();
+	} catch (HibernateException e) {
+	    exceptionHandling(e, session);
 	}
-	
-	public K save(T t) {
-		K result = null;
-		Session session = null;
-		// get the current session
-		session = sessionFactory.getCurrentSession();
-		try {
-			// perform database access (query, insert, update, etc) here
-			session.save(t);
-		} catch (HibernateException e) {
-			exceptionHandling(e, session);
-		}
-		return result;
+	// return result, if needed
+	return result;
+    }
+
+    /**
+     * Insert new entity into the database.<br>
+     * Will throw exception if entity has existed in the database.
+     * 
+     * @param t entity to be inserted
+     * @return id
+     */
+    public Serializable insert(T t) {
+	Serializable result = null;
+	Session session = null;
+	// get the current session
+	session = sessionFactory.getCurrentSession();
+	try {
+	    // perform database access (query, insert, update, etc) here
+	    result = session.save(t);
+	} catch (HibernateException e) {
+	    exceptionHandling(e, session);
 	}
-	
-	public K update(T t) {
-		K result = null;
-		Session session = null;
-		// get the current session
-		session = sessionFactory.getCurrentSession();
-		try {
-			// perform database access (query, insert, update, etc) here
-			session.update(t);
-		} catch (HibernateException e) {
-			exceptionHandling(e, session);
-		}
-		return result;
+	return result;
+    }
+
+    /**
+     * Update an existing entity in the database.<br>
+     * Will throw exception if the entity does not exist in the database
+     * 
+     * @param t entity to be updated
+     * @return id
+     */
+    public void update(T t) {
+	Session session = null;
+	// get the current session
+	session = sessionFactory.getCurrentSession();
+	try {
+	    // perform database access (query, insert, update, etc) here
+	    session.update(t);
+	} catch (HibernateException e) {
+	    exceptionHandling(e, session);
 	}
+    }
 
 }
