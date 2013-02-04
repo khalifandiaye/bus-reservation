@@ -19,91 +19,91 @@ public class BusStatusBean extends AbstractBean<Integer> {
 	private String busStatus;
 	private Date fromDate;
 	private Date toDate;
-	private List<TripBean> trips;
+	private StationBean endStation;
 	private String status;
-	private EmployeeBean scheduler;
+	private List<TripBean> trips;
 	/**
 	 * @return the bus
 	 */
 	public BusBean getBus() {
-		return bus;
+	    return bus;
 	}
 	/**
 	 * @param bus the bus to set
 	 */
 	public void setBus(BusBean bus) {
-		this.bus = bus;
+	    this.bus = bus;
 	}
 	/**
 	 * @return the busStatus
 	 */
 	public String getBusStatus() {
-		return busStatus;
+	    return busStatus;
 	}
 	/**
 	 * @param busStatus the busStatus to set
 	 */
 	public void setBusStatus(String busStatus) {
-		this.busStatus = busStatus;
+	    this.busStatus = busStatus;
 	}
 	/**
 	 * @return the fromDate
 	 */
 	public Date getFromDate() {
-		return fromDate;
+	    return fromDate;
 	}
 	/**
 	 * @param fromDate the fromDate to set
 	 */
 	public void setFromDate(Date fromDate) {
-		this.fromDate = fromDate;
+	    this.fromDate = fromDate;
 	}
 	/**
 	 * @return the toDate
 	 */
 	public Date getToDate() {
-		return toDate;
+	    return toDate;
 	}
 	/**
 	 * @param toDate the toDate to set
 	 */
 	public void setToDate(Date toDate) {
-		this.toDate = toDate;
+	    this.toDate = toDate;
 	}
 	/**
-	 * @return the trips
+	 * @return the endStation
 	 */
-	public List<TripBean> getTrips() {
-		return trips;
+	public StationBean getEndStation() {
+	    return endStation;
 	}
 	/**
-	 * @param trips the trips to set
+	 * @param endStation the endStation to set
 	 */
-	public void setTrips(List<TripBean> trips) {
-		this.trips = trips;
+	public void setEndStation(StationBean endStation) {
+	    this.endStation = endStation;
 	}
 	/**
 	 * @return the status
 	 */
 	public String getStatus() {
-		return status;
+	    return status;
 	}
 	/**
 	 * @param status the status to set
 	 */
 	public void setStatus(String status) {
-		this.status = status;
+	    this.status = status;
 	}
 	/**
-	 * @return the scheduler
+	 * @return the trips
 	 */
-	public EmployeeBean getScheduler() {
-		return scheduler;
+	public List<TripBean> getTrips() {
+	    return trips;
 	}
 	/**
-	 * @param scheduler the scheduler to set
+	 * @param trips the trips to set
 	 */
-	public void setScheduler(EmployeeBean scheduler) {
-		this.scheduler = scheduler;
+	public void setTrips(List<TripBean> trips) {
+	    this.trips = trips;
 	}
 }

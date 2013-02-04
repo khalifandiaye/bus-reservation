@@ -14,56 +14,56 @@ public class TariffBean extends AbstractBean<Integer> {
 	 * 
 	 */
 	private static final long serialVersionUID = 9170351175544644640L;
-	private RouteDetailsBean routeDetails;
+	private SegmentBean segment;
 	private BusTypeBean busType;
 	private Date validFrom;
 	private double fare;
 	/**
-	 * @return the routeDetails
+	 * @return the segment
 	 */
-	public RouteDetailsBean getRouteDetails() {
-		return routeDetails;
+	public SegmentBean getSegment() {
+	    return segment;
 	}
 	/**
-	 * @param routeDetails the routeDetails to set
+	 * @param segment the segment to set
 	 */
-	public void setRouteDetails(RouteDetailsBean routeDetails) {
-		this.routeDetails = routeDetails;
+	public void setSegment(SegmentBean segment) {
+	    this.segment = segment;
 	}
 	/**
 	 * @return the busType
 	 */
 	public BusTypeBean getBusType() {
-		return busType;
+	    return busType;
 	}
 	/**
 	 * @param busType the busType to set
 	 */
 	public void setBusType(BusTypeBean busType) {
-		this.busType = busType;
+	    this.busType = busType;
 	}
 	/**
 	 * @return the validFrom
 	 */
 	public Date getValidFrom() {
-		return validFrom;
+	    return validFrom;
 	}
 	/**
 	 * @param validFrom the validFrom to set
 	 */
 	public void setValidFrom(Date validFrom) {
-		this.validFrom = validFrom;
+	    this.validFrom = validFrom;
 	}
 	/**
 	 * @return the fare
 	 */
 	public double getFare() {
-		return fare;
+	    return fare;
 	}
 	/**
 	 * @param fare the fare to set
 	 */
 	public void setFare(double fare) {
-		this.fare = fare;
+	    this.fare = fare;
 	}
 }
