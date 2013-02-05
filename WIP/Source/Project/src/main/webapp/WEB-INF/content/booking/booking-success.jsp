@@ -51,32 +51,21 @@
 	                <div class="seat-map-wrapper">
 	                    <div class="seat-map-inner" style="">
 	                    	
-	                    	<s:iterator status="col" begin="1" end="11" >
-	                    		<s:div cssClass="seat-map-col">	
-		                    		<s:iterator status="row" begin="1" end="4">
-							  			<s:div cssClass="seat">
-							  				<s:if test="seatMap[#col.index * 4 + #row.index].status != 1">
-							  					<span style="position: absolute"><s:property value="seatMap[#col.index * 4 + #row.index].name" /></span>
-		                						<img class="seat-img" src="../images/bus-one-seat.png" alt="" data-seat="<s:property value="seatMap[#col.index * 4 + #row.index].name" />" data-status="<s:property value="seatMap[#col.index * 4 + #row.index].status" />">
+	                    	<s:iterator status="seat" value="seatMap" >
+	                  			<s:div cssClass="seat-map-row">
+		                  			<s:iterator >
+		                  			<s:if test=""></s:if>
+	                   					<s:div cssClass="seat"> 
+							  				<s:if test="status != 1">
+							  					<span style="position: absolute"><s:property value="name" /></span>
+		                						<img class="seat-img" src="../images/bus-one-seat.png" alt="" data-seat="<s:property value="name" />" data-status="<s:property value="status" />">
 		               						</s:if>
 		               						<s:else>
-		               							<span style="position: absolute"><s:property value="seatMap[#col.index * 4 + #row.index].name" /></span>
-		               							<img class="seat-img" src="../images/bus-one-seat-sold.png" alt="" data-seat="<s:property value="seatMap[#col.index * 4 + #row.index].name" />" data-status="<s:property value="seatMap[#col.index * 4 + #row.index].status" />">
+		               							<span style="position: absolute"><s:property value="name"/></span>
+		               							<img class="seat-img" src="../images/bus-one-seat-sold.png" alt="" data-seat="<s:property value="name" />" data-status="<s:property value="status" />">
 		               						</s:else>
 		                   				</s:div>
 	                   				</s:iterator>
-	                   				<s:if test="#col.count == 11">
-	                   					<s:div cssClass="seat"> 
-							  				<s:if test="seatMap[44].status != 1">
-							  					<span style="position: absolute"><s:property value="seatMap[44].name" /></span>
-		                						<img class="seat-img" src="../images/bus-one-seat.png" alt="" data-seat="<s:property value="seatMap[44].name" />" data-status="<s:property value="seatMap[44].status" />">
-		               						</s:if>
-		               						<s:else>
-		               							<span style="position: absolute"><s:property value="45"/></span>
-		               							<img class="seat-img" src="../images/bus-one-seat-sold.png" alt="" data-seat="<s:property value="seatMap[44].name" />" data-status="<s:property value="seatMap[44].status" />">
-		               						</s:else>
-		                   				</s:div>
-	                   				</s:if>
                    				</s:div>
 						   	</s:iterator>
 	                    	

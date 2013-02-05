@@ -33,32 +33,29 @@ public class BookingAction extends ActionSupport implements SessionAware {
 	 */
 	private static final long serialVersionUID = 5962554617409673584L;
 	
-	private TripDAO tripDAO = null; 
-	private List<TripBean> listTripBean = new ArrayList<TripBean>();
-	private List<SeatInfo> seatMap = new ArrayList<SeatInfo>();
-	Map<String,Object> session = null;
+	private TripDAO tripDAO;
+	private SeatInfo[][] seatMap;
 	
-
-	public List<SeatInfo> getSeatMap() {
+	public SeatInfo[][] getSeatMap() {
 		return seatMap;
 	}
 
-	public void setSeatMap(List<SeatInfo> seatMap) {
-		this.seatMap = seatMap;
-	}
+	Map<String,Object> session = null;	
 
 	public void setTripDAO(TripDAO tripDAO) {
 		this.tripDAO = tripDAO;
 	}
 
-	public void getListTripBean(){
+	private List<TripBean> getListTripBean(){
 		TripBean tripTmp = new TripBean();
 		tripTmp = tripDAO.getById(1);
+		List<TripBean> listTripBean = new ArrayList<TripBean>();
 		listTripBean.add(tripTmp);
+		session.put("listTripBean", listTripBean);
+		return listTripBean;
 	}
 	
-	public List<SeatInfo> getSeatsList(){
-		getListTripBean();
+	private List<SeatInfo> getSeatsList(List<TripBean> listTripBean){
 		List<SeatInfo> seats = new ArrayList<SeatInfo>();		
 		for(int k = 0; k < listTripBean.size(); k++){
 			int reservationForTrip = listTripBean.get(k).getReservations().size();
@@ -75,15 +72,17 @@ public class BookingAction extends ActionSupport implements SessionAware {
 		return seats;
 	}
 	
-	public String buildSeatMap(){
+	private SeatInfo[][] buildSeatMap(List<TripBean> listTripBean){
 		
-		List<SeatInfo> seats = getSeatsList();
+		List<SeatInfo> seats = getSeatsList(listTripBean);
 		
 		String[] bigText = {"A","B","C","D","E","F","G","H","I","J","K"}; 
 		
-		for(int i = 0; i < 11; i++){
-			if(i < 10){
-				for(int j = 0; j < 4;j++ ){
+		SeatInfo[][] tmpSeatMap = new SeatInfo[5][11];
+		
+		for(int i = 0; i < 5; i++){
+			if(i != 2){
+				for(int j = 0; j < 11;j++ ){
 					String seatNum = bigText[i] + Integer.toString(j+1);
 					String status = "0";
 					for(int k = 0; k < seats.size(); k++){
@@ -91,28 +90,27 @@ public class BookingAction extends ActionSupport implements SessionAware {
 							status = "1";
 						}
 					}
-					seatMap.add(new SeatInfo(seatNum, status));
+					tmpSeatMap[i][j] = new SeatInfo(seatNum, status);
 				}
 			}else{
 				//Bonus seat
-				for(int j = 0; j < 5;j++ ){
-					String seatNum = bigText[i] + Integer.toString(j+1);
-					String status = "0";
-					for(int k = 0; k < seats.size(); k++){
-						if(seats.get(k).getName().equals(seatNum)){
-							status = "1";
-						}
+				String seatNum = bigText[i] + Integer.toString(1);
+				String status = "0";
+				for(int k = 0; k < seats.size(); k++){
+					if(seats.get(k).getName().equals(seatNum)){
+						status = "1";
 					}
-					seatMap.add(new SeatInfo(seatNum, status));
 				}
+				tmpSeatMap[i][0] = new SeatInfo(seatNum, status);
 			}
 		}
-		return SUCCESS;
+		return tmpSeatMap;
 	}
 	
 	public String execute(){
-		buildSeatMap();
-		session.put("listTripBean", listTripBean);
+		List<TripBean> listTripBeans = null;
+		listTripBeans = getListTripBean();
+		seatMap = buildSeatMap(listTripBeans);
 		return SUCCESS;
 	}
 
