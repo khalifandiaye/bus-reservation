@@ -70,8 +70,8 @@ CREATE TABLE `bus_status` (
   UNIQUE KEY `bus_status_unique_key` (`bus_id`,`from_date`),
   KEY `bus_status_bus_id_idx` (`bus_id`),
   KEY `bus_status_end_station_id_idx` (`end_station_id`),
-  CONSTRAINT `bus_status_end_station_id` FOREIGN KEY (`end_station_id`) REFERENCES `station` (`id`),
-  CONSTRAINT `bus_status_bus_id` FOREIGN KEY (`bus_id`) REFERENCES `bus` (`id`)
+  CONSTRAINT `bus_status_bus_id` FOREIGN KEY (`bus_id`) REFERENCES `bus` (`id`),
+  CONSTRAINT `bus_status_end_station_id` FOREIGN KEY (`end_station_id`) REFERENCES `station` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -194,6 +194,22 @@ INSERT INTO `payment_method` VALUES (1,'Cash',0,0),(2,'Paypal',0.039,0.3);
 UNLOCK TABLES;
 
 --
+-- Temporary table structure for view `remained_seats`
+--
+
+DROP TABLE IF EXISTS `remained_seats`;
+/*!50001 DROP VIEW IF EXISTS `remained_seats`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `remained_seats` (
+  `bus_status_id` int(11),
+  `start_city_id` int(11),
+  `end_city_id` int(11),
+  `number_of_remained_seats` bigint(22)
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `reservation`
 --
 
@@ -214,7 +230,7 @@ CREATE TABLE `reservation` (
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `reservation_booker_id_idx` (`user_id`),
   CONSTRAINT `reservation_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -223,7 +239,7 @@ CREATE TABLE `reservation` (
 
 LOCK TABLES `reservation` WRITE;
 /*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
-INSERT INTO `reservation` VALUES (1,1,NULL,'2013-02-15 12:00:00','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn');
+INSERT INTO `reservation` VALUES (1,1,NULL,'2013-02-15 12:00:00','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(2,1,NULL,'2013-02-15 12:00:00','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(3,1,NULL,'2013-02-15 12:00:00','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn');
 /*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -329,7 +345,7 @@ CREATE TABLE `seat_position` (
 
 LOCK TABLES `seat_position` WRITE;
 /*!40000 ALTER TABLE `seat_position` DISABLE KEYS */;
-INSERT INTO `seat_position` VALUES (1,'A1'),(1,'A2');
+INSERT INTO `seat_position` VALUES (1,'A1'),(1,'A2'),(2,'A1'),(2,'A2'),(2,'A3'),(3,'B1'),(3,'B2');
 /*!40000 ALTER TABLE `seat_position` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -376,7 +392,7 @@ CREATE TABLE `station` (
   `name` varchar(45) NOT NULL,
   `city_id` int(11) NOT NULL,
   `address` varchar(100) NOT NULL DEFAULT '',
-  `status` varchar(10) NOT NULL,
+  `status` varchar(10) NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`),
   KEY `station_city_id_idx` (`city_id`),
   CONSTRAINT `station_city_id` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`)
@@ -465,8 +481,8 @@ CREATE TABLE `trip` (
   PRIMARY KEY (`id`),
   KEY `trip_bus_id_idx` (`bus_status_id`),
   KEY `trip_segment_in_route_id_idx` (`route_details_id`),
-  CONSTRAINT `trip_segment_in_route_id` FOREIGN KEY (`route_details_id`) REFERENCES `route_details` (`id`),
-  CONSTRAINT `trip_bus_status_id` FOREIGN KEY (`bus_status_id`) REFERENCES `bus_status` (`id`)
+  CONSTRAINT `trip_bus_status_id` FOREIGN KEY (`bus_status_id`) REFERENCES `bus_status` (`id`),
+  CONSTRAINT `trip_segment_in_route_id` FOREIGN KEY (`route_details_id`) REFERENCES `route_details` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -504,9 +520,46 @@ CREATE TABLE `trip_in_reservation` (
 
 LOCK TABLES `trip_in_reservation` WRITE;
 /*!40000 ALTER TABLE `trip_in_reservation` DISABLE KEYS */;
-INSERT INTO `trip_in_reservation` VALUES (1,1);
+INSERT INTO `trip_in_reservation` VALUES (1,1),(3,3),(2,4),(3,4),(2,5);
 /*!40000 ALTER TABLE `trip_in_reservation` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `trip_start_end`
+--
+
+DROP TABLE IF EXISTS `trip_start_end`;
+/*!50001 DROP VIEW IF EXISTS `trip_start_end`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `trip_start_end` (
+  `trip_id` int(11),
+  `bus_status_id` int(11),
+  `start_city_id` int(11),
+  `departure_time` datetime,
+  `end_city_id` int(11),
+  `arrival_time` datetime
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `trip_with_number_of_remained_seats_in_subroute`
+--
+
+DROP TABLE IF EXISTS `trip_with_number_of_remained_seats_in_subroute`;
+/*!50001 DROP VIEW IF EXISTS `trip_with_number_of_remained_seats_in_subroute`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `trip_with_number_of_remained_seats_in_subroute` (
+  `trip_id` int(11),
+  `bus_status_id` int(11),
+  `start_city_id` int(11),
+  `departure_time` datetime,
+  `end_city_id` int(11),
+  `arrival_time` datetime,
+  `number_of_remained_seats` bigint(22)
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `user`
@@ -543,6 +596,63 @@ LOCK TABLES `user` WRITE;
 INSERT INTO `user` VALUES (1,'customer1','customer1',1,'First','Customer',NULL,NULL,'cust1_1357703483_per@fpt.edu.vn',NULL,'active'),(2,'truong','truong',3,'Truong','Nguyen Son',NULL,NULL,NULL,NULL,'active'),(3,'tram','tram',2,'Tram','Nguyen Thi Bich',NULL,NULL,NULL,NULL,'active');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Final view structure for view `remained_seats`
+--
+
+/*!50001 DROP TABLE IF EXISTS `remained_seats`*/;
+/*!50001 DROP VIEW IF EXISTS `remained_seats`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `remained_seats` AS select `tse`.`bus_status_id` AS `bus_status_id`,`tse`.`start_city_id` AS `start_city_id`,`tse`.`end_city_id` AS `end_city_id`,(`btp`.`number_of_seats` - count(distinct `sp`.`seat_name`)) AS `number_of_remained_seats` from ((((((`trip_start_end` `tse` left join `trip_in_reservation` `tir` on((`tir`.`trip_id` = `tse`.`trip_id`))) left join `reservation` `rsv` on(((`rsv`.`id` = `tir`.`reservation_id`) and ((`rsv`.`status` = 'paid') or ((`rsv`.`status` = 'unpaid') and (`rsv`.`book_time` >= (now() - '0000-00-00 00:15:00'))))))) left join `seat_position` `sp` on((`sp`.`reservation_id` = `rsv`.`id`))) join `bus_status` `bst` on((`bst`.`id` = `tse`.`bus_status_id`))) join `bus` on((`bus`.`id` = `bst`.`bus_id`))) join `bus_type` `btp` on((`btp`.`id` = `bus`.`bus_type_id`))) group by `tse`.`bus_status_id`,`tse`.`start_city_id`,`tse`.`end_city_id`,`btp`.`number_of_seats` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `trip_start_end`
+--
+
+/*!50001 DROP TABLE IF EXISTS `trip_start_end`*/;
+/*!50001 DROP VIEW IF EXISTS `trip_start_end`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=TEMPTABLE */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `trip_start_end` AS select `trp`.`id` AS `trip_id`,`trp`.`bus_status_id` AS `bus_status_id`,`st1`.`city_id` AS `start_city_id`,`tr1`.`departure_time` AS `departure_time`,`st2`.`city_id` AS `end_city_id`,`tr2`.`arrival_time` AS `arrival_time` from ((((((((`trip` `tr1` join `route_details` `rd1` on((`rd1`.`id` = `tr1`.`route_details_id`))) join `segment` `sg1` on((`sg1`.`id` = `rd1`.`segment_id`))) join `station` `st1` on((`st1`.`id` = `sg1`.`departure_station_id`))) join `trip` `tr2` on((`tr1`.`bus_status_id` = `tr2`.`bus_status_id`))) join `route_details` `rd2` on((`rd2`.`id` = `tr2`.`route_details_id`))) join `segment` `sg2` on((`sg2`.`id` = `rd2`.`segment_id`))) join `station` `st2` on((`st2`.`id` = `sg2`.`arrival_station_id`))) join `trip` `trp` on((`trp`.`bus_status_id` = `tr2`.`bus_status_id`))) where ((`tr1`.`departure_time` <= `tr2`.`departure_time`) and (`trp`.`departure_time` >= `tr1`.`departure_time`) and (`trp`.`departure_time` <= `tr2`.`departure_time`)) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `trip_with_number_of_remained_seats_in_subroute`
+--
+
+/*!50001 DROP TABLE IF EXISTS `trip_with_number_of_remained_seats_in_subroute`*/;
+/*!50001 DROP VIEW IF EXISTS `trip_with_number_of_remained_seats_in_subroute`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `trip_with_number_of_remained_seats_in_subroute` AS select `trip_start_end`.`trip_id` AS `trip_id`,`trip_start_end`.`bus_status_id` AS `bus_status_id`,`trip_start_end`.`start_city_id` AS `start_city_id`,`trip_start_end`.`departure_time` AS `departure_time`,`trip_start_end`.`end_city_id` AS `end_city_id`,`trip_start_end`.`arrival_time` AS `arrival_time`,`temp`.`number_of_remained_seats` AS `number_of_remained_seats` from (`trip_start_end` join `remained_seats` `temp` on(((`trip_start_end`.`bus_status_id` = `temp`.`bus_status_id`) and (`trip_start_end`.`start_city_id` = `temp`.`start_city_id`) and (`trip_start_end`.`end_city_id` = `temp`.`end_city_id`)))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -553,4 +663,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-02-04 10:26:10
+-- Dump completed on 2013-02-05 23:19:54
