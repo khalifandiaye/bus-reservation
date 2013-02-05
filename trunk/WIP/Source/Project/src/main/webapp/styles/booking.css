@@ -80,12 +80,12 @@
     padding-left: 4%;
     overflow: hidden;
 }
-.seat-map-col{
-    width: 9%;
-    float:right;
+.seat-map-row{
+    width: 100%;
+    float:left;
 }
 .seat{
-    width: 100%;
+    width: 9%;
     float: left;
 }
 .seat img{
