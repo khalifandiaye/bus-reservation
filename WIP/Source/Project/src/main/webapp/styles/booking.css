@@ -87,8 +87,29 @@
 .seat{
     width: 9%;
     float: left;
+    position: relative;
 }
 .seat img{
 	float:left;
     cursor: pointer;
+}
+.seat-name{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	padding-left: 45%;
+	padding-top: 10%;
+	cursor: pointer;
+}
+@media (max-width: 979px) and (min-width: 768px){
+	.seat-name{
+		font-size: 80%;
+		padding-top: 0%;
+		padding-left: 40%;
+	}
+}
+@media (max-width: 767px){
+	.seat-name{
+		display:none
+	}
 }

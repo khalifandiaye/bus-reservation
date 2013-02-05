@@ -36,20 +36,11 @@ public class BookingPayAction extends ActionSupport implements SessionAware {
 	private TripBean tripBean;
 	private ReservationDAO reservationDAO = null;
 	private SeatPositionDAO seatPositionDAO = null;
-	private String selectedSeat;
 	private String inputFirstName;
 	private String inputLastName;
 	private String inputMobile;
 	private String inputEmail;
-	
-	public String getSelectedSeat() {
-		return selectedSeat;
-	}
 
-	public void setSelectedSeat(String selectedSeat) {
-		this.selectedSeat = selectedSeat;
-	}
-	
 	public String getInputFirstName() {
 		return inputFirstName;
 	}
@@ -98,7 +89,7 @@ public class BookingPayAction extends ActionSupport implements SessionAware {
 		List<TripBean> list = (List<TripBean>)session.get("listTripBean");
 		
 		UserBean userBean;
-		if(!session.get("User").equals(null)){
+		if(!(session.get("User") == null)){
 			userBean = (UserBean)session.get("User");
 			this.inputFirstName = userBean.getFirstName();
 			this.inputLastName = userBean.getLastName();
@@ -119,13 +110,12 @@ public class BookingPayAction extends ActionSupport implements SessionAware {
 		reservationBean.setCode(null);//String Code
 		reservationBean.setPayments(null);//List<PaymentBean>
 		reservationBean.setSeatPositions(null);//List<seatPosition>
-		reservationBean.setStatus("available");
+		reservationBean.setStatus("unpaid");
 		reservationBean.setTrips(list);//List<tripBean>
 		
 		reservationDAO.insert(reservationBean);
 		
-		List<SeatPositionBean> listSeats = new ArrayList<SeatPositionBean>();
-		String[] tmp = selectedSeat.split(";");
+		String[] tmp = ((String)session.get("selectedSeats")).split(";");
 		for(int i =0 ; i< tmp.length; i++){
 			SeatPositionKey key = new SeatPositionKey();
 			key.setName(tmp[i]);
@@ -136,15 +126,10 @@ public class BookingPayAction extends ActionSupport implements SessionAware {
 			spb.setName(tmp[i]);
 			spb.setReservation(reservationBean);
 			
-			seatPositionDAO.insert(spb);
-			
-			listSeats.add(spb);
+			seatPositionDAO.insert(spb);	
 		}
-//		
-//		reservationBean.setSeatPositions(listSeats);
-//		reservationDAO.save(reservationBean);
-		
 		session.remove("listTripBean");
+		session.remove("selectedSeats");
 		
 		return SUCCESS;
 	}

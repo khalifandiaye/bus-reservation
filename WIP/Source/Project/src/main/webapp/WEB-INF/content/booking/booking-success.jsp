@@ -50,27 +50,44 @@
 	            <div class="seat-map well well-small">
 	                <div class="seat-map-wrapper">
 	                    <div class="seat-map-inner" style="">
-	                    	
 	                    	<s:iterator status="seat" value="seatMap" >
 	                  			<s:div cssClass="seat-map-row">
 		                  			<s:iterator >
-		                  			<s:if test=""></s:if>
-	                   					<s:div cssClass="seat"> 
-							  				<s:if test="status != 1">
-							  					<span style="position: absolute"><s:property value="name" /></span>
-		                						<img class="seat-img" src="../images/bus-one-seat.png" alt="" data-seat="<s:property value="name" />" data-status="<s:property value="status" />">
-		               						</s:if>
-		               						<s:else>
-		               							<span style="position: absolute"><s:property value="name"/></span>
-		               							<img class="seat-img" src="../images/bus-one-seat-sold.png" alt="" data-seat="<s:property value="name" />" data-status="<s:property value="status" />">
-		               						</s:else>
-		                   				</s:div>
+			                  			<s:if test="status != null">
+		                   					<s:div cssClass="seat"> 
+								  				<s:if test="status != 1">
+								  					<span class="seat-name"><s:property value="name" /></span>
+			                						<img class="seat-img" src="../images/bus-one-seat.png" alt="" data-seat="<s:property value="name" />" data-status="<s:property value="status" />">
+			               						</s:if>
+			               						<s:else>
+			               							<span class="seat-name"><s:property value="name"/></span>
+			               							<img class="seat-img" src="../images/bus-one-seat-sold.png" alt="" data-seat="<s:property value="name" />" data-status="<s:property value="status" />">
+			               						</s:else>
+			                   				</s:div>
+		                   				</s:if>
+		                   				<s:else>
+											<!--  no  seat  here -->
+		                   				</s:else>
 	                   				</s:iterator>
                    				</s:div>
 						   	</s:iterator>
 	                    	
 	                    </div>
 	                </div>
+	            </div>
+	            <div class="seat-description well well-small" style="overflow: hidden"> 
+	            	<div style="width: 33%;float:left">
+	            		<img src="../images/bus-one-seat.png" width="20%">
+	            		<span>Ghế Trống</span>
+	            	</div>
+	            	<div style="width: 33%;float:left">
+	            		<img src="../images/bus-one-seat-selected.png" width="20%">
+	            		<span>Ghế đang chọn</span>
+	            	</div>
+	            	<div style="width: 33%;float:left">
+	            		<img src="../images/bus-one-seat-sold.png" width="20%">
+	            		<span>Ghế đã được bán</span>    
+	            	</div>
 	            </div>
 	        </div>
 	        <div class="span4 booking-wrapper">

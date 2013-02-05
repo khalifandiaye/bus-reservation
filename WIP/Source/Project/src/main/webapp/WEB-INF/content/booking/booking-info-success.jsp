@@ -50,21 +50,15 @@
 				<fieldset>
 					<legend>Hoàn thành thông tin đăng kí vé xe</legend>
 						<div class="control-group">
-						    <label class="control-label" for="inputFirstName">Họ</label>
+						    <label class="control-label" for="inputFirstName">Tên</label>
 						    <div class="controls">
-						      <input type="text" id="inputFirstName" name="inputFirstName" placeholder="Họ">
+						      <input type="text" id="inputFirstName" name="inputFirstName" placeholder="Tên">
 					    	</div>
 					  	</div>
 					  	<div class="control-group">
-						    <label class="control-label" for="inputLastName">Tên</label>
+						    <label class="control-label" for="inputLastName">Họ</label>
 						    <div class="controls">
-						      <input type="text" id="inputLastName" name="inputLastName" placeholder="Tên">
-					    	</div>
-					  	</div>
-					  	<div class="control-group">
-						    <label class="control-label" for="inputPhone">Điện Thoại Bàn</label>
-						    <div class="controls">
-						      <input type="text" id="inputPhone" name="inputPhone" placeholder="Điện Thoại Bàn">
+						      <input type="text" id="inputLastName" name="inputLastName" placeholder="Họ">
 					    	</div>
 					  	</div>
 					  	<div class="control-group">
@@ -80,18 +74,11 @@
 					    	</div>
 					  	</div>
 					  	<div class="control-group">
-						    <label class="control-label" for="inputCivilID">Chứng Minh Nhân Dân</label>
-						    <div class="controls">
-						      <input type="text" id="inputCivilID" name="inputCivilID" placeholder="Chứng Minh Nhân Dân">
-					    	</div>
-					  	</div>
-					  	<div class="control-group">
 						    <label class="control-label">Số ghế chọn</label>
 						    <div class="controls">
 						     	<s:iterator value="listSeats">
 						     		<s:div><s:property value="name" /></s:div>
-						     	</s:iterator>
-						     	<s:textfield name="selectedSeat" value="%{selectedSeat}" cssStyle="display:none"></s:textfield>
+						     	</s:iterator>						     	
 					    	</div>
 					  	</div>
 					  	<button class="btn btn-large" >Hoàn Tất</button>
