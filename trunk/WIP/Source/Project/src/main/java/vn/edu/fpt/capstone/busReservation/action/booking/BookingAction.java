@@ -4,7 +4,9 @@
 package vn.edu.fpt.capstone.busReservation.action.booking;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Map;
 import org.apache.struts2.interceptor.SessionAware;
 
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
+import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SeatInfo;
@@ -55,16 +58,32 @@ public class BookingAction extends ActionSupport implements SessionAware {
 		return listTripBean;
 	}
 	
+	private boolean checkTime(Date bookTime){
+		Calendar timeLimit = null;
+		timeLimit = Calendar.getInstance();
+		timeLimit.add(Calendar.MINUTE, -15);
+		if (bookTime.after(timeLimit.getTime())) {
+			return true;
+		}
+		return false;
+	}
+	
 	private List<SeatInfo> getSeatsList(List<TripBean> listTripBean){
 		List<SeatInfo> seats = new ArrayList<SeatInfo>();		
 		for(int k = 0; k < listTripBean.size(); k++){
-			int reservationForTrip = listTripBean.get(k).getReservations().size();
-			for(int i = 0; i < reservationForTrip; i++){
-				int positionSize = listTripBean.get(k).getReservations().get(i).getSeatPositions().size();
-				for(int j = 0; j < positionSize; j++){
-					SeatInfo tmp = new SeatInfo(listTripBean.get(k).getReservations().get(i).getSeatPositions().get(j).getName(), "1");
-					if( !seats.contains(tmp)){
-						seats.add(tmp);
+			int reservationForTripSize = listTripBean.get(k).getReservations().size();
+			for(int i = 0; i < reservationForTripSize; i++){
+				ReservationBean reservationBean = listTripBean.get(k).getReservations().get(i);
+				int positionSize = reservationBean.getSeatPositions().size();
+				boolean isPaid = checkTime(reservationBean.getBookTime());
+				if(reservationBean.getStatus().equals("paid") || 
+						(reservationBean.getStatus().equals("unpaid") && isPaid)){
+					for(int j = 0; j < positionSize; j++){
+						SeatPositionBean seatBean = listTripBean.get(k).getReservations().get(i).getSeatPositions().get(j);
+						SeatInfo tmp = new SeatInfo(seatBean.getName(), "1");
+						if( !seats.contains(tmp)){
+							seats.add(tmp);
+						}
 					}
 				}
 			}
@@ -76,7 +95,7 @@ public class BookingAction extends ActionSupport implements SessionAware {
 		
 		List<SeatInfo> seats = getSeatsList(listTripBean);
 		
-		String[] bigText = {"A","B","C","D","E","F","G","H","I","J","K"}; 
+		String[] bigText = {"A","B","C","D","E"}; 
 		
 		SeatInfo[][] tmpSeatMap = new SeatInfo[5][11];
 		
