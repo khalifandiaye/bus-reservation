@@ -17,7 +17,7 @@
 	<jsp:include page="../common/header.jsp" />
 	<!-- Start small nav -->
 	<section class="small-nav">
-	    <div class="container">
+	    <div class="my-container">
 	        <div class="nav-step-wrapper">
 	            <div class="nav-step nav-done">
 	                <span class="nav-step-num">1</span>
@@ -45,9 +45,9 @@
 	<!-- End small nav -->
 	<!-- Start Boooking bus seat -->
 	<setion class="booking-bus-seat">
-	    <div class="container">
-	        <div class="span8" style="margin-left: 0px;">
-	            <div class="seat-map well well-small">
+	    <div class="my-container">
+	        <div class="well well-small">
+	            <div class="seat-map ">
 	                <div class="seat-map-wrapper">
 	                    <div class="seat-map-inner" style="">
 	                    	<s:iterator status="seat" value="seatMap" >
@@ -75,7 +75,7 @@
 	                    </div>
 	                </div>
 	            </div>
-	            <div class="seat-description well well-small" style="overflow: hidden"> 
+	            <div class="seat-description" style="overflow: hidden;padding-left:20px;"> 
 	            	<div style="width: 33%;float:left">
 	            		<img src="../images/bus-one-seat.png" width="20%">
 	            		<span>Ghế Trống</span>
@@ -89,21 +89,21 @@
 	            		<span>Ghế đã được bán</span>    
 	            	</div>
 	            </div>
-	        </div>
-	        <div class="span4 booking-wrapper">
-	            <form class="booking well well-small well-custom" action="booking-info.html" method="post">
-	                <fieldset>
-	                    <legend>Chọn Ghế</legend>
-	                    <div>Bạn đã chọn <span class="seat-number">0</span> trên tổng số 5 ghế được chọn</div>
+	            <div class="booking-wrapper" style="padding-left: 10px; padding-top: 30px; overflow: hidden;">
+		            <form class="booking" action="booking-info.html" method="post">
+	                    <div class="pull-right" style="padding-right: 30px;">Bạn đã chọn <span class="seat-number">0</span> trên tổng số 5 ghế được chọn</div>
 	                    <input id="selectedSeat" style="display:none" type="text" name="selectedSeat">
-	                    <button class="btn btn-large" style="width: 100%;margin-top: 9px;">Thanh Toán</button>
-	                </fieldset>
-	            </form>
+	                    <div style="overflow: hidden;width: 100%;">
+	                    	<button class="btn btn-large pull-right" style="margin-top: 15px;margin-right: 30px;">Tiếp Tục</button>
+	                    </div>
+		            </form>
+	        	</div>
 	        </div>
+	        
 	    </div>
 	</setion>
 	<!-- End Booking bus seat -->
-   	
+
 	<!-- Start Modal -->
 	<section>
 	    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
