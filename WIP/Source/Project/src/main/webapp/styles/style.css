@@ -661,3 +661,7 @@ input.paypal_checkout {
 	border: none;
 	cursor: pointer;
 }
+.my-container{
+	width: 960px;
+	margin: 0 auto;
+}

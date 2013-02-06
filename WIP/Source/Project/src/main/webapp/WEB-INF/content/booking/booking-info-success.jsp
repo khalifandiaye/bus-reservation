@@ -17,7 +17,7 @@
 	<jsp:include page="../common/header.jsp" />
 	<!-- Start small nav -->
 	<section class="small-nav">
-	    <div class="container">
+	    <div class="my-container">
 	        <div class="nav-step-wrapper">
 	            <div class="nav-step nav-done">
 	                <span class="nav-step-num">1</span>
@@ -45,7 +45,7 @@
 	<!-- End small nav -->
 	<!-- Start information content -->
 	<section>
-		<div class="container">
+		<div class="my-container">
 			<form class="well" action="booking-pay.html" method="post">
 				<fieldset>
 					<legend>Hoàn thành thông tin đăng kí vé xe</legend>
