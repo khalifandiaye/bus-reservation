@@ -1,10 +1,14 @@
 package vn.edu.fpt.capstone.busReservation.dao;
 
-public class SeatPositionDAO extends GenericDAO {
+import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionKey;
 
-	public SeatPositionDAO(Class clazz) {
-		super(clazz);
-		// TODO Auto-generated constructor stub
-	}
+public class SeatPositionDAO extends
+        GenericDAO<SeatPositionKey, SeatPositionBean> {
+
+    public SeatPositionDAO(Class<SeatPositionBean> clazz) {
+        super(clazz);
+        // TODO Auto-generated constructor stub
+    }
 
 }
