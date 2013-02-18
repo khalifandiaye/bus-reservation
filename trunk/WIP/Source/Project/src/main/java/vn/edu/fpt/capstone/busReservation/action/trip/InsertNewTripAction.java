@@ -9,13 +9,11 @@ import java.util.List;
 
 import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
-import vn.edu.fpt.capstone.busReservation.dao.EmployeeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.EmployeeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
@@ -30,51 +28,49 @@ public class InsertNewTripAction extends ActionSupport{
 	private String arriveDate;
 	private int busPlateSelect;
 	private BusDAO busDAO;
-	private EmployeeDAO employeeDAO;
+//	private EmployeeDAO employeeDAO;
 	private RouteDAO routeDAO;
 	private RouteDetailsDAO routeDetailsDAO;
 	private TripDAO tripDAO;
 	private BusStatusDAO busStatusDAO;
 	
 	public String execute() throws ParseException{
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm");
-		Calendar calendar = Calendar.getInstance();
-		
-		Date fromDate = sdf.parse(departDate);
-		calendar.setTime(fromDate);
-		
-		String travelTime = routeDAO.getAllSegmentByRouteId(routeSelect);
-		SimpleDateFormat travelTimeFormat = new SimpleDateFormat("hh:mm:ss");
-		Date travelDate = travelTimeFormat.parse(travelTime);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(travelDate);
-		calendar.add(Calendar.MINUTE, cal.get(Calendar.MINUTE));
-		calendar.add(Calendar.HOUR, cal.get(Calendar.HOUR));
-		Date toDate = calendar.getTime();
-		
-		BusStatusBean busStatusBean = new BusStatusBean();
-		BusBean busBean = busDAO.getById(busPlateSelect);
-		busStatusBean.setBus(busBean);
-		busStatusBean.setBusStatus("ontrip");
-		busStatusBean.setFromDate(fromDate);
-		busStatusBean.setToDate(toDate);
-		busStatusBean.setStatus("");
-		EmployeeBean employeeBean = employeeDAO.getById(1);
-		busStatusBean.setScheduler(employeeBean);
-		
-		RouteDetailsBean routeDetailsBean = routeDetailsDAO.getById(1);
-		TripBean trip = new TripBean();
-		trip.setDepartureTime(fromDate);
-		trip.setBusStatus(busStatusBean);
-		trip.setArrivalTime(toDate);
-		trip.setStatus("active");
-		trip.setRouteDetails(routeDetailsBean);
-		List<ReservationBean> reservations = new ArrayList<ReservationBean>();
-		trip.setReservations(reservations);
-		busStatusDAO.save(busStatusBean);
-		
-		tripDAO.save(trip);
-		
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm");
+//		Calendar calendar = Calendar.getInstance();
+//		
+//		Date fromDate = sdf.parse(departDate);
+//		calendar.setTime(fromDate);
+//		
+//		String travelTime = routeDAO.getAllSegmentByRouteId(routeSelect);
+//		SimpleDateFormat travelTimeFormat = new SimpleDateFormat("hh:mm:ss");
+//		Date travelDate = travelTimeFormat.parse(travelTime);
+//		Calendar cal = Calendar.getInstance();
+//		cal.setTime(travelDate);
+//		calendar.add(Calendar.MINUTE, cal.get(Calendar.MINUTE));
+//		calendar.add(Calendar.HOUR, cal.get(Calendar.HOUR));
+//		Date toDate = calendar.getTime();
+//		
+//		BusStatusBean busStatusBean = new BusStatusBean();
+//		BusBean busBean = busDAO.getById(busPlateSelect);
+//		busStatusBean.setBus(busBean);
+//		busStatusBean.setBusStatus("ontrip");
+//		busStatusBean.setFromDate(fromDate);
+//		busStatusBean.setToDate(toDate);
+//		busStatusBean.setStatus("");
+//		EmployeeBean employeeBean = employeeDAO.getById(1);
+//		busStatusBean.setScheduler(employeeBean);
+//		
+//		RouteDetailsBean routeDetailsBean = routeDetailsDAO.getById(1);
+//		TripBean trip = new TripBean();
+//		trip.setDepartureTime(fromDate);
+//		trip.setBusStatus(busStatusBean);
+//		trip.setArrivalTime(toDate);
+//		trip.setStatus("active");
+//		trip.setRouteDetails(routeDetailsBean);
+//		List<ReservationBean> reservations = new ArrayList<ReservationBean>();
+//		trip.setReservations(reservations);
+//		busStatusDAO.save(busStatusBean);
+//		tripDAO.save(trip);
 		return SUCCESS;
 	}
 
@@ -112,10 +108,6 @@ public class InsertNewTripAction extends ActionSupport{
 
 	public void setBusDAO(BusDAO busDAO) {
 		this.busDAO = busDAO;
-	}
-	
-	public void setEmployeeDAO(EmployeeDAO employeeDAO) {
-		this.employeeDAO = employeeDAO;
 	}
 
 	public void setRouteDAO(RouteDAO routeDAO) {

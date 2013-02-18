@@ -21,7 +21,7 @@
 				<legend>Temporary Section</legend>
 				
 				<input type="submit" id="hello-world" value="Say Hello World" /><br />
-				<a href="trip/create.html">Test Create Trip</a></p>
+				<a href="trip/list.html">Test Create Trip</a></p>
 				<a href="trip/updateTripTime.html">Test Get Trip Time</a></p>
 				<a href="pay/pay01000.html">Test Pay</a></p>
 				<a href="pay/pay02000.html">Test Cancel</a></p>
