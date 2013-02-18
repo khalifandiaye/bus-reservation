@@ -16,8 +16,16 @@
 		</interceptors>
 		<default-interceptor-ref name="dbStack" />
 	</package>
-	<package name="jsonPackage"
-		extends="transactionalPackage,json-default">
+	<package name="jsonPackage" extends="json-default">
+		<interceptors>
+			<interceptor name="hibernateSessionInterceptor"
+				class="vn.edu.fpt.capstone.busReservation.util.HibernateSessionInterceptor" />
+			<interceptor-stack name="dbStack">
+				<interceptor-ref name="hibernateSessionInterceptor" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="dbStack" />
 	</package>
 	<package name="basePackage" extends="struts-default">
 		<default-interceptor-ref name="defaultStack" />
@@ -25,4 +33,5 @@
 	<package name="pay" extends="transactionalPackage"></package>
 	<package name="trip" extends="transactionalPackage"></package>
 	<package name="booking" extends="transactionalPackage"></package>
+	<package name="user" extends="transactionalPackage"></package>
 </struts>
