@@ -623,4 +623,10 @@ fieldset {
 
 .well {
 	border: 1px solid #D5D5D5 !important;
+	overflow: hidden;
+}
+.my-container{
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
 }
