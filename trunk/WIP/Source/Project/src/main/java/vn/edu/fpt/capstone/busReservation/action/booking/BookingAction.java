@@ -20,6 +20,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SeatInfo;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 import com.opensymphony.xwork2.ActionChainResult;
 import com.opensymphony.xwork2.ActionSupport;
@@ -61,7 +62,7 @@ public class BookingAction extends ActionSupport implements SessionAware {
 	private boolean checkTime(Date bookTime){
 		Calendar timeLimit = null;
 		timeLimit = Calendar.getInstance();
-		timeLimit.add(Calendar.MINUTE, -15);
+		timeLimit.add(Calendar.MINUTE, -CommonConstant.RESERVATION_TIMEOUT);
 		if (bookTime.after(timeLimit.getTime())) {
 			return true;
 		}

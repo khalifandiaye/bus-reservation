@@ -9,12 +9,13 @@ import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 /**
  * @author Yoshimi
  * 
  */
-@ParentPackage(value="basePackage")
+@ParentPackage(value = "basePackage")
 public class Pay01020Action extends BaseAction {
 
     /**
@@ -46,7 +47,8 @@ public class Pay01020Action extends BaseAction {
         String paymentToken = null;
         ReservationInfo reservationInfo = null;
 
-        reservationInfo = (ReservationInfo) getSession().get("reservationInfo");
+        reservationInfo = (ReservationInfo) getSession().get(
+                ReservationInfo.class.getName());
         try {
             paymentToken = paymentLogic.setPaypalExpressCheckout(
                     reservationInfo, getServletRequest().getContextPath());
@@ -56,7 +58,7 @@ public class Pay01020Action extends BaseAction {
         }
         redirectUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token="
                 + paymentToken;
-        session.put("paymentToken", paymentToken);
+        session.put(CommonConstant.SESSION_KEY_PAYMENT_TOKEN, paymentToken);
 
         return SUCCESS;
     }

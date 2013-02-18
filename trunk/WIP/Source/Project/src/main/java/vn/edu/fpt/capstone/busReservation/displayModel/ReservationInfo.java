@@ -14,6 +14,11 @@ public class ReservationInfo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -7740272488683962205L;
+    private int id;
+	/**
+	 * 
+     * @deprecated
+	 */
 	private String routeName;
 	private String subRouteName;
 	private String departureDate;
@@ -27,6 +32,7 @@ public class ReservationInfo implements Serializable {
 	private String quantity;
 	/**
 	 * conversion rate from USD
+	 * @deprecated
 	 */
 	private String conversionRate;
 	/**
@@ -50,21 +56,35 @@ public class ReservationInfo implements Serializable {
 	 */
 	private String totalAmount;
 	/**
-	 * currency in price list
-	 */
-	private String currency;
-	/**
 	 * total amount that must be paid in USD
 	 */
 	private String totalAmountInUSD;
 	/**
+	 * status of the reservation
+	 */
+	private String status;
+	/**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+    /**
 	 * @return the routeName
+     * @deprecated
 	 */
 	public String getRouteName() {
 		return routeName;
 	}
 	/**
 	 * @param routeName the routeName to set
+     * @deprecated
 	 */
 	public void setRouteName(String routeName) {
 		this.routeName = routeName;
@@ -155,12 +175,14 @@ public class ReservationInfo implements Serializable {
 	}
 	/**
 	 * @return the conversionRate
+     * @deprecated
 	 */
 	public String getConversionRate() {
 		return conversionRate;
 	}
 	/**
 	 * @param conversionRate the conversionRate to set
+     * @deprecated
 	 */
 	public void setConversionRate(String conversionRate) {
 		this.conversionRate = conversionRate;
@@ -226,18 +248,6 @@ public class ReservationInfo implements Serializable {
 		this.totalAmount = totalAmount;
 	}
 	/**
-	 * @return the currency
-	 */
-	public String getCurrency() {
-		return currency;
-	}
-	/**
-	 * @param currency the currency to set
-	 */
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
-	/**
 	 * @return the totalAmountInUSD
 	 */
 	public String getTotalAmountInUSD() {
@@ -249,4 +259,16 @@ public class ReservationInfo implements Serializable {
 	public void setTotalAmountInUSD(String totalAmountInUSD) {
 		this.totalAmountInUSD = totalAmountInUSD;
 	}
+    /**
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
+    }
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

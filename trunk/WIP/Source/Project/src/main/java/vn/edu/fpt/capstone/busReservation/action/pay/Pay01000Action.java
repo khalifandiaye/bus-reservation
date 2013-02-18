@@ -10,6 +10,7 @@ import java.util.Map;
 
 import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -57,7 +58,7 @@ public class Pay01000Action extends ActionSupport {
 			description.append(reservation.getId());
 			description.append(" - ");
 			description.append(FormatUtils.formatDate(
-					reservation.getBookTime(), "yyyy/MM/dd hh:mm", Locale.US));
+					reservation.getBookTime(), "yyyy/MM/dd hh:mm", Locale.US, CommonConstant.DEFAULT_TIME_ZONE));
 			description.append(", ");
 			description
 					.append((reservation.getPayments() == null || reservation

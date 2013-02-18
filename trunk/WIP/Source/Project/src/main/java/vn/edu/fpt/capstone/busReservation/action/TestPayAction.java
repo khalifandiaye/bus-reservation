@@ -16,6 +16,7 @@ import urn.ebay.apis.eBLBaseComponents.CurrencyCodeType;
 import urn.ebay.apis.eBLBaseComponents.ErrorType;
 import urn.ebay.apis.eBLBaseComponents.PaymentActionCodeType;
 import urn.ebay.apis.eBLBaseComponents.SetExpressCheckoutRequestDetailsType;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -80,7 +81,7 @@ public class TestPayAction extends ActionSupport implements ServletRequestAware,
 			if (checkoutResponse.getAck().toString().equalsIgnoreCase("SUCCESS")) {
 				redirectUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token="
 						+ checkoutResponse.getToken();
-				session.put("paymentToken", checkoutResponse.getToken());
+				session.put(CommonConstant.SESSION_KEY_PAYMENT_TOKEN, checkoutResponse.getToken());
 			} else {
 				for (ErrorType error : checkoutResponse.getErrors()) {
 					System.out.println(error.getErrorCode() + ":" + error.getLongMessage());

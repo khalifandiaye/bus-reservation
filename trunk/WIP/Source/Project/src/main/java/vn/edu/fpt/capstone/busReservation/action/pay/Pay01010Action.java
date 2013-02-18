@@ -3,8 +3,6 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.pay;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -14,6 +12,8 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
+import vn.edu.fpt.capstone.busReservation.logic.ReservationLogic;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 /**
  * @author Yoshimi
@@ -39,6 +39,7 @@ public class Pay01010Action extends BaseAction {
 
     // ==========================Logic Object==========================
     private PaymentLogic paymentLogic;
+    private ReservationLogic reservationLogic;
 
     /**
      * @param paymentLogic
@@ -46,6 +47,14 @@ public class Pay01010Action extends BaseAction {
      */
     public void setPaymentLogic(PaymentLogic paymentLogic) {
         this.paymentLogic = paymentLogic;
+    }
+
+    /**
+     * @param reservationLogic
+     *            the reservationLogic to set
+     */
+    public void setReservationLogic(ReservationLogic reservationLogic) {
+        this.reservationLogic = reservationLogic;
     }
 
     // ==========================Action Output=========================
@@ -77,34 +86,35 @@ public class Pay01010Action extends BaseAction {
         // }
     }
 
+    private String forTest() {
+        String reservationId = null;
+        // ===TEST CODE (wokr in conjuction with pay01000)
+        reservationId = servletRequest
+                .getParameter(CommonConstant.SESSION_KEY_RESERVATION_ID);
+        if (reservationId == null) {
+            reservationId = (String) getSession().get(
+                    CommonConstant.SESSION_KEY_RESERVATION_ID);
+        }
+        session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
+        // ===TEST CODE END================================
+        return reservationId;
+    }
+
     public String execute() {
         String reservationId = null;
-        // reservationId = (String) getSession().get("reservationId");
+        reservationId = (String) getSession().get("reservationId");
 
-        // ===TEST CODE (wokr in conjuction with pay01000)
-        reservationId = servletRequest.getParameter("reservationId");
-        if (reservationId == null) {
-            reservationId = (String) getSession().get("reservationId");
-        }
-        session.put("reservationId", reservationId);
-        // ===TEST CODE END================================
+        // TODO remove this later
+        reservationId = forTest();
 
         paymentMethods = paymentLogic.getPaymentMethods();
-        getSession().put("reservationId", reservationId);
+        getSession().put(CommonConstant.SESSION_KEY_RESERVATION_ID,
+                reservationId);
         try {
-            reservationInfo = paymentLogic.getReservationInfo(reservationId,
-                    Integer.toString(paymentMethods.get(0).getId()));
-        } catch (IOException e) {
-            addActionError(getText("msgerrws001"));
-            return ERROR;
-        } catch (NumberFormatException e) {
-            // TODO error processing
-            addActionError(getText("msgerrcm000"));
-            return ERROR;
-        } catch (ParseException e) {
-            // TODO error processing
-            addActionError(getText("msgerrcm000"));
-            return ERROR;
+            reservationInfo = reservationLogic
+                    .loadReservationInfo(reservationId);
+            paymentLogic.updateReservationPaymentInfo(
+                    reservationInfo, paymentMethods.get(0).getId());
         } catch (HibernateException e) {
             // TODO error processing
             genericDatabaseErrorProcess(e);
@@ -113,7 +123,7 @@ public class Pay01010Action extends BaseAction {
             errorProcessing(e);
             return ERROR;
         }
-        getSession().put("reservationInfo", reservationInfo);
+        getSession().put(ReservationInfo.class.getName(), reservationInfo);
 
         return SUCCESS;
     }

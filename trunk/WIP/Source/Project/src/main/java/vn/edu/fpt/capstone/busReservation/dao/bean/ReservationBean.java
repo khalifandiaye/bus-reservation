@@ -204,29 +204,39 @@ public class ReservationBean extends AbstractBean<Integer> {
         /**
          * The reservation is in effect.
          */
-        public static final ReservationStatus PAID = new ReservationStatus("paid");
+        public static final ReservationStatus PAID = new ReservationStatus(
+                "paid");
         /**
          * The reservation has been created, but payment has not been completed
          */
-        public static final ReservationStatus UNPAID = new ReservationStatus("unpaid");
+        public static final ReservationStatus UNPAID = new ReservationStatus(
+                "unpaid");
+        /**
+         * The first trip has departed
+         */
+        public static final ReservationStatus DEPARTED = new ReservationStatus(
+                "departed");
         /**
          * The reservation has been cancelled due to the trip being cancelled.<br>
          * Awaiting refund or changing trip.
          */
-        public static final ReservationStatus CANCELLED = new ReservationStatus("cancelled");
+        public static final ReservationStatus CANCELLED = new ReservationStatus(
+                "cancelled");
         /**
          * The reservation has been moved to another trip
          */
-        public static final ReservationStatus MOVED = new ReservationStatus("moved");
+        public static final ReservationStatus MOVED = new ReservationStatus(
+                "moved");
         /**
          * The reservation was not paid within the time limit
          */
-        public static final ReservationStatus DELETED = new ReservationStatus("deleted");
+        public static final ReservationStatus DELETED = new ReservationStatus(
+                "deleted");
         /**
-         * The reservation was cancelled by the customer, and refund is
-         * completed.
+         * The reservation was cancelled, and refund is completed.
          */
-        public static final ReservationStatus REFUNDED = new ReservationStatus("refunded");
+        public static final ReservationStatus REFUNDED = new ReservationStatus(
+                "refunded");
 
         private ReservationStatus(String value) {
             this.value = value;
@@ -247,8 +257,8 @@ public class ReservationBean extends AbstractBean<Integer> {
                 return REFUNDED;
             } else {
                 throw new InvalidParameterException("Can not instantiate new "
-                        + ReservationStatus.class.getName() + " from the value \"" + value
-                        + "\"");
+                        + ReservationStatus.class.getName()
+                        + " from the value \"" + value + "\"");
             }
         }
 

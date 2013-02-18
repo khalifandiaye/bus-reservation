@@ -18,6 +18,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionKey;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -86,6 +87,7 @@ public class BookingPayAction extends ActionSupport implements SessionAware {
 		this.tripBean = tripBean;
 	}
 
+    @SuppressWarnings("unchecked")
     @Action(results = { @Result(name = SUCCESS, type = "chain", params = {
             "namespace", "/pay", "actionName", "pay01010" }) })
     public String execute(){
@@ -130,7 +132,7 @@ public class BookingPayAction extends ActionSupport implements SessionAware {
 		}
 		session.remove("listTripBean");
 		session.remove("selectedSeats");
-		session.put("reservationId", reservationId);
+		session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
 		
 		return SUCCESS;
 	}

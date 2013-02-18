@@ -3,15 +3,14 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.pay;
 
-import java.io.IOException;
-import java.text.ParseException;
-
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
+import org.hibernate.HibernateException;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
+import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 
 /**
@@ -74,18 +73,15 @@ public class PayJSONAction extends BaseAction {
                     "reservationInfo");
             if (reservationInfo != null) {
                 try {
-                    paymentLogic.updateReservationInfo(reservationInfo,
+                    paymentLogic.updateReservationPaymentInfo(reservationInfo,
                             paymentMethodId);
-                } catch (IOException e) {
+                } catch (CommonException e) {
+                    errorProcessing(e);
+                    return ERROR;
+                } catch (HibernateException e) {
                     // TODO error processing
-                    errorMessage = getText("msgerrcm000");
-                    LOG.error("msgerrcm000", e);
-                    return SUCCESS;
-                } catch (ParseException e) {
-                    // TODO error processing
-                    errorMessage = getText("msgerrcm000");
-                    LOG.error("msgerrcm000", e);
-                    return SUCCESS;
+                    genericDatabaseErrorProcess(e);
+                    return ERROR;
                 }
                 getSession().put("reservationInfo", reservationInfo);
             } else {

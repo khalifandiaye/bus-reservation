@@ -53,17 +53,17 @@
 				</tr>
 				<tr>
 					<th><s:text name="ticket_price" /></th>
-					<td><s:property value="reservationInfo.basePrice" /> <s:property value="reservationInfo.currency" /><br />
+					<td><s:property value="reservationInfo.basePrice" /> VND<br />
 						= $<s:property value="reservationInfo.basePriceInUSD" /></td>
 				</tr>
 				<tr>
 					<th><s:text name="online_transaction_fee" /></th>
-					<td id="transactionFee"><s:property value="reservationInfo.transactionFee" /> <s:property value="reservationInfo.currency" /><br />
+					<td id="transactionFee"><s:property value="reservationInfo.transactionFee" /> VND<br />
 						= $<s:property value="reservationInfo.transactionFeeInUSD" /></td>
 				</tr>
 				<tr>
 					<th><s:text name="total_amount" /></th>
-					<td id="totalAmount"><s:property value="reservationInfo.totalAmount" /> <s:property value="reservationInfo.currency" /><br />
+					<td id="totalAmount"><s:property value="reservationInfo.totalAmount" /> VND<br />
 						= $<s:property value="reservationInfo.totalAmountInUSD" /></td>
 				</tr>
 			</table>
