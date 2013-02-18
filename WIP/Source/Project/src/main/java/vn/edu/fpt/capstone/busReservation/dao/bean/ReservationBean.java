@@ -19,7 +19,7 @@ public class ReservationBean extends AbstractBean<Integer> {
     private UserBean booker;
     private String code;
     private Date bookTime;
-    private PaymentStatus status;
+    private ReservationStatus status;
     private String bookerFirstName;
     private String bookerLastName;
     private String phone;
@@ -85,7 +85,7 @@ public class ReservationBean extends AbstractBean<Integer> {
      *            the status to set
      */
     public void setStatus(String status) {
-        this.status = PaymentStatus.fromValue(status);
+        this.status = ReservationStatus.fromValue(status);
     }
 
     /**
@@ -199,40 +199,40 @@ public class ReservationBean extends AbstractBean<Integer> {
      * @author Yoshimi
      * 
      */
-    public static class PaymentStatus {
+    public static class ReservationStatus {
         private final String value;
         /**
          * The reservation is in effect.
          */
-        public static final PaymentStatus PAID = new PaymentStatus("paid");
+        public static final ReservationStatus PAID = new ReservationStatus("paid");
         /**
          * The reservation has been created, but payment has not been completed
          */
-        public static final PaymentStatus UNPAID = new PaymentStatus("unpaid");
+        public static final ReservationStatus UNPAID = new ReservationStatus("unpaid");
         /**
          * The reservation has been cancelled due to the trip being cancelled.<br>
          * Awaiting refund or changing trip.
          */
-        public static final PaymentStatus CANCELLED = new PaymentStatus("cancelled");
+        public static final ReservationStatus CANCELLED = new ReservationStatus("cancelled");
         /**
          * The reservation has been moved to another trip
          */
-        public static final PaymentStatus MOVED = new PaymentStatus("moved");
+        public static final ReservationStatus MOVED = new ReservationStatus("moved");
         /**
          * The reservation was not paid within the time limit
          */
-        public static final PaymentStatus DELETED = new PaymentStatus("deleted");
+        public static final ReservationStatus DELETED = new ReservationStatus("deleted");
         /**
          * The reservation was cancelled by the customer, and refund is
          * completed.
          */
-        public static final PaymentStatus REFUNDED = new PaymentStatus("refunded");
+        public static final ReservationStatus REFUNDED = new ReservationStatus("refunded");
 
-        private PaymentStatus(String value) {
+        private ReservationStatus(String value) {
             this.value = value;
         }
 
-        public static final PaymentStatus fromValue(final String value) {
+        public static final ReservationStatus fromValue(final String value) {
             if (PAID.value.equalsIgnoreCase(value)) {
                 return PAID;
             } else if (UNPAID.value.equalsIgnoreCase(value)) {
@@ -247,7 +247,7 @@ public class ReservationBean extends AbstractBean<Integer> {
                 return REFUNDED;
             } else {
                 throw new InvalidParameterException("Can not instantiate new "
-                        + PaymentStatus.class.getName() + " from the value \"" + value
+                        + ReservationStatus.class.getName() + " from the value \"" + value
                         + "\"");
             }
         }

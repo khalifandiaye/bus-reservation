@@ -45,6 +45,7 @@ import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TariffDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean.PaymentType;
+import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
@@ -443,8 +444,6 @@ public class PaymentLogic {
         DoExpressCheckoutPaymentRequestDetailsType details = null;
         DoExpressCheckoutPaymentResponseType doResponse = null;
         String[] result = null;
-        BigDecimal paidAmount = null;
-        BigDecimal fee = null;
         details = new DoExpressCheckoutPaymentRequestDetailsType();
         details.setToken(checkoutDetailsResponse.getGetExpressCheckoutDetailsResponseDetails().getToken());
         details.setPayerID(checkoutDetailsResponse
@@ -591,6 +590,7 @@ public class PaymentLogic {
             throw new CommonException(e);
         }
         reservation.setCode(reservationCode);
+        reservation.setStatus(ReservationStatus.PAID.getValue());
         reservationDAO.update(reservation);
         return reservationCode;
     }
