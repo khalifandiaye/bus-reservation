@@ -155,7 +155,7 @@ CREATE TABLE `payment` (
   KEY `payment_payment_method_id_idx` (`payment_method_id`),
   CONSTRAINT `payment_payment_method_id` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_method` (`id`),
   CONSTRAINT `payment_reservation_id` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -164,6 +164,7 @@ CREATE TABLE `payment` (
 
 LOCK TABLES `payment` WRITE;
 /*!40000 ALTER TABLE `payment` DISABLE KEYS */;
+INSERT INTO `payment` VALUES (4,42,111041.66666666648,6666.666666666656,2,'5L3140966H1976525','pay');
 /*!40000 ALTER TABLE `payment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -230,7 +231,7 @@ CREATE TABLE `reservation` (
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `reservation_booker_id_idx` (`user_id`),
   CONSTRAINT `reservation_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,9 +240,26 @@ CREATE TABLE `reservation` (
 
 LOCK TABLES `reservation` WRITE;
 /*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
-INSERT INTO `reservation` VALUES (1,1,NULL,'2013-02-15 12:00:00','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(2,1,NULL,'2013-02-15 12:00:00','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(3,1,NULL,'2013-02-15 12:00:00','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn');
+INSERT INTO `reservation` VALUES (1,1,NULL,'2013-02-15 12:00:00','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(2,1,NULL,'2013-02-15 12:00:00','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(3,1,NULL,'2013-02-15 12:00:00','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(30,NULL,NULL,'2013-02-17 23:12:21','unpaid','abc','abc','123215435','abc@abc.com'),(31,NULL,NULL,'2013-02-18 08:18:32','unpaid','abc','abc','123215435','abc@abc.com'),(32,NULL,NULL,'2013-02-18 08:29:01','unpaid','abc','abc','123215435','abc@abc.com'),(34,1,'BHIWJX','2013-02-18 08:29:41','unpaid','abc','abc','123215435','abc@abc.com'),(35,NULL,NULL,'2013-02-18 08:30:54','unpaid','abc','abc','123215435','abc@abc.com'),(36,NULL,NULL,'2013-02-18 08:31:43','unpaid','abc','abc','123215435','abc@abc.com'),(37,NULL,NULL,'2013-02-18 08:32:35','unpaid','abc','abc','123215435','abc@abc.com'),(39,NULL,NULL,'2013-02-18 08:40:30','unpaid','abc','abc','123215435','abc@abc.com'),(40,NULL,'50UD8A','2013-02-18 09:41:03','unpaid','abc','abc','123215435','abc@abc.com'),(41,NULL,'8Y9YLC','2013-02-18 11:29:29','unpaid','abc','abc','123215435','abc@abc.com'),(42,NULL,'1BSEMJ','2013-02-18 17:53:49','paid','abc','abc','123215435','abc@abc.com');
 /*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `reservation_view`
+--
+
+DROP TABLE IF EXISTS `reservation_view`;
+/*!50001 DROP VIEW IF EXISTS `reservation_view`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `reservation_view` (
+  `reservation_id` int(11),
+  `start_trip_id` int(11),
+  `end_trip_id` int(11),
+  `ticket_price` double,
+  `paid_amount` double
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `role`
@@ -345,7 +363,7 @@ CREATE TABLE `seat_position` (
 
 LOCK TABLES `seat_position` WRITE;
 /*!40000 ALTER TABLE `seat_position` DISABLE KEYS */;
-INSERT INTO `seat_position` VALUES (1,'A1'),(1,'A2'),(2,'A1'),(2,'A2'),(2,'A3'),(3,'B1'),(3,'B2');
+INSERT INTO `seat_position` VALUES (1,'A1'),(1,'A2'),(2,'A1'),(2,'A2'),(2,'A3'),(3,'B1'),(3,'B2'),(30,'A5'),(30,'B5'),(31,'B8'),(32,'A8'),(34,'A9'),(35,'B9'),(36,'A10'),(37,'B10'),(39,'B8'),(40,'A9'),(41,'B9'),(42,'E11');
 /*!40000 ALTER TABLE `seat_position` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -520,7 +538,7 @@ CREATE TABLE `trip_in_reservation` (
 
 LOCK TABLES `trip_in_reservation` WRITE;
 /*!40000 ALTER TABLE `trip_in_reservation` DISABLE KEYS */;
-INSERT INTO `trip_in_reservation` VALUES (1,1),(3,3),(2,4),(3,4),(2,5);
+INSERT INTO `trip_in_reservation` VALUES (1,1),(30,1),(31,1),(32,1),(34,1),(35,1),(36,1),(37,1),(39,1),(40,1),(41,1),(42,1),(2,4),(3,4),(2,5),(3,5);
 /*!40000 ALTER TABLE `trip_in_reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -617,6 +635,25 @@ UNLOCK TABLES;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
+-- Final view structure for view `reservation_view`
+--
+
+/*!50001 DROP TABLE IF EXISTS `reservation_view`*/;
+/*!50001 DROP VIEW IF EXISTS `reservation_view`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `reservation_view` AS select `rsv`.`id` AS `reservation_id`,`trp_start`.`id` AS `start_trip_id`,`trp_end`.`id` AS `end_trip_id`,sum(`tar`.`fare`) AS `ticket_price`,`pay`.`pay_amount` AS `paid_amount` from ((((((((((((`reservation` `rsv` join `trip_in_reservation` `tir_start` on((`rsv`.`id` = `tir_start`.`reservation_id`))) join `trip` `trp_start` on((`trp_start`.`id` = `tir_start`.`trip_id`))) join `trip_in_reservation` `tir_end` on((`rsv`.`id` = `tir_end`.`reservation_id`))) join `trip` `trp_end` on((`trp_end`.`id` = `tir_end`.`trip_id`))) join `trip_in_reservation` `tir` on((`rsv`.`id` = `tir`.`reservation_id`))) join `trip` `trp` on((`trp`.`id` = `tir`.`trip_id`))) join `route_details` `rds` on((`rds`.`id` = `trp`.`route_details_id`))) join `segment` `seg` on((`seg`.`id` = `rds`.`segment_id`))) join `bus_status` `bst` on((`bst`.`id` = `trp`.`bus_status_id`))) join `bus` on((`bus`.`id` = `bst`.`bus_id`))) join `tariff` `tar` on(((`seg`.`id` = `tar`.`segment_id`) and (`tar`.`bus_type_id` = `bus`.`bus_type_id`)))) left join `payment` `pay` on(((`rsv`.`id` = `pay`.`reservation_id`) and (`pay`.`type` = 'pay')))) where ((`trp_start`.`departure_time` = (select min(`trp1`.`departure_time`) from ((`reservation` `rsv1` join `trip_in_reservation` `tir1` on((`rsv1`.`id` = `tir1`.`reservation_id`))) join `trip` `trp1` on((`trp1`.`id` = `tir1`.`trip_id`))) where (`rsv`.`id` = `rsv1`.`id`))) and (`trp_end`.`departure_time` = (select max(`trp2`.`departure_time`) from ((`reservation` `rsv2` join `trip_in_reservation` `tir2` on((`rsv2`.`id` = `tir2`.`reservation_id`))) join `trip` `trp2` on((`trp2`.`id` = `tir2`.`trip_id`))) where (`rsv`.`id` = `rsv2`.`id`))) and (`tar`.`valid_from` = (select max(`tar1`.`valid_from`) from (((((`trip` `trp1` join `route_details` `rds1` on((`rds1`.`id` = `trp1`.`route_details_id`))) join `segment` `seg1` on((`seg1`.`id` = `rds1`.`segment_id`))) join `bus_status` `bst1` on((`bst1`.`id` = `trp1`.`bus_status_id`))) join `bus` `bus1` on((`bus1`.`id` = `bst1`.`bus_id`))) join `tariff` `tar1` on(((`seg1`.`id` = `tar1`.`segment_id`) and (`tar1`.`bus_type_id` = `bus1`.`bus_type_id`)))) where ((`trp1`.`id` = `trp`.`id`) and (`tar1`.`valid_from` < `rsv`.`book_time`))))) group by `rsv`.`id`,`trp_start`.`id`,`trp_end`.`id`,`pay`.`pay_amount` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
 -- Final view structure for view `trip_start_end`
 --
 
@@ -663,4 +700,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-02-05 23:19:54
+-- Dump completed on 2013-02-18 17:55:32
