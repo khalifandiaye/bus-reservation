@@ -1,9 +1,11 @@
 package vn.edu.fpt.capstone.busReservation.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
@@ -64,4 +66,17 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 	return result;
     }
 
+    @SuppressWarnings("unchecked")
+	public List<TripBean> getActiveTrips() {
+		String hql = "from TripBean tripBean where tripBean.status = 'active'";
+		Session session = sessionFactory.getCurrentSession();
+		List<TripBean> result = new ArrayList<TripBean>();
+		try {
+			Query query = session.createQuery(hql);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
 }

@@ -94,6 +94,11 @@
     	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean" />
     </bean>
     
+    <bean id="busTypeDAO" class="vn.edu.fpt.capstone.busReservation.dao.BusTypeDAO">
+    	<property name="sessionFactory" ref="sessionFactory" />
+    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean" />
+    </bean>
+    
 <!--     <bean id="tripWithNumberOfRemainedSeatsInSubrouteDAO" class="vn.edu.fpt.capstone.busReservation.dao.TripWithNumberOfRemainedSeatsInSubrouteDAO"> -->
 <!--     	<property name="sessionFactory" ref="sessionFactory" /> -->
 <!--     	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.TripWithNumberOfRemainedSeatsInSubrouteBean" /> -->
