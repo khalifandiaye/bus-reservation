@@ -1,6 +1,8 @@
 package vn.edu.fpt.capstone.busReservation.displayModel;
 
-public class SeatInfo {
+import java.io.Serializable;
+
+public class SeatInfo implements Serializable {
 	private String name;
 	private String status;
 	
