@@ -630,3 +630,9 @@ fieldset {
 	margin: 0 auto;
 	overflow: hidden;
 }
+label.error{
+	color: red;
+}
+label.success{
+	color: green;
+}

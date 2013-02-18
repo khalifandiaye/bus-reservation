@@ -11,7 +11,8 @@
 <title>Đặt Vé</title>
 <jsp:include page="../common/xheader.jsp" />
 <link href="<%=request.getContextPath()%>/styles/booking.css" rel="stylesheet">
-<script src="<%=request.getContextPath()%>/js/booking.js" ></script>
+<script src="<%=request.getContextPath()%>/js/jquery.validate.min.js" ></script>
+<script src="<%=request.getContextPath()%>/js/booking-validation.js" ></script> 
 </head>
 	<body>
 	<jsp:include page="../common/header.jsp" />
@@ -46,7 +47,7 @@
 	<!-- Start information content -->
 	<section>
 		<div class="my-container">
-			<form class="well" action="booking-pay.html" method="post">
+			<form class="well" action="booking-pay.html" method="post" id="booking-form">
 				<fieldset>
 					<legend>Hoàn thành thông tin đăng kí vé xe</legend>
 						<div class="control-group">

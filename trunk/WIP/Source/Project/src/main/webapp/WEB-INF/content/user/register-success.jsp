@@ -27,13 +27,13 @@
 				Description section 
 			</div>
 			<div style="margin-left: 0px;width: 50%;float:left;">  
-				<form action="" method="post" class="well well-small" id="register-form">
+				<form action="add-user.html" method="post" class="well well-small" id="register-form">
 					<fieldset> 
 					<legend style="margin-bottom: 10px;">Đăng ký tài khoản mới</legend> 
 						<div class="control-group" > 
 						    <label class="control-label" for="inputUserName">Tên tài khoản</label>
 						    <div class="controls" style="width: 410px;"> 
-						      <input type="text" id="inputUserName" name="inputUserName" placeholder="Tên tài khoản" style="width: 395px" onchange="onChangeUsernameEmail()" data-userStat=0>
+						      <input type="text" id="inputUserName" name="inputUserName" placeholder="Tên tài khoản" style="width: 395px" onchange="onChangeUsername()" onkeypress="onKeyPressClear()">
 					    	</div>
 					  	</div>
 					  	<div class="control-group" >
@@ -69,7 +69,7 @@
 					  	<div class="control-group">
 						    <label class="control-label" for="inputEmail">Email</label>
 						    <div class="controls" style="width: 410px;">
-						      <input type="text" id="inputEmail" name="inputEmail" placeholder="Email" style="width: 395px" data-emailStat=0 onchange="onChangeUsernameEmail()">
+						      <input type="text" id="inputEmail" name="inputEmail" placeholder="Email" style="width: 395px" onchange="onChangeEmail()">
 					    	</div>
 					  	</div> 
 					  	<button type="submit" class="btn btn-large btn-primary" style="width: 100%;margin-top:10px;">Đăng Ký</button> 
