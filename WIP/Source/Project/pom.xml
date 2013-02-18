@@ -11,7 +11,7 @@
 			<url>http://repository.jboss.org/maven2/</url>
 		</repository>
 	</repositories>
-	
+
 	<dependencies>
 		<!-- Junit -->
 		<dependency>
@@ -27,22 +27,22 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!--  Struts 2 -->
+		<!-- Struts 2 -->
 		<dependency>
-            <groupId>org.apache.struts</groupId>
-            <artifactId>struts2-core</artifactId>
-            <version>2.1.8</version>
-        </dependency>
-        <!-- <dependency>
-            <groupId>org.apache.struts</groupId>
-            <artifactId>struts2-sitemesh-plugin</artifactId>
-            <version>2.1.8</version>
-        </dependency> -->
-        <dependency>
-            <groupId>org.apache.struts</groupId>
-            <artifactId>struts2-spring-plugin</artifactId>
-            <version>2.1.8</version>
-        </dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-core</artifactId>
+			<version>2.1.8</version>
+		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.struts</groupId> -->
+<!-- 			<artifactId>struts2-sitemesh-plugin</artifactId> -->
+<!-- 			<version>2.1.8</version> -->
+<!-- 		</dependency> -->
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-spring-plugin</artifactId>
+			<version>2.1.8</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.struts</groupId>
 			<artifactId>struts2-json-plugin</artifactId>
@@ -53,7 +53,12 @@
 			<artifactId>struts2-convention-plugin</artifactId>
 			<version>2.1.8</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-junit-plugin</artifactId>
+			<version>2.1.8</version>
+		</dependency>
+
 		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -65,6 +70,16 @@
 			<artifactId>spring-orm</artifactId>
 			<version>2.5.6</version>
 		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.springframework</groupId> -->
+		<!-- <artifactId>spring-tx</artifactId> -->
+		<!-- <version>2.5.6</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.springframework</groupId> -->
+		<!-- <artifactId>spring-aop</artifactId> -->
+		<!-- <version>2.5.6</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
@@ -75,7 +90,13 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.5.6</version>
 		</dependency>
-		
+		<!-- AOP dependency -->
+		<!-- <dependency> -->
+		<!-- <groupId>cglib</groupId> -->
+		<!-- <artifactId>cglib</artifactId> -->
+		<!-- <version>2.2</version> -->
+		<!-- </dependency> -->
+
 		<!-- MySQL -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -83,27 +104,27 @@
 			<version>5.1.18</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- SQLServer -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>net.sourceforge.jtds</groupId> -->
-<!-- 			<artifactId>jtds</artifactId> -->
-<!-- 			<version>1.2.4</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>net.sourceforge.jtds</groupId> -->
+		<!-- <artifactId>jtds</artifactId> -->
+		<!-- <version>1.2.4</version> -->
+		<!-- </dependency> -->
 
 		<!-- Servlet & Jsp -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>javax.servlet</groupId> -->
-<!-- 			<artifactId>servlet-api</artifactId> -->
-<!-- 			<version>2.4</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>javax.servlet</groupId> -->
-<!-- 			<artifactId>jsp-api</artifactId> -->
-<!-- 			<version>2.0</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>javax.servlet</groupId> -->
+		<!-- <artifactId>servlet-api</artifactId> -->
+		<!-- <version>2.4</version> -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>javax.servlet</groupId> -->
+		<!-- <artifactId>jsp-api</artifactId> -->
+		<!-- <version>2.0</version> -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
 
 		<!-- Jakarta Commons -->
 		<dependency>
@@ -112,29 +133,24 @@
 			<version>1.1.1</version>
 		</dependency>
 
-		<!-- Dwr -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>uk.ltd.getahead</groupId> -->
-<!-- 			<artifactId>dwr</artifactId> -->
-<!-- 			<version>1.1-beta-3</version> -->
-<!-- 		</dependency> -->
+		<!-- Payment-related -->
 		<dependency>
 			<groupId>com.paypal.sdk</groupId>
 			<artifactId>merchantsdk</artifactId>
 			<version>2.1.96</version>
 		</dependency>
 	</dependencies>
-	
-    <build>
-      <finalName>bus-reservation</finalName>
-    	<plugins>
-    		<plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                   <source>1.6</source>
-                   <target>1.6</target>
-                </configuration>
-            </plugin>
-    	</plugins>
-    </build>
+
+	<build>
+		<finalName>bus-reservation</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

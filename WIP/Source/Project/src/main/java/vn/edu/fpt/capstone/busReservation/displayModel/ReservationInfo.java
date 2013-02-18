@@ -17,7 +17,9 @@ public class ReservationInfo implements Serializable {
 	private String routeName;
 	private String subRouteName;
 	private String departureDate;
+	private String departureStationAddress;
 	private String arrivalDate;
+	private String arrivalStationAddress;
 	private String seatNumbers;
 	/**
 	 * number of tickets
@@ -92,6 +94,18 @@ public class ReservationInfo implements Serializable {
 		this.departureDate = departureDate;
 	}
 	/**
+     * @return the departureStationAddress
+     */
+    public String getDepartureStationAddress() {
+        return departureStationAddress;
+    }
+    /**
+     * @param departureStationAddress the departureStationAddress to set
+     */
+    public void setDepartureStationAddress(String departureStationAddress) {
+        this.departureStationAddress = departureStationAddress;
+    }
+    /**
 	 * @return the arrivalDate
 	 */
 	public String getArrivalDate() {
@@ -104,6 +118,18 @@ public class ReservationInfo implements Serializable {
 		this.arrivalDate = arrivalDate;
 	}
 	/**
+     * @return the arrivalStationAddress
+     */
+    public String getArrivalStationAddress() {
+        return arrivalStationAddress;
+    }
+    /**
+     * @param arrivalStationAddress the arrivalStationAddress to set
+     */
+    public void setArrivalStationAddress(String arrivalStationAddress) {
+        this.arrivalStationAddress = arrivalStationAddress;
+    }
+    /**
 	 * @return the seatNumbers
 	 */
 	public String getSeatNumbers() {

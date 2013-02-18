@@ -4,8 +4,10 @@
 package vn.edu.fpt.capstone.busReservation.util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Currency;
 import java.util.Date;
@@ -33,6 +35,12 @@ public class FormatUtils {
 		NumberFormat format = NumberFormat.getInstance(locale);
 		format.setMaximumFractionDigits(fractionDigits);
 		format.setMinimumFractionDigits(fractionDigits);
+		format.setRoundingMode(RoundingMode.CEILING);
 		return format.format(amount.doubleValue());
+	}
+	
+	public static BigDecimal deformatNumber(String string, Locale locale) throws ParseException {
+	    NumberFormat format = NumberFormat.getInstance(locale);
+	    return BigDecimal.valueOf(format.parse(string).doubleValue());
 	}
 }

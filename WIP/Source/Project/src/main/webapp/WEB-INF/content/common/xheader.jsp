@@ -8,6 +8,6 @@
 <link href="<%=request.getContextPath()%>/styles/bootstrap-responsive.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/styles/style.css" rel="stylesheet">
 <!-- Javascript -->
-<script src="<%=request.getContextPath()%>/js/jquery-1.7.2.js" ></script>
+<script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js" ></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.min.js" ></script>
 <script src="<%=request.getContextPath()%>/js/common.js" ></script>
