@@ -4,7 +4,9 @@
 package vn.edu.fpt.capstone.busReservation.action.user;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.ws.Action;
 
@@ -21,60 +23,46 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author NoName
  *
  */
-@ParentPackage("json-default")
+@ParentPackage("jsonPackage")
 public class CheckUsernameAction extends ActionSupport {
 	
 	private String inputUserName;
 	private String inputEmail;
-	private List<Boolean> checkUsernameResult;
+	private Map<String, Boolean> checkUsernameResult;
 	private UserDAO userDAO;
-	private String inputUserNameStat;
-	private String inputEmailStat;
 	
-	public void setInputUserName(String inputUserName) {
-		this.inputUserName = inputUserName;
+	public Map<String, Boolean> getCheckUsernameResult() {
+		return checkUsernameResult;
 	}
 
-	public void setInputUserNameStat(String inputUserNameStat) {
-		this.inputUserNameStat = inputUserNameStat;
-	}
-	
-	public List<Boolean> getCheckUsernameResult() {
-		return checkUsernameResult;
+	public void setInputUserName(String inputUserName) {
+		this.inputUserName = inputUserName;
 	}
 	
 	public void setInputEmail(String inputEmail) {
 		this.inputEmail = inputEmail;
 	}
-
-	public void setInputEmailStat(String inputEmailStat) {
-		this.inputEmailStat = inputEmailStat;
-	}
-
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
 	
 	@org.apache.struts2.convention.annotation.Action(results={
-		@Result(type="json",params={
-			"includeProperties",
-			"checkUsernameResult"
-		})
+		@Result(type="json")
 	})
 	public String execute(){
 		boolean resultUsername = false;
 		boolean resultEmail = false;
-		checkUsernameResult = new ArrayList<Boolean>();
+		checkUsernameResult = new HashMap<String, Boolean>();
 	
-		if(inputUserNameStat.equals("1")){
+		if(inputUserName.length()>0){
 			resultUsername = userDAO.isExist(inputUserName);
 		}
-		if(inputEmailStat.equals("1")){
+		if(inputEmail.length()>0){
 			resultEmail = userDAO.isEmailExist(inputEmail);
 		}
 		
-		checkUsernameResult.add(resultUsername);
-		checkUsernameResult.add(resultEmail);
+		checkUsernameResult.put("usernameCheck", resultUsername);
+		checkUsernameResult.put("emailCheck", resultEmail);
 		
 		return SUCCESS;
 	}
