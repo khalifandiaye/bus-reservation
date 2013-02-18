@@ -21,6 +21,13 @@
 		class="vn.edu.fpt.capstone.busReservation.logic.HelloWorldLogicImpl">
 		<property name="helloWorldDAO" ref="helloWorldDAO" />
 	</bean>
+	<bean id="paymentLogic"
+		class="vn.edu.fpt.capstone.busReservation.logic.PaymentLogic" singleton="true" >
+		<property name="reservationDAO" ref="reservationDAO" />
+		<property name="tariffDAO" ref="tariffDAO" />
+		<property name="paymentMethodDAO" ref="paymentMethodDAO" />
+		<property name="paymentDAO" ref="paymentDAO" />
+	</bean>
 	<!-- *****************define DAO here***************** -->
 	<bean id="helloWorldDAO"
 		class="vn.edu.fpt.capstone.busReservation.dao.HelloWorldDAOImpl">
@@ -81,5 +88,15 @@
     	<property name="sessionFactory" ref="sessionFactory" />
     	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
     </bean>
+    
+    <bean id="paymentMethodDAO" class="vn.edu.fpt.capstone.busReservation.dao.PaymentMethodDAO">
+    	<property name="sessionFactory" ref="sessionFactory" />
+    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean" />
+    </bean>
+    
+<!--     <bean id="tripWithNumberOfRemainedSeatsInSubrouteDAO" class="vn.edu.fpt.capstone.busReservation.dao.TripWithNumberOfRemainedSeatsInSubrouteDAO"> -->
+<!--     	<property name="sessionFactory" ref="sessionFactory" /> -->
+<!--     	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.TripWithNumberOfRemainedSeatsInSubrouteBean" /> -->
+<!--     </bean> -->
 </beans>
 

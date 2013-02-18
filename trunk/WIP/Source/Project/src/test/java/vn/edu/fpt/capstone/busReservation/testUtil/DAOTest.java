@@ -14,7 +14,7 @@ import org.junit.BeforeClass;
  * 
  */
 public class DAOTest extends SpringTest {
-    private static Log log = LogFactory.getLog(DAOTest.class);
+    protected static Log log = LogFactory.getLog(DAOTest.class);
 
     @BeforeClass
     public static void start() {

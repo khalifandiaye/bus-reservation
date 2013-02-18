@@ -3,11 +3,12 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.booking;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.SessionAware;
 
 import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
@@ -85,8 +86,11 @@ public class BookingPayAction extends ActionSupport implements SessionAware {
 		this.tripBean = tripBean;
 	}
 
-	public String execute(){
+    @Action(results = { @Result(name = SUCCESS, type = "chain", params = {
+            "namespace", "/pay", "actionName", "pay01010" }) })
+    public String execute(){
 		List<TripBean> list = (List<TripBean>)session.get("listTripBean");
+		String reservationId = null;
 		
 		UserBean userBean;
 		if(!(session.get("User") == null)){
@@ -113,16 +117,12 @@ public class BookingPayAction extends ActionSupport implements SessionAware {
 		reservationBean.setStatus("unpaid");
 		reservationBean.setTrips(list);//List<tripBean>
 		
-		reservationDAO.insert(reservationBean);
+        reservationId = Integer.toString((Integer) reservationDAO
+                .insert(reservationBean));
 		
 		String[] tmp = ((String)session.get("selectedSeats")).split(";");
 		for(int i =0 ; i< tmp.length; i++){
-			SeatPositionKey key = new SeatPositionKey();
-			key.setName(tmp[i]);
-			key.setReservation(reservationBean);
-			
 			SeatPositionBean spb = new SeatPositionBean();
-			spb.setId(key);
 			spb.setName(tmp[i]);
 			spb.setReservation(reservationBean);
 			
@@ -130,6 +130,7 @@ public class BookingPayAction extends ActionSupport implements SessionAware {
 		}
 		session.remove("listTripBean");
 		session.remove("selectedSeats");
+		session.put("reservationId", reservationId);
 		
 		return SUCCESS;
 	}

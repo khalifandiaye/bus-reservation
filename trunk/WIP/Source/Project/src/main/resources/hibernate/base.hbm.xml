@@ -236,4 +236,16 @@
 		<property name="transactionId" column="transaction_id" type="string" not-null="true" />
 		<property name="type" type="string" not-null="true" />
 	</class>
+	<!-- TRIP_WITH_NUMBER_OF_REMAINED_SEATS_IN_SUBROUTE -->
+<!-- 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TripWithNumberOfRemainedSeatsInSubrouteBean" table="trip_with_number_of_remained_seats_in_subroute"> -->
+<!-- 		<composite-id> -->
+<!-- 			<key-many-to-one name="trip" column="trip_id" /> -->
+<!-- 			<key-many-to-one name="busStatus" column="bus_status_id" /> -->
+<!-- 			<key-many-to-one name="startCity" column="start_city_id" /> -->
+<!-- 			<key-many-to-one name="endCity" column="end_city_id" /> -->
+<!-- 		</composite-id> -->
+<!-- 		<property name="departureTime" column="departure_time" type="timestamp" not-null="true" /> -->
+<!-- 		<property name="arrivalTime" column="arrival_time" type="timestamp" not-null="true" /> -->
+<!-- 		<property name="numberOfRemainedSeats" column="number_of_remained_seats" type="int" not-null="true" /> -->
+<!-- 	</class> -->
 </hibernate-mapping>

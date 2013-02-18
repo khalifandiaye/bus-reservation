@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!-- Start header -->
+<input type="hidden" id="contextPath" value="<%=request.getContextPath()%>">
 <header class="header">
     <div class="container">
         <div class="navbar">
@@ -9,8 +10,8 @@
                     <a class="brand" href="index.html"><img src="<%=request.getContextPath()%>/images/Coach-logo.png" alt="" style="background:rgb(34, 170, 238);border-radius: 23px;"> TRAVEL<span>BUS</span></a>
                 </div>
                 <ul class="nav">
-                    <li class="active"><a href="#">TRANG CHỦ</a></li>
-                    <li><a href="booking/booking.html">ĐẶT VÉ</a></li>
+                    <li class="active"><a href="<%=request.getContextPath()%>/">TRANG CHỦ</a></li>
+                    <li><a href="<%=request.getContextPath()%>/booking/booking.html">ĐẶT VÉ</a></li>
                     <li><a href="#">VỀ CHÚNG TÔI</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">TÀI KHOẢN <b class="caret"></b></a>

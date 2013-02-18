@@ -5,56 +5,24 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-	<package name="pay" extends="struts-default,json-default">
-		<!-- <action name="index" class="indexAction">
-			<result>/jsp/index.jsp</result>
-			<result name="error">/jsp/error.jsp</result>
-		</action>
-		<action name="testPaypalStart" class="successAction">
-			<result>/jsp/testpaypal.jsp</result>
-			<result name="error">/jsp/common/error.jsp</result>
-		</action>
-		<action name="testPaypalPay" class="testPayAction">
-			<result>/jsp/testpaypal_redirect.jsp</result>
-			<result name="error">/jsp/common/error.jsp</result>
-		</action>
-		<action name="testPaypalSuccess" class="testPaySuccessAction">
-			<result>/jsp/testpaypal_success.jsp</result>
-			<result name="error">/jsp/common/error.jsp</result>
-		</action>
-		<action name="testPaypalCancel" class="successAction">
-			<result>/jsp/testpaypal_cancel.jsp</result>
-			<result name="error">/jsp/common/error.jsp</result>
-		</action>
-		<action name="helloWorld" class="helloWorldAction">
-			<result>/jsp/helloWorld.jsp</result>
-			<result name="error">/jsp/error.jsp</result>
-		</action>
-		<action name="listEmployee" class="listEmployeeAction">
-			<result>/jsp/employee.jsp</result>
-			<result name="error">/jsp/error.jsp</result>
-		</action> -->
+	<package name="transactionalPackage" extends="struts-default">
+		<interceptors>
+			<interceptor name="hibernateSessionInterceptor"
+				class="vn.edu.fpt.capstone.busReservation.util.HibernateSessionInterceptor" />
+			<interceptor-stack name="dbStack">
+				<interceptor-ref name="hibernateSessionInterceptor" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="dbStack" />
 	</package>
-	<package name="trip" extends="json-default">
-		<action name="create" class="vn.edu.fpt.capstone.busReservation.action.trip.CreateAction">
-			<result>/jsp/createTrip.jsp</result>
-			<result name="error">/jsp/error.jsp</result>
-		</action>
-		<action name="delete" class="vn.edu.fpt.capstone.busReservation.action.trip.DeleteAction">
-			<result>/jsp/createTrip.jsp</result>
-			<result name="error">/jsp/error.jsp</result>
-		</action>
-		<action name="update" class="vn.edu.fpt.capstone.busReservation.action.trip.UpdateAction">
-			<result>/jsp/createTrip.jsp</result>
-			<result name="error">/jsp/error.jsp</result>
-		</action>
-		<action name="insertNewTrip" class="vn.edu.fpt.capstone.busReservation.action.trip.InsertNewTripAction">
-			<result>/jsp/index.jsp</result>
-			<result name="error">/jsp/error.jsp</result>
-		</action>
-		<action name="updateTripTime" class="vn.edu.fpt.capstone.busReservation.action.trip.UpdateTripTimeAction">
-				<result type="json" />
-		</action>
+	<package name="jsonPackage"
+		extends="transactionalPackage,json-default">
 	</package>
-	
+	<package name="basePackage" extends="struts-default">
+		<default-interceptor-ref name="defaultStack" />
+	</package>
+	<package name="pay" extends="transactionalPackage"></package>
+	<package name="trip" extends="transactionalPackage"></package>
+	<package name="booking" extends="transactionalPackage"></package>
 </struts>
