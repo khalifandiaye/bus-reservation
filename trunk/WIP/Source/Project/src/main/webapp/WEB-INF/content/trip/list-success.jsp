@@ -74,6 +74,10 @@
 					});
 				});
 				
+				$('#tripDialogBusType').change(function() {
+					getAvailBus();
+				});
+				
 				function getAvailBus() {
 					var selectedRouteId = $("#tripDialogRoutes").val()
 					var departureTime = $("#tripDialogDepartureTime").val();
@@ -85,12 +89,12 @@
 		    				  url: "availBus.html?departureTime=" + departureTime + "&busType=" + selectedBusType,
 		    				}).done(function(data) {
 		    					// cleare bus selection
-		    					$('#busPlateSelect').empty();
+		    					$('#tripDialogBusPlate').empty();
 		    					
 		    					// process over response data
 		    					// add new avaible bus plateNumber
-		    					$.each(data.busBeans, function() {
-		    						$('#busPlateSelect').append('<option value="'+this.id+'">'+this.plateNumber+'</option>');
+		    					$.each(data, function() {
+		    						$('#tripDialogBusPlate').append('<option value="'+this.id+'">'+this.plateNumber+'</option>');
 		    					});
 		    				});
 					}
@@ -140,6 +144,7 @@
 	<!-- Modal -->
 	<div id="editTripDialog" class="modal hide fade" tabindex="-1" role="dialog" 
 		aria-labelledby="myModalLabel" aria-hidden="true">
+		<form id="addNewTripForm" action="insert.html" method="POST">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
 				aria-hidden="true">×</button>
@@ -178,8 +183,9 @@
 		</div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-			<button class="btn btn-primary">Save changes</button>
+			<button id="addNewTrip" class="btn btn-primary">Save changes</button>
 		</div>
+		</form>
 	</div>
 	
 	<!-- Modal Delete Dialog -->
