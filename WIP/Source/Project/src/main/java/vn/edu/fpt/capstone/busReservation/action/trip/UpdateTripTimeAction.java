@@ -9,12 +9,14 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.ParentPackage;
 
 import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+@ParentPackage("transactionalPackage")
 public class UpdateTripTimeAction extends ActionSupport {
 
 	private static final long serialVersionUID = -1900533216154623510L;
