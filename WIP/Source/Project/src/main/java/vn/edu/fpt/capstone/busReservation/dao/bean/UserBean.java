@@ -3,6 +3,8 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao.bean;
 
+import java.util.List;
+
 /**
  * @author Yoshimi
  *
@@ -22,6 +24,7 @@ public class UserBean extends AbstractBean<Integer> {
 	private String email;
 	private String civilId;
 	private String status;
+	private List<ReservationBean> reservations;
 	/**
 	 * @return the username
 	 */
@@ -142,4 +145,16 @@ public class UserBean extends AbstractBean<Integer> {
 	public void setStatus(String status) {
 	    this.status = status;
 	}
+    /**
+     * @return the reservations
+     */
+    public List<ReservationBean> getReservations() {
+        return reservations;
+    }
+    /**
+     * @param reservations the reservations to set
+     */
+    public void setReservations(List<ReservationBean> reservations) {
+        this.reservations = reservations;
+    }
 }

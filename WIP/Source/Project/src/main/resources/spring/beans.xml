@@ -24,9 +24,13 @@
 	<bean id="paymentLogic"
 		class="vn.edu.fpt.capstone.busReservation.logic.PaymentLogic" singleton="true" >
 		<property name="reservationDAO" ref="reservationDAO" />
-		<property name="tariffDAO" ref="tariffDAO" />
 		<property name="paymentMethodDAO" ref="paymentMethodDAO" />
 		<property name="paymentDAO" ref="paymentDAO" />
+	</bean>
+	<bean id="reservationLogic"
+		class="vn.edu.fpt.capstone.busReservation.logic.ReservationLogic" singleton="true" >
+		<property name="userDAO" ref="userDAO" />
+		<property name="reservationInfoDAO" ref="reservationInfoDAO" />
 	</bean>
 	<!-- *****************define DAO here***************** -->
 	<bean id="helloWorldDAO"
@@ -97,6 +101,11 @@
     <bean id="busTypeDAO" class="vn.edu.fpt.capstone.busReservation.dao.BusTypeDAO">
     	<property name="sessionFactory" ref="sessionFactory" />
     	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean" />
+    </bean>
+    
+    <bean id="reservationInfoDAO" class="vn.edu.fpt.capstone.busReservation.dao.ReservationInfoDAO">
+    	<property name="sessionFactory" ref="sessionFactory" />
+    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean" />
     </bean>
     
 <!--     <bean id="tripWithNumberOfRemainedSeatsInSubrouteDAO" class="vn.edu.fpt.capstone.busReservation.dao.TripWithNumberOfRemainedSeatsInSubrouteDAO"> -->

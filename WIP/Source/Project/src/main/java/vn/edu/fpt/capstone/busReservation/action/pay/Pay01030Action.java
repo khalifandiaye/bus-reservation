@@ -3,11 +3,17 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.pay;
 
+import java.io.IOException;
+
+import org.hibernate.HibernateException;
+
 import urn.ebay.api.PayPalAPI.GetExpressCheckoutDetailsResponseType;
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
+import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 /**
  * @author Yoshimi
@@ -47,8 +53,8 @@ public class Pay01030Action extends BaseAction {
         String reservationId = null;
         String[] paymentDetails = null;
 
-        token = (String) session.get("paymentToken");
-        reservationId = (String) session.get("reservationId");
+        token = (String) session.get(CommonConstant.SESSION_KEY_PAYMENT_TOKEN);
+        reservationId = (String) session.get(CommonConstant.SESSION_KEY_RESERVATION_ID);
         if (CheckUtils.isNullOrBlank(reservationId)
                 || CheckUtils.isNullOrBlank(token)
                 || !CheckUtils.isPositiveInteger(reservationId)) {
@@ -75,9 +81,18 @@ public class Pay01030Action extends BaseAction {
         } catch (CommonException e) {
             errorProcessing(e);
             return ERROR;
+        } catch (HibernateException e) {
+            // TODO error processing
+            genericDatabaseErrorProcess(e);
+            return ERROR;
+        } catch (IOException e) {
+            //TODO error processing
+            addActionError(getText("msgerrws001"));
+            return ERROR;
         }
-        session.remove("reservationInfo");
-        session.remove("reservationId");
+        session.remove(ReservationInfo.class.getName());
+        session.remove(CommonConstant.SESSION_KEY_RESERVATION_ID);
+        session.remove(CommonConstant.SESSION_KEY_PAYMENT_TOKEN);
         return SUCCESS;
     }
 }

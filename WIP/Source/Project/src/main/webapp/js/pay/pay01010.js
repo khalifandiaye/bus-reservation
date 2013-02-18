@@ -17,13 +17,11 @@ $(document).ready(function() {
             success : function(data) {
                 $("#transactionFee").html(
                         data.reservationInfo.transactionFee
-                        + data.reservationInfo.currency
-                        + "<br />=$"
+                        + " VND<br />=$"
                         + data.reservationInfo.transactionFeeInUSD);
                 $("#totalAmount").html(
                         data.reservationInfo.totalAmount
-                        + data.reservationInfo.currency
-                        + "<br />=$"
+                        + " VND<br />=$"
                         + data.reservationInfo.totalAmountInUSD);
             }
         });

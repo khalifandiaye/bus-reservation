@@ -16,6 +16,7 @@ import urn.ebay.apis.eBLBaseComponents.DoExpressCheckoutPaymentRequestDetailsTyp
 import urn.ebay.apis.eBLBaseComponents.ErrorType;
 import urn.ebay.apis.eBLBaseComponents.PaymentActionCodeType;
 import urn.ebay.apis.eBLBaseComponents.PaymentDetailsType;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -45,7 +46,7 @@ public class TestPayReturnAction extends ActionSupport implements SessionAware {
 		DoExpressCheckoutPaymentRequestDetailsType details = null;
 		DoExpressCheckoutPaymentResponseType doResponse = null;
 		String token = null;
-		token = session.get("paymentToken").toString();
+		token = session.get(CommonConstant.SESSION_KEY_PAYMENT_TOKEN).toString();
 		checkoutDetailsRequest = new GetExpressCheckoutDetailsRequestType(token);
 		checkoutDetailsReq = new GetExpressCheckoutDetailsReq();
 		checkoutDetailsReq

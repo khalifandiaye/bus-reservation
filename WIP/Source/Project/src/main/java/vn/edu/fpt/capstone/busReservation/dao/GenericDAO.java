@@ -100,14 +100,27 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
      *             executing the SQL or processing the SQL results.
      */
     @SuppressWarnings("unchecked")
-    public T getById(Serializable id) {
+    public T getById(K id) {
         T result = null;
         Session session = null;
         // get the current session
         session = sessionFactory.getCurrentSession();
         try {
             // perform database access (query, insert, update, etc) here
-            result = (T) session.get(clazz, id);
+            try {
+                if (id.getClass().getName().startsWith(
+                        this.getClass().getPackage().getName())) {
+                    result = clazz.newInstance();
+                    result.setId(id);
+                    result = (T) session.get(clazz, result);
+                } else {
+                    result = (T) session.get(clazz, id);
+                }
+            } catch (InstantiationException e) {
+                result = (T) session.get(clazz, id);
+            } catch (IllegalAccessException e) {
+                result = (T) session.get(clazz, id);
+            }
         } catch (HibernateException e) {
             exceptionHandling(e, session);
         }
@@ -119,7 +132,8 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
      * Return the persistent instance of the given entity class with the given
      * identifier, assuming that the instance exists. This method might return a
      * proxied instance that is initialized on-demand, when a non-identifier
-     * method is accessed.<p>
+     * method is accessed.
+     * <p>
      * 
      * You should not use this method to determine if an instance exists (use
      * get() instead). Use this only to retrieve an instance that you assume

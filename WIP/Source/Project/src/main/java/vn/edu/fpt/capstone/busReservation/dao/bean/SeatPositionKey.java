@@ -5,6 +5,7 @@ package vn.edu.fpt.capstone.busReservation.dao.bean;
 
 import java.io.Serializable;
 
+
 /**
  * @author Yoshimi
  * 

@@ -183,12 +183,12 @@ public class CurrencyConverter {
                     + currencyPair.fromCurrency.getCurrencyCode()
                     + "; toCurrency="
                     + currencyPair.toCurrency.getCurrencyCode()
-                    + "; conversionRate="
-                    + conversionRate.toString());
+                    + "; conversionRate=" + conversionRate.toString());
             converterMap.put(currencyPair, converter);
             conversionRate = BigDecimal.ONE.divide(conversionRate, 10,
                     BigDecimal.ROUND_HALF_UP);
-            converterMap.put(currencyPair.reverse(), new CurrencyConverter(conversionRate));
+            converterMap.put(currencyPair.reverse(), new CurrencyConverter(
+                    conversionRate));
             log.debug("The inversal CurrencyConverter instance has been created. initDate="
                     + converter.initDate
                     + "; conversionRate="
@@ -218,7 +218,7 @@ public class CurrencyConverter {
      * @return the converted amount
      */
     public BigDecimal convert(BigDecimal amount) {
-        return amount.multiply(conversionRate);
+        return amount != null ? amount.multiply(conversionRate) : null;
     }
 
     /**
