@@ -34,7 +34,7 @@ public class DeleteAction extends ActionSupport {
 	private int id; 
 
 	@Action(value = "/delete", results = { @Result(type = "json", name = SUCCESS, params = {
-            "includeProperties", "reservationInfo, errorMessage" }) })
+            "includeProperties", "tripBean" }) })
 	public String execute() {
 		tripBean =  tripDAO.getById(id);
 		tripBean.setStatus("inactive");
