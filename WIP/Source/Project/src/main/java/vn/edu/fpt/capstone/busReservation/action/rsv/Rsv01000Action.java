@@ -6,7 +6,6 @@ package vn.edu.fpt.capstone.busReservation.action.rsv;
 import java.util.List;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
-import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.logic.ReservationLogic;
 
 /**

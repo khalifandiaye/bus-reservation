@@ -5,8 +5,6 @@ package vn.edu.fpt.capstone.busReservation.action.pay;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 
-import com.opensymphony.xwork2.ActionSupport;
-
 /**
  * @author Yoshimi
  *

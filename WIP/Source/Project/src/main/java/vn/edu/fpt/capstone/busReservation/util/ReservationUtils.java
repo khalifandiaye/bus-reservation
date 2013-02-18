@@ -3,11 +3,7 @@
  */
 package vn.edu.fpt.capstone.busReservation.util;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +11,6 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;

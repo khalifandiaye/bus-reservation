@@ -65,12 +65,11 @@ public class PayJSONAction extends BaseAction {
         return errorMessage;
     }
 
-    @Action(value = "/calculateFee", results = { @Result(type = "json", name = SUCCESS, params = {
-            "includeProperties", "reservationInfo, errorMessage" }) })
+    @Action(value = "/calculateFee", results = { @Result(type = "json", name = SUCCESS) })
     public String calculateFee() {
         if (paymentMethodId != null) {
             reservationInfo = (ReservationInfo) getSession().get(
-                    "reservationInfo");
+                    ReservationInfo.class.getName());
             if (reservationInfo != null) {
                 try {
                     paymentLogic.updateReservationPaymentInfo(reservationInfo,
@@ -83,7 +82,7 @@ public class PayJSONAction extends BaseAction {
                     genericDatabaseErrorProcess(e);
                     return ERROR;
                 }
-                getSession().put("reservationInfo", reservationInfo);
+                getSession().put(ReservationInfo.class.getName(), reservationInfo);
             } else {
                 // TODO error processing
                 errorMessage = getText("msgerrcm000");
