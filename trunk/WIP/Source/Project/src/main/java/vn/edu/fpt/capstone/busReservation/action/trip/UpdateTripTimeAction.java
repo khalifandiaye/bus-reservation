@@ -32,7 +32,7 @@ public class UpdateTripTimeAction extends ActionSupport {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm");
 		Date date = sdf.parse(dateString);
 		List<Integer> busyBusIds = busDAO.getBusyBus(date);
-		busBeans = busDAO.getAvailBus(busyBusIds);
+//		busBeans = busDAO.getAvailBus(date, );
 
 //		segmentBeans = routeDAO.getAllSegmentByRouteId(routeId);
 //		for (SegmentBean segmentBean : segmentBeans) {

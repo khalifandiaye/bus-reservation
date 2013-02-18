@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 
@@ -36,16 +34,25 @@ public class BusDAO extends GenericDAO<Integer, BusBean>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<BusBean> getAvailBus(List<Integer> busyBusIds) {
+	public List<BusBean> getAvailBus(Date date, int busTypeId) {
+		String hql = "SELECT busBean " +
+				"FROM BusBean busBean WHERE busBean.id " +
+				"NOT IN (SELECT distinct busStatusBean.bus.id " +
+				"FROM BusStatusBean busStatusBean " +
+				"WHERE :date > busStatusBean.fromDate and busStatusBean.toDate < :date) " +
+				"AND busBean.busType.id = :busTypeId";
 		Session session = sessionFactory.getCurrentSession();
-		Criteria criteria = session.createCriteria(BusBean.class);
-		if (busyBusIds != null && !busyBusIds.isEmpty()) {
-			criteria.add(Restrictions.not(
-			// replace "id" below with property name, depending on what you're
-			// filtering against
-					Restrictions.in("id", busyBusIds)));
+		List<BusBean> result = new ArrayList<BusBean>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setDate("date", date);
+			query.setParameter("busTypeId", busTypeId);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
 		}
-
-		return criteria.list();
+		return result;
 	}
+
 }
