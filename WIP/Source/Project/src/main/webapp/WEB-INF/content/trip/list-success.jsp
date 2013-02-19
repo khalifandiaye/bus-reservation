@@ -79,23 +79,24 @@
 				});
 				
 				function getAvailBus() {
-					var selectedRouteId = $("#tripDialogRoutes").val()
+					var selectedRouteId = $("#tripDialogRoutes").val();
 					var departureTime = $("#tripDialogDepartureTime").val();
 					var arrivalTime = $("#tripDialogArrivalTime").val();
 					var selectedBusType = $("#tripDialogBusType").val();
 					if (selectedRouteId != '-1' && departureTime != ""
 							&& selectedBusType != '-1') {
 						$.ajax({
-		    				  url: "availBus.html?departureTime=" + departureTime + "&busType=" + selectedBusType,
+		    				  url: "availBus.html?departureTime=" + departureTime + "&busType=" + selectedBusType + "&routeId=" + selectedRouteId,
 		    				}).done(function(data) {
 		    					// cleare bus selection
 		    					$('#tripDialogBusPlate').empty();
 		    					
 		    					// process over response data
 		    					// add new avaible bus plateNumber
-		    					$.each(data, function() {
+		    					$.each(data.busInfos, function() {
 		    						$('#tripDialogBusPlate').append('<option value="'+this.id+'">'+this.plateNumber+'</option>');
 		    					});
+		    					$("#tripDialogArrivalTime").val(data.arrivalTime);
 		    				});
 					}
 				}
@@ -187,7 +188,7 @@
 		</div>
 		</form>
 	</div>
-	
+
 	<!-- Modal Delete Dialog -->
 	<div id="deleteTripDialog" class="modal hide fade" tabindex="-1" role="dialog" 
 		aria-labelledby="myModalLabel" aria-hidden="true">

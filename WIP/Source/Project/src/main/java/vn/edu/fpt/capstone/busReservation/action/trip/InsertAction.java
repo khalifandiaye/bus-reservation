@@ -20,7 +20,9 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
+import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -45,13 +47,14 @@ public class InsertAction extends ActionSupport{
 		Calendar calendar = Calendar.getInstance();
 		
 		Date fromDate = sdf.parse(departDate);
+		long traTime = 0;
 		calendar.setTime(fromDate);
-		
-		String travelTime = routeDAO.getAllSegmentByRouteId(routeSelect);
-		SimpleDateFormat travelTimeFormat = new SimpleDateFormat("hh:mm:ss");
-		Date travelDate = travelTimeFormat.parse(travelTime);
+		List<RouteDetailsBean> routeDetailsList = routeDAO.getById(routeSelect).getRouteDetails();
+		for (RouteDetailsBean bean : routeDetailsList) {
+			traTime += bean.getSegment().getTravelTime().getTime();
+		}
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(travelDate);
+		cal.setTimeInMillis(traTime);
 		calendar.add(Calendar.MINUTE, cal.get(Calendar.MINUTE));
 		calendar.add(Calendar.HOUR, cal.get(Calendar.HOUR));
 		Date toDate = calendar.getTime();
