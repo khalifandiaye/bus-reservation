@@ -14,6 +14,20 @@ var SEAT_EMPTY = 0,
     SEAT_SOLD = 1,
     SEAT_SELECTED = 2;
 
+function initSelectedSeat(){
+	var selectedSeatInput = $("#selectedSeat").val();
+	var arraySelectedSeat;
+	if(selectedSeatInput.length > 0){
+		arraySelectedSeat = selectedSeatInput.split(";");
+		console.log(arraySelectedSeat);
+		for(var i = 0; i < arraySelectedSeat.length ;i++){
+			if(arraySelectedSeat[i] != ""){
+				selectSeat(arraySelectedSeat[i]);
+			}
+		}
+	}
+}
+
 function seatAvailable(seatImage){
 //    if(seatImage.data('status') === SEAT_EMPTY ){
 //        return true;
@@ -122,10 +136,10 @@ function seatClicked(seatImage){
 }
 
 function showPopup(message){
-    $('#myModal').on('show', function () {
-        $(".modal-body p").text(message);
-    });
-    $('#myModal').modal('show');
+	if($(".notify-message").html().trim()!=""){
+		$(".notify-message").empty();
+	}
+	$(".notify-message").append('<div class="alert fade in"><button type="button" class="close" data-dismiss="alert">×</button>'+message+'</div>');
 }
 
 function updateSeatNum(){
@@ -134,6 +148,7 @@ function updateSeatNum(){
 }
 
 $(function(){
+	
     $(".seat").bind("click",function(event){
 
         var seatImage,targetTagName,message;
@@ -163,4 +178,7 @@ $(function(){
         }
         
     });
+    
+    //init selected seat 
+	initSelectedSeat();
 });

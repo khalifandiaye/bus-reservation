@@ -43,6 +43,12 @@
 	    </div>
 	</section>
 	<!-- End small nav -->
+	<!-- Start notify message -->
+	<section>
+	<div class="my-container notify-message">
+	</div>
+	</section>
+	<!-- End notify message -->
 	<!-- Start Boooking bus seat -->
 	<setion class="booking-bus-seat">
 	    <div class="my-container">
