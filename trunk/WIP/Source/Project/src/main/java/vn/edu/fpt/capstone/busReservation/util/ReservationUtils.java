@@ -30,7 +30,7 @@ public abstract class ReservationUtils {
      *            a list of trips
      * @return an array of the first and the last trips, in that order
      */
-    public static Map<Integer, TripBean[]> getStartEndTrips(List<TripBean> trips) {
+    public static Map<Integer, TripBean[]> getStartEndTripsMap(List<TripBean> trips) {
         Map<Integer, TripBean[]> result = null;
         int busStatusId = 0;
         result = new HashMap<Integer, TripBean[]>();
@@ -51,6 +51,24 @@ public abstract class ReservationUtils {
             }
         }
         return result;
+    }
+    
+    public static TripBean[] getStartEndTrips(Map<Integer, TripBean[]> startEndTripsMap) {
+        TripBean[] startEndTrips = null;
+        startEndTrips = new TripBean[2];
+        for (TripBean[] trips : startEndTripsMap.values()) {
+            if (startEndTrips[0] == null || trips[0].getDepartureTime().before(startEndTrips[0].getDepartureTime())) {
+                startEndTrips[0] = trips[0];
+            }
+            if (startEndTrips[1] == null || trips[1].getDepartureTime().after(startEndTrips[1].getDepartureTime())) {
+                startEndTrips[1] = trips[1];
+            }
+        }
+        return startEndTrips;
+    }
+    
+    public static TripBean[] getStartEndTrips(List<TripBean> trips) {
+        return getStartEndTrips(getStartEndTripsMap(trips));
     }
 
     public static String getSeatNumbers(

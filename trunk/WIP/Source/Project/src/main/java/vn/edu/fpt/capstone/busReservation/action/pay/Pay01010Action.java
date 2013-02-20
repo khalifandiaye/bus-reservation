@@ -92,7 +92,7 @@ public class Pay01010Action extends BaseAction {
         reservationId = servletRequest
                 .getParameter(CommonConstant.SESSION_KEY_RESERVATION_ID);
         if (reservationId == null) {
-            reservationId = (String) getSession().get(
+            reservationId = (String) session.get(
                     CommonConstant.SESSION_KEY_RESERVATION_ID);
         }
         session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
@@ -102,13 +102,13 @@ public class Pay01010Action extends BaseAction {
 
     public String execute() {
         String reservationId = null;
-        reservationId = (String) getSession().get("reservationId");
+        reservationId = (String) session.get("reservationId");
 
         // TODO remove this later
         reservationId = forTest();
 
         paymentMethods = paymentLogic.getPaymentMethods();
-        getSession().put(CommonConstant.SESSION_KEY_RESERVATION_ID,
+        session.put(CommonConstant.SESSION_KEY_RESERVATION_ID,
                 reservationId);
         try {
             reservationInfo = reservationLogic
@@ -123,7 +123,7 @@ public class Pay01010Action extends BaseAction {
             errorProcessing(e);
             return ERROR;
         }
-        getSession().put(ReservationInfo.class.getName(), reservationInfo);
+        session.put(ReservationInfo.class.getName(), reservationInfo);
 
         return SUCCESS;
     }

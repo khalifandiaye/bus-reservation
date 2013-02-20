@@ -267,6 +267,21 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
             exceptionHandling(e, session);
         }
     }
+    
+    public void load(List<T> tList) {
+        Session session = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            for (T t : tList) {
+                session.load(t, t.getId());
+            }
+            session.flush();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+    }
 
     // public void initialize(Object proxy) throws HibernateException {
     // Session session = null;
