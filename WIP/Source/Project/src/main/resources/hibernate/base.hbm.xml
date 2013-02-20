@@ -251,6 +251,17 @@
 		<property name="paidAmount" column="paid_amount" type="double" not-null="false" />
 		<property name="refundAmount" column="refund_amount" type="double" not-null="false" />
 	</class>
+	<!-- TARIFF VIEW-->
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TariffViewBean" table="tariff_view">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<many-to-one name="segment" column="segment_id" />
+		<many-to-one name="busType" column="bus_type_id" />
+		<property name="validFrom" column="valid_from" type="timestamp" not-null="true" />
+		<property name="validTo" column="valid_to" type="timestamp" not-null="true" />
+		<property name="fare" type="double" not-null="true" />
+	</class>
 	<!-- TRIP_WITH_NUMBER_OF_REMAINED_SEATS_IN_SUBROUTE -->
 <!-- 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TripWithNumberOfRemainedSeatsInSubrouteBean" table="trip_with_number_of_remained_seats_in_subroute"> -->
 <!-- 		<composite-id> -->

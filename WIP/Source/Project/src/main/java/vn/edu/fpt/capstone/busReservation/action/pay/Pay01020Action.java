@@ -47,11 +47,11 @@ public class Pay01020Action extends BaseAction {
         String paymentToken = null;
         ReservationInfo reservationInfo = null;
 
-        reservationInfo = (ReservationInfo) getSession().get(
+        reservationInfo = (ReservationInfo) session.get(
                 ReservationInfo.class.getName());
         try {
             paymentToken = paymentLogic.setPaypalExpressCheckout(
-                    reservationInfo, getServletRequest().getContextPath());
+                    reservationInfo, servletRequest.getContextPath());
         } catch (CommonException e) {
             errorProcessing(e);
             return ERROR;

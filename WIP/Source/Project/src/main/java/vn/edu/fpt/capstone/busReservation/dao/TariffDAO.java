@@ -3,6 +3,7 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -11,6 +12,7 @@ import org.hibernate.Session;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 
 /**
  * @author Yoshimi

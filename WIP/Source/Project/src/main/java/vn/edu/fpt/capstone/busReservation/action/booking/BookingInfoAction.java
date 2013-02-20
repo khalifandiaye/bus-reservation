@@ -8,6 +8,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SeatInfo;
+import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.logic.ReservationLogic;
 
@@ -19,7 +20,6 @@ public class BookingInfoAction extends BaseAction {
     private static final long serialVersionUID = 1L;
     // ==========================Logic Object==========================
     private PaymentLogic paymentLogic;
-    @SuppressWarnings("unused")
     private ReservationLogic reservationLogic;
 
     /**
@@ -37,14 +37,15 @@ public class BookingInfoAction extends BaseAction {
     public void setReservationLogic(ReservationLogic reservationLogic) {
         this.reservationLogic = reservationLogic;
     }
-	private String selectedSeat;
-	private List<SeatInfo> listSeats = new ArrayList<SeatInfo>();
+
+    private String selectedSeat;
+    private List<SeatInfo> listSeats = new ArrayList<SeatInfo>();
     private List<PaymentMethodBean> paymentMethods;
     private ReservationInfo reservationInfo;
-	
-	public List<SeatInfo> getListSeats() {
-		return listSeats;
-	}
+
+    public List<SeatInfo> getListSeats() {
+        return listSeats;
+    }
 
     /**
      * @return the paymentMethods
@@ -60,18 +61,31 @@ public class BookingInfoAction extends BaseAction {
         return reservationInfo;
     }
 
-	public void setSelectedSeat(String selectedSeat) {
-		this.selectedSeat = selectedSeat;
-	}
+    public void setSelectedSeat(String selectedSeat) {
+        this.selectedSeat = selectedSeat;
+    }
 
-	public String execute(){
-	    String[] seats;
-		session.put("selectedSeats", selectedSeat);
-		seats = selectedSeat.split(";");
-		for(int i= 0; i < seats.length; i++){
-			listSeats.add(new SeatInfo(seats[i], "2"));
-		}
+    @SuppressWarnings("unchecked")
+    public String execute() {
+        String[] seats;
+        List<TripBean> tripBeanList = null;
+        session.put("selectedSeats", selectedSeat);
+        seats = selectedSeat.split(";");
+        for (int i = 0; i < seats.length; i++) {
+            listSeats.add(new SeatInfo(seats[i], "2"));
+        }
         paymentMethods = paymentLogic.getPaymentMethods();
-		return SUCCESS;
-	}
+        tripBeanList = (List<TripBean>) session.get("listTripBean");
+        try {
+            reservationInfo = reservationLogic.createReservationInfo(
+                    tripBeanList, listSeats.size());
+            paymentLogic.updateReservationPaymentInfo(reservationInfo,
+                    paymentMethods.get(0).getId());
+        } catch (CommonException e) {
+            errorProcessing(e);
+            return ERROR;
+        }
+        session.put(ReservationInfo.class.getName(), reservationInfo);
+        return SUCCESS;
+    }
 }

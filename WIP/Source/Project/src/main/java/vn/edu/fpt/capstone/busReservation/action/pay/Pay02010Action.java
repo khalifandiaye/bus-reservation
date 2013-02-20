@@ -85,7 +85,7 @@ public class Pay02010Action extends BaseAction {
             errorProcessing(e);
             return ERROR;
         }
-        getSession().put(ReservationInfo.class.getName(), reservationInfo);
+        session.put(ReservationInfo.class.getName(), reservationInfo);
 
         return SUCCESS;
 	}

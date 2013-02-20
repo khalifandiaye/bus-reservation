@@ -108,7 +108,7 @@ public class PaymentLogic extends BaseLogic {
         for (Iterator<PaymentMethodBean> paymentMethodIterator = paymentMethods
                 .iterator(); paymentMethodIterator.hasNext();) {
             paymentMethod = paymentMethodIterator.next();
-            if (paymentMethod.getId() != 2) {
+            if (paymentMethod.getId() != 2 && paymentMethod.getId() != 3) {
                 paymentMethodIterator.remove();
             }
         }

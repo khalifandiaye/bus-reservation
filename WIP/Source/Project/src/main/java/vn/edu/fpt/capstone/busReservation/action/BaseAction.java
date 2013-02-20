@@ -11,6 +11,7 @@ import org.apache.struts2.interceptor.RequestAware;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.SessionAware;
 import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
 
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 
@@ -28,19 +29,27 @@ public class BaseAction extends ActionSupport implements SessionAware,
      */
     private static final long serialVersionUID = -3228510192469319564L;
     // ===========================HTTP Object==========================
+    private SessionFactory sessionFactory;
     protected Map<String, Object> session;
     protected Map<String, Object> request;
     protected HttpServletRequest servletRequest;
 
-    public void setSession(Map<String, Object> session) {
-        this.session = session;
+    /**
+     * @param sessionFactory
+     *            the sessionFactory to set
+     */
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
-    /**
-     * @return the session
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.struts2.interceptor.SessionAware#setSession(java.util.Map)
      */
-    protected Map<String, Object> getSession() {
-        return session;
+    public void setSession(Map<String, Object> session) {
+        this.session = session;
     }
 
     @Override
@@ -48,40 +57,29 @@ public class BaseAction extends ActionSupport implements SessionAware,
         this.request = request;
     }
 
-    /**
-     * @return the request
-     */
-    protected Map<String, Object> getRequest() {
-        return request;
-    }
-
     @Override
     public void setServletRequest(HttpServletRequest request) {
         this.servletRequest = request;
     }
 
-    /**
-     * @return the servletRequest
-     */
-    protected HttpServletRequest getServletRequest() {
-        return servletRequest;
-    }
-
     // ====================GENERIC ERROR PROCESSING====================
 
     protected void genericDatabaseErrorProcess(HibernateException e) {
+        rollback();
         LOG.error("Database error", e);
         addActionError(getText("msgerrdb001"));
     }
 
     /**
      * Untested
+     * 
      * @param e
      */
     protected void errorProcessing(CommonException e) {
         String[] parameters;
         String[] paramKeys;
         int length = 0;
+        rollback();
         paramKeys = e.getParameters();
         if (paramKeys != null && paramKeys.length > 0) {
             length = paramKeys.length;
@@ -92,16 +90,34 @@ public class BaseAction extends ActionSupport implements SessionAware,
         } else {
             parameters = new String[0];
         }
-        
-        addActionError(getText(e.getMessageId(),parameters));
+        addActionError(getText(e.getMessageId(), parameters));
     }
 
     /**
      * Untested
+     * 
      * @param e
      */
     protected void commonSessionTimeoutError() {
+        rollback();
         addActionError(getText("msgerrss001"));
+    }
+    
+    private void rollback() {
+        // Rollback only
+        try {
+            if (sessionFactory.getCurrentSession().getTransaction()
+                    .isActive()) {
+                LOG.debug("Trying to rollback database transaction after exception");
+                sessionFactory.getCurrentSession().getTransaction()
+                        .rollback();
+            } else {
+                LOG.debug("The database transaction is longer active");
+            }
+        } catch (Throwable rbEx) {
+            LOG.error("Could not rollback transaction after exception!",
+                    rbEx);
+        }
     }
 
 }

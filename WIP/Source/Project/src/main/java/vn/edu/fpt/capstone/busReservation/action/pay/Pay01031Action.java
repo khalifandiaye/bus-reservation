@@ -17,8 +17,8 @@ public class Pay01031Action extends BaseAction {
 	private static final long serialVersionUID = 1609116152245459318L;
 	
 	public String execute() {
-        getSession().remove("reservationInfo");
-        getSession().remove("reservationId");
+	    session.remove("reservationInfo");
+	    session.remove("reservationId");
 		return SUCCESS;
 	}
 

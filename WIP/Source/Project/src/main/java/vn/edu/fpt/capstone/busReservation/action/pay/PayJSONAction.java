@@ -68,7 +68,7 @@ public class PayJSONAction extends BaseAction {
     @Action(value = "/calculateFee", results = { @Result(type = "json", name = SUCCESS) })
     public String calculateFee() {
         if (paymentMethodId != null) {
-            reservationInfo = (ReservationInfo) getSession().get(
+            reservationInfo = (ReservationInfo) session.get(
                     ReservationInfo.class.getName());
             if (reservationInfo != null) {
                 try {
@@ -82,7 +82,7 @@ public class PayJSONAction extends BaseAction {
                     genericDatabaseErrorProcess(e);
                     return ERROR;
                 }
-                getSession().put(ReservationInfo.class.getName(), reservationInfo);
+                session.put(ReservationInfo.class.getName(), reservationInfo);
             } else {
                 // TODO error processing
                 errorMessage = getText("msgerrcm000");
