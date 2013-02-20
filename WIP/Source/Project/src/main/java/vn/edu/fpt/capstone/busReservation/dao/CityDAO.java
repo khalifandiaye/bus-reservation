@@ -7,17 +7,17 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.CityBean;
 
-public class BusTypeDAO extends GenericDAO<Integer, BusTypeBean>{
+public class CityDAO extends GenericDAO<Integer, CityBean>{
 
-	public BusTypeDAO(Class<BusTypeBean> clazz) {
+	public CityDAO(Class<CityBean> clazz) {
 		super(clazz);
 		// TODO Auto-generated constructor stub
 	}
-
-	public List<BusTypeBean> getAllBusType(){
-		List<BusTypeBean> result = null;
+	
+	public List<CityBean> getAllCity(){
+		List<CityBean> result = null;
 		Query query = null;
 		String queryString = null;
 		Session session = null;
@@ -26,7 +26,7 @@ public class BusTypeDAO extends GenericDAO<Integer, BusTypeBean>{
 		Transaction tx = session.beginTransaction();
 		try {
 			// perform database access (query, insert, update, etc) here
-			queryString = "SELECT bus FROM BusTypeBean bus";
+			queryString = "SELECT city FROM CityBean city";
 			query = session.createQuery(queryString);
 			result = query.list();
 			// commit transaction
