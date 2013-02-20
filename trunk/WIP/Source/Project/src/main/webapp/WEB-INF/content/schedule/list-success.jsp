@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <!DOCTYPE html PUBLIC 
 	"-//W3C//DTD XHTML 1.1 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	
 	
 <html>
 <head>
@@ -22,19 +21,62 @@
 				var oTable;
 				oTable = $('#scheduleTable').dataTable();
 
-				$('input[data-view-details]').click(function() {
-					var busStatusId = this.dataset['view-details'];
-					$(location).attr('href', busStatusId);
-				});
+				$('#BusStatusInsertBtn').click(function() {
+					$('#CreateScheduleDialog').modal();
+					$('#tripEditDialogLabel').html("Add New Schedule");
+					$("#tripDialogDepartureTimeDiv").datetimepicker({
+						format : "yyyy/mm/dd - hh:ii",
+						autoclose : true,
+						todayBtn : true,
+						startDate : new Date(),
+						minuteStep : 10
+					}).on('changeDate', function(ev) {
+						var d1 = new Date(ev.date);
+						d1.setHours(d1.getHours() - 6);
+						$('#tripDialogArrivalTime').datetimepicker('setStartDate', d1);
+						
+						var d2 = new Date(ev.date);
+						d2.setMonth( d2.getMonth( ) + 1 );
+						$('#tripDialogArrivalTime').datetimepicker('setEndDate', d2);
+						
+						getAvailBus();
+					});
 
-				$('input[data-delete]').click(
-						function() {
-							var busStatusId = this.dataset['delete'];
-							$('#tripDeleteDialogLabel').html(
-									$("#trip_" + tripId + " td")[0].innerHTML);
-							$('#deleteTripDialog').modal();
-							selectedTripId = tripId;
-						});
+					$("#tripDialogArrivalTimeDiv").datetimepicker({
+						format : "yyyy/mm/dd - hh:ii",
+						autoclose : true,
+						todayBtn : true,
+						startDate : new Date(),
+						minuteStep : 10
+					});
+				});
+				
+				$('#tripDialogBusType').change(function() {
+					getAvailBus();
+				});
+				
+				function getAvailBus() {
+					var selectedRouteId = $("#tripDialogRoutes").val();
+					var departureTime = $("#tripDialogDepartureTime").val();
+					var arrivalTime = $("#tripDialogArrivalTime").val();
+					var selectedBusType = $("#tripDialogBusType").val();
+					if (selectedRouteId != '-1' && departureTime != ""
+							&& selectedBusType != '-1') {
+						$.ajax({
+		    				  url: "availBus.html?departureTime=" + departureTime + "&busType=" + selectedBusType + "&routeId=" + selectedRouteId,
+		    				}).done(function(data) {
+		    					// cleare bus selection
+		    					$('#tripDialogBusPlate').empty();
+		    					
+		    					// process over response data
+		    					// add new avaible bus plateNumber
+		    					$.each(data.busInfos, function() {
+		    						$('#tripDialogBusPlate').append('<option value="'+this.id+'">'+this.plateNumber+'</option>');
+		    					});
+		    					$("#tripDialogArrivalTime").val(data.arrivalTime);
+		    				});
+					}
+				}
 			});
 </script>
 </head>
@@ -44,7 +86,7 @@
 	<div id="page">
 		<div class="post">
 			<div style="height: 45px; margin-left: 1%;">
-				<input id="tripInsertBtn" type="button" class="btn btn-success"
+				<input id="BusStatusInsertBtn" type="button" class="btn btn-success"
 					value="Add New" />
 			</div>
 			<table id="scheduleTable">
@@ -60,13 +102,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					<s:iterator value="busStatusBeans">
+					<s:iterator value="busStatusBeans" status="busStatus">
 						<tr id="busStatus_<s:property value='id'/>">
-							<td><s:property value="bus.plateNumber" /></td>
-							<td><s:property value="fromDate" /></td>
-							<td><s:property value="toDate" /></td>
-							<td><s:property value="status" /></td>
-							<td><s:property value="endStation.city" /></td>
+							<td><s:property value="bus.plateNumber"/></td>
+							<td><s:property value="fromDate"/></td>
+							<td><s:property value="toDate"/></td>
+							<td><s:property value="status"/></td>
+							<td><s:property value="endStation.city.name"/></td>
 							<td style="width: 6%"><input
 								data-view-details="<s:property value='id'/>"
 								class="btn btn-warning" type="button" value="View Details" /></td>
@@ -80,7 +122,7 @@
 	</div>
 	
 	<!-- Modal -->
-	<div id="editTripDialog" class="modal hide fade" tabindex="-1" role="dialog" 
+	<div id="CreateScheduleDialog" class="modal hide fade" tabindex="-1" role="dialog" 
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<form id="addNewTripForm" action="insert.html" method="POST">
 		<div class="modal-header">
@@ -95,14 +137,14 @@
 					headerValue="--- Select Route ---" list="routeBeans"
 					name="routeBeans" listKey="id" listValue="name" />
 			</div>
-			<label for="tripDialogDepartureTimeDiv">Departure Time: </label>
+			<label for="tripDialogDepartureTimeDiv">From Date: </label>
 			<div id="tripDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
 				<input id="tripDialogDepartureTime" size="16" type="text" value="" readonly
 					name="tripDialogDepartureTime"> <span class="add-on"><i
 					class="icon-remove"></i></span> <span class="add-on"><i
 					class="icon-calendar"></i></span>
 			</div>
-			<label for="tripDialogArrivalTimeDiv">Arrival Time: </label>
+			<label for="tripDialogArrivalTimeDiv">To Date: </label>
 			<div id="tripDialogArrivalTimeDiv" class="input-append date form_datetime"
 				data-date="">
 				<input id="tripDialogArrivalTime" size="16" type="text" value="" readonly> <span
@@ -125,7 +167,7 @@
 		</div>
 		</form>
 	</div>
-
+	
 	<!-- Modal Delete Dialog -->
 	<div id="deleteTripDialog" class="modal hide fade" tabindex="-1" role="dialog" 
 		aria-labelledby="myModalLabel" aria-hidden="true">

@@ -20,9 +20,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
-import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
