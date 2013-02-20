@@ -7,11 +7,10 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionKey;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 public class SeatPositionDAO extends
@@ -23,8 +22,8 @@ public class SeatPositionDAO extends
     }
     
     @SuppressWarnings("unchecked")
-    public boolean isDoubleBooking(List<TripBean> trips, List<String> seatNames) {
-        List<TripBean> result = null;
+    public List<String> checkDoubleBooking(List<TripBean> trips, List<String> seatNames) {
+        List<String> result = null;
         Query query = null;
         String queryString = null;
         Session session = null;
@@ -35,7 +34,7 @@ public class SeatPositionDAO extends
             timeLimit = Calendar.getInstance();
             timeLimit.add(Calendar.MINUTE, -CommonConstant.RESERVATION_TIMEOUT);
             // perform database access (query, insert, update, etc) here
-            queryString = "SELECT trp FROM TripBean AS trp INNER JOIN trp.reservations AS rsv INNER JOIN rsv.seatPositions AS stp WHERE trp IN :trips AND stp.name IN :seats AND (rsv.status = :statusPaid OR (rsv.status = :statusUnpaid && rsv.bookTime > :timeLimit))";
+            queryString = "SELECT DISTINCT stp.name FROM TripBean AS trp INNER JOIN trp.reservations AS rsv INNER JOIN rsv.seatPositions AS stp WHERE trp IN (:trips) AND stp.name IN (:seatNames) AND (rsv.status = :statusPaid OR (rsv.status = :statusUnpaid AND rsv.bookTime > :timeLimit))";
             query = session.createQuery(queryString);
             query.setParameterList("trips", trips);
             query.setParameterList("seatNames", seatNames);
@@ -46,7 +45,7 @@ public class SeatPositionDAO extends
         } catch (HibernateException e) {
             exceptionHandling(e, session);
         }
-        return result != null && result.size() >0;
+        return result;
     }
 
 }
