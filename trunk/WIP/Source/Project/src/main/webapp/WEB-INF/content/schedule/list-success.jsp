@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<!DOCTYPE html PUBLIC 
-	"-//W3C//DTD XHTML 1.1 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 	
 <html>
 <head>
@@ -102,7 +100,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<s:iterator value="busStatusBeans" status="busStatus">
+					<s:iterator value="busStatusBeans">
 						<tr id="busStatus_<s:property value='id'/>">
 							<td><s:property value="bus.plateNumber"/></td>
 							<td><s:property value="fromDate"/></td>
@@ -124,7 +122,7 @@
 	<!-- Modal -->
 	<div id="CreateScheduleDialog" class="modal hide fade" tabindex="-1" role="dialog" 
 		aria-labelledby="myModalLabel" aria-hidden="true">
-		<form id="addNewTripForm" action="insert.html" method="POST">
+		<form id="addNewTripForm" action="save.html" method="POST">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
 				aria-hidden="true">×</button>
