@@ -67,12 +67,13 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
     }
 
     @SuppressWarnings("unchecked")
-	public List<TripBean> getActiveTrips() {
-		String hql = "from TripBean tripBean where tripBean.status = 'active'";
+	public List<TripBean> getTripsByBusStatus(int busStatusId) {
+		String hql = "from TripBean tripBean where tripBean.busStatus.id = :busStatusId";
 		Session session = sessionFactory.getCurrentSession();
 		List<TripBean> result = new ArrayList<TripBean>();
 		try {
 			Query query = session.createQuery(hql);
+			query.setParameter("busStatusId", busStatusId);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);

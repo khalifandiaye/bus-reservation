@@ -24,13 +24,16 @@ public class ListAction extends ActionSupport {
 	private BusTypeDAO busTypeDAO;
 	private RouteDAO routeDAO;
 	
+	// BusStatus ID
+	private int id;
+	
 	private List<BusTypeBean> busTypeBeans = new ArrayList<BusTypeBean>();
 	private List<TripBean> tripBeans = new ArrayList<TripBean>();
 	private List<RouteBean> routeBeans = new ArrayList<RouteBean>();
 
 	public String execute() {
 		busTypeBeans = busTypeDAO.getAll();
-		tripBeans = tripDAO.getActiveTrips();
+		tripBeans = tripDAO.getTripsByBusStatus(id);
 		routeBeans = routeDAO.getAll();
 		return SUCCESS;
 	}
@@ -77,6 +80,14 @@ public class ListAction extends ActionSupport {
 
 	public void setRouteBeans(List<RouteBean> routeBeans) {
 		this.routeBeans = routeBeans;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }
