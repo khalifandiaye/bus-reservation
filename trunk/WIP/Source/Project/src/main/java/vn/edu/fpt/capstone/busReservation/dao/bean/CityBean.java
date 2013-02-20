@@ -16,7 +16,8 @@ public class CityBean extends AbstractBean<Integer> {
     private static final long serialVersionUID = 3460926919404121200L;
     private String name;
     private List<StationBean> stations;
-    /**
+    
+	/**
      * @return the name
      */
     public String getName() {
