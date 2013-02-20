@@ -33,7 +33,7 @@ public class SeatPositionDAOTest extends DAOTest {
         SeatPositionBean bean = seatPositionDAO.getById(key);
         Assert.assertNotNull(bean);
     }
-    
+
     @Test
     public void testCheckDoubleBooking001() {
         TripDAO tripDAO = (TripDAO) getBean("tripDAO");
@@ -45,12 +45,13 @@ public class SeatPositionDAOTest extends DAOTest {
         seatNames.add("B1");
         seatNames.add("B2");
         SeatPositionDAO seatPositionDAO = (SeatPositionDAO) getBean("seatPositionDAO");
-        List<String> beans = seatPositionDAO.checkDoubleBooking(trips, seatNames);
+        List<String> beans = seatPositionDAO.checkDoubleBooking(trips,
+                seatNames);
         assertNotNull(beans);
         assertEquals(1, beans.size());
         assertEquals("A1", beans.get(0));
     }
-    
+
     @Test
     public void testCheckDoubleBooking002() {
         TripDAO tripDAO = (TripDAO) getBean("tripDAO");
@@ -62,7 +63,8 @@ public class SeatPositionDAOTest extends DAOTest {
         seatNames.add("B1");
         seatNames.add("B2");
         SeatPositionDAO seatPositionDAO = (SeatPositionDAO) getBean("seatPositionDAO");
-        List<String> beans = seatPositionDAO.checkDoubleBooking(trips, seatNames);
+        List<String> beans = seatPositionDAO.checkDoubleBooking(trips,
+                seatNames);
         assertNotNull(beans);
         assertEquals(1, beans.size());
         assertEquals("A1", beans.get(0));

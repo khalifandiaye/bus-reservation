@@ -5,36 +5,55 @@ package vn.edu.fpt.capstone.busReservation.action.booking;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.SessionAware;
 
+import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SeatPositionDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionKey;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
+import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
+import vn.edu.fpt.capstone.busReservation.exception.CommonException;
+import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
-
-import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * @author NoName
  *
  */
-public class BookingPayAction extends ActionSupport implements SessionAware {
+public class BookingPayAction extends BaseAction {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5962554617409673584L;
+
+    // ==========================Logic Object==========================
+    private PaymentLogic paymentLogic;
+
+    /**
+     * @param paymentLogic
+     *            the paymentLogic to set
+     */
+    public void setPaymentLogic(PaymentLogic paymentLogic) {
+        this.paymentLogic = paymentLogic;
+    }
+
+    // =========================Action Output==========================
+
+    private String redirectUrl;
+
+    /**
+     * @return the redirectUrl
+     */
+    public String getRedirectUrl() {
+        return redirectUrl;
+    }
 	
 	
-	Map<String,Object> session = null;
 	private TripBean tripBean;
 	private ReservationDAO reservationDAO = null;
 	private SeatPositionDAO seatPositionDAO = null;
@@ -88,8 +107,8 @@ public class BookingPayAction extends ActionSupport implements SessionAware {
 	}
 
     @SuppressWarnings("unchecked")
-    @Action(results = { @Result(name = SUCCESS, type = "chain", params = {
-            "namespace", "/pay", "actionName", "pay01010" }) })
+    @Action(results = { /*@Result(name = SUCCESS, type = "chain", params = {
+            "namespace", "/pay", "actionName", "pay01010" })*/ })
     public String execute(){
 		List<TripBean> list = (List<TripBean>)session.get("listTripBean");
 		String reservationId = null;
@@ -133,13 +152,23 @@ public class BookingPayAction extends ActionSupport implements SessionAware {
 		session.remove("listTripBean");
 		session.remove("selectedSeats");
 		session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
+        String paymentToken = null;
+        ReservationInfo reservationInfo = null;
+
+        reservationInfo = (ReservationInfo) session.get(
+                ReservationInfo.class.getName());
+        try {
+            paymentToken = paymentLogic.setPaypalExpressCheckout(
+                    reservationInfo, servletRequest.getContextPath());
+        } catch (CommonException e) {
+            errorProcessing(e);
+            return ERROR;
+        }
+        redirectUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token="
+                + paymentToken;
+        session.put(CommonConstant.SESSION_KEY_PAYMENT_TOKEN, paymentToken);
 		
 		return SUCCESS;
-	}
-
-	@Override
-	public void setSession(Map<String, Object> map) {
-		this.session = map;
 	}
 
 	public SeatPositionDAO getSeatPositionDAO() {
