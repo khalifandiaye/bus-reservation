@@ -17,6 +17,7 @@ import java.util.Map;
 import org.apache.struts2.interceptor.SessionAware;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
+import vn.edu.fpt.capstone.busReservation.dao.SeatPositionDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
@@ -42,7 +43,12 @@ public class BookingAction extends BaseAction implements SessionAware {
 	private TripDAO tripDAO;
 	private SeatInfo[][] seatMap;
 	private String selectedSeat;
+	private SeatPositionDAO seatPositionDAO;
 	
+	public void setSeatPositionDAO(SeatPositionDAO seatPositionDAO) {
+		this.seatPositionDAO = seatPositionDAO;
+	}
+
 	public String getSelectedSeat() {
 		return selectedSeat;
 	}
@@ -84,24 +90,31 @@ public class BookingAction extends BaseAction implements SessionAware {
 	
 	private List<SeatInfo> getSeatsList(List<TripBean> listTripBean){
 		List<SeatInfo> seats = new ArrayList<SeatInfo>();		
-		for(int k = 0; k < listTripBean.size(); k++){
-			int reservationForTripSize = listTripBean.get(k).getReservations().size();
-			for(int i = 0; i < reservationForTripSize; i++){
-				ReservationBean reservationBean = listTripBean.get(k).getReservations().get(i);
-				int positionSize = reservationBean.getSeatPositions().size();
-				boolean isPaid = checkTime(reservationBean.getBookTime());
-				if(reservationBean.getStatus().equals("paid") || 
-						(reservationBean.getStatus().equals("unpaid") && isPaid)){
-					for(int j = 0; j < positionSize; j++){
-						SeatPositionBean seatBean = listTripBean.get(k).getReservations().get(i).getSeatPositions().get(j);
-						SeatInfo tmp = new SeatInfo(seatBean.getName(), "1");
-						if( !seats.contains(tmp)){
-							seats.add(tmp);
-						}
-					}
-				}
-			}
+//		for(int k = 0; k < listTripBean.size(); k++){
+//			int reservationForTripSize = listTripBean.get(k).getReservations().size();
+//			for(int i = 0; i < reservationForTripSize; i++){
+//				ReservationBean reservationBean = listTripBean.get(k).getReservations().get(i);
+//				int positionSize = reservationBean.getSeatPositions().size();
+//				boolean isPaid = checkTime(reservationBean.getBookTime());
+//				if(reservationBean.getStatus().equals("paid") || 
+//						(reservationBean.getStatus().equals("unpaid") && isPaid)){
+//					for(int j = 0; j < positionSize; j++){
+//						SeatPositionBean seatBean = listTripBean.get(k).getReservations().get(i).getSeatPositions().get(j);
+//						SeatInfo tmp = new SeatInfo(seatBean.getName(), "1");
+//						if( !seats.contains(tmp)){
+//							seats.add(tmp);
+//						}
+//					}
+//				}
+//			}
+//		}
+		List<String> listSoldSeat = seatPositionDAO.getSoldSeats(listTripBean);
+		
+		for (String string : listSoldSeat) {
+			SeatInfo tmp = new SeatInfo(string, "1");
+			seats.add(tmp);
 		}
+		
 		return seats;
 	}
 	
@@ -149,13 +162,11 @@ public class BookingAction extends BaseAction implements SessionAware {
 			//remove doubleSeat and build new seletedSeat
 			List<String> doubleSeats = (List<String>)request.get("doubleSeat");
 			String selSeat = (String)session.get("selectedSeats");
-			List<String> list = Arrays.asList(selSeat.split(";"));
+			String[] list = selSeat.split(";");
 			String nwSelectedSeat = "";
 			
 			for (String string : list) {
-				if(doubleSeats.contains(string)){
-					list.remove(string);
-				}else{
+				if(!doubleSeats.contains(string)){
 					nwSelectedSeat += string+";";
 				}
 			}
