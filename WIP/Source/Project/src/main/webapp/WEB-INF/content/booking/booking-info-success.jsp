@@ -13,6 +13,7 @@
 <link href="<%=request.getContextPath()%>/styles/booking.css" rel="stylesheet">
 <script src="<%=request.getContextPath()%>/js/jquery.validate.min.js" ></script>
 <script src="<%=request.getContextPath()%>/js/booking-validation.js" ></script> 
+<script src="<%=request.getContextPath()%>/js/pay/pay01010.js" ></script>
 </head>
 	<body>
 	<jsp:include page="../common/header.jsp" />
@@ -87,6 +88,59 @@
 			</form>
 		</div>
 	</section>
+		<div class="reservation_info">
+			<h4><s:text name="reservation_info" /> </h4>
+			<table>
+				<tr>
+					<th><s:text name="subroute" /></th>
+					<td><s:property value="reservationInfo.subRouteName" /></td>
+				</tr>
+				<tr>
+					<th><s:text name="departure_date" /></th>
+					<td><s:property value="reservationInfo.departureDate" /></td>
+				</tr>
+				<tr>
+					<th><s:text name="departure_station_address" /></th>
+					<td><s:property value="reservationInfo.departureStationAddress" /></td>
+				</tr>
+				<tr>
+					<th><s:text name="arrival_date" /></th>
+					<td><s:property value="reservationInfo.arrivalDate" /></td>
+				</tr>
+				<tr>
+					<th><s:text name="arrival_station_address" /></th>
+					<td><s:property value="reservationInfo.arrivalStationAddress" /></td>
+				</tr>
+				<tr>
+					<th><s:text name="seat_numbers" /></th>
+					<td><s:property value="reservationInfo.seatNumbers" /></td>
+				</tr>
+			</table>
+		</div>
+		<div class="payment_info">
+			<table>
+				<tr>
+					<th><s:text name="payment_method" /></th>
+					<td><s:select list="paymentMethods" listKey="id" listValue="name" name="paymentMethodId" /></td>
+				</tr>
+				<tr>
+					<th><s:text name="ticket_price" /></th>
+					<td><s:property value="reservationInfo.basePrice" /> VND<br />
+						= $<s:property value="reservationInfo.basePriceInUSD" /></td>
+				</tr>
+				<tr>
+					<th><s:text name="online_transaction_fee" /></th>
+					<td id="transactionFee"><s:property value="reservationInfo.transactionFee" /> VND<br />
+						= $<s:property value="reservationInfo.transactionFeeInUSD" /></td>
+				</tr>
+				<tr>
+					<th><s:text name="total_amount" /></th>
+					<td id="totalAmount"><s:property value="reservationInfo.totalAmount" /> VND<br />
+						= $<s:property value="reservationInfo.totalAmountInUSD" /></td>
+				</tr>
+			</table>
+			<input type="button" class="pay" id="pay01020" value='<s:text name="pay" />' />
+		</div>
 	<!-- End information content -->
 	<jsp:include page="../common/footer.jsp" /> 
 	</body>
