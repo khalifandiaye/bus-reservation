@@ -14,14 +14,12 @@ import org.apache.struts2.convention.annotation.Result;
 import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
-import vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO;
 import vn.edu.fpt.capstone.busReservation.dao.StationDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -36,7 +34,6 @@ public class SaveAction extends ActionSupport{
 	private int tripDialogBusPlate;
 	private BusDAO busDAO;
 	private RouteDAO routeDAO;
-	private RouteDetailsDAO routeDetailsDAO;
 	private TripDAO tripDAO;
 	private BusStatusDAO busStatusDAO;
 	private StationDAO stationDAO;
@@ -62,7 +59,7 @@ public class SaveAction extends ActionSupport{
 		for (RouteDetailsBean bean : routeDetailsList) {
 			traTime += bean.getSegment().getTravelTime().getTime();
 		}
-		;
+		
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(traTime);
 		calendar.add(Calendar.MINUTE, cal.get(Calendar.MINUTE));
@@ -76,22 +73,22 @@ public class SaveAction extends ActionSupport{
 		busStatusBean.setFromDate(fromDate);
 		busStatusBean.setToDate(toDate);
 		busStatusBean.setStatus("");
-		StationBean stationBean = stationDAO.getById(1);
-		busStatusBean.setEndStation(stationBean);
-		
-		RouteDetailsBean routeDetailsBean = routeDetailsDAO
-				.getById(routeDetailsList.get(routeDetailsList.size() - 1)
-						.getSegment().getId());
-		TripBean trip = new TripBean();
-		trip.setDepartureTime(fromDate);
-		trip.setBusStatus(busStatusBean);
-		trip.setArrivalTime(toDate);
-		trip.setStatus("active");
-		trip.setRouteDetails(routeDetailsBean);
-		List<ReservationBean> reservations = new ArrayList<ReservationBean>();
-		trip.setReservations(reservations);
+		busStatusBean.setEndStation(routeDetailsList.get(routeDetailsList.size() - 1)
+				.getSegment().getEndAt());
 		busStatusDAO.insert(busStatusBean);
-		tripDAO.insert(trip);
+		
+		for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
+			TripBean trip = new TripBean();
+			trip.setDepartureTime(fromDate);
+			trip.setBusStatus(busStatusBean);
+			trip.setArrivalTime(toDate);
+			trip.setStatus("active");
+			trip.setRouteDetails(routeDetailsBean);
+			List<ReservationBean> reservations = new ArrayList<ReservationBean>();
+			trip.setReservations(reservations);
+			tripDAO.insert(trip);
+		}
+		
 		return SUCCESS;
 	}
 
@@ -101,10 +98,6 @@ public class SaveAction extends ActionSupport{
 
 	public void setRouteDAO(RouteDAO routeDAO) {
 		this.routeDAO = routeDAO;
-	}
-
-	public void setRouteDetailsDAO(RouteDetailsDAO routeDetailsDAO) {
-		this.routeDetailsDAO = routeDetailsDAO;
 	}
 
 	public void setTripDAO(TripDAO tripDAO) {
