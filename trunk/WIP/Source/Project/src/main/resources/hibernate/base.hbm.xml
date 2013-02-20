@@ -70,6 +70,7 @@
 			<key column="assigned_route_return_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
 		</bag>
+		<one-to-one name="routeTerminal" property-ref="id" />
 	</class>
 	<!-- ROUTE_DETAILS -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean" table="route_details">
@@ -139,6 +140,7 @@
 			<key column="bus_status_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
 		</bag>
+		<one-to-one name="busFreeTime" property-ref="id" />
 	</class>
 	<!-- TRIP -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" table="trip">
@@ -261,6 +263,27 @@
 		<property name="validFrom" column="valid_from" type="timestamp" not-null="true" />
 		<property name="validTo" column="valid_to" type="timestamp" not-null="true" />
 		<property name="fare" type="double" not-null="true" />
+	</class>
+	<!-- ROUTE_TERMINAL VIEW-->
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.RouteTerminalBean" table="route_terminal">
+	    <composite-id>
+			<key-many-to-one name="id" column="id" class="vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean" />
+		</composite-id>
+		<many-to-one name="id" column="id" class="vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean" insert="false" update="false" />
+		<many-to-one name="startTerminal" column="start_terminal_id" />
+		<many-to-one name="endTerminal" column="end_terminal_id" not-null="false" />
+		<many-to-one name="endTerminalAlternative" column="end_terminal_alternative_id" />
+	</class>
+	<!-- BUS_FREE_TIME VIEW-->
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.BusFreeTimeBean" table="bus_free_time">
+	    <composite-id>
+			<key-many-to-one name="id" column="id" class="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean" />
+		</composite-id>
+		<many-to-one name="id" column="id" class="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean" insert="false" update="false" />
+		<many-to-one name="bus" column="bus_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
+		<property name="fromDate" column="from_date" type="timestamp" not-null="true" />
+		<property name="toDate" column="to_date" type="timestamp" not-null="false" />
+		<many-to-one name="station" column="station_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.StationBean" />
 	</class>
 	<!-- TRIP_WITH_NUMBER_OF_REMAINED_SEATS_IN_SUBROUTE -->
 <!-- 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TripWithNumberOfRemainedSeatsInSubrouteBean" table="trip_with_number_of_remained_seats_in_subroute"> -->

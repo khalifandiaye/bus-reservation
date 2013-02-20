@@ -11,14 +11,15 @@ import java.util.List;
  */
 public class RouteBean extends AbstractBean<Integer> {
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 248904229492636837L;
-	private String name;
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private String name;
 	private String status;
 	private List<RouteDetailsBean> routeDetails;
 	private List<BusBean> assignedForwardBuses;
 	private List<BusBean> assignedReturnBuses;
+	private RouteTerminalBean routeTerminal;
 	/**
 	 * @return the name
 	 */
@@ -79,4 +80,16 @@ public class RouteBean extends AbstractBean<Integer> {
 	public void setAssignedReturnBuses(List<BusBean> assignedReturnBuses) {
 	    this.assignedReturnBuses = assignedReturnBuses;
 	}
+    /**
+     * @return the routeTerminal
+     */
+    public RouteTerminalBean getRouteTerminal() {
+        return routeTerminal;
+    }
+    /**
+     * @param routeTerminal the routeTerminal to set
+     */
+    public void setRouteTerminal(RouteTerminalBean routeTerminal) {
+        this.routeTerminal = routeTerminal;
+    }
 }

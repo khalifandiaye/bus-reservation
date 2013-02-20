@@ -190,7 +190,6 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
         try {
             // perform database access (query, insert, update, etc) here
             result = session.save(t);
-            session.flush();
         } catch (HibernateException e) {
             exceptionHandling(e, session);
         }
@@ -215,7 +214,6 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
             for (T t : tList) {
                 session.save(t);
             }
-            session.flush();
         } catch (HibernateException e) {
             exceptionHandling(e, session);
         }
@@ -237,7 +235,6 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
         try {
             // perform database access (query, insert, update, etc) here
             session.update(t);
-            session.flush();
         } catch (HibernateException e) {
             exceptionHandling(e, session);
         }
@@ -262,7 +259,6 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
             for (T t : tList) {
                 session.update(t);
             }
-            session.flush();
         } catch (HibernateException e) {
             exceptionHandling(e, session);
         }
@@ -275,9 +271,8 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
         try {
             // perform database access (query, insert, update, etc) here
             for (T t : tList) {
-                session.load(t, t.getId());
+                session.refresh(t);
             }
-            session.flush();
         } catch (HibernateException e) {
             exceptionHandling(e, session);
         }

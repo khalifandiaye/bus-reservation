@@ -11,17 +11,18 @@ import java.util.List;
  *
  */
 public class BusStatusBean extends AbstractBean<Integer> {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5390911848677888911L;
-	private BusBean bus;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private BusBean bus;
 	private String busStatus;
 	private Date fromDate;
 	private Date toDate;
 	private StationBean endStation;
 	private String status;
 	private List<TripBean> trips;
+	private BusFreeTimeBean busFreeTime;
 	/**
 	 * @return the bus
 	 */
@@ -106,4 +107,16 @@ public class BusStatusBean extends AbstractBean<Integer> {
 	public void setTrips(List<TripBean> trips) {
 	    this.trips = trips;
 	}
+    /**
+     * @return the busFreeTime
+     */
+    public BusFreeTimeBean getBusFreeTime() {
+        return busFreeTime;
+    }
+    /**
+     * @param busFreeTime the busFreeTime to set
+     */
+    public void setBusFreeTime(BusFreeTimeBean busFreeTime) {
+        this.busFreeTime = busFreeTime;
+    }
 }

@@ -20,9 +20,10 @@ public class SeatPositionDAO extends
         super(clazz);
         // TODO Auto-generated constructor stub
     }
-    
+
     @SuppressWarnings("unchecked")
-    public List<String> checkDoubleBooking(List<TripBean> trips, String[] seatNames) {
+    public List<String> checkDoubleBooking(List<TripBean> trips,
+            List<String> seatNames) {
         List<String> result = null;
         Query query = null;
         String queryString = null;

@@ -34,6 +34,8 @@ public class Pay01020Action extends BaseAction {
         this.paymentLogic = paymentLogic;
     }
 
+    // =========================Action Output==========================
+
     private String redirectUrl;
 
     /**

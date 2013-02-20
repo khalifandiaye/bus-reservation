@@ -21,14 +21,15 @@
 		class="vn.edu.fpt.capstone.busReservation.logic.HelloWorldLogicImpl">
 		<property name="helloWorldDAO" ref="helloWorldDAO" />
 	</bean>
-	<bean id="paymentLogic"
-		class="vn.edu.fpt.capstone.busReservation.logic.PaymentLogic" singleton="true" >
+	<bean id="paymentLogic" class="vn.edu.fpt.capstone.busReservation.logic.PaymentLogic"
+		singleton="true">
 		<property name="reservationDAO" ref="reservationDAO" />
 		<property name="paymentMethodDAO" ref="paymentMethodDAO" />
 		<property name="paymentDAO" ref="paymentDAO" />
 	</bean>
 	<bean id="reservationLogic"
-		class="vn.edu.fpt.capstone.busReservation.logic.ReservationLogic" singleton="true" >
+		class="vn.edu.fpt.capstone.busReservation.logic.ReservationLogic"
+		singleton="true">
 		<property name="userDAO" ref="userDAO" />
 		<property name="reservationInfoDAO" ref="reservationInfoDAO" />
 		<property name="tariffViewDAO" ref="tariffViewDAO" />
@@ -57,72 +58,97 @@
 
 	<bean id="routeDAO" class="vn.edu.fpt.capstone.busReservation.dao.RouteDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
-		<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean" />
 	</bean>
-	
+
 	<bean id="routeDetailsDAO" class="vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
-		<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean" />
 	</bean>
 	
-    <bean id="paymentDAO" class="vn.edu.fpt.capstone.busReservation.dao.PaymentDAO">
-    	<property name="sessionFactory" ref="sessionFactory" />
-    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean" />
-    </bean>
-    
-    <bean id="busStatusDAO" class="vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO">
-    	<property name="sessionFactory" ref="sessionFactory" />
-    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
-    </bean>
-    
-    <bean id="busDAO" class="vn.edu.fpt.capstone.busReservation.dao.BusDAO">
-    	<property name="sessionFactory" ref="sessionFactory" />
-    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
-    </bean>
-    
-    <bean id="userDAO" class="vn.edu.fpt.capstone.busReservation.dao.UserDAO">
-    	<property name="sessionFactory" ref="sessionFactory" />
-    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.UserBean" />
-    </bean>
-    
-    <bean id="seatPositionDAO" class="vn.edu.fpt.capstone.busReservation.dao.SeatPositionDAO">
-    	<property name="sessionFactory" ref="sessionFactory" />
-    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" />
-    </bean>
-    
-    <bean id="tripDAO" class="vn.edu.fpt.capstone.busReservation.dao.TripDAO">
-    	<property name="sessionFactory" ref="sessionFactory" />
-    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
-    </bean>
-    
-    <bean id="paymentMethodDAO" class="vn.edu.fpt.capstone.busReservation.dao.PaymentMethodDAO">
-    	<property name="sessionFactory" ref="sessionFactory" />
-    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean" />
-    </bean>
-    
-    <bean id="busTypeDAO" class="vn.edu.fpt.capstone.busReservation.dao.BusTypeDAO">
-    	<property name="sessionFactory" ref="sessionFactory" />
-    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean" />
-    </bean>
-    
-    <bean id="reservationInfoDAO" class="vn.edu.fpt.capstone.busReservation.dao.ReservationInfoDAO">
-    	<property name="sessionFactory" ref="sessionFactory" />
-    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean" />
-    </bean>
+	<bean id="paymentDAO" class="vn.edu.fpt.capstone.busReservation.dao.PaymentDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean" />
+	</bean>
+	
+	<bean id="busStatusDAO" class="vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
+	</bean>
+	
+	<bean id="busDAO" class="vn.edu.fpt.capstone.busReservation.dao.BusDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
+	</bean>
+	
+	<bean id="userDAO" class="vn.edu.fpt.capstone.busReservation.dao.UserDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.UserBean" />
+	</bean>
+	
+	<bean id="seatPositionDAO" class="vn.edu.fpt.capstone.busReservation.dao.SeatPositionDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" />
+	</bean>
+	
+	<bean id="tripDAO" class="vn.edu.fpt.capstone.busReservation.dao.TripDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
+	</bean>
+	
+	<bean id="paymentMethodDAO" class="vn.edu.fpt.capstone.busReservation.dao.PaymentMethodDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean" />
+	</bean>
+	
+	<bean id="busTypeDAO" class="vn.edu.fpt.capstone.busReservation.dao.BusTypeDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean" />
+	</bean>
+	
+	<bean id="reservationInfoDAO"
+		class="vn.edu.fpt.capstone.busReservation.dao.ReservationInfoDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean" />
+	</bean>
+	
 	<bean id="tariffViewDAO" class="vn.edu.fpt.capstone.busReservation.dao.TariffViewDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
 		<constructor-arg
 			value="vn.edu.fpt.capstone.busReservation.dao.bean.TariffViewBean" />
 	</bean>
-    
-    <bean id="cityDAO" class="vn.edu.fpt.capstone.busReservation.dao.CityDAO">
-    	<property name="sessionFactory" ref="sessionFactory" />
-    	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.CityBean" />
-    </bean>
-    
-<!--     <bean id="tripWithNumberOfRemainedSeatsInSubrouteDAO" class="vn.edu.fpt.capstone.busReservation.dao.TripWithNumberOfRemainedSeatsInSubrouteDAO"> -->
-<!--     	<property name="sessionFactory" ref="sessionFactory" /> -->
-<!--     	<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.TripWithNumberOfRemainedSeatsInSubrouteBean" /> -->
-<!--     </bean> -->
+	
+	<bean id="cityDAO" class="vn.edu.fpt.capstone.busReservation.dao.CityDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.CityBean" />
+	</bean>
+	
+	<bean id="routeTerminalDAO" class="vn.edu.fpt.capstone.busReservation.dao.RouteTerminalDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.RouteTerminalBean" />
+	</bean>
+	
+	<bean id="busFreeTimeDAO" class="vn.edu.fpt.capstone.busReservation.dao.BusFreeTimeDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.BusFreeTimeBean" />
+	</bean>
+
+	<!-- <bean id="tripWithNumberOfRemainedSeatsInSubrouteDAO" class="vn.edu.fpt.capstone.busReservation.dao.TripWithNumberOfRemainedSeatsInSubrouteDAO"> -->
+	<!-- <property name="sessionFactory" ref="sessionFactory" /> -->
+	<!-- <constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.TripWithNumberOfRemainedSeatsInSubrouteBean" 
+		/> -->
+	<!-- </bean> -->
 </beans>
 

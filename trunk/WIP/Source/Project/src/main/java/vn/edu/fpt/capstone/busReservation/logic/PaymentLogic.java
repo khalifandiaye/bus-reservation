@@ -228,8 +228,8 @@ public class PaymentLogic extends BaseLogic {
         checkoutRequest = new SetExpressCheckoutRequestType();
         details = new SetExpressCheckoutRequestDetailsType();
         url = new StringBuilder();
-        url.append("http://");
-        url.append("localhost:8080");
+        url.append("https://");
+        url.append("localhost:8443");
         url.append(contextPath);
         // set return pages
         details.setReturnURL(url.toString() + "/pay/pay01030.html");
