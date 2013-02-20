@@ -22,7 +22,7 @@ public class SeatPositionDAO extends
     }
     
     @SuppressWarnings("unchecked")
-    public List<String> checkDoubleBooking(List<TripBean> trips, List<String> seatNames) {
+    public List<String> checkDoubleBooking(List<TripBean> trips, String[] seatNames) {
         List<String> result = null;
         Query query = null;
         String queryString = null;
