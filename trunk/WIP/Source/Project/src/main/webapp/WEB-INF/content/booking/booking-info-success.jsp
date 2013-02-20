@@ -48,7 +48,8 @@
 	<!-- Start information content -->
 	<section>
 		<div class="my-container">
-			<form class="well" action="booking-pay.html" method="post" id="booking-form">
+		<div class="well" style="overflow: hidden;">
+			<form style="width:50%;float:left" action="booking-pay.html" method="post" id="booking-form">
 				<fieldset>
 					<legend>Hoàn thành thông tin đăng kí vé xe</legend>
 						<div class="control-group">
@@ -76,6 +77,13 @@
 					    	</div>
 					  	</div>
 					  	<div class="control-group">
+						    <label class="control-label" for="selectPaymentMethod">Phương thức thanh toán</label>
+						    <div class="controls">
+						      <s:select list="paymentMethods" listKey="id" listValue="name" name="paymentMethodId" id="selectPaymentMethod"/>
+					    	</div>
+					  	</div>
+					  	
+					  	<div class="control-group">
 						    <label class="control-label">Số ghế chọn</label>
 						    <div class="controls">
 						     	<s:iterator value="listSeats">
@@ -86,61 +94,65 @@
 					  	<button class="btn btn-large" >Hoàn Tất</button>
 				</fieldset>
 			</form>
+			<div style="width:50%;float:left;padding-top:80px;">
+				<div class="reservation_info">
+					<h4><s:text name="reservation_info" /> </h4>
+					<table class="table table-bordered">
+						<tr>
+							<th><s:text name="subroute" /></th>
+							<td><s:property value="reservationInfo.subRouteName" /></td>
+						</tr>
+						<tr>
+							<th><s:text name="departure_date" /></th>
+							<td><s:property value="reservationInfo.departureDate" /></td>
+						</tr>
+						<tr>
+							<th><s:text name="departure_station_address" /></th>
+							<td><s:property value="reservationInfo.departureStationAddress" /></td>
+						</tr>
+						<tr>
+							<th><s:text name="arrival_date" /></th>
+							<td><s:property value="reservationInfo.arrivalDate" /></td>
+						</tr>
+						<tr>
+							<th><s:text name="arrival_station_address" /></th>
+							<td><s:property value="reservationInfo.arrivalStationAddress" /></td>
+						</tr>
+						<tr>
+							<th><s:text name="seat_numbers" /></th>
+							<td><s:property value="reservationInfo.seatNumbers" /></td>
+						</tr>
+					</table>
+				</div>
+				<div class="payment_info">
+					<table>
+		<!-- 				<tr> -->
+		<%-- 					<th><s:text name="payment_method" /></th> --%>
+		<%-- 					<td><s:select list="paymentMethods" listKey="id" listValue="name" name="paymentMethodId" /></td> --%>
+		<!-- 				</tr> -->
+						<tr>
+							<th><s:text name="ticket_price" /></th>
+							<td><s:property value="reservationInfo.basePrice" /> VND
+								= $<s:property value="reservationInfo.basePriceInUSD" /></td>
+						</tr>
+						<tr>
+							<th><s:text name="online_transaction_fee" /></th>
+							<td id="transactionFee"><s:property value="reservationInfo.transactionFee" /> VND
+								= $<s:property value="reservationInfo.transactionFeeInUSD" /></td>
+						</tr>
+						<tr>
+							<th><s:text name="total_amount" /></th>
+							<td id="totalAmount"><s:property value="reservationInfo.totalAmount" /> VND
+								= $<s:property value="reservationInfo.totalAmountInUSD" /></td>
+						</tr>
+					</table> 
+					<input class="btn" type="button" class="pay" id="pay01020" value='<s:text name="pay" />' />
+				</div>
+			</div>
+		</div>
 		</div>
 	</section>
-		<div class="reservation_info">
-			<h4><s:text name="reservation_info" /> </h4>
-			<table>
-				<tr>
-					<th><s:text name="subroute" /></th>
-					<td><s:property value="reservationInfo.subRouteName" /></td>
-				</tr>
-				<tr>
-					<th><s:text name="departure_date" /></th>
-					<td><s:property value="reservationInfo.departureDate" /></td>
-				</tr>
-				<tr>
-					<th><s:text name="departure_station_address" /></th>
-					<td><s:property value="reservationInfo.departureStationAddress" /></td>
-				</tr>
-				<tr>
-					<th><s:text name="arrival_date" /></th>
-					<td><s:property value="reservationInfo.arrivalDate" /></td>
-				</tr>
-				<tr>
-					<th><s:text name="arrival_station_address" /></th>
-					<td><s:property value="reservationInfo.arrivalStationAddress" /></td>
-				</tr>
-				<tr>
-					<th><s:text name="seat_numbers" /></th>
-					<td><s:property value="reservationInfo.seatNumbers" /></td>
-				</tr>
-			</table>
-		</div>
-		<div class="payment_info">
-			<table>
-				<tr>
-					<th><s:text name="payment_method" /></th>
-					<td><s:select list="paymentMethods" listKey="id" listValue="name" name="paymentMethodId" /></td>
-				</tr>
-				<tr>
-					<th><s:text name="ticket_price" /></th>
-					<td><s:property value="reservationInfo.basePrice" /> VND<br />
-						= $<s:property value="reservationInfo.basePriceInUSD" /></td>
-				</tr>
-				<tr>
-					<th><s:text name="online_transaction_fee" /></th>
-					<td id="transactionFee"><s:property value="reservationInfo.transactionFee" /> VND<br />
-						= $<s:property value="reservationInfo.transactionFeeInUSD" /></td>
-				</tr>
-				<tr>
-					<th><s:text name="total_amount" /></th>
-					<td id="totalAmount"><s:property value="reservationInfo.totalAmount" /> VND<br />
-						= $<s:property value="reservationInfo.totalAmountInUSD" /></td>
-				</tr>
-			</table>
-			<input type="button" class="pay" id="pay01020" value='<s:text name="pay" />' />
-		</div>
+		
 	<!-- End information content -->
 	<jsp:include page="../common/footer.jsp" /> 
 	</body>
