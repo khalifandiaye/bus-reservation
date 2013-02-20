@@ -3,14 +3,18 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.booking;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.interceptor.SessionAware;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SeatPositionDAO;
+import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
@@ -24,7 +28,7 @@ import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
  * @author NoName
  *
  */
-public class BookingPayAction extends BaseAction {
+public class BookingPayAction extends BaseAction implements SessionAware {
 	
 	/**
 	 * 
@@ -107,12 +111,14 @@ public class BookingPayAction extends BaseAction {
 	}
 
     @SuppressWarnings("unchecked")
-    @Action(results = { /*@Result(name = SUCCESS, type = "chain", params = {
-            "namespace", "/pay", "actionName", "pay01010" })*/ })
+    @Action(results = { @Result(name = SUCCESS, type = "chain", params = {
+        			"namespace", "/pay", "actionName", "pay01010" }),
+            @Result(name = "double",type="chain",params = {
+                    "namespace", "/booking", "actionName", "booking" }) })
     public String execute(){
 		List<TripBean> list = (List<TripBean>)session.get("listTripBean");
 		String reservationId = null;
-		
+		 
 		UserBean userBean;
 		if(!(session.get("User") == null)){
 			userBean = (UserBean)session.get("User");
@@ -123,52 +129,69 @@ public class BookingPayAction extends BaseAction {
 		}else{
 			userBean = null;
 		}
-		
-		ReservationBean reservationBean = new ReservationBean();
-		reservationBean.setBooker(userBean);
-		reservationBean.setBookerFirstName(inputFirstName);
-		reservationBean.setBookerLastName(inputLastName);
-		reservationBean.setEmail(inputEmail);
-		reservationBean.setPhone(inputMobile);
-		
-		reservationBean.setBookTime(new Date());
-		reservationBean.setCode(null);//String Code
-		reservationBean.setPayments(null);//List<PaymentBean>
-		reservationBean.setSeatPositions(null);//List<seatPosition>
-		reservationBean.setStatus("unpaid");
-		reservationBean.setTrips(list);//List<tripBean>
-		
-        reservationId = Integer.toString((Integer) reservationDAO
-                .insert(reservationBean));
-		
+		//Check double seat
 		String[] tmp = ((String)session.get("selectedSeats")).split(";");
-		for(int i =0 ; i< tmp.length; i++){
-			SeatPositionBean spb = new SeatPositionBean();
-			spb.setName(tmp[i]);
-			spb.setReservation(reservationBean);
-			
-			seatPositionDAO.insert(spb);	
+		List<String> listSelectedSeat = new ArrayList<String>();  
+		for (String string : tmp) {
+			listSelectedSeat.add(string);
 		}
-		session.remove("listTripBean");
-		session.remove("selectedSeats");
-		session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
-        String paymentToken = null;
-        ReservationInfo reservationInfo = null;
-
-        reservationInfo = (ReservationInfo) session.get(
-                ReservationInfo.class.getName());
-        try {
-            paymentToken = paymentLogic.setPaypalExpressCheckout(
-                    reservationInfo, servletRequest.getContextPath());
-        } catch (CommonException e) {
-            errorProcessing(e);
-            return ERROR;
-        }
-        redirectUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token="
-                + paymentToken;
-        session.put(CommonConstant.SESSION_KEY_PAYMENT_TOKEN, paymentToken);
 		
-		return SUCCESS;
+		List<String> seatsDouble = seatPositionDAO.checkDoubleBooking(list, listSelectedSeat);
+		
+		if(seatsDouble.size() == 0){
+		
+			ReservationBean reservationBean = new ReservationBean();
+			reservationBean.setBooker(userBean);
+			reservationBean.setBookerFirstName(inputFirstName);
+			reservationBean.setBookerLastName(inputLastName);
+			reservationBean.setEmail(inputEmail); 
+			reservationBean.setPhone(inputMobile);
+			
+			reservationBean.setBookTime(new Date());
+			reservationBean.setCode(null);//String Code
+			reservationBean.setPayments(null);//List<PaymentBean>
+			reservationBean.setSeatPositions(null);//List<seatPosition>
+			reservationBean.setStatus("unpaid");
+			reservationBean.setTrips(list);//List<tripBean>
+			
+			reservationId = Integer.toString((Integer) reservationDAO
+	                .insert(reservationBean));
+	        
+			
+			for(int i = 0 ; i< tmp.length; i++){
+				SeatPositionBean spb = new SeatPositionBean();
+				spb.setName(tmp[i]);
+				spb.setReservation(reservationBean);
+				
+				seatPositionDAO.insert(spb);
+			}
+			session.remove("listTripBean");
+			session.remove("selectedSeats");
+			session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
+	        String paymentToken = null;
+	        ReservationInfo reservationInfo = null;
+
+	        reservationInfo = (ReservationInfo) session.get(
+	                ReservationInfo.class.getName());
+	        try {
+	            paymentToken = paymentLogic.setPaypalExpressCheckout(
+	                    reservationInfo, servletRequest.getContextPath());
+	        } catch (CommonException e) {
+	            errorProcessing(e);
+	            return ERROR;
+	        }
+	        redirectUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token="
+	                + paymentToken;
+	        session.put(CommonConstant.SESSION_KEY_PAYMENT_TOKEN, paymentToken);
+			
+			return SUCCESS;
+		}else{
+			//send selectedSeat and  double 
+			request.put("backFrom","bookingPay");
+			request.put("doubleSeat", seatsDouble);//List<String>
+			session.remove("listTripBean");
+			return "double"; 
+		}		
 	}
 
 	public SeatPositionDAO getSeatPositionDAO() {
@@ -178,4 +201,5 @@ public class BookingPayAction extends BaseAction {
 	public void setSeatPositionDAO(SeatPositionDAO seatPositionDAO) {
 		this.seatPositionDAO = seatPositionDAO;
 	}
+	
 }

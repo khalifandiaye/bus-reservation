@@ -63,5 +63,27 @@ public class UserDAO extends GenericDAO<Integer, UserBean> {
 		}
 		return false;
 	}
+
 	
+	public UserBean checkLogin(String username ,String password){
+		List<UserBean> result = null;
+		Query query = null;
+		String queryString = null;
+		Session session = null;
+		// get the current session
+		session = sessionFactory.getCurrentSession();
+		try {
+			// perform database access (query, insert, update, etc) here
+			queryString = "SELECT user FROM UserBean AS user WHERE user.username = ? AND user.password = ?";
+			query = session.createQuery(queryString);
+			query.setString(0, username);
+			query.setString(1, password);
+			result = query.list();
+			// commit transaction
+			// session.getTransaction().commit();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result != null && result.size() > 0 ? result.get(0) : null;
+	}
 }

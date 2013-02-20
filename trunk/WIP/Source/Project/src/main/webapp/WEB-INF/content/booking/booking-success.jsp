@@ -92,7 +92,9 @@
 	            <div class="booking-wrapper" style="padding-left: 10px; padding-top: 30px; overflow: hidden;">
 		            <form class="booking" action="booking-info.html" method="post">
 	                    <div class="pull-right" style="padding-right: 30px;">Bạn đã chọn <span class="seat-number">0</span> trên tổng số 5 ghế được chọn</div>
-	                    <input id="selectedSeat" style="display:none" type="text" name="selectedSeat">
+	                    
+	                    <s:hidden id="selectedSeat" name="selectedSeat"></s:hidden>
+	                    
 	                    <div style="overflow: hidden;width: 100%;">
 	                    	<button class="btn btn-large pull-right" style="margin-top: 15px;margin-right: 30px;">Tiếp Tục</button>
 	                    </div>

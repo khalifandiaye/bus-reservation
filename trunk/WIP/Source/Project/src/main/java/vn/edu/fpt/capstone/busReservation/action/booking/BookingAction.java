@@ -4,6 +4,7 @@
 package vn.edu.fpt.capstone.busReservation.action.booking;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 import org.apache.struts2.interceptor.SessionAware;
 
+import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
@@ -30,7 +32,7 @@ import com.opensymphony.xwork2.ActionSupport;
  *
  */
 
-public class BookingAction extends ActionSupport implements SessionAware {
+public class BookingAction extends BaseAction implements SessionAware {
 	
 	/**
 	 * 
@@ -39,7 +41,12 @@ public class BookingAction extends ActionSupport implements SessionAware {
 	
 	private TripDAO tripDAO;
 	private SeatInfo[][] seatMap;
+	private String selectedSeat;
 	
+	public String getSelectedSeat() {
+		return selectedSeat;
+	}
+
 	public SeatInfo[][] getSeatMap() {
 		return seatMap;
 	}
@@ -50,12 +57,18 @@ public class BookingAction extends ActionSupport implements SessionAware {
 		this.tripDAO = tripDAO;
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<TripBean> getListTripBean(){
-		TripBean tripTmp = new TripBean();
-		tripTmp = tripDAO.getById(1);
 		List<TripBean> listTripBean = new ArrayList<TripBean>();
-		listTripBean.add(tripTmp);
-		session.put("listTripBean", listTripBean);
+		if(session.get("listTripBean") == null){
+			TripBean tripTmp = new TripBean();
+			tripTmp = tripDAO.getById(1);
+			listTripBean.add(tripTmp);
+			session.put("listTripBean", listTripBean);
+		}else{
+			//redirect from some where
+			listTripBean = (List<TripBean>)session.get("listTripBean");
+		}
 		return listTripBean;
 	}
 	
@@ -127,9 +140,29 @@ public class BookingAction extends ActionSupport implements SessionAware {
 		return tmpSeatMap;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public String execute(){
 		List<TripBean> listTripBeans = null;
 		listTripBeans = getListTripBean();
+		
+		if(request.get("backFrom") != null){
+			//remove doubleSeat and build new seletedSeat
+			List<String> doubleSeats = (List<String>)request.get("doubleSeat");
+			String selSeat = (String)session.get("selectedSeats");
+			List<String> list = Arrays.asList(selSeat.split(";"));
+			String nwSelectedSeat = "";
+			
+			for (String string : list) {
+				if(doubleSeats.contains(string)){
+					list.remove(string);
+				}else{
+					nwSelectedSeat += string+";";
+				}
+			}
+			
+			this.selectedSeat = nwSelectedSeat;
+		}
+		
 		seatMap = buildSeatMap(listTripBeans);
 		return SUCCESS;
 	}

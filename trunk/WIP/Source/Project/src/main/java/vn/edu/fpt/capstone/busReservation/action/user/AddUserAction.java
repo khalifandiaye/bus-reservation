@@ -3,6 +3,9 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.user;
 
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Result;
+
 import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RoleBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
@@ -56,7 +59,8 @@ public class AddUserAction extends ActionSupport {
 		this.inputMobile = inputMobile;
 	}
 
-
+	@Action(results = { @Result(name = SUCCESS, type = "chain", params = {
+            "namespace", "/user", "actionName", "login-user" }) })
 	public String execute(){
 		UserBean userBean = new UserBean();
 		userBean.setUsername(inputUserName);
