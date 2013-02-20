@@ -22,7 +22,7 @@
 				
 				<input type="submit" id="hello-world" value="Say Hello World" /><br />
 				<a href="trip/list.html">Test Create Trip</a><br />
-				<a href="trip/update-trip-time.html">Test Get Trip Time</a><br />
+				<a href="busStatus/list.html">Test Get Route</a><br />
 				<a href="pay/pay01000.html">Test Pay</a><br />
 				<a href="pay/pay02000.html">Test Cancel</a><br />
 				<a href="rsv/rsv01000.html">Test Reservation List</a><br />

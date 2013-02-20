@@ -34,20 +34,23 @@ public class BusDAO extends GenericDAO<Integer, BusBean>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<BusBean> getAvailBus(Date date, int busTypeId) {
+	public List<BusBean> getAvailBus(Date departureTime, Date arrivalTime, int busTypeId) {
 		String hql = "SELECT busBean " +
 				"FROM BusBean busBean WHERE busBean.id " +
 				"NOT IN (SELECT distinct busStatusBean.bus.id " +
 				"FROM BusStatusBean busStatusBean " +
-				"WHERE :date > busStatusBean.fromDate and busStatusBean.toDate < :date) " +
-				"AND busBean.busType.id = :busTypeId";
+				"WHERE (:departureTime <= busStatusBean.fromDate and busStatusBean.fromDate <= :arrivalTime) "+
+					"OR (:departureTime <= busStatusBean.toDate and busStatusBean.toDate <= :arrivalTime) "+
+					"OR (:departureTime >= busStatusBean.fromDate and busStatusBean.toDate >= :arrivalTime)) " +
+				"AND busBean.busType.id = :busTypeId ";
 		Session session = sessionFactory.getCurrentSession();
 		List<BusBean> result = new ArrayList<BusBean>();
 		try {
 			// must have to start any transaction
 			Query query = session.createQuery(hql);
-			query.setDate("date", date);
-			query.setParameter("busTypeId", busTypeId);
+			query.setDate("departureTime", departureTime);
+			query.setDate("arrivalTime", arrivalTime);
+			query.setInteger("busTypeId", busTypeId);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
