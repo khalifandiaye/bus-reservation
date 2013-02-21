@@ -77,11 +77,18 @@ public class SaveAction extends ActionSupport{
 				.getSegment().getEndAt());
 		busStatusDAO.insert(busStatusBean);
 		
+		//time travel
+		long segmentDeparture = fromDate.getTime();
+		
 		for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
 			TripBean trip = new TripBean();
-			trip.setDepartureTime(fromDate);
-			trip.setBusStatus(busStatusBean);
-			trip.setArrivalTime(toDate);
+			Date departTime = new Date(segmentDeparture);
+			trip.setDepartureTime(departTime);			
+			trip.setBusStatus(busStatusBean);			
+			//set arrival time 
+			segmentDeparture += routeDetailsBean.getSegment().getTravelTime().getTime();
+			departTime = new Date(segmentDeparture);
+			trip.setArrivalTime(departTime);
 			trip.setStatus("active");
 			trip.setRouteDetails(routeDetailsBean);
 			List<ReservationBean> reservations = new ArrayList<ReservationBean>();
