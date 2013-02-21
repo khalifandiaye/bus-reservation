@@ -91,7 +91,7 @@
 						     	</s:iterator>						     	
 					    	</div>
 					  	</div>
-					  	<button class="btn btn-large" >Hoàn Tất</button>
+					  	<button class="btn btn-large" ><s:text name="pay" /></button>
 				</fieldset>
 			</form>
 			<div style="width:50%;float:left;padding-top:80px;">
@@ -118,10 +118,6 @@
 							<th><s:text name="arrival_station_address" /></th>
 							<td><s:property value="reservationInfo.arrivalStationAddress" /></td>
 						</tr>
-						<tr>
-							<th><s:text name="seat_numbers" /></th>
-							<td><s:property value="reservationInfo.seatNumbers" /></td>
-						</tr>
 					</table>
 				</div>
 				<div class="payment_info">
@@ -146,7 +142,6 @@
 								= $<s:property value="reservationInfo.totalAmountInUSD" /></td>
 						</tr>
 					</table> 
-					<input class="btn" type="button" class="pay" id="pay01020" value='<s:text name="pay" />' />
 				</div>
 			</div>
 		</div>

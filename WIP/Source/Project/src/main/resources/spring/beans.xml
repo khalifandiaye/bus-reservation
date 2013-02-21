@@ -34,6 +34,7 @@
 		<property name="reservationInfoDAO" ref="reservationInfoDAO" />
 		<property name="tariffViewDAO" ref="tariffViewDAO" />
 		<property name="tripDAO" ref="tripDAO" />
+		<property name="reservationDAO" ref="reservationDAO" />
 	</bean>
 	<!-- *****************define DAO here***************** -->
 	<bean id="helloWorldDAO"
@@ -76,7 +77,7 @@
 	
 	<bean id="busStatusDAO" class="vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
-		<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
+		<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean" />
 	</bean>
 	
 	<bean id="busDAO" class="vn.edu.fpt.capstone.busReservation.dao.BusDAO">

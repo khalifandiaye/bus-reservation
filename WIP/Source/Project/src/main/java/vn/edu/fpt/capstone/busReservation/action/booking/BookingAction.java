@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.struts2.interceptor.SessionAware;
 
@@ -68,7 +69,7 @@ public class BookingAction extends BaseAction implements SessionAware {
 		List<TripBean> listTripBean = new ArrayList<TripBean>();
 		if(session.get("listTripBean") == null){
 			TripBean tripTmp = new TripBean();
-			tripTmp = tripDAO.getById(1);
+			tripTmp = tripDAO.getById(7);
 			listTripBean.add(tripTmp);
 			session.put("listTripBean", listTripBean);
 		}else{

@@ -272,7 +272,6 @@
 		<many-to-one name="id" column="id" class="vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean" insert="false" update="false" />
 		<many-to-one name="startTerminal" column="start_terminal_id" />
 		<many-to-one name="endTerminal" column="end_terminal_id" not-null="false" />
-		<many-to-one name="endTerminalAlternative" column="end_terminal_alternative_id" />
 	</class>
 	<!-- BUS_FREE_TIME VIEW-->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.BusFreeTimeBean" table="bus_free_time">

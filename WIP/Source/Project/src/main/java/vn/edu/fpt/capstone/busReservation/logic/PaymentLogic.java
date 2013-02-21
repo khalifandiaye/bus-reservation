@@ -539,6 +539,7 @@ public class PaymentLogic extends BaseLogic {
                 .getPaymentInfo().get(0).getFeeAmount().getValue();
         result[2] = doResponse.getDoExpressCheckoutPaymentResponseDetails()
                 .getPaymentInfo().get(0).getTransactionID();
+        paymentDAO.startTransaction();
         return result;
     }
 
@@ -549,7 +550,6 @@ public class PaymentLogic extends BaseLogic {
         int maxTry = CommonConstant.MAX_REGENERATE_CODE_TRY;
         String reservationCode = null;
         CurrencyConverter converter = null;
-        paymentDAO.startTransaction();
         // Update database
         reservation = reservationDAO.getById(Integer.parseInt(reservationId));
         payment = new PaymentBean();

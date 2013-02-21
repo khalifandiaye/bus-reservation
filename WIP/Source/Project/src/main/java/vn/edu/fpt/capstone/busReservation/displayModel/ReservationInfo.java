@@ -26,6 +26,9 @@ public class ReservationInfo implements Serializable {
 	private String arrivalDate;
 	private String arrivalStationAddress;
 	private String seatNumbers;
+	private String bookerName;
+	private String phone;
+	private String email;
 	/**
 	 * number of tickets
 	 */
@@ -259,6 +262,42 @@ public class ReservationInfo implements Serializable {
 	public void setTotalAmountInUSD(String totalAmountInUSD) {
 		this.totalAmountInUSD = totalAmountInUSD;
 	}
+    /**
+     * @return the bookerName
+     */
+    public String getBookerName() {
+        return bookerName;
+    }
+    /**
+     * @param bookerName the bookerName to set
+     */
+    public void setBookerName(String bookerName) {
+        this.bookerName = bookerName;
+    }
+    /**
+     * @return the phone
+     */
+    public String getPhone() {
+        return phone;
+    }
+    /**
+     * @param phone the phone to set
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
     /**
      * @return the status
      */

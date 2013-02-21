@@ -13,10 +13,12 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 
+import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
 import vn.edu.fpt.capstone.busReservation.dao.ReservationInfoDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TariffViewDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
+import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
@@ -60,6 +62,7 @@ public class ReservationLogic extends BaseLogic {
     private ReservationInfoDAO reservationInfoDAO;
     private TariffViewDAO tariffViewDAO;
     private TripDAO tripDAO;
+    private ReservationDAO reservationDAO;
 
     /**
      * @param userDAO
@@ -78,17 +81,27 @@ public class ReservationLogic extends BaseLogic {
     }
 
     /**
-     * @param tariffViewDAO the tariffViewDAO to set
+     * @param tariffViewDAO
+     *            the tariffViewDAO to set
      */
     public void setTariffViewDAO(TariffViewDAO tariffViewDAO) {
         this.tariffViewDAO = tariffViewDAO;
     }
 
     /**
-     * @param tripDAO the tripDAO to set
+     * @param tripDAO
+     *            the tripDAO to set
      */
     public void setTripDAO(TripDAO tripDAO) {
         this.tripDAO = tripDAO;
+    }
+
+    /**
+     * @param reservationDAO
+     *            the reservationDAO to set
+     */
+    public void setReservationDAO(ReservationDAO reservationDAO) {
+        this.reservationDAO = reservationDAO;
     }
 
     /**
@@ -149,7 +162,6 @@ public class ReservationLogic extends BaseLogic {
         StationBean endStation = null;
         CurrencyConverter converter = null;
         int quantity = 0;
-        Calendar timeLimit = null;
         info = new ReservationInfo();
         info.setId(bean.getId().getId());
         startStation = bean.getStartTrip().getRouteDetails().getSegment()
@@ -169,6 +181,11 @@ public class ReservationLogic extends BaseLogic {
         info.setSeatNumbers(getSeatNumbers(bean.getId().getSeatPositions()));
         quantity = bean.getId().getSeatPositions().size();
         info.setQuantity(Integer.toString(quantity));
+        // TODO first name last name order
+        info.setBookerName(bean.getId().getBookerLastName() + " "
+                + bean.getId().getBookerFirstName());
+        info.setPhone(bean.getId().getPhone());
+        info.setEmail(bean.getId().getEmail());
         try {
             converter = CurrencyConverter.getInstance(
                     Currency.getInstance("VND"), Currency.getInstance("USD"));
@@ -201,20 +218,33 @@ public class ReservationLogic extends BaseLogic {
                                                     .getTicketPrice())))), 2,
                     CommonConstant.LOCALE_VN));
         }
+        info.setStatus(updateStatus(bean.getId(), bean.getStartTrip()
+                .getDepartureTime()));
+        return info;
+    }
+
+    public String updateStatus(String reservationId) {
+        ReservationInfoBean infoBean = reservationInfoDAO.getById(Integer
+                .parseInt(reservationId));
+        return updateStatus(infoBean.getId(), infoBean.getStartTrip()
+                .getDepartureTime());
+    }
+
+    private String updateStatus(ReservationBean bean, Date departureTime) {
+        Calendar timeLimit = null;
         timeLimit = Calendar.getInstance();
         timeLimit.add(Calendar.MINUTE, -CommonConstant.RESERVATION_TIMEOUT);
-        if (ReservationStatus.UNPAID.getValue()
-                .equals(bean.getId().getStatus())
-                && timeLimit.getTime().after(bean.getId().getBookTime())) {
-            info.setStatus(ReservationStatus.DELETED.getValue());
-        } else if ((ReservationStatus.PAID.getValue().equals(
-                bean.getId().getStatus()) || ReservationStatus.UNPAID
-                .getValue().equals(bean.getId().getStatus()))
-                && new Date().before(bean.getStartTrip().getDepartureTime())) {
-        } else {
-            info.setStatus(bean.getId().getStatus());
+        if (ReservationStatus.UNPAID.getValue().equals(bean.getStatus())
+                && timeLimit.getTime().after(bean.getBookTime())) {
+            bean.setStatus(ReservationStatus.DELETED.getValue());
+            reservationDAO.update(bean);
+        } else if ((ReservationStatus.PAID.getValue().equals(bean.getStatus()) || ReservationStatus.UNPAID
+                .getValue().equals(bean.getStatus()))
+                && new Date().before(departureTime)) {
+            bean.setStatus(ReservationStatus.DEPARTED.getValue());
+            reservationDAO.update(bean);
         }
-        return info;
+        return bean.getStatus();
     }
 
     private String getSeatNumbers(final List<SeatPositionBean> seatPositions) {
@@ -228,8 +258,9 @@ public class ReservationLogic extends BaseLogic {
         return result.toString();
     }
 
-    public ReservationInfo createReservationInfo(final List<TripBean> tripBeanList,
-            int quantity) throws CommonException {
+    public ReservationInfo createReservationInfo(
+            final List<TripBean> tripBeanList, int quantity)
+            throws CommonException {
         ReservationInfo info = null;
         StationBean startStation = null;
         StationBean endStation = null;
@@ -269,8 +300,8 @@ public class ReservationLogic extends BaseLogic {
         info.setBasePrice(FormatUtils.formatNumber(ticketPrice, 0,
                 CommonConstant.LOCALE_VN));
         info.setBasePriceInUSD(FormatUtils.formatNumber(
-                converter.convert(BigDecimal.valueOf(ticketPrice)),
-                2, CommonConstant.LOCALE_VN));
+                converter.convert(BigDecimal.valueOf(ticketPrice)), 2,
+                CommonConstant.LOCALE_VN));
         return info;
     }
 }
