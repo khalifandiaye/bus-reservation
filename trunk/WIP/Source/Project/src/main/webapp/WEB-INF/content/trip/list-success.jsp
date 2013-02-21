@@ -48,8 +48,8 @@
 		<div class="post">
 			<form action="insertNewTrip" method="post">
 				<div style="height: 45px; margin-left: 1%;">
-				<h3>Trip name</h3>
 				</div>
+				<h3><s:property value="tripBeans[0].routeDetails.route.name" /></h3>
 				<table id="tripsTable">
 					<thead>
 						<tr>
@@ -62,7 +62,7 @@
 					<tbody>
 						<s:iterator value="tripBeans" status="tripBeansStatus">
 							<tr id="trip_<s:property value='id'/>">
-								<td><s:property value="routeDetails.route.name" /></td>
+								<td><s:property value="routeDetails.segment.startAt.city.name" /> - <s:property value="routeDetails.segment.endAt.city.name" /></td>
 								<td><s:property value="departureTime" /></td>
 								<td><s:property value="arrivalTime" /></td>
 								<td style="width: 6%"><input
