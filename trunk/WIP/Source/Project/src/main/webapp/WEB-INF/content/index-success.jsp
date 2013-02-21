@@ -27,6 +27,7 @@
 				<a href="pay/pay02000.html">Test Cancel</a><br />
 				<a href="rsv/rsv01000.html">Test Reservation List</a><br />
 				<a href="search/search-trip.html">Test Search</a><br />
+				<a href="clear-session.html">Clear Session</a><br />
 			</div>
 			</div>
 		</section>
