@@ -240,7 +240,7 @@ public class ReservationLogic extends BaseLogic {
             reservationDAO.update(bean);
         } else if ((ReservationStatus.PAID.getValue().equals(bean.getStatus()) || ReservationStatus.UNPAID
                 .getValue().equals(bean.getStatus()))
-                && new Date().before(departureTime)) {
+                && new Date().after(departureTime)) {
             bean.setStatus(ReservationStatus.DEPARTED.getValue());
             reservationDAO.update(bean);
         }
