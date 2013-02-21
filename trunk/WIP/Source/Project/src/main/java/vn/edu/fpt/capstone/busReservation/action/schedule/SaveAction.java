@@ -72,7 +72,7 @@ public class SaveAction extends ActionSupport{
 		busStatusBean.setBusStatus("ontrip");
 		busStatusBean.setFromDate(fromDate);
 		busStatusBean.setToDate(toDate);
-		busStatusBean.setStatus("");
+		busStatusBean.setStatus("active");
 		busStatusBean.setEndStation(routeDetailsList.get(routeDetailsList.size() - 1)
 				.getSegment().getEndAt());
 		busStatusDAO.insert(busStatusBean);
