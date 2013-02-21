@@ -14,7 +14,6 @@ import org.apache.struts2.interceptor.SessionAware;
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SeatPositionDAO;
-import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
@@ -111,8 +110,8 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 	}
 
     @SuppressWarnings("unchecked")
-    @Action(results = { @Result(name = SUCCESS, type = "chain", params = {
-        			"namespace", "/pay", "actionName", "pay01010" }),
+    @Action(results = { /*@Result(name = SUCCESS, type = "chain", params = {
+        			"namespace", "/pay", "actionName", "pay01010" }),*/
             @Result(name = "double",type="chain",params = {
                     "namespace", "/booking", "actionName", "booking" }) })
     public String execute(){
@@ -165,9 +164,10 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 				
 				seatPositionDAO.insert(spb);
 			}
-			session.remove("listTripBean");
-			session.remove("selectedSeats");
-			session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
+			// moved below
+//			session.remove("listTripBean");
+//			session.remove("selectedSeats");
+//			session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
 	        String paymentToken = null;
 	        ReservationInfo reservationInfo = null;
 
@@ -183,6 +183,9 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 	        redirectUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token="
 	                + paymentToken;
 	        session.put(CommonConstant.SESSION_KEY_PAYMENT_TOKEN, paymentToken);
+            session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
+            session.remove("listTripBean");
+            session.remove("selectedSeats");
 			
 			return SUCCESS;
 		}else{

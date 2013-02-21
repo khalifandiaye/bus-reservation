@@ -7,7 +7,6 @@ public class RouteTerminalBean extends AbstractBean<RouteBean> {
     private static final long serialVersionUID = 1L;
     private StationBean startTerminal;
     private StationBean endTerminal;
-    private StationBean endTerminalAlternative;
     /**
      * @return the startTerminal
      */
@@ -31,17 +30,5 @@ public class RouteTerminalBean extends AbstractBean<RouteBean> {
      */
     public void setEndTerminal(StationBean endTerminal) {
         this.endTerminal = endTerminal;
-    }
-    /**
-     * @return the endTerminalAlternative
-     */
-    public StationBean getEndTerminalAlternative() {
-        return endTerminalAlternative;
-    }
-    /**
-     * @param endTerminalAlternative the endTerminalAlternative to set
-     */
-    public void setEndTerminalAlternative(StationBean endTerminalAlternative) {
-        this.endTerminalAlternative = endTerminalAlternative;
     }
 }

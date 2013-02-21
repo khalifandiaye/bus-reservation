@@ -247,6 +247,8 @@ public class ReservationBean extends AbstractBean<Integer> {
                 return PAID;
             } else if (UNPAID.value.equalsIgnoreCase(value)) {
                 return UNPAID;
+            } else if (DEPARTED.value.equalsIgnoreCase(value)) {
+                return DEPARTED;
             } else if (CANCELLED.value.equalsIgnoreCase(value)) {
                 return CANCELLED;
             } else if (MOVED.value.equalsIgnoreCase(value)) {
