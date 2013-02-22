@@ -25,7 +25,7 @@ public class FormatUtils {
 		formatter.setTimeZone(timeZone);
 		return formatter.format(date);
 	}
-    public static Date deFormatDate(String date, String pattern, Locale locale) throws ParseException {
+    public static Date deFormatDate(String date, String pattern, Locale locale, TimeZone timeZone) throws ParseException {
         DateFormat formatter = new SimpleDateFormat(pattern, locale);
         return formatter.parse(date);
     }

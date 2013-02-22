@@ -36,7 +36,7 @@ public class AvailBusAction extends BaseAction {
 	@Action(value = "/availBus", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() throws ParseException, JSONException {
 		List<BusBean> busBeans;
-		Date departureTime1 = FormatUtils.deFormatDate(departureTime, "yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US);
+		Date departureTime1 = FormatUtils.deFormatDate(departureTime, "yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
 		
 		//calculate arrival time
 		long traTime = 0;
