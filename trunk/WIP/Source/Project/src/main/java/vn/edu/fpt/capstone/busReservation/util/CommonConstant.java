@@ -18,4 +18,5 @@ public interface CommonConstant {
      */
     public final static int RESERVATION_TIMEOUT = 15;
     public final static TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("Asia/Ho_Chi_Minh");
+    public final static TimeZone UTC_TIME_ZONE = TimeZone.getTimeZone("GMT");
 }
