@@ -242,7 +242,6 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
 
     /**
      * Update a list of existing entities in the database.<br>
-     * If any entity in the list does not exist in the database
      * 
      * @param tList
      *            list of entities to be updated
@@ -264,7 +263,19 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
         }
     }
     
-    public void load(List<T> tList) {
+    public void refresh(T t) {
+        Session session = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            session.refresh(t);
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+    }
+    
+    public void refresh(List<T> tList) {
         Session session = null;
         // get the current session
         session = sessionFactory.getCurrentSession();

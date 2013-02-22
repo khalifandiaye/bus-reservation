@@ -269,7 +269,7 @@ public class ReservationLogic extends BaseLogic {
         Double ticketPrice = null;
         info = new ReservationInfo();
         info.setId(0);
-        tripDAO.load(tripBeanList);
+        tripDAO.refresh(tripBeanList);
         startEndTrip = ReservationUtils.getStartEndTrips(tripBeanList);
         startStation = startEndTrip[0].getRouteDetails().getSegment()
                 .getStartAt();
