@@ -16,7 +16,7 @@ public class SpringTest {
 	return context.getBean(name);
     }
     
-    @Test
+//    @Test
     public void testGetBean() {
 	Object result = null;
 	result = getBean("reservationDAO");
