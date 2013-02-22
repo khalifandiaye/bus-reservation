@@ -20,31 +20,31 @@ import vn.edu.fpt.capstone.busReservation.testUtil.DAOTest;
  */
 public class TripDAOTest extends DAOTest {
 
-//    @Test
-//    public void testUpdate001() {
-//        TripDAO tripDAO = (TripDAO) getBean("tripDAO");
-//        List<TripBean> beans = tripDAO.getAll();
-//        BusStatusDAO busStatusDAO = (BusStatusDAO) getBean("busStatusDAO");
-//        List<BusStatusBean> beans2 = busStatusDAO.getAll();
-//        Assert.assertNotNull(beans);
-//        Assert.assertNotEquals(0, beans.size());
-//        Assert.assertNotNull(beans.get(0));
-//        Calendar bookTime = Calendar.getInstance();
-//        long shiftMilisecs = 0;
-//        bookTime.setTimeInMillis(0);
-//        bookTime.add(Calendar.DATE, 12);
-//        shiftMilisecs = bookTime.getTimeInMillis();
-//        for (TripBean tripBean : beans) {
-//                tripBean.setDepartureTime(new Date(tripBean.getDepartureTime().getTime() + shiftMilisecs));
-//                tripBean.setArrivalTime(new Date(tripBean.getArrivalTime().getTime() + shiftMilisecs));
-//        }
-//        for (BusStatusBean busStatusBean : beans2) {
-//            busStatusBean.setFromDate(new Date(busStatusBean.getFromDate().getTime() + shiftMilisecs));
-//            busStatusBean.setToDate(new Date(busStatusBean.getToDate().getTime() + shiftMilisecs));
-//    }
-//        tripDAO.update(beans);
-//        busStatusDAO.update(beans2);
-//    }
+    @Test
+    public void testUpdate001() {
+        TripDAO tripDAO = (TripDAO) getBean("tripDAO");
+        List<TripBean> beans = tripDAO.getAll();
+        BusStatusDAO busStatusDAO = (BusStatusDAO) getBean("busStatusDAO");
+        List<BusStatusBean> beans2 = busStatusDAO.getAll();
+        Assert.assertNotNull(beans);
+        Assert.assertNotEquals(0, beans.size());
+        Assert.assertNotNull(beans.get(0));
+        Calendar bookTime = Calendar.getInstance();
+        long shiftMilisecs = 0;
+        bookTime.setTimeInMillis(0);
+        bookTime.add(Calendar.DATE, 12);
+        shiftMilisecs = -bookTime.getTimeInMillis();
+        for (TripBean tripBean : beans) {
+                tripBean.setDepartureTime(new Date(tripBean.getDepartureTime().getTime() + shiftMilisecs));
+                tripBean.setArrivalTime(new Date(tripBean.getArrivalTime().getTime() + shiftMilisecs));
+        }
+        for (BusStatusBean busStatusBean : beans2) {
+            busStatusBean.setFromDate(new Date(busStatusBean.getFromDate().getTime() + shiftMilisecs));
+            busStatusBean.setToDate(new Date(busStatusBean.getToDate().getTime() + shiftMilisecs));
+    }
+        tripDAO.update(beans);
+        busStatusDAO.update(beans2);
+    }
 //    @Test
 //    public void testInsert001() {
 //        TripDAO tripDAO = (TripDAO) getBean("tripDAO");

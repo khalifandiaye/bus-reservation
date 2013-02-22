@@ -57,7 +57,7 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 	    result = session.createQuery(queryString)
 		    .setString("fromStation", fromStation)
 		    .setString("toStation", toStation)
-		    .setDate("timeLimit", timeLimit)
+		    .setTimestamp("timeLimit", timeLimit)
 		    .setInteger("numberOfSeats", numberOfSeats)
 		    .setString("status", "active").list();
 	} catch (HibernateException e) {

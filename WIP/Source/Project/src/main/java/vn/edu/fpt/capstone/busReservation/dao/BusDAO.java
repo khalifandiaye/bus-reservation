@@ -25,7 +25,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean>{
 		try {
 			// must have to start any transaction
 			Query query = session.createQuery(hql);
-			query.setDate("date", date);
+			query.setTimestamp("date", date);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
@@ -48,8 +48,8 @@ public class BusDAO extends GenericDAO<Integer, BusBean>{
 		try {
 			// must have to start any transaction
 			Query query = session.createQuery(hql);
-			query.setDate("departureTime", departureTime);
-			query.setDate("arrivalTime", arrivalTime);
+			query.setTimestamp("departureTime", departureTime);
+			query.setTimestamp("arrivalTime", arrivalTime);
 			query.setInteger("busTypeId", busTypeId);
 			result = query.list();
 		} catch (HibernateException e) {
