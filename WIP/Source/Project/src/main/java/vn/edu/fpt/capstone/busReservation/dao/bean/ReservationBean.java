@@ -212,6 +212,11 @@ public class ReservationBean extends AbstractBean<Integer> {
         public static final ReservationStatus UNPAID = new ReservationStatus(
                 "unpaid");
         /**
+         * The reservation can no longer be cancelled
+         */
+        public static final ReservationStatus PENDING = new ReservationStatus(
+                "pending");
+        /**
          * The first trip has departed
          */
         public static final ReservationStatus DEPARTED = new ReservationStatus(
@@ -247,6 +252,8 @@ public class ReservationBean extends AbstractBean<Integer> {
                 return PAID;
             } else if (UNPAID.value.equalsIgnoreCase(value)) {
                 return UNPAID;
+            } else if (PENDING.value.equalsIgnoreCase(value)) {
+                return PENDING;
             } else if (DEPARTED.value.equalsIgnoreCase(value)) {
                 return DEPARTED;
             } else if (CANCELLED.value.equalsIgnoreCase(value)) {

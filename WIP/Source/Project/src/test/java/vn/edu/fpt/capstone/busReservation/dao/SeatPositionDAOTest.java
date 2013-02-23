@@ -9,7 +9,6 @@ import static org.junit.Assert.assertNotNull;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -22,8 +21,6 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionKey;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
 import vn.edu.fpt.capstone.busReservation.testUtil.DAOTest;
-import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
-import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
 /**
  * @author Yoshimi
@@ -83,10 +80,10 @@ public class SeatPositionDAOTest extends DAOTest {
         ReservationDAO reservationDAO = (ReservationDAO) getBean("reservationDAO");
         TripDAO tripDAO = (TripDAO) getBean("tripDAO");
         // Prepare data
-        // =Get a trip list
+        // =Get base data
         List<TripBean> trips = new ArrayList<TripBean>();
         trips.add(tripDAO.getById(14));
-        // =Remove all exists reservation
+        // =Clean data
         for (TripBean trip : trips) {
             if (trip.getReservations() != null) {
                 for (ReservationBean reservation : trip.getReservations()) {
@@ -99,7 +96,7 @@ public class SeatPositionDAOTest extends DAOTest {
                 delete(trip.getReservations());
             }
         }
-        // =Add new reservation(s)
+        // =Add test data
         List<ReservationBean> reservations = new ArrayList<ReservationBean>();
         ReservationBean reservation = null;
         UserBean booker = ((UserDAO) getBean("userDAO")).getById(1);
@@ -136,6 +133,13 @@ public class SeatPositionDAOTest extends DAOTest {
         List<String> seatNames = seatPositionDAO.getSoldSeats(trips);
         assertNotNull(seatNames);
         assertEquals(2, seatNames.size());
+        // =Clean test data
+//        delete(seatPositionBeans);
+//        for (ReservationBean bean : reservations) {
+//            bean.setTrips(null);
+//        }
+//        reservationDAO.update(reservations);
+//        delete(reservations);
     }
 
     @Test
@@ -175,7 +179,7 @@ public class SeatPositionDAOTest extends DAOTest {
                 : booker.getPhoneNumber());
         // ==Important: bookTime = now - 20mins
         Calendar bookTime = Calendar.getInstance();
-        bookTime.add(Calendar.MINUTE, -20);
+        bookTime.add(Calendar.MINUTE, -16);
         reservation.setBookTime(bookTime.getTime());
         reservation.setTrips(trips);
         reservation.setStatus(ReservationStatus.UNPAID.getValue());
@@ -196,5 +200,12 @@ public class SeatPositionDAOTest extends DAOTest {
         List<String> seatNames = seatPositionDAO.getSoldSeats(trips);
         assertNotNull(seatNames);
         assertEquals(0, seatNames.size());
+        // remove
+//        delete(seatPositionBeans);
+//        for (ReservationBean bean : reservations) {
+//            bean.setTrips(null);
+//        }
+//        reservationDAO.update(reservations);
+//        delete(reservations);
     }
 }

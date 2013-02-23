@@ -10,26 +10,29 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.AbstractBean;
 
 /**
+ * Abstract class that open transaction during testing
+ * NOTE: all database changes will be reversed after a test has finished
+ * 
  * @author Yoshimi
  * 
  */
-public class DAOTest extends SpringTest {
+public abstract class DAOTest extends SpringTest {
     protected static Log LOG = LogFactory.getLog(DAOTest.class);
 
-    @BeforeClass
+    @Before
     public static void start() {
         SessionFactory sessionFactory = (SessionFactory) getBean("sessionFactory");
         LOG.debug("Starting a database transaction");
         sessionFactory.getCurrentSession().beginTransaction();
     }
 
-    @AfterClass
+    @After
     public static void end() {
         SessionFactory sessionFactory = (SessionFactory) getBean("sessionFactory");
         Session session = sessionFactory.getCurrentSession();
@@ -43,8 +46,8 @@ public class DAOTest extends SpringTest {
         } catch (Throwable rbEx) {
             LOG.error("Could not rollback transaction after exception!", rbEx);
         } finally {
-//            session.close();
-//            LOG.debug("The database session has been closed");
+            // session.close();
+            // LOG.debug("The database session has been closed");
         }
     }
 

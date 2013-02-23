@@ -232,16 +232,33 @@ public class ReservationLogic extends BaseLogic {
 
     private String updateStatus(ReservationBean bean, Date departureTime) {
         Calendar timeLimit = null;
+        boolean changed = true;
+        Calendar pendingTime = null;
+        Date today = null;
         timeLimit = Calendar.getInstance();
         timeLimit.add(Calendar.MINUTE, -CommonConstant.RESERVATION_TIMEOUT);
+        pendingTime = Calendar.getInstance(CommonConstant.DEFAULT_TIME_ZONE,
+                CommonConstant.LOCALE_VN);
+        pendingTime.setTime(departureTime);
+        pendingTime.add(Calendar.DATE, -CommonConstant.RESERVATION_LOCK);
+        today = new Date();
         if (ReservationStatus.UNPAID.getValue().equals(bean.getStatus())
                 && timeLimit.getTime().after(bean.getBookTime())) {
+            // status UNPAID, bookTime < timeOutLimit : DELETED
             bean.setStatus(ReservationStatus.DELETED.getValue());
-            reservationDAO.update(bean);
-        } else if ((ReservationStatus.PAID.getValue().equals(bean.getStatus()) || ReservationStatus.UNPAID
+        } else if (ReservationStatus.PAID.getValue().equals(bean.getStatus())
+                && today.after(pendingTime.getTime())) {
+            // status PAID, today > pendingTime: PENDING
+            bean.setStatus(ReservationStatus.PENDING.getValue());
+        } else if ((ReservationStatus.PAID.getValue().equals(bean.getStatus()) || ReservationStatus.PENDING
                 .getValue().equals(bean.getStatus()))
-                && new Date().after(departureTime)) {
+                && today.after(departureTime)) {
+            // status PAID/PENDING, today > departureTime: DEPARTED
             bean.setStatus(ReservationStatus.DEPARTED.getValue());
+        } else {
+            changed = false;
+        }
+        if (changed) {
             reservationDAO.update(bean);
         }
         return bean.getStatus();
