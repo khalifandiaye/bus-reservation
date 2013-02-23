@@ -66,7 +66,7 @@ public class Pay01030Action extends BaseAction {
     }
 
     public String execute() {
-        GetExpressCheckoutDetailsResponseType checkoutDetailsResponse = null;
+        /*GetExpressCheckoutDetailsResponseType checkoutDetailsResponse = null;
         String token = null;
         String reservationId = null;
         String[] paymentDetails = null;
@@ -128,7 +128,14 @@ public class Pay01030Action extends BaseAction {
         }
         session.remove(ReservationInfo.class.getName());
         session.remove(CommonConstant.SESSION_KEY_RESERVATION_ID);
-        session.remove(CommonConstant.SESSION_KEY_PAYMENT_TOKEN);
+        session.remove(CommonConstant.SESSION_KEY_PAYMENT_TOKEN);*/
+        try {
+            reservationInfo = reservationLogic.loadReservationInfo("153");
+        } catch (CommonException e) {
+            errorProcessing(e);
+            return ERROR;
+        }
+        reservationCode = "AAAAAA";
         return SUCCESS;
     }
 }

@@ -9,7 +9,9 @@ import java.math.RoundingMode;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Currency;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,6 +27,9 @@ import urn.ebay.api.PayPalAPI.GetExpressCheckoutDetailsReq;
 import urn.ebay.api.PayPalAPI.GetExpressCheckoutDetailsRequestType;
 import urn.ebay.api.PayPalAPI.GetExpressCheckoutDetailsResponseType;
 import urn.ebay.api.PayPalAPI.PayPalAPIInterfaceServiceService;
+import urn.ebay.api.PayPalAPI.RefundTransactionReq;
+import urn.ebay.api.PayPalAPI.RefundTransactionRequestType;
+import urn.ebay.api.PayPalAPI.RefundTransactionResponseType;
 import urn.ebay.api.PayPalAPI.SetExpressCheckoutReq;
 import urn.ebay.api.PayPalAPI.SetExpressCheckoutRequestType;
 import urn.ebay.api.PayPalAPI.SetExpressCheckoutResponseType;
@@ -36,6 +41,7 @@ import urn.ebay.apis.eBLBaseComponents.ItemCategoryType;
 import urn.ebay.apis.eBLBaseComponents.PaymentActionCodeType;
 import urn.ebay.apis.eBLBaseComponents.PaymentDetailsItemType;
 import urn.ebay.apis.eBLBaseComponents.PaymentDetailsType;
+import urn.ebay.apis.eBLBaseComponents.RefundType;
 import urn.ebay.apis.eBLBaseComponents.SetExpressCheckoutRequestDetailsType;
 import vn.edu.fpt.capstone.busReservation.dao.PaymentDAO;
 import vn.edu.fpt.capstone.busReservation.dao.PaymentMethodDAO;
@@ -45,6 +51,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean.PaymentType;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
+import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
@@ -189,10 +196,12 @@ public class PaymentLogic extends BaseLogic {
         }
         paymentMethod = paymentMethodDAO.getById(paymentMethodId);
         try {
-            fee = roundingVND(calculateFee(info.getBasePrice(),
-                    info.getQuantity(), paymentMethod), RoundingMode.CEILING);
-            totalAmount = roundingVND(calculateTotal(info.getBasePrice(),
-                    info.getQuantity(), fee), RoundingMode.CEILING);
+            fee = roundingVND(
+                    calculateFee(info.getBasePrice(), info.getQuantity(),
+                            paymentMethod), RoundingMode.CEILING);
+            totalAmount = roundingVND(
+                    calculateTotal(info.getBasePrice(), info.getQuantity(), fee),
+                    RoundingMode.CEILING);
         } catch (IOException e) {
             // TODO handle error
             throw new CommonException(e);
@@ -208,6 +217,105 @@ public class PaymentLogic extends BaseLogic {
                 CommonConstant.LOCALE_VN));
         info.setTotalAmountInUSD(FormatUtils.formatNumber(
                 converter.convert(totalAmount), 2, CommonConstant.LOCALE_VN));
+    }
+
+    public RefundTransactionResponseType doPaypalRefund(
+            ReservationInfoBean reservation) throws CommonException {
+        PayPalAPIInterfaceServiceService service = null;
+        PaymentBean payment = null;
+        RefundTransactionResponseType response = null;
+        RefundTransactionReq request = null;
+        RefundTransactionRequestType requestDetails = null;
+        BasicAmountType amount = null;
+        CurrencyConverter converter = null;
+        BigDecimal refundAmount = null;
+        Calendar refundRate1Time = null;
+        Calendar refundRate2Time = null;
+        Date today = null;
+        if (ReservationStatus.PAID.getValue().equals(
+                reservation.getId().getStatus())) {
+            // get today
+            today = new Date();
+            // calculate date to apply refund rate 1
+            refundRate1Time = Calendar.getInstance();
+            refundRate1Time.setTime(reservation.getStartTrip()
+                    .getDepartureTime());
+            refundRate1Time.set(Calendar.HOUR_OF_DAY, 23);
+            refundRate1Time.set(Calendar.MINUTE, 59);
+            refundRate1Time.set(Calendar.SECOND, 59);
+            refundRate1Time.set(Calendar.MILLISECOND, 999);
+            refundRate1Time.add(Calendar.DATE,
+                    -CommonConstant.REFUND_TIME_LIMIT_1);
+            // calculate date to apply refund rate 2
+            refundRate2Time = Calendar.getInstance();
+            refundRate2Time.setTime(reservation.getStartTrip()
+                    .getDepartureTime());
+            refundRate2Time.set(Calendar.HOUR_OF_DAY, 23);
+            refundRate2Time.set(Calendar.MINUTE, 59);
+            refundRate2Time.set(Calendar.SECOND, 59);
+            refundRate2Time.set(Calendar.MILLISECOND, 999);
+            refundRate2Time.add(Calendar.DATE,
+                    -CommonConstant.REFUND_TIME_LIMIT_2);
+            payment = reservation.getId().getPayments().get(0);
+            request = new RefundTransactionReq();
+            requestDetails = new RefundTransactionRequestType();
+            request.setRefundTransactionRequest(requestDetails);
+            requestDetails.setTransactionID(payment.getTransactionId());
+            requestDetails.setRefundType(RefundType.PARTIAL);
+            amount = new BasicAmountType();
+            requestDetails.setAmount(amount);
+            amount.setCurrencyID(CurrencyCodeType.USD);
+            try {
+                converter = CurrencyConverter.getInstance(
+                        Currency.getInstance("VND"),
+                        Currency.getInstance("USD"));
+            } catch (InstantiationException e) {
+                LOG.error("Impossible error", e);
+            } catch (IOException e) {
+                // TODO handle error
+                throw new CommonException(e);
+            }
+            refundAmount = converter.convert(BigDecimal.valueOf(payment
+                    .getPayAmount()));
+            if (today.before(refundRate1Time.getTime())) {
+                refundAmount.multiply(
+                        BigDecimal.valueOf(CommonConstant.REFUND_RATE_1))
+                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.FLOOR);
+            } else if (today.before(refundRate2Time.getTime())) {
+                refundAmount.multiply(
+                        BigDecimal.valueOf(CommonConstant.REFUND_RATE_2))
+                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.FLOOR);
+            }
+            amount.setValue(refundAmount.toString());
+            try {
+                service = new PayPalAPIInterfaceServiceService(this.getClass()
+                        .getResourceAsStream("/paypal/sdk_config.properties"));
+                response = service.refundTransaction(request);
+            } catch (Exception e) {
+                // TODO handle error
+                throw new CommonException(e);
+            }
+            if (response != null) {
+                if (response.getAck().toString().equalsIgnoreCase("SUCCESS")) {
+                    // do nothing
+                } else {
+                    for (ErrorType error : response.getErrors()) {
+                        LOG.error("PAYPAL error: " + error.getErrorCode() + ":"
+                                + error.getLongMessage());
+                    }
+                    // TODO handle error
+                    throw new CommonException();
+                }
+            } else {
+                // TODO handle error
+                LOG.error("Null response from paypal");
+                throw new CommonException();
+            }
+        } else {
+            // TODO handle error
+            throw new CommonException();
+        }
+        return response;
     }
 
     public String setPaypalExpressCheckout(ReservationInfo reservationInfo,
@@ -562,10 +670,12 @@ public class PaymentLogic extends BaseLogic {
         } catch (InstantiationException e) {
             LOG.error("Impossible error", e);
         }
-        payment.setPayAmount(roundingVND(converter.convert(
-                new BigDecimal(paymentDetails[0])), RoundingMode.FLOOR).doubleValue());
-        payment.setServiceFee(roundingVND(converter.convert(
-                new BigDecimal(paymentDetails[1])), RoundingMode.FLOOR).doubleValue());
+        payment.setPayAmount(roundingVND(
+                converter.convert(new BigDecimal(paymentDetails[0])),
+                RoundingMode.FLOOR).doubleValue());
+        payment.setServiceFee(roundingVND(
+                converter.convert(new BigDecimal(paymentDetails[1])),
+                RoundingMode.FLOOR).doubleValue());
         payment.setTransactionId(paymentDetails[2]);
         payment.setType(PaymentType.PAY.getValue());
         paymentDAO.insert(payment);
@@ -638,29 +748,31 @@ public class PaymentLogic extends BaseLogic {
         return result;
     }
 
-    private BigDecimal roundingVND(final BigDecimal number, RoundingMode roundingMode) {
+    private BigDecimal roundingVND(final BigDecimal number,
+            RoundingMode roundingMode) {
         return number.divide(BigDecimal.valueOf(500), 0, roundingMode)
                 .multiply(BigDecimal.valueOf(500));
     }
 
-//    private BigDecimal calculateTicketPrice(final List<TariffBean> fares) {
-//        BigDecimal result = null;
-//        result = BigDecimal.ZERO;
-//        for (TariffBean fare : fares) {
-//            result = result.add(BigDecimal.valueOf(fare.getFare()));
-//        }
-//        return result;
-//    }
-//
-//    private String getSeatNumbers(final List<SeatPositionBean> seatPositions) {
-//        StringBuilder result = null;
-//        result = new StringBuilder();
-//        for (SeatPositionBean seatPosition : seatPositions) {
-//            result.append(" " + seatPosition.getId().getName());
-//        }
-//        // remove first space
-//        result.delete(0, 1);
-//        return result.toString();
-//    }
+    // private BigDecimal calculateTicketPrice(final List<TariffBean> fares) {
+    // BigDecimal result = null;
+    // result = BigDecimal.ZERO;
+    // for (TariffBean fare : fares) {
+    // result = result.add(BigDecimal.valueOf(fare.getFare()));
+    // }
+    // return result;
+    // }
+    //
+    // private String getSeatNumbers(final List<SeatPositionBean> seatPositions)
+    // {
+    // StringBuilder result = null;
+    // result = new StringBuilder();
+    // for (SeatPositionBean seatPosition : seatPositions) {
+    // result.append(" " + seatPosition.getId().getName());
+    // }
+    // // remove first space
+    // result.delete(0, 1);
+    // return result.toString();
+    // }
 
 }

@@ -43,7 +43,7 @@
 	</section>
 	<!-- End small nav -->
 	<div class="container">
-		<h4><s:text name="reservation_complete" /></h4>
+		<div class="well">
 			<div style="width:50%;float:left;padding-top:80px;">
 				<div class="reservation_info">
 					<h4><s:text name="reservation_info" /> </h4>
@@ -90,22 +90,20 @@
 						</tr>
 						<tr>
 							<th><s:text name="ticket_price" /></th>
-							<td><s:property value="reservationInfo.basePrice" /> VND
-								= $<s:property value="reservationInfo.basePriceInUSD" /></td>
+							<td><s:property value="reservationInfo.basePrice" /> VND ($<s:property value="reservationInfo.basePriceInUSD" />)</td>
 						</tr>
 						<tr>
 							<th><s:text name="online_transaction_fee" /></th>
-							<td id="transactionFee"><s:property value="reservationInfo.transactionFee" /> VND
-								= $<s:property value="reservationInfo.transactionFeeInUSD" /></td>
+							<td id="transactionFee"><s:property value="reservationInfo.transactionFee" /> VND ($<s:property value="reservationInfo.transactionFeeInUSD" />)</td>
 						</tr>
 						<tr>
 							<th><s:text name="total_amount" /></th>
-							<td id="totalAmount"><s:property value="reservationInfo.totalAmount" /> VND
-								= $<s:property value="reservationInfo.totalAmountInUSD" /></td>
+							<td id="totalAmount"><s:property value="reservationInfo.totalAmount" /> VND ($<s:property value="reservationInfo.totalAmountInUSD" />)</td>
 						</tr>
 					</table>
 				</div>
 			</div>
+		</div>
 	</div>
 	<jsp:include page="../common/footer.jsp" />
 </body>
