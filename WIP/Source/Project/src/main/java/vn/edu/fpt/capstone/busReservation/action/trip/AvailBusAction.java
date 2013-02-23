@@ -36,21 +36,24 @@ public class AvailBusAction extends BaseAction {
 	@Action(value = "/availBus", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() throws ParseException, JSONException {
 		List<BusBean> busBeans;
-		Date departureTime1 = FormatUtils.deFormatDate(departureTime, "yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
+		Date startDate = FormatUtils.deFormatDate(departureTime, "yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
 		
 		//calculate arrival time
 		long traTime = 0;
 		RouteBean routeBean = routeDAO.getById(routeId);
-		for (RouteDetailsBean routeDetailsBean: routeBean.getRouteDetails()) {
+		
+		List<RouteDetailsBean> routeDetailsBeans = routeBean.getRouteDetails();
+		for (RouteDetailsBean routeDetailsBean: routeDetailsBeans) {
 			traTime += routeDetailsBean.getSegment().getTravelTime().getTime();
 		}
-		Date arrivalTime1 = new Date(departureTime1.getTime() + traTime);
-		arrivalTime = FormatUtils.formatDate(arrivalTime1, "yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
+		Date endDate = new Date(startDate.getTime() + traTime);
+		arrivalTime = FormatUtils.formatDate(endDate, "yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
 		
-		
-		busBeans = busDAO.getAvailBus(departureTime1, arrivalTime1, busType);
-		for (BusBean busBean : busBeans) {
-			BusInfo busInfo = new BusInfo(busBean.getId(), busBean.getPlateNumber());
+		int endStationId = routeDetailsBeans.get(0).getSegment().getStartAt().getId();
+		//get available bus
+		List<Object[]> bus = busDAO.getAvailBus(startDate, routeId, endStationId, busType);
+		for (Object b[] : bus) {
+			BusInfo busInfo = new BusInfo((Integer) b[0], (String) b[1]);
 			busInfos.add(busInfo);
 		}
 		return SUCCESS;
