@@ -75,6 +75,10 @@
 		    				});
 					}
 				}
+				$('input.btn-warning').bind('click', function(){
+					var url = $('#contextPath').val() + "/trip/list.html?id=" + $(this).data('view-details');
+					window.location = url;
+				});
 			});
 </script>
 </head>
@@ -107,8 +111,8 @@
 							<td><s:property value="toDate"/></td>
 							<td><s:property value="status"/></td>
 							<td><s:property value="endStation.city.name"/></td>
-							<td style="width: 6%"><input
-								data-view-details="<s:property value='id'/>"
+							<td style="width: 6%">
+								<input data-view-details="<s:property value='id'/>"
 								class="btn btn-warning" type="button" value="View Details" /></td>
 							<td><input data-delete="<s:property value='id'/>"
 								class="btn btn-danger" type="button" value="Delete" /></td>
