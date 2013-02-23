@@ -25,32 +25,41 @@ public class BusDAO extends GenericDAO<Integer, BusBean>{
 		try {
 			// must have to start any transaction
 			Query query = session.createQuery(hql);
-			query.setTimestamp("date", date);
+			query.setDate("date", date);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
 		}
 		return result;
 	}
-	
+	/*
+	SELECT b.id, b.plate_number, MAX(bs.to_date) 
+	FROM bus b LEFT JOIN bus_status bs 
+	ON b.id = bs.bus_id
+	WHERE bs.end_station_id = 8
+	AND (b.assigned_route_forward_id = 1 OR b.assigned_route_return_id = 1)
+	GROUP BY b.id
+*/
 	@SuppressWarnings("unchecked")
-	public List<BusBean> getAvailBus(Date departureTime, Date arrivalTime, int busTypeId) {
-		String hql = "SELECT busBean " +
-				"FROM BusBean busBean WHERE busBean.id " +
-				"NOT IN (SELECT distinct busStatusBean.bus.id " +
-				"FROM BusStatusBean busStatusBean " +
-				"WHERE (:departureTime <= busStatusBean.fromDate and busStatusBean.fromDate <= :arrivalTime) "+
-					"OR (:departureTime <= busStatusBean.toDate and busStatusBean.toDate <= :arrivalTime) "+
-					"OR (:departureTime >= busStatusBean.fromDate and busStatusBean.toDate >= :arrivalTime)) " +
-				"AND busBean.busType.id = :busTypeId ";
+	public List<Object[]> getAvailBus(Date departureTime, int routeId, int endStationId, int busTypeId) {
+		String stringQuery = "SELECT b.id, b.plate_number "
+				+ "FROM bus b LEFT JOIN bus_status bs "
+				+ "ON b.id = bs.bus_id "
+				+ "WHERE bs.end_station_id = :endStationId "
+				+ "AND (b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId) " 
+				+ "AND b.bus_type_id = :busTypeId "
+				+ "GROUP BY b.id " 
+				+ "HAVING MAX(bs.to_date) < :departureTime ";
+		
 		Session session = sessionFactory.getCurrentSession();
-		List<BusBean> result = new ArrayList<BusBean>();
+		List<Object[]> result = new ArrayList<Object[]>();
 		try {
 			// must have to start any transaction
-			Query query = session.createQuery(hql);
-			query.setTimestamp("departureTime", departureTime);
-			query.setTimestamp("arrivalTime", arrivalTime);
-			query.setInteger("busTypeId", busTypeId);
+			Query query = session.createSQLQuery(stringQuery);
+			query.setParameter("departureTime", departureTime);
+			query.setParameter("routeId", routeId);
+			query.setParameter("endStationId", endStationId);
+			query.setParameter("busTypeId", busTypeId);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
