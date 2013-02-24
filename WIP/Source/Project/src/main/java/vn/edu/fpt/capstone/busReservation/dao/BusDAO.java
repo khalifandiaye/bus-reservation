@@ -42,7 +42,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean>{
 */
 	@SuppressWarnings("unchecked")
 	public List<Object[]> getAvailBus(Date departureTime, int routeId, int startStationId, int busTypeId) {
-		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date"
+		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date "
 				+ "FROM bus b LEFT JOIN bus_status bs "
 				+ "ON b.id = bs.bus_id "
 				+ "WHERE bs.end_station_id = :startStationId "
