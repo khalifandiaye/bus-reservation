@@ -10,4 +10,4 @@
 <!-- Javascript -->
 <script src="<%=request.getContextPath()%>/js/jquery-1.7.2.js" ></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.min.js" ></script>
-<script src="<%=request.getContextPath()%>/js/common.js" ></script>
+<%-- <script src="<%=request.getContextPath()%>/js/common.js" ></script> --%>
