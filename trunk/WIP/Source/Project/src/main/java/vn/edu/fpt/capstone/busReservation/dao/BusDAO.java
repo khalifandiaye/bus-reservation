@@ -10,7 +10,7 @@ import org.hibernate.Session;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 
-public class BusDAO extends GenericDAO<Integer, BusBean>{
+public class BusDAO extends GenericDAO<Integer, BusBean> {
 
 	public BusDAO(Class<BusBean> clazz) {
 		super(clazz);
@@ -32,25 +32,25 @@ public class BusDAO extends GenericDAO<Integer, BusBean>{
 		}
 		return result;
 	}
+
 	/*
-	SELECT b.id, b.plate_number, MAX(bs.to_date) 
-	FROM bus b LEFT JOIN bus_status bs 
-	ON b.id = bs.bus_id
-	WHERE bs.end_station_id = 8
-	AND (b.assigned_route_forward_id = 1 OR b.assigned_route_return_id = 1)
-	GROUP BY b.id
-*/
+	 * SELECT b.id, b.plate_number, MAX(bs.to_date) FROM bus b LEFT JOIN
+	 * bus_status bs ON b.id = bs.bus_id WHERE bs.end_station_id = 8 AND
+	 * (b.assigned_route_forward_id = 1 OR b.assigned_route_return_id = 1) GROUP
+	 * BY b.id
+	 */
 	@SuppressWarnings("unchecked")
-	public List<Object[]> getAvailBus(Date departureTime, int routeId, int startStationId, int busTypeId) {
-		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date "
-				+ "FROM bus b LEFT JOIN bus_status bs "
-				+ "ON b.id = bs.bus_id "
-				+ "WHERE bs.end_station_id = :startStationId "
-				+ "AND (b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId) " 
+	public List<Object[]> getAvailBus(Date departureTime, int routeId,
+			int startStationId, int busTypeId) {
+		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id "
+				+ "FROM bus b LEFT JOIN (SELECT t1.* FROM bus_status t1 "
+				+ "JOIN (SELECT id, MAX(to_date) to_date FROM bus_status GROUP BY bus_id) t2 "
+				+ "ON t1.id = t2.id AND t1.to_date = t2.to_date) bs ON b.id = bs.bus_id "
+				+ "WHERE (b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId) "
 				+ "AND b.bus_type_id = :busTypeId "
-				+ "GROUP BY b.id " 
-				+ "HAVING bs.to_date < :departureTime ";
-		
+				+ "GROUP BY b.id "
+				+ "HAVING bs.to_date < :departureTime AND bs.end_station_id = :startStationId";
+
 		Session session = sessionFactory.getCurrentSession();
 		List<Object[]> result = new ArrayList<Object[]>();
 		try {
