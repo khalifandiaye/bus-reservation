@@ -296,4 +296,36 @@
 <!-- 		<property name="arrivalTime" column="arrival_time" type="timestamp" not-null="true" /> -->
 <!-- 		<property name="numberOfRemainedSeats" column="number_of_remained_seats" type="int" not-null="true" /> -->
 <!-- 	</class> -->
+
+	<class name="vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo">
+		<id name="busStatusId" type="int" column="bus_status_id">
+			<generator class="native" />
+		</id>
+		<property name="departureCity" column="departure_city" type="string" not-null="true" />
+		<property name="departureStation" column="departure_station_name" type="string" not-null="true" />
+		<property name="departureStationAddress" column="departure_station_address" type="string" not-null="true" />
+		<property name="departureTime" column="departure_time" type="timestamp" not-null="true" />
+		<property name="arrivalCity" column="arrival_city" type="string" not-null="true" />
+		<property name="arrivalStation" column="arrival_station_name" type="string" not-null="true" />
+		<property name="arrivalStationAddress" column="arrival_station_address" type="string" not-null="true" />
+		<property name="arrivalTime" column="arrival_time" type="timestamp" not-null="true" />
+		<property name="fare" column="fare" type="double" not-null="true" />
+	</class>
+	<sql-query name="callSearchTripsProcedure">
+		<return alias="searchResult"
+			class="vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo">
+			<return-property name="busStatusId" column="bus_status_id"/>
+        	<return-property name="departureCity" column="departure_city"/>
+        	<return-property name="departureStation" column="departure_station_name"/>
+        	<return-property name="departureStationAddress" column="departure_station_address"/>
+        	<return-property name="departureTime" column="departure_time"/>
+        	<return-property name="arrivalCity" column="arrival_city"/>
+        	<return-property name="arrivalStation" column="arrival_station_name"/>
+        	<return-property name="arrivalStationAddress" column="arrival_station_address"/>
+        	<return-property name="arrivalTime" column="arrival_time"/>
+        	<return-property name="fare" column="fare"/>
+        </return>
+		<![CDATA[CALL search_trips(:deptCity, :arrvCity, :deptDate, :pssgrNo, :busType);]]>
+	</sql-query>
+
 </hibernate-mapping>

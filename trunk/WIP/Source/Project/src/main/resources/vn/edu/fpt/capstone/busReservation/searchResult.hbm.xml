@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="vn.edu.fpt.capstone.busReservation">
+	<class
+		name="vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo">
+		<id name="busStatusId" type="int" column="bus_status_id">
+			<generator class="native" />
+		</id>
+		<property name="departureCity" column="departure_city" type="string"
+			not-null="true" />
+		<property name="departureStation" column="departure_station_name"
+			type="string" not-null="true" />
+		<property name="departureStationAddress" column="departure_station_address"
+			type="string" not-null="true" />
+		<property name="departureTime" column="departure_time" type="timestamp"
+			not-null="true" />
+		<property name="arrivalCity" column="arrival_city" type="string"
+			not-null="true" />
+		<property name="arrivalStation" column="arrival_station_name"
+			type="string" not-null="true" />
+		<property name="arrivalStationAddress" column="arrival_station_address"
+			type="string" not-null="true" />
+		<property name="arrivalTime" column="arrival_time" type="timestamp"
+			not-null="true" />
+		<property name="fare" column="fare" type="double" not-null="true" />
+	</class>
+	<sql-query name="callSearchTripsProcedure">
+		<return alias="searchResult"
+			class="vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo" />
+	<![CDATA[CALL search_trips(:deptCity, :arrvCity, :deptDate, :pssgrNo, :busType);]]>
+	</sql-query>
+</hibernate-mapping>

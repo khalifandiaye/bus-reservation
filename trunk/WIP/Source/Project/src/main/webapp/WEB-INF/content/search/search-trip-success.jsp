@@ -88,16 +88,15 @@
                     </div>
                     <div class="controls controls-row" id="input-depart">
                         <label>Ngày đi</label>
-                        <input type="text" value="01-01-2013" id="dp1" name="departureDate">
+                        <input type="text" value="10-02-2013" id="dp1" name="departureDate" data-date-format="dd-mm-yyyy">
                     </div>
                     <div class="controls controls-row" id="input-return">
                         <label>Ngày về</label>
-                        <input type="text" value="01-01-2013" id="dp2" name="arrivalDate">
+                        <input type="text" value="01-01-2013" id="dp2" name="returnDate" data-date-format="dd-mm-yyyy">
                     </div>
                     <div class="controls controls-row" id="select-bus-type">
                         <label>Loại xe bus</label>
                         <s:select list="busType" listKey="id" listValue="name" name="busType"/>
-                        </select>
                     </div>
                     <input type="submit" class="pull-right btn btn-large" style="width: 100%;margin-top: 9px;" value="Đặt Vé"/>
                     <a id="btn-change" href="#" class="pull-right" style="color: #fff;padding-top: 15px;" onclick="showMore()">Đặt vé chi tiết</a>
@@ -106,7 +105,7 @@
             <script type="text/javascript">
                 $(function(){
                     $('#dp1').datepicker();
-                    $('#dp2').datepicker()
+                    $('#dp2').datepicker();
                 })
             </script>
         </div>

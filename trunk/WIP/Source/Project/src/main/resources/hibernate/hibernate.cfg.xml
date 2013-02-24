@@ -15,6 +15,9 @@
         </property>
         <property name="current_session_context_class">thread</property>
         <property name="jta.UserTransaction">java:comp/UserTransaction</property>
+        
+        <!-- mapping files -->
+        <mapping resource="vn/edu/fpt/capstone/busReservation/searchResult.hbm.xml"/>
     </session-factory>
 
 </hibernate-configuration>
