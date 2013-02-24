@@ -42,14 +42,14 @@ public class BusDAO extends GenericDAO<Integer, BusBean>{
 */
 	@SuppressWarnings("unchecked")
 	public List<Object[]> getAvailBus(Date departureTime, int routeId, int startStationId, int busTypeId) {
-		String stringQuery = "SELECT b.id, b.plate_number "
+		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date"
 				+ "FROM bus b LEFT JOIN bus_status bs "
 				+ "ON b.id = bs.bus_id "
 				+ "WHERE bs.end_station_id = :startStationId "
 				+ "AND (b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId) " 
 				+ "AND b.bus_type_id = :busTypeId "
 				+ "GROUP BY b.id " 
-				+ "HAVING MAX(bs.to_date) < :departureTime ";
+				+ "HAVING bs.to_date < :departureTime ";
 		
 		Session session = sessionFactory.getCurrentSession();
 		List<Object[]> result = new ArrayList<Object[]>();
