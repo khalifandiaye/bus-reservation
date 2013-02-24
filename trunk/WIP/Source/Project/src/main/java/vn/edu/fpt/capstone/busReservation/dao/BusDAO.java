@@ -41,11 +41,11 @@ public class BusDAO extends GenericDAO<Integer, BusBean>{
 	GROUP BY b.id
 */
 	@SuppressWarnings("unchecked")
-	public List<Object[]> getAvailBus(Date departureTime, int routeId, int endStationId, int busTypeId) {
+	public List<Object[]> getAvailBus(Date departureTime, int routeId, int startStationId, int busTypeId) {
 		String stringQuery = "SELECT b.id, b.plate_number "
 				+ "FROM bus b LEFT JOIN bus_status bs "
 				+ "ON b.id = bs.bus_id "
-				+ "WHERE bs.end_station_id = :endStationId "
+				+ "WHERE bs.end_station_id = :startStationId "
 				+ "AND (b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId) " 
 				+ "AND b.bus_type_id = :busTypeId "
 				+ "GROUP BY b.id " 
@@ -58,7 +58,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean>{
 			Query query = session.createSQLQuery(stringQuery);
 			query.setParameter("departureTime", departureTime);
 			query.setParameter("routeId", routeId);
-			query.setParameter("endStationId", endStationId);
+			query.setParameter("startStationId", startStationId);
 			query.setParameter("busTypeId", busTypeId);
 			result = query.list();
 		} catch (HibernateException e) {
