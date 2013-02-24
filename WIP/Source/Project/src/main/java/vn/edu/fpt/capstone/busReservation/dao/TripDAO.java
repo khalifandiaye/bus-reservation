@@ -7,8 +7,10 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
+import vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo;
 
 public class TripDAO extends GenericDAO<Integer, TripBean> {
 
@@ -79,5 +81,37 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 			exceptionHandling(e, session);
 		}
 		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<SearchResultInfo> searchAvailableTrips(int deptCity,
+			int arrvCity, String deptDate, int pssgrNo, int busType) {
+		List<SearchResultInfo> returnVal = new ArrayList<SearchResultInfo>();
+		Session session = sessionFactory.getCurrentSession();
+		//String strQuery = "CALL search_trips(:deptCity, :arrvCity, :deptDate, :pssgrNo, :busType);";
+		try {
+			startTransaction();
+			 Query query = session.getNamedQuery("callSearchTripsProcedure")
+			 .setInteger("deptCity", deptCity)
+			 .setInteger("arrvCity", arrvCity)
+			 .setString("deptDate", deptDate)
+			 .setInteger("pssgrNo", pssgrNo)
+			 .setInteger("busType", busType);
+			 returnVal = query.list();
+/*			Query query = session.createSQLQuery(strQuery)
+					.setInteger("deptCity", deptCity)
+					.setInteger("arrvCity", arrvCity)
+					.setString("deptDate", deptDate)
+					.setInteger("pssgrNo", pssgrNo)
+					.setInteger("busType", busType);
+			List<Object> result = query.list();
+			for(int i=0; i<result.size(); i++){
+				returnVal.add((SearchResultInfo)result.get(i));
+			}*/
+			endTransaction();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return returnVal;
 	}
 }
