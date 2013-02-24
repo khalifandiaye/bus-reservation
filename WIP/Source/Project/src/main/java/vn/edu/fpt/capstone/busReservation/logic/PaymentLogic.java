@@ -54,6 +54,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationSt
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
+import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.CryptUtils;
 import vn.edu.fpt.capstone.busReservation.util.CurrencyConverter;
@@ -178,6 +179,13 @@ public class PaymentLogic extends BaseLogic {
     // return reservationInfo;
     // }
 
+    /**
+     * @param info
+     *            reservation information
+     * @param paymentMethodId
+     * @throws CommonException
+     * @throws HibernateException
+     */
     public void updateReservationPaymentInfo(ReservationInfo info,
             final int paymentMethodId) throws CommonException,
             HibernateException {
@@ -219,8 +227,17 @@ public class PaymentLogic extends BaseLogic {
                 converter.convert(totalAmount), 2, CommonConstant.LOCALE_VN));
     }
 
-    public RefundTransactionResponseType doPaypalRefund(
-            ReservationInfoBean reservation) throws CommonException {
+    /**
+     * @param reservation
+     *            reservation information
+     * @return the payment details, which includes the total paid or refunded
+     *         amount in VND, the service fee for the payment method provider in
+     *         VND, and the transaction id
+     * @throws CommonException
+     */
+    public String[] doPaypalRefund(ReservationInfoBean reservation)
+            throws CommonException {
+        String[] result = null;
         PayPalAPIInterfaceServiceService service = null;
         PaymentBean payment = null;
         RefundTransactionResponseType response = null;
@@ -297,7 +314,10 @@ public class PaymentLogic extends BaseLogic {
             }
             if (response != null) {
                 if (response.getAck().toString().equalsIgnoreCase("SUCCESS")) {
-                    // do nothing
+                    result = new String[3];
+                    result[0] = response.getGrossRefundAmount().getValue();
+                    result[1] = response.getFeeRefundAmount().getValue();
+                    result[2] = response.getRefundTransactionID();
                 } else {
                     for (ErrorType error : response.getErrors()) {
                         LOG.error("PAYPAL error: " + error.getErrorCode() + ":"
@@ -315,7 +335,7 @@ public class PaymentLogic extends BaseLogic {
             // TODO handle error
             throw new CommonException();
         }
-        return response;
+        return result;
     }
 
     public String setPaypalExpressCheckout(ReservationInfo reservationInfo,
@@ -651,8 +671,23 @@ public class PaymentLogic extends BaseLogic {
         return result;
     }
 
-    public String savePayment(String reservationId, String[] paymentDetails)
-            throws CommonException, HibernateException, IOException {
+    /**
+     * @param reservationId
+     *            identifier of the reservation to be paid or refund for
+     * @param paymentDetails
+     *            the total paid or refunded amount in VND, the service fee for
+     *            the payment method provider in VND, and the transaction id
+     * @param paymentMethodId
+     *            identifier of the payment method
+     * @param paymentType
+     *            is the transaction a payment or a refund
+     * @return reservation code
+     * @throws CommonException
+     * @throws HibernateException
+     */
+    public String savePayment(String reservationId, String[] paymentDetails,
+            int paymentMethodId, PaymentType paymentType)
+            throws CommonException, HibernateException {
         ReservationBean reservation = null;
         PaymentBean payment = null;
         int maxTry = CommonConstant.MAX_REGENERATE_CODE_TRY;
@@ -663,12 +698,16 @@ public class PaymentLogic extends BaseLogic {
         payment = new PaymentBean();
         payment.setReservation(reservation);
         // Payment method = PAYPAL
-        payment.setPaymentMethod(paymentMethodDAO.getById(2));
+        payment.setPaymentMethod(paymentMethodDAO.getById(paymentMethodId));
         try {
             converter = CurrencyConverter.getInstance(
                     Currency.getInstance("USD"), Currency.getInstance("VND"));
         } catch (InstantiationException e) {
             LOG.error("Impossible error", e);
+            throw new CommonException(e);
+        } catch (IOException e) {
+            // TODO handle error
+            throw new CommonException(e);
         }
         payment.setPayAmount(roundingVND(
                 converter.convert(new BigDecimal(paymentDetails[0])),
@@ -677,37 +716,48 @@ public class PaymentLogic extends BaseLogic {
                 converter.convert(new BigDecimal(paymentDetails[1])),
                 RoundingMode.FLOOR).doubleValue());
         payment.setTransactionId(paymentDetails[2]);
-        payment.setType(PaymentType.PAY.getValue());
+        // Payment type
+        payment.setType(paymentType.getValue());
         paymentDAO.insert(payment);
         // Generate reservation code
-        try {
-            reservationCode = CryptUtils.generateCode(reservation.getId(), 6);
-            // Anti duplicate code
-            if (reservationDAO.getByCode(reservationCode) != null) {
-                maxTry = 3;
-                for (int i = 0; i < maxTry; i++) {
-                    reservationCode = CryptUtils.generateCode(
-                            reservation.getId(), 6, reservationCode);
-                    if (reservationDAO.getByCode(reservationCode) != null) {
-                        // When generated code is duplicated
-                        if (i + 1 >= maxTry) {
-                            // TODO handle error
-                            throw new CommonException();
+        if (CheckUtils.isNullOrBlank(reservation.getCode())) {
+            try {
+                reservationCode = CryptUtils.generateCode(reservation.getId(),
+                        6);
+                // Anti duplicate code
+                if (reservationDAO.getByCode(reservationCode) != null) {
+                    maxTry = 3;
+                    for (int i = 0; i < maxTry; i++) {
+                        reservationCode = CryptUtils.generateCode(
+                                reservation.getId(), 6, reservationCode);
+                        if (reservationDAO.getByCode(reservationCode) != null) {
+                            // When generated code is duplicated
+                            if (i + 1 >= maxTry) {
+                                // TODO handle error
+                                throw new CommonException();
+                            } else {
+                                // continue
+                            }
                         } else {
-                            // continue
+                            // stop generate when a unique code has been
+                            // generated
+                            break;
                         }
-                    } else {
-                        // stop generate when a unique code has been generated
-                        break;
                     }
                 }
+            } catch (NoSuchAlgorithmException e) {
+                LOG.error("Impossible error", e);
+                throw new CommonException(e);
             }
-        } catch (NoSuchAlgorithmException e) {
-            LOG.error("Impossible error", e);
-            throw new CommonException(e);
+            reservation.setCode(reservationCode);
+        } else {
+            reservationCode = reservation.getCode();
         }
-        reservation.setCode(reservationCode);
-        reservation.setStatus(ReservationStatus.PAID.getValue());
+        if (PaymentType.PAY.equals(paymentType)) {
+            reservation.setStatus(ReservationStatus.PAID.getValue());
+        } else {
+            reservation.setStatus(ReservationStatus.REFUNDED.getValue());
+        }
         reservationDAO.update(reservation);
         return reservationCode;
     }
