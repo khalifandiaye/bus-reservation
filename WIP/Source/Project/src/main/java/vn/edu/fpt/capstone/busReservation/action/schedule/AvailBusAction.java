@@ -17,6 +17,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.BusInfo;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
+import vn.edu.fpt.capstone.busReservation.util.DateUtils;
 import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
 @ParentPackage("jsonPackage")
@@ -42,8 +43,9 @@ public class AvailBusAction extends BaseAction {
 		
 		List<RouteDetailsBean> routeDetailsBeans = routeBean.getRouteDetails();
 		for (RouteDetailsBean routeDetailsBean: routeDetailsBeans) {
-			traTime += routeDetailsBean.getSegment().getTravelTime().getTime();
+			traTime += DateUtils.getAbsoluteMiliseconds(routeDetailsBean.getSegment().getTravelTime());
 		}
+		
 		Date endDate = new Date(startDate.getTime() + traTime);
 		arrivalTime = FormatUtils.formatDate(endDate, "yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
 		

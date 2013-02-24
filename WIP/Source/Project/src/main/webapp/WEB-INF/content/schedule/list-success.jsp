@@ -56,7 +56,6 @@
 				function getAvailBus() {
 					var selectedRouteId = $("#tripDialogRoutes").val();
 					var departureTime = $("#tripDialogDepartureTime").val();
-					var arrivalTime = $("#tripDialogArrivalTime").val();
 					var selectedBusType = $("#tripDialogBusType").val();
 					if (selectedRouteId != '-1' && departureTime != ""
 							&& selectedBusType != '-1') {
