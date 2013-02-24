@@ -21,6 +21,9 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
+import vn.edu.fpt.capstone.busReservation.util.DateUtils;
+import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -30,7 +33,7 @@ public class SaveAction extends ActionSupport{
 	private static final long serialVersionUID = 3916263183042873075L;
 	private int routeBeans;
 	private String tripDialogDepartureTime;
-	private String tripDialogArrivalTime;
+	//private String tripDialogArrivalTime;
 	private int tripDialogBusPlate;
 	private BusDAO busDAO;
 	private RouteDAO routeDAO;
@@ -49,22 +52,15 @@ public class SaveAction extends ActionSupport{
 	@Action(value = "/save", results = { @Result(type = "json", name = SUCCESS, params = {
             "root", "busInfos" }) })
 	public String execute() throws ParseException{
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd - hh:mm");
-		Calendar calendar = Calendar.getInstance();
+		Date fromDate = FormatUtils.deFormatDate(tripDialogDepartureTime, "yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
 		
-		Date fromDate = sdf.parse(tripDialogDepartureTime);
+		//cannot get tripDialogArrivalTime: GUI issue
 		long traTime = 0;
-		calendar.setTime(fromDate);
 		List<RouteDetailsBean> routeDetailsList = routeDAO.getById(routeBeans).getRouteDetails();
-		for (RouteDetailsBean bean : routeDetailsList) {
-			traTime += bean.getSegment().getTravelTime().getTime();
+		for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
+			traTime += DateUtils.getAbsoluteMiliseconds(routeDetailsBean.getSegment().getTravelTime());
 		}
-		
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(traTime);
-		calendar.add(Calendar.MINUTE, cal.get(Calendar.MINUTE));
-		calendar.add(Calendar.HOUR, cal.get(Calendar.HOUR));
-		Date toDate = calendar.getTime();
+		Date toDate = new Date(fromDate.getTime() + traTime);
 		
 		BusStatusBean busStatusBean = new BusStatusBean();
 		BusBean busBean = busDAO.getById(tripDialogBusPlate);
@@ -78,17 +74,17 @@ public class SaveAction extends ActionSupport{
 		busStatusDAO.insert(busStatusBean);
 		
 		//time travel
-		long segmentDeparture = fromDate.getTime();
+		long traDate = fromDate.getTime();
 		
 		for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
 			TripBean trip = new TripBean();
-			Date departTime = new Date(segmentDeparture);
-			trip.setDepartureTime(departTime);			
-			trip.setBusStatus(busStatusBean);			
-			//set arrival time 
-			segmentDeparture += routeDetailsBean.getSegment().getTravelTime().getTime();
-			departTime = new Date(segmentDeparture);
-			trip.setArrivalTime(departTime);
+			Date travelDate = new Date(traDate);
+			trip.setDepartureTime(travelDate);			
+			trip.setBusStatus(busStatusBean);
+			//calculate arrival time for each segment
+			traDate += DateUtils.getAbsoluteMiliseconds(routeDetailsBean.getSegment().getTravelTime());
+			travelDate = new Date(traDate);
+			trip.setArrivalTime(travelDate);
 			trip.setStatus("active");
 			trip.setRouteDetails(routeDetailsBean);
 			List<ReservationBean> reservations = new ArrayList<ReservationBean>();
@@ -131,6 +127,7 @@ public class SaveAction extends ActionSupport{
 		this.tripDialogDepartureTime = tripDialogDepartureTime;
 	}
 
+	/* cannot get tripDialogArrivalTime: GUI issue
 	public String getTripDialogArrivalTime() {
 		return tripDialogArrivalTime;
 	}
@@ -138,6 +135,7 @@ public class SaveAction extends ActionSupport{
 	public void setTripDialogArrivalTime(String tripDialogArrivalTime) {
 		this.tripDialogArrivalTime = tripDialogArrivalTime;
 	}
+	*/
 
 	public int getTripDialogBusPlate() {
 		return tripDialogBusPlate;
