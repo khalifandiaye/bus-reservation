@@ -8,6 +8,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SeatInfo;
+import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.logic.ReservationLogic;
@@ -42,7 +43,39 @@ public class BookingInfoAction extends BaseAction {
     private List<SeatInfo> listSeats = new ArrayList<SeatInfo>();
     private List<PaymentMethodBean> paymentMethods;
     private ReservationInfo reservationInfo;
+    private String inputFirstName;
+	private String inputLastName;
+	private String inputMobile;
+	private String inputEmail;
+	
+	/**
+	 * @return the inputFirstName
+	 */
+	public String getInputFirstName() {
+		return inputFirstName;
+	}
 
+	/**
+	 * @return the inputLastName
+	 */
+	public String getInputLastName() {
+		return inputLastName;
+	}
+
+	/**
+	 * @return the inputMobile
+	 */
+	public String getInputMobile() {
+		return inputMobile;
+	}
+
+	/**
+	 * @return the inputEmail
+	 */
+	public String getInputEmail() {
+		return inputEmail;
+	}
+	
     public List<SeatInfo> getListSeats() {
         return listSeats;
     }
@@ -67,6 +100,20 @@ public class BookingInfoAction extends BaseAction {
 
     @SuppressWarnings("unchecked")
     public String execute() {
+    	
+    	User user;
+		if(!(session.get("User") == null) || !(session.get("User_tmp") == null)){
+			if(!(session.get("User_tmp") == null)){
+				user = (User)session.get("User_tmp");
+			}else{
+				user = (User)session.get("User");
+			}
+			this.inputFirstName = user.getFirstName();
+			this.inputLastName = user.getLastName();
+			this.inputEmail = user.getEmail();
+			this.inputMobile = user.getMobilePhone();
+		}
+    	
         String[] seats;
         List<TripBean> tripBeanList = null;
         session.put("selectedSeats", selectedSeat);
