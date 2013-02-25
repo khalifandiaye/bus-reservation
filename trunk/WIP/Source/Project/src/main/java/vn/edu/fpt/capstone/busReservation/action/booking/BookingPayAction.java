@@ -14,11 +14,13 @@ import org.apache.struts2.interceptor.SessionAware;
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SeatPositionDAO;
+import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
+import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
@@ -64,33 +66,25 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 	private String inputLastName;
 	private String inputMobile;
 	private String inputEmail;
-
-	public String getInputFirstName() {
-		return inputFirstName;
+	private UserDAO userDAO = null;
+	
+	/**
+	 * @param userDAO the userDAO to set
+	 */
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
 	}
 
 	public void setInputFirstName(String inputFirstName) {
 		this.inputFirstName = inputFirstName;
 	}
 
-	public String getInputLastName() {
-		return inputLastName;
-	}
-
 	public void setInputLastName(String inputLastName) {
 		this.inputLastName = inputLastName;
 	}
 
-	public String getInputMobile() {
-		return inputMobile;
-	}
-
 	public void setInputMobile(String inputMobile) {
 		this.inputMobile = inputMobile;
-	}
-
-	public String getInputEmail() {
-		return inputEmail;
 	}
 
 	public void setInputEmail(String inputEmail) {
@@ -117,17 +111,19 @@ public class BookingPayAction extends BaseAction implements SessionAware {
     public String execute(){
 		List<TripBean> list = (List<TripBean>)session.get("listTripBean");
 		String reservationId = null;
-		 
-		UserBean userBean;
+		
+		//Check user logged in and set user info  
+		UserBean userBean = null;
+		
 		if(!(session.get("User") == null)){
-			userBean = (UserBean)session.get("User");
-			this.inputFirstName = userBean.getFirstName();
-			this.inputLastName = userBean.getLastName();
-			this.inputEmail = userBean.getEmail();
-			this.inputMobile = userBean.getMobileNumber();
-		}else{
-			userBean = null;
+			User user = (User)session.get("User");
+			userBean = userDAO.getById(Integer.parseInt(user.getUserId()));
 		}
+		
+		//Set tmp user info
+		User tmp_user = new User("","","",inputFirstName,inputLastName,inputMobile,inputEmail);
+		session.put("User_tmp", tmp_user);
+		
 		//Check double seat
 		String[] tmp = ((String)session.get("selectedSeats")).split(";");
 		List<String> listSelectedSeat = new ArrayList<String>();  
@@ -186,6 +182,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
             session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
             session.remove("listTripBean");
             session.remove("selectedSeats");
+            session.remove("User_tmp");
 			
 			return SUCCESS;
 		}else{
