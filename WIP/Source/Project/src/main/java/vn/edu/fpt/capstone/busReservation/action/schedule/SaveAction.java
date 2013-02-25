@@ -33,6 +33,7 @@ public class SaveAction extends ActionSupport{
 	private static final long serialVersionUID = 3916263183042873075L;
 	private int routeBeans;
 	private String tripDialogDepartureTime;
+	private String message;
 	//private String tripDialogArrivalTime;
 	private int tripDialogBusPlate;
 	private BusDAO busDAO;
@@ -50,48 +51,52 @@ public class SaveAction extends ActionSupport{
 	}
 
 	@Action(value = "/save", results = { @Result(type = "json", name = SUCCESS, params = {
-            "root", "busInfos" }) })
-	public String execute() throws ParseException{
-		Date fromDate = FormatUtils.deFormatDate(tripDialogDepartureTime, "yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
-		
-		//cannot get tripDialogArrivalTime: GUI issue
-		long traTime = 0;
-		List<RouteDetailsBean> routeDetailsList = routeDAO.getById(routeBeans).getRouteDetails();
-		for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
-			traTime += DateUtils.getAbsoluteMiliseconds(routeDetailsBean.getSegment().getTravelTime());
+            "root", "message" }) })
+	public String execute() {
+		try {
+			Date fromDate = FormatUtils.deFormatDate(tripDialogDepartureTime, "yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
+			
+			//cannot get tripDialogArrivalTime: GUI issue
+			long traTime = 0;
+			List<RouteDetailsBean> routeDetailsList = routeDAO.getById(routeBeans).getRouteDetails();
+			for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
+				traTime += DateUtils.getAbsoluteMiliseconds(routeDetailsBean.getSegment().getTravelTime());
+			}
+			Date toDate = new Date(fromDate.getTime() + traTime);
+			
+			BusStatusBean busStatusBean = new BusStatusBean();
+			BusBean busBean = busDAO.getById(tripDialogBusPlate);
+			busStatusBean.setBus(busBean);
+			busStatusBean.setBusStatus("ontrip");
+			busStatusBean.setFromDate(fromDate);
+			busStatusBean.setToDate(toDate);
+			busStatusBean.setStatus("active");
+			busStatusBean.setEndStation(routeDetailsList.get(routeDetailsList.size() - 1)
+					.getSegment().getEndAt());
+			busStatusDAO.insert(busStatusBean);
+			
+			//time travel
+			long traDate = fromDate.getTime();
+			
+			for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
+				TripBean trip = new TripBean();
+				Date travelDate = new Date(traDate);
+				trip.setDepartureTime(travelDate);			
+				trip.setBusStatus(busStatusBean);
+				//calculate arrival time for each segment
+				traDate += DateUtils.getAbsoluteMiliseconds(routeDetailsBean.getSegment().getTravelTime());
+				travelDate = new Date(traDate);
+				trip.setArrivalTime(travelDate);
+				trip.setStatus("active");
+				trip.setRouteDetails(routeDetailsBean);
+				List<ReservationBean> reservations = new ArrayList<ReservationBean>();
+				trip.setReservations(reservations);
+				tripDAO.insert(trip);
+			}
+		} catch (Exception ex) {
+			message = "Error! Please try again!";
 		}
-		Date toDate = new Date(fromDate.getTime() + traTime);
-		
-		BusStatusBean busStatusBean = new BusStatusBean();
-		BusBean busBean = busDAO.getById(tripDialogBusPlate);
-		busStatusBean.setBus(busBean);
-		busStatusBean.setBusStatus("ontrip");
-		busStatusBean.setFromDate(fromDate);
-		busStatusBean.setToDate(toDate);
-		busStatusBean.setStatus("active");
-		busStatusBean.setEndStation(routeDetailsList.get(routeDetailsList.size() - 1)
-				.getSegment().getEndAt());
-		busStatusDAO.insert(busStatusBean);
-		
-		//time travel
-		long traDate = fromDate.getTime();
-		
-		for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
-			TripBean trip = new TripBean();
-			Date travelDate = new Date(traDate);
-			trip.setDepartureTime(travelDate);			
-			trip.setBusStatus(busStatusBean);
-			//calculate arrival time for each segment
-			traDate += DateUtils.getAbsoluteMiliseconds(routeDetailsBean.getSegment().getTravelTime());
-			travelDate = new Date(traDate);
-			trip.setArrivalTime(travelDate);
-			trip.setStatus("active");
-			trip.setRouteDetails(routeDetailsBean);
-			List<ReservationBean> reservations = new ArrayList<ReservationBean>();
-			trip.setReservations(reservations);
-			tripDAO.insert(trip);
-		}
-		
+		message = "Add schedule Success!";
 		return SUCCESS;
 	}
 
@@ -143,6 +148,14 @@ public class SaveAction extends ActionSupport{
 
 	public void setTripDialogBusPlate(int tripDialogBusPlate) {
 		this.tripDialogBusPlate = tripDialogBusPlate;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }
