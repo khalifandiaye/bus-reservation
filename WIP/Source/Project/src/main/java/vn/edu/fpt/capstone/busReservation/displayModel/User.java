@@ -22,7 +22,16 @@ public class User implements Serializable {
     private String lastName;
     private String mobilePhone;
     
-    /**
+
+	/**
+	 * 
+	 */
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
 	 * @param userId
 	 * @param username
 	 * @param roleId
