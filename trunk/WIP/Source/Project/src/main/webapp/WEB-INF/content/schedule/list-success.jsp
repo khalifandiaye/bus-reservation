@@ -29,29 +29,17 @@
 						startDate : new Date(),
 						minuteStep : 10
 					}).on('changeDate', function(ev) {
-						var d1 = new Date(ev.date);
-						d1.setHours(d1.getHours() - 6);
-						$('#tripDialogArrivalTime').datetimepicker('setStartDate', d1);
-						
-						var d2 = new Date(ev.date);
-						d2.setMonth( d2.getMonth( ) + 1 );
-						$('#tripDialogArrivalTime').datetimepicker('setEndDate', d2);
-						
 						getAvailBus();
-					});
-
-					$("#tripDialogArrivalTimeDiv").datetimepicker({
-						format : "yyyy/mm/dd - hh:ii",
-						autoclose : true,
-						todayBtn : true,
-						startDate : new Date(),
-						minuteStep : 10
 					});
 				});
 				
 				$('#tripDialogBusType').change(function() {
 					getAvailBus();
 				});
+				
+				$('#tripDialogRoutes').change(function() {
+					getAvailBus();
+		      });
 				
 				function getAvailBus() {
 					var selectedRouteId = $("#tripDialogRoutes").val();
@@ -74,9 +62,25 @@
 		    				});
 					}
 				}
+				
 				$('input.btn-warning').bind('click', function(){
 					var url = $('#contextPath').val() + "/trip/list.html?id=" + $(this).data('view-details');
 					window.location = url;
+				});
+				
+				$('#addNewSchedule').bind('click', function(event) {
+					var form = $('#addNewTripForm');
+					event.preventDefault();
+					$.ajax({
+					      type: "POST",
+					      url: form.attr('action'),
+					      data: form.serialize(),
+					      success: function( response ) {
+					    	  $('#CreateScheduleDialog').modal('hide');
+					    	  $("#saveSuccessDialogLabeMessage").html(response);
+					    	  $("#saveSuccess").modal();
+					      }
+					});
 				});
 			});
 </script>
@@ -88,7 +92,7 @@
 		<div class="post">
 			<div style="height: 45px; margin-left: 1%;">
 				<input id="BusStatusInsertBtn" type="button" class="btn btn-success"
-					value="Add New" />
+					value="Add New Schedule" />
 			</div>
 			<table id="scheduleTable">
 				<thead>
@@ -112,7 +116,7 @@
 							<td><s:property value="endStation.city.name"/></td>
 							<td style="width: 6%">
 								<input data-view-details="<s:property value='id'/>"
-								class="btn btn-warning" type="button" value="View Details" /></td>
+								class="btn btn-primary" type="button" value="View Details" /></td>
 							<td><input data-delete="<s:property value='id'/>"
 								class="btn btn-danger" type="button" value="Delete" /></td>
 						</tr>
@@ -148,9 +152,7 @@
 			<label for="tripDialogArrivalTimeDiv">To Date: </label>
 			<div id="tripDialogArrivalTimeDiv" class="input-append date form_datetime"
 				data-date="">
-				<input id="tripDialogArrivalTime" size="16" type="text" value="" readonly> <span
-					class="add-on"><i class="icon-remove"></i></span> <span
-					class="add-on"><i class="icon-calendar"></i></span>
+				<input id="tripDialogArrivalTime" size="16" type="text" value="" readonly>
 			</div>
 			<label for="tripDialogBusType">Bus Type: </label>
 			<s:select id="tripDialogBusType" headerKey="-1"
@@ -164,7 +166,7 @@
 		</div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-			<button id="addNewTrip" class="btn btn-primary">Save changes</button>
+			<button id="addNewSchedule" class="btn btn-primary">Save changes</button>
 		</div>
 		</form>
 	</div>
@@ -185,6 +187,22 @@
 			<button id="tripDeleteDialogOk" class="btn btn-danger">Delete</button>
 		</div>
 	</div>
+
+	<!-- Modal Delete Dialog -->
+   <div id="saveSuccess" class="modal hide fade" tabindex="-1" role="dialog" 
+      aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true">×</button>
+         <h3 id="saveSuccessDialogLabel">Message</h3>
+      </div>
+      <div class="modal-body">
+         <p id="saveSuccessDialogLabeMessage"></p>
+      </div>
+      <div class="modal-footer">
+         <button class="btn" data-dismiss="modal" aria-hidden="true">Ok</button>
+      </div>
+   </div>
 	<jsp:include page="../common/footer.jsp" />
 </body>
 
