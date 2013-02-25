@@ -97,7 +97,7 @@ CREATE TABLE `bus_status` (
 
 LOCK TABLES `bus_status` WRITE;
 /*!40000 ALTER TABLE `bus_status` DISABLE KEYS */;
-INSERT INTO `bus_status` VALUES (4,3,'ontrip','2013-03-07 09:19:49','2013-03-06 20:19:49',8,'active'),(5,3,'ontrip','2013-03-09 09:19:49','2013-03-08 20:19:49',35,'active'),(6,3,'ontrip','2013-03-11 09:19:49','2013-03-10 20:19:49',8,'active'),(7,3,'ontrip','2013-03-13 09:19:49','2013-03-12 20:19:49',35,'active'),(8,3,'ontrip','2013-03-15 09:19:49','2013-03-14 20:19:49',8,'active'),(9,3,'ontrip','2013-03-17 09:19:49','2013-03-16 20:19:49',35,'active'),(10,3,'ontrip','2013-03-19 09:19:49','2013-03-18 20:19:49',8,'active'),(11,3,'ontrip','2013-03-21 09:19:49','2013-03-20 20:19:49',35,'active'),(12,3,'ontrip','2013-03-23 09:19:49','2013-03-22 20:19:49',8,'active'),(13,3,'ontrip','2013-03-25 09:19:49','2013-03-24 20:19:49',35,'active');
+INSERT INTO `bus_status` VALUES (4,3,'ontrip','2013-03-11 18:10:50','2013-03-25 06:10:50',8,'active'),(5,3,'ontrip','2013-03-27 06:10:50','2013-04-09 18:10:50',35,'active'),(6,3,'ontrip','2013-04-11 18:10:50','2013-04-25 06:10:50',8,'active'),(7,3,'ontrip','2013-04-27 06:10:50','2013-05-10 18:10:50',35,'active'),(8,3,'ontrip','2013-05-12 18:10:50','2013-05-26 06:10:50',8,'active'),(9,3,'ontrip','2013-05-28 06:10:50','2013-06-10 18:10:50',35,'active'),(10,3,'ontrip','2013-06-12 18:10:50','2013-06-26 06:10:50',8,'active'),(11,3,'ontrip','2013-06-28 06:10:50','2013-07-11 18:10:50',35,'active'),(12,3,'ontrip','2013-07-13 18:10:50','2013-07-27 06:10:50',8,'active'),(13,3,'ontrip','2013-07-29 06:10:50','2013-08-11 18:10:50',35,'active');
 /*!40000 ALTER TABLE `bus_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -171,7 +171,7 @@ CREATE TABLE `payment` (
   KEY `payment_payment_method_id_idx` (`payment_method_id`),
   CONSTRAINT `payment_payment_method_id` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_method` (`id`),
   CONSTRAINT `payment_reservation_id` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -180,7 +180,7 @@ CREATE TABLE `payment` (
 
 LOCK TABLES `payment` WRITE;
 /*!40000 ALTER TABLE `payment` DISABLE KEYS */;
-INSERT INTO `payment` VALUES (11,153,397000,17500,2,'68X2160439520110L','pay');
+INSERT INTO `payment` VALUES (11,153,397000,17500,2,'68X2160439520110L','pay'),(12,130,1958000,63000,2,'61269572B6664915S','pay'),(15,137,527000,21000,2,'5J777951W1357152F','pay'),(16,130,208000,6000,2,'2G122410L22675119','refund'),(17,137,368000,10500,2,'69J401522L9850834','refund');
 /*!40000 ALTER TABLE `payment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -247,7 +247,7 @@ CREATE TABLE `reservation` (
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `reservation_booker_id_idx` (`user_id`),
   CONSTRAINT `reservation_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=175 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -256,9 +256,23 @@ CREATE TABLE `reservation` (
 
 LOCK TABLES `reservation` WRITE;
 /*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
-INSERT INTO `reservation` VALUES (130,1,NULL,'2013-02-25 13:13:47','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(131,1,NULL,'2013-02-19 19:11:18','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(132,1,NULL,'2013-03-10 03:36:07','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(133,1,NULL,'2013-03-09 06:05:23','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(134,1,NULL,'2013-03-08 20:23:00','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(135,1,NULL,'2013-03-04 04:45:04','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(136,1,NULL,'2013-03-02 07:41:51','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(137,1,NULL,'2013-02-26 07:05:34','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(138,1,NULL,'2013-02-26 12:07:52','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(139,1,NULL,'2013-02-22 17:17:56','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(140,1,NULL,'2013-02-18 18:29:52','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(141,1,NULL,'2013-02-24 01:34:38','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(142,1,NULL,'2013-02-09 10:49:05','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(143,1,NULL,'2013-02-24 02:30:46','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(144,1,NULL,'2013-02-23 08:58:12','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(145,1,NULL,'2013-02-16 12:51:46','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(146,1,NULL,'2013-03-01 20:01:59','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(147,1,NULL,'2013-02-23 03:30:18','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(148,1,NULL,'2013-03-01 15:10:11','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(149,1,NULL,'2013-03-05 10:37:52','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(150,1,NULL,'2013-02-14 17:53:38','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(151,1,NULL,'2013-03-01 16:06:34','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(152,1,NULL,'2013-02-05 22:37:43','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(153,NULL,'25G3Q6','2013-02-21 11:12:00','paid','Trường','Nguyễn Sơn','','truongns60466@fpt.edu.vn');
+INSERT INTO `reservation` VALUES (130,1,'BDYBHD','2013-02-25 13:13:47','refunded','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(131,1,NULL,'2013-02-19 19:11:18','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(132,1,NULL,'2013-03-10 03:36:07','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(133,1,NULL,'2013-03-09 06:05:23','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(134,1,NULL,'2013-03-08 20:23:00','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(135,1,NULL,'2013-03-04 04:45:04','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(136,1,NULL,'2013-03-02 07:41:51','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(137,1,'BEP5WF','2013-02-26 07:05:34','refunded','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(138,1,NULL,'2013-02-26 12:07:52','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(139,1,NULL,'2013-02-22 17:17:56','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(140,1,NULL,'2013-02-18 18:29:52','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(141,1,NULL,'2013-02-24 01:34:38','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(142,1,NULL,'2013-02-09 10:49:05','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(143,1,NULL,'2013-02-24 02:30:46','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(144,1,NULL,'2013-02-23 08:58:12','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(145,1,NULL,'2013-02-16 12:51:46','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(146,1,NULL,'2013-03-01 20:01:59','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(147,1,NULL,'2013-02-23 03:30:18','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(148,1,NULL,'2013-03-01 15:10:11','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(149,1,NULL,'2013-03-05 10:37:52','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(150,1,NULL,'2013-02-14 17:53:38','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(151,1,NULL,'2013-03-01 16:06:34','unpaid','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(152,1,NULL,'2013-02-05 22:37:43','deleted','First','Customer','123456789','cust1_1357703483_per@fpt.edu.vn'),(153,NULL,'25G3Q6','2013-02-21 11:12:00','paid','Trường','Nguyễn Sơn','123456789','truongns60466@fpt.edu.vn'),(173,NULL,NULL,'2013-02-22 17:35:56','unpaid','Trường','Nguyễn Sơn','123456789','truongns60466@fpt.edu.vn'),(174,NULL,NULL,'2013-02-22 18:22:32','unpaid','Trường','Nguyễn Sơn','123456','truongns60466@fpt.edu.vn');
 /*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `reservation_refund_view`
+--
+
+DROP TABLE IF EXISTS `reservation_refund_view`;
+/*!50001 DROP VIEW IF EXISTS `reservation_refund_view`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `reservation_refund_view` (
+  `reservation_id` int(11),
+  `refund_amount` double
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Temporary table structure for view `reservation_view`
@@ -315,7 +329,7 @@ CREATE TABLE `route` (
   `name` varchar(45) DEFAULT NULL,
   `status` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -395,7 +409,7 @@ CREATE TABLE `seat_position` (
 
 LOCK TABLES `seat_position` WRITE;
 /*!40000 ALTER TABLE `seat_position` DISABLE KEYS */;
-INSERT INTO `seat_position` VALUES (130,'A16'),(130,'A3'),(130,'A9'),(130,'B20'),(130,'C6'),(131,'B9'),(131,'C10'),(131,'C16'),(131,'D10'),(131,'D16'),(132,'A16'),(132,'B6'),(132,'B7'),(132,'C13'),(132,'D1'),(133,'A17'),(133,'A18'),(133,'B4'),(133,'C1'),(133,'C10'),(134,'A9'),(134,'B14'),(134,'C4'),(134,'D1'),(134,'D3'),(135,'A12'),(135,'A3'),(135,'B7'),(135,'B8'),(135,'C20'),(136,'A8'),(136,'C14'),(136,'C19'),(136,'D19'),(137,'A8'),(137,'B11'),(137,'C1'),(137,'D13'),(138,'B20'),(138,'C15'),(138,'C3'),(138,'C9'),(139,'B1'),(139,'B13'),(139,'C3'),(139,'C4'),(140,'A17'),(140,'A2'),(140,'C12'),(140,'D1'),(140,'D7'),(141,'A16'),(141,'D15'),(141,'D16'),(141,'D3'),(141,'D7'),(142,'A1'),(142,'B18'),(142,'B7'),(142,'C16'),(142,'D13'),(143,'A18'),(143,'B13'),(143,'B9'),(143,'C2'),(143,'D14'),(144,'A7'),(144,'A8'),(144,'B4'),(144,'D14'),(144,'D2'),(145,'B16'),(145,'B17'),(145,'B4'),(145,'B8'),(145,'D6'),(146,'A1'),(146,'A16'),(146,'B3'),(146,'C16'),(146,'D17'),(147,'A1'),(147,'A16'),(147,'B13'),(147,'B6'),(147,'D15'),(148,'A10'),(148,'A5'),(148,'C1'),(148,'C12'),(149,'B3'),(149,'C16'),(149,'C6'),(149,'D13'),(149,'D7'),(150,'A17'),(150,'B16'),(150,'B7'),(150,'C17'),(150,'D1'),(151,'B2'),(151,'B20'),(151,'C10'),(151,'D7'),(151,'D9'),(152,'A11'),(152,'A9'),(152,'C20'),(152,'C3'),(152,'D19'),(153,'A7'),(153,'B7'),(153,'D7');
+INSERT INTO `seat_position` VALUES (130,'A16'),(130,'A3'),(130,'A9'),(130,'B20'),(130,'C6'),(131,'B9'),(131,'C10'),(131,'C16'),(131,'D10'),(131,'D16'),(132,'A16'),(132,'B6'),(132,'B7'),(132,'C13'),(132,'D1'),(133,'A17'),(133,'A18'),(133,'B4'),(133,'C1'),(133,'C10'),(134,'A9'),(134,'B14'),(134,'C4'),(134,'D1'),(134,'D3'),(135,'A12'),(135,'A3'),(135,'B7'),(135,'B8'),(135,'C20'),(136,'A8'),(136,'C14'),(136,'C19'),(136,'D19'),(137,'A8'),(137,'B11'),(137,'C1'),(137,'D13'),(138,'B20'),(138,'C15'),(138,'C3'),(138,'C9'),(139,'B1'),(139,'B13'),(139,'C3'),(139,'C4'),(140,'A17'),(140,'A2'),(140,'C12'),(140,'D1'),(140,'D7'),(141,'A16'),(141,'D15'),(141,'D16'),(141,'D3'),(141,'D7'),(142,'A1'),(142,'B18'),(142,'B7'),(142,'C16'),(142,'D13'),(143,'A18'),(143,'B13'),(143,'B9'),(143,'C2'),(143,'D14'),(144,'A7'),(144,'A8'),(144,'B4'),(144,'D14'),(144,'D2'),(145,'B16'),(145,'B17'),(145,'B4'),(145,'B8'),(145,'D6'),(146,'A1'),(146,'A16'),(146,'B3'),(146,'C16'),(146,'D17'),(147,'A1'),(147,'A16'),(147,'B13'),(147,'B6'),(147,'D15'),(148,'A10'),(148,'A5'),(148,'C1'),(148,'C12'),(149,'B3'),(149,'C16'),(149,'C6'),(149,'D13'),(149,'D7'),(150,'A17'),(150,'B16'),(150,'B7'),(150,'C17'),(150,'D1'),(151,'B2'),(151,'B20'),(151,'C10'),(151,'D7'),(151,'D9'),(152,'A11'),(152,'A9'),(152,'C20'),(152,'C3'),(152,'D19'),(153,'A7'),(153,'B7'),(153,'D7'),(173,'A8'),(173,'B8'),(174,'A8'),(174,'B8');
 /*!40000 ALTER TABLE `seat_position` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -460,26 +474,27 @@ INSERT INTO `station` VALUES (1,'Bến xe Hà Tĩnh',39,'Hà Tĩnh','active'),(2
 UNLOCK TABLES;
 
 --
--- Table structure for table `system_settings`
+-- Table structure for table `system_setting`
 --
 
-DROP TABLE IF EXISTS `system_settings`;
+DROP TABLE IF EXISTS `system_setting`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `system_settings` (
-  `name` varchar(45) NOT NULL,
-  `value` varchar(45) NOT NULL,
+CREATE TABLE `system_setting` (
+  `name` varchar(50) NOT NULL,
+  `value` varchar(50) NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `system_settings`
+-- Dumping data for table `system_setting`
 --
 
-LOCK TABLES `system_settings` WRITE;
-/*!40000 ALTER TABLE `system_settings` DISABLE KEYS */;
-/*!40000 ALTER TABLE `system_settings` ENABLE KEYS */;
+LOCK TABLES `system_setting` WRITE;
+/*!40000 ALTER TABLE `system_setting` DISABLE KEYS */;
+INSERT INTO `system_setting` VALUES ('refund.1.rate','70'),('refund.1.time','10'),('refund.2.rate','30'),('refund.2.time','5');
+/*!40000 ALTER TABLE `system_setting` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -560,7 +575,7 @@ CREATE TABLE `trip` (
 
 LOCK TABLES `trip` WRITE;
 /*!40000 ALTER TABLE `trip` DISABLE KEYS */;
-INSERT INTO `trip` VALUES (7,4,7,'2013-03-07 09:19:49','2013-03-07 06:49:49','active'),(8,4,8,'2013-03-07 06:49:49','2013-03-07 04:19:49','active'),(9,4,9,'2013-03-07 04:19:49','2013-03-06 22:34:49','active'),(10,4,10,'2013-03-06 22:34:49','2013-03-06 19:19:49','active'),(11,4,11,'2013-03-06 19:19:49','2013-03-06 15:19:49','active'),(12,4,12,'2013-03-06 15:19:49','2013-03-06 11:19:49','active'),(13,4,13,'2013-03-06 11:19:49','2013-03-06 20:19:49','active'),(14,5,14,'2013-03-09 09:19:49','2013-03-09 18:19:49','active'),(15,5,15,'2013-03-09 18:19:49','2013-03-09 14:19:49','active'),(16,5,16,'2013-03-09 14:19:49','2013-03-09 10:19:49','active'),(17,5,17,'2013-03-09 10:19:49','2013-03-09 07:04:49','active'),(18,5,18,'2013-03-09 07:04:49','2013-03-09 01:19:49','active'),(19,5,19,'2013-03-09 01:19:49','2013-03-08 22:49:49','active'),(20,5,20,'2013-03-08 22:49:49','2013-03-08 20:19:49','active'),(21,6,7,'2013-03-11 09:19:49','2013-03-11 06:49:49','active'),(22,6,8,'2013-03-11 06:49:49','2013-03-11 04:19:49','active'),(23,6,9,'2013-03-11 04:19:49','2013-03-10 22:34:49','active'),(24,6,10,'2013-03-10 22:34:49','2013-03-10 19:19:49','active'),(25,6,11,'2013-03-10 19:19:49','2013-03-10 15:19:49','active'),(26,6,12,'2013-03-10 15:19:49','2013-03-10 11:19:49','active'),(27,6,13,'2013-03-10 11:19:49','2013-03-10 20:19:49','active'),(28,7,14,'2013-03-13 09:19:49','2013-03-13 18:19:49','active'),(29,7,15,'2013-03-13 18:19:49','2013-03-13 14:19:49','active'),(30,7,16,'2013-03-13 14:19:49','2013-03-13 10:19:49','active'),(31,7,17,'2013-03-13 10:19:49','2013-03-13 07:04:49','active'),(32,7,18,'2013-03-13 07:04:49','2013-03-13 01:19:49','active'),(33,7,19,'2013-03-13 01:19:49','2013-03-12 22:49:49','active'),(34,7,20,'2013-03-12 22:49:49','2013-03-12 20:19:49','active'),(35,8,7,'2013-03-15 09:19:49','2013-03-15 06:49:49','active'),(36,8,8,'2013-03-15 06:49:49','2013-03-15 04:19:49','active'),(37,8,9,'2013-03-15 04:19:49','2013-03-14 22:34:49','active'),(38,8,10,'2013-03-14 22:34:49','2013-03-14 19:19:49','active'),(39,8,11,'2013-03-14 19:19:49','2013-03-14 15:19:49','active'),(40,8,12,'2013-03-14 15:19:49','2013-03-14 11:19:49','active'),(41,8,13,'2013-03-14 11:19:49','2013-03-14 20:19:49','active'),(42,9,14,'2013-03-17 09:19:49','2013-03-17 18:19:49','active'),(43,9,15,'2013-03-17 18:19:49','2013-03-17 14:19:49','active'),(44,9,16,'2013-03-17 14:19:49','2013-03-17 10:19:49','active'),(45,9,17,'2013-03-17 10:19:49','2013-03-17 07:04:49','active'),(46,9,18,'2013-03-17 07:04:49','2013-03-17 01:19:49','active'),(47,9,19,'2013-03-17 01:19:49','2013-03-16 22:49:49','active'),(48,9,20,'2013-03-16 22:49:49','2013-03-16 20:19:49','active'),(49,10,7,'2013-03-19 09:19:49','2013-03-19 06:49:49','active'),(50,10,8,'2013-03-19 06:49:49','2013-03-19 04:19:49','active'),(51,10,9,'2013-03-19 04:19:49','2013-03-18 22:34:49','active'),(52,10,10,'2013-03-18 22:34:49','2013-03-18 19:19:49','active'),(53,10,11,'2013-03-18 19:19:49','2013-03-18 15:19:49','active'),(54,10,12,'2013-03-18 15:19:49','2013-03-18 11:19:49','active'),(55,10,13,'2013-03-18 11:19:49','2013-03-18 20:19:49','active'),(56,11,14,'2013-03-21 09:19:49','2013-03-21 18:19:49','active'),(57,11,15,'2013-03-21 18:19:49','2013-03-21 14:19:49','active'),(58,11,16,'2013-03-21 14:19:49','2013-03-21 10:19:49','active'),(59,11,17,'2013-03-21 10:19:49','2013-03-21 07:04:49','active'),(60,11,18,'2013-03-21 07:04:49','2013-03-21 01:19:49','active'),(61,11,19,'2013-03-21 01:19:49','2013-03-20 22:49:49','active'),(62,11,20,'2013-03-20 22:49:49','2013-03-20 20:19:49','active'),(63,12,7,'2013-03-23 09:19:49','2013-03-23 06:49:49','active'),(64,12,8,'2013-03-23 06:49:49','2013-03-23 04:19:49','active'),(65,12,9,'2013-03-23 04:19:49','2013-03-22 22:34:49','active'),(66,12,10,'2013-03-22 22:34:49','2013-03-22 19:19:49','active'),(67,12,11,'2013-03-22 19:19:49','2013-03-22 15:19:49','active'),(68,12,12,'2013-03-22 15:19:49','2013-03-22 11:19:49','active'),(69,12,13,'2013-03-22 11:19:49','2013-03-22 20:19:49','active'),(70,13,14,'2013-03-25 09:19:49','2013-03-25 18:19:49','active'),(71,13,15,'2013-03-25 18:19:49','2013-03-25 14:19:49','active'),(72,13,16,'2013-03-25 14:19:49','2013-03-25 10:19:49','active'),(73,13,17,'2013-03-25 10:19:49','2013-03-25 07:04:49','active'),(74,13,18,'2013-03-25 07:04:49','2013-03-25 01:19:49','active'),(75,13,19,'2013-03-25 01:19:49','2013-03-24 22:49:49','active'),(76,13,20,'2013-03-24 22:49:49','2013-03-24 20:19:49','active');
+INSERT INTO `trip` VALUES (7,4,7,'2013-03-11 18:10:50','2013-03-11 22:40:50','active'),(8,4,8,'2013-03-13 22:40:50','2013-03-14 03:10:50','active'),(9,4,9,'2013-03-16 03:10:50','2013-03-16 04:25:50','active'),(10,4,10,'2013-03-18 04:25:50','2013-03-18 08:10:50','active'),(11,4,11,'2013-03-20 08:10:50','2013-03-20 11:10:50','active'),(12,4,12,'2013-03-22 11:10:50','2013-03-22 14:10:50','active'),(13,4,13,'2013-03-24 14:10:50','2013-03-25 06:10:50','active'),(14,5,14,'2013-03-27 06:10:50','2013-03-27 22:10:50','active'),(15,5,15,'2013-03-29 22:10:50','2013-03-30 01:10:50','active'),(16,5,16,'2013-04-01 01:10:50','2013-04-01 04:10:50','active'),(17,5,17,'2013-04-03 04:10:50','2013-04-03 07:55:50','active'),(18,5,18,'2013-04-05 07:55:50','2013-04-05 09:10:50','active'),(19,5,19,'2013-04-07 09:10:50','2013-04-07 13:40:50','active'),(20,5,20,'2013-04-09 13:40:50','2013-04-09 18:10:50','active'),(21,6,7,'2013-04-11 18:10:50','2013-04-11 22:40:50','active'),(22,6,8,'2013-04-13 22:40:50','2013-04-14 03:10:50','active'),(23,6,9,'2013-04-16 03:10:50','2013-04-16 04:25:50','active'),(24,6,10,'2013-04-18 04:25:50','2013-04-18 08:10:50','active'),(25,6,11,'2013-04-20 08:10:50','2013-04-20 11:10:50','active'),(26,6,12,'2013-04-22 11:10:50','2013-04-22 14:10:50','active'),(27,6,13,'2013-04-24 14:10:50','2013-04-25 06:10:50','active'),(28,7,14,'2013-04-27 06:10:50','2013-04-27 22:10:50','active'),(29,7,15,'2013-04-29 22:10:50','2013-04-30 01:10:50','active'),(30,7,16,'2013-05-02 01:10:50','2013-05-02 04:10:50','active'),(31,7,17,'2013-05-04 04:10:50','2013-05-04 07:55:50','active'),(32,7,18,'2013-05-06 07:55:50','2013-05-06 09:10:50','active'),(33,7,19,'2013-05-08 09:10:50','2013-05-08 13:40:50','active'),(34,7,20,'2013-05-10 13:40:50','2013-05-10 18:10:50','active'),(35,8,7,'2013-05-12 18:10:50','2013-05-12 22:40:50','active'),(36,8,8,'2013-05-14 22:40:50','2013-05-15 03:10:50','active'),(37,8,9,'2013-05-17 03:10:50','2013-05-17 04:25:50','active'),(38,8,10,'2013-05-19 04:25:50','2013-05-19 08:10:50','active'),(39,8,11,'2013-05-21 08:10:50','2013-05-21 11:10:50','active'),(40,8,12,'2013-05-23 11:10:50','2013-05-23 14:10:50','active'),(41,8,13,'2013-05-25 14:10:50','2013-05-26 06:10:50','active'),(42,9,14,'2013-05-28 06:10:50','2013-05-28 22:10:50','active'),(43,9,15,'2013-05-30 22:10:50','2013-05-31 01:10:50','active'),(44,9,16,'2013-06-02 01:10:50','2013-06-02 04:10:50','active'),(45,9,17,'2013-06-04 04:10:50','2013-06-04 07:55:50','active'),(46,9,18,'2013-06-06 07:55:50','2013-06-06 09:10:50','active'),(47,9,19,'2013-06-08 09:10:50','2013-06-08 13:40:50','active'),(48,9,20,'2013-06-10 13:40:50','2013-06-10 18:10:50','active'),(49,10,7,'2013-06-12 18:10:50','2013-06-12 22:40:50','active'),(50,10,8,'2013-06-14 22:40:50','2013-06-15 03:10:50','active'),(51,10,9,'2013-06-17 03:10:50','2013-06-17 04:25:50','active'),(52,10,10,'2013-06-19 04:25:50','2013-06-19 08:10:50','active'),(53,10,11,'2013-06-21 08:10:50','2013-06-21 11:10:50','active'),(54,10,12,'2013-06-23 11:10:50','2013-06-23 14:10:50','active'),(55,10,13,'2013-06-25 14:10:50','2013-06-26 06:10:50','active'),(56,11,14,'2013-06-28 06:10:50','2013-06-28 22:10:50','active'),(57,11,15,'2013-06-30 22:10:50','2013-07-01 01:10:50','active'),(58,11,16,'2013-07-03 01:10:50','2013-07-03 04:10:50','active'),(59,11,17,'2013-07-05 04:10:50','2013-07-05 07:55:50','active'),(60,11,18,'2013-07-07 07:55:50','2013-07-07 09:10:50','active'),(61,11,19,'2013-07-09 09:10:50','2013-07-09 13:40:50','active'),(62,11,20,'2013-07-11 13:40:50','2013-07-11 18:10:50','active'),(63,12,7,'2013-07-13 18:10:50','2013-07-13 22:40:50','active'),(64,12,8,'2013-07-15 22:40:50','2013-07-16 03:10:50','active'),(65,12,9,'2013-07-18 03:10:50','2013-07-18 04:25:50','active'),(66,12,10,'2013-07-20 04:25:50','2013-07-20 08:10:50','active'),(67,12,11,'2013-07-22 08:10:50','2013-07-22 11:10:50','active'),(68,12,12,'2013-07-24 11:10:50','2013-07-24 14:10:50','active'),(69,12,13,'2013-07-26 14:10:50','2013-07-27 06:10:50','active'),(70,13,14,'2013-07-29 06:10:50','2013-07-29 22:10:50','active'),(71,13,15,'2013-07-31 22:10:50','2013-08-01 01:10:50','active'),(72,13,16,'2013-08-03 01:10:50','2013-08-03 04:10:50','active'),(73,13,17,'2013-08-05 04:10:50','2013-08-05 07:55:50','active'),(74,13,18,'2013-08-07 07:55:50','2013-08-07 09:10:50','active'),(75,13,19,'2013-08-09 09:10:50','2013-08-09 13:40:50','active'),(76,13,20,'2013-08-11 13:40:50','2013-08-11 18:10:50','active');
 /*!40000 ALTER TABLE `trip` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -588,7 +603,7 @@ CREATE TABLE `trip_in_reservation` (
 
 LOCK TABLES `trip_in_reservation` WRITE;
 /*!40000 ALTER TABLE `trip_in_reservation` DISABLE KEYS */;
-INSERT INTO `trip_in_reservation` VALUES (153,7),(133,9),(133,10),(130,11),(130,12),(130,13),(144,15),(147,15),(144,16),(144,17),(144,18),(143,22),(135,23),(140,23),(143,23),(135,24),(140,24),(143,24),(140,25),(143,25),(140,26),(143,26),(140,27),(141,30),(141,31),(141,32),(150,32),(150,33),(137,34),(150,34),(142,36),(142,37),(142,38),(142,39),(136,40),(136,41),(148,42),(134,48),(139,53),(139,54),(151,58),(152,58),(151,59),(152,59),(151,60),(152,60),(151,61),(138,62),(132,68),(149,70),(149,71),(145,72),(146,73),(131,74),(131,75),(131,76);
+INSERT INTO `trip_in_reservation` VALUES (153,7),(173,7),(174,7),(133,9),(133,10),(130,11),(130,12),(130,13),(144,15),(147,15),(144,16),(144,17),(144,18),(143,22),(135,23),(140,23),(143,23),(135,24),(140,24),(143,24),(140,25),(143,25),(140,26),(143,26),(140,27),(141,30),(141,31),(141,32),(150,32),(150,33),(137,34),(150,34),(142,36),(142,37),(142,38),(142,39),(136,40),(136,41),(148,42),(134,48),(139,53),(139,54),(151,58),(152,58),(151,59),(152,59),(151,60),(152,60),(151,61),(138,62),(132,68),(149,70),(149,71),(145,72),(146,73),(131,74),(131,75),(131,76);
 /*!40000 ALTER TABLE `trip_in_reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -725,6 +740,25 @@ UNLOCK TABLES;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
+-- Final view structure for view `reservation_refund_view`
+--
+
+/*!50001 DROP TABLE IF EXISTS `reservation_refund_view`*/;
+/*!50001 DROP VIEW IF EXISTS `reservation_refund_view`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `reservation_refund_view` AS select `rsv`.`id` AS `reservation_id`,sum(`ref`.`pay_amount`) AS `refund_amount` from (`reservation` `rsv` join `payment` `ref` on(((`ref`.`reservation_id` = `rsv`.`id`) and (`ref`.`type` = 'refund')))) group by `rsv`.`id` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
 -- Final view structure for view `reservation_view`
 --
 
@@ -738,7 +772,7 @@ UNLOCK TABLES;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `reservation_view` AS select `rsv`.`id` AS `reservation_id`,`trp_start`.`id` AS `start_trip_id`,`trp_end`.`id` AS `end_trip_id`,sum(`tar`.`fare`) AS `ticket_price`,`pay`.`pay_amount` AS `paid_amount`,`ref`.`pay_amount` AS `refund_amount` from (((((((((((((`reservation` `rsv` join `trip_in_reservation` `tir_start` on((`rsv`.`id` = `tir_start`.`reservation_id`))) join `trip` `trp_start` on((`trp_start`.`id` = `tir_start`.`trip_id`))) join `trip_in_reservation` `tir_end` on((`rsv`.`id` = `tir_end`.`reservation_id`))) join `trip` `trp_end` on((`trp_end`.`id` = `tir_end`.`trip_id`))) join `trip_in_reservation` `tir` on((`rsv`.`id` = `tir`.`reservation_id`))) join `trip` `trp` on((`trp`.`id` = `tir`.`trip_id`))) join `route_details` `rds` on((`rds`.`id` = `trp`.`route_details_id`))) join `segment` `seg` on((`seg`.`id` = `rds`.`segment_id`))) join `bus_status` `bst` on((`bst`.`id` = `trp`.`bus_status_id`))) join `bus` on((`bus`.`id` = `bst`.`bus_id`))) join `tariff` `tar` on(((`seg`.`id` = `tar`.`segment_id`) and (`tar`.`bus_type_id` = `bus`.`bus_type_id`)))) left join `payment` `pay` on(((`rsv`.`id` = `pay`.`reservation_id`) and (`pay`.`type` = 'pay')))) left join `payment` `ref` on(((`rsv`.`id` = `ref`.`reservation_id`) and (`ref`.`type` = 'refund')))) where ((`trp_start`.`departure_time` = (select min(`trp1`.`departure_time`) from ((`reservation` `rsv1` join `trip_in_reservation` `tir1` on((`rsv1`.`id` = `tir1`.`reservation_id`))) join `trip` `trp1` on((`trp1`.`id` = `tir1`.`trip_id`))) where (`rsv`.`id` = `rsv1`.`id`))) and (`trp_end`.`departure_time` = (select max(`trp2`.`departure_time`) from ((`reservation` `rsv2` join `trip_in_reservation` `tir2` on((`rsv2`.`id` = `tir2`.`reservation_id`))) join `trip` `trp2` on((`trp2`.`id` = `tir2`.`trip_id`))) where (`rsv`.`id` = `rsv2`.`id`))) and (`tar`.`valid_from` = (select max(`tar1`.`valid_from`) from (((((`trip` `trp1` join `route_details` `rds1` on((`rds1`.`id` = `trp1`.`route_details_id`))) join `segment` `seg1` on((`seg1`.`id` = `rds1`.`segment_id`))) join `bus_status` `bst1` on((`bst1`.`id` = `trp1`.`bus_status_id`))) join `bus` `bus1` on((`bus1`.`id` = `bst1`.`bus_id`))) join `tariff` `tar1` on(((`seg1`.`id` = `tar1`.`segment_id`) and (`tar1`.`bus_type_id` = `bus1`.`bus_type_id`)))) where ((`trp1`.`id` = `trp`.`id`) and (`tar1`.`valid_from` < `rsv`.`book_time`))))) group by `rsv`.`id`,`trp_start`.`id`,`trp_end`.`id`,`pay`.`pay_amount`,`ref`.`pay_amount` */;
+/*!50001 VIEW `reservation_view` AS select `rsv`.`id` AS `reservation_id`,`trp_start`.`id` AS `start_trip_id`,`trp_end`.`id` AS `end_trip_id`,sum(`tar`.`fare`) AS `ticket_price`,`pay`.`pay_amount` AS `paid_amount`,`ref`.`refund_amount` AS `refund_amount` from (((((((((((((`reservation` `rsv` join `trip_in_reservation` `tir_start` on((`rsv`.`id` = `tir_start`.`reservation_id`))) join `trip` `trp_start` on((`trp_start`.`id` = `tir_start`.`trip_id`))) join `trip_in_reservation` `tir_end` on((`rsv`.`id` = `tir_end`.`reservation_id`))) join `trip` `trp_end` on((`trp_end`.`id` = `tir_end`.`trip_id`))) join `trip_in_reservation` `tir` on((`rsv`.`id` = `tir`.`reservation_id`))) join `trip` `trp` on((`trp`.`id` = `tir`.`trip_id`))) join `route_details` `rds` on((`rds`.`id` = `trp`.`route_details_id`))) join `segment` `seg` on((`seg`.`id` = `rds`.`segment_id`))) join `bus_status` `bst` on((`bst`.`id` = `trp`.`bus_status_id`))) join `bus` on((`bus`.`id` = `bst`.`bus_id`))) join `tariff` `tar` on(((`seg`.`id` = `tar`.`segment_id`) and (`tar`.`bus_type_id` = `bus`.`bus_type_id`)))) left join `payment` `pay` on(((`rsv`.`id` = `pay`.`reservation_id`) and (`pay`.`type` = 'pay')))) left join `reservation_refund_view` `ref` on((`rsv`.`id` = `ref`.`reservation_id`))) where ((`trp_start`.`departure_time` = (select min(`trp1`.`departure_time`) from ((`reservation` `rsv1` join `trip_in_reservation` `tir1` on((`rsv1`.`id` = `tir1`.`reservation_id`))) join `trip` `trp1` on((`trp1`.`id` = `tir1`.`trip_id`))) where (`rsv`.`id` = `rsv1`.`id`))) and (`trp_end`.`departure_time` = (select max(`trp2`.`departure_time`) from ((`reservation` `rsv2` join `trip_in_reservation` `tir2` on((`rsv2`.`id` = `tir2`.`reservation_id`))) join `trip` `trp2` on((`trp2`.`id` = `tir2`.`trip_id`))) where (`rsv`.`id` = `rsv2`.`id`))) and (`tar`.`valid_from` = (select max(`tar1`.`valid_from`) from (((((`trip` `trp1` join `route_details` `rds1` on((`rds1`.`id` = `trp1`.`route_details_id`))) join `segment` `seg1` on((`seg1`.`id` = `rds1`.`segment_id`))) join `bus_status` `bst1` on((`bst1`.`id` = `trp1`.`bus_status_id`))) join `bus` `bus1` on((`bus1`.`id` = `bst1`.`bus_id`))) join `tariff` `tar1` on(((`seg1`.`id` = `tar1`.`segment_id`) and (`tar1`.`bus_type_id` = `bus1`.`bus_type_id`)))) where ((`trp1`.`id` = `trp`.`id`) and (`tar1`.`valid_from` < `rsv`.`book_time`))))) group by `rsv`.`id`,`trp_start`.`id`,`trp_end`.`id`,`pay`.`pay_amount`,`ref`.`refund_amount` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -847,4 +881,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-02-21 11:16:51
+-- Dump completed on 2013-02-26  0:28:26
