@@ -50,6 +50,13 @@ public class BookingInfoAction extends BaseAction {
 	private String inputEmail;
 	
 	/**
+	 * @return the selectedSeat
+	 */
+	public String getSelectedSeat() {
+		return selectedSeat;
+	}
+
+	/**
 	 * @return the inputFirstName
 	 */
 	public String getInputFirstName() {
@@ -117,11 +124,18 @@ public class BookingInfoAction extends BaseAction {
     	
         String[] seats;
         List<TripBean> tripBeanList = null;
-        session.put("selectedSeats", selectedSeat);
+        //Save selectedSeats
+        if(selectedSeat != null){
+        	session.put("selectedSeats", selectedSeat);
+        }else{
+        	selectedSeat = (String)session.get("selectedSeats");
+        }
+        
         seats = selectedSeat.split(";");
         for (int i = 0; i < seats.length; i++) {
             listSeats.add(new SeatInfo(seats[i], "2"));
         }
+        //
         paymentMethods = paymentLogic.getPaymentMethods();
         tripBeanList = (List<TripBean>) session.get("listTripBean");
         try {
@@ -134,6 +148,7 @@ public class BookingInfoAction extends BaseAction {
             return ERROR;
         }
         session.put(ReservationInfo.class.getName(), reservationInfo);
+        session.remove("selectedSeats");
         return SUCCESS;
     }
 }
