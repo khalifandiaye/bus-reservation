@@ -115,8 +115,8 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 		//Check user logged in and set user info  
 		UserBean userBean = null;
 		
-		if(!(session.get("User") == null)){
-			User user = (User)session.get("User");
+		if(!(session.get(CommonConstant.SESSION_KEY_USER) == null)){
+			User user = (User)session.get(CommonConstant.SESSION_KEY_USER);
 			userBean = userDAO.getById(Integer.parseInt(user.getUserId()));
 		}
 		
