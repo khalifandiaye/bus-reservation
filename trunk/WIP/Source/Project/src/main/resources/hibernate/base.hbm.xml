@@ -10,7 +10,7 @@
 			<generator class="native" />
 		</id>
 		<property name="name" type="string" not-null="true" />
-		<bag name="stations" table="station" inverse="true">
+		<bag name="stations" table="station" inverse="true" order-by="id">
 			<key column="city_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.StationBean" />
 		</bag>
@@ -24,11 +24,11 @@
 		<many-to-one name="city" column="city_id" />
 		<property name="address" type="string" not-null="true" />
 		<property name="status" type="string" not-null="true" />
-		<bag name="inSegments" table="segment" inverse="true">
+		<bag name="inSegments" table="segment" inverse="true" order-by="id">
 			<key column="arrival_station_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean" />
 		</bag>
-		<bag name="outSegments" table="segment" inverse="true">
+		<bag name="outSegments" table="segment" inverse="true" order-by="id">
 			<key column="departure_station_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean" />
 		</bag>
@@ -42,11 +42,11 @@
 		<many-to-one name="endAt" column="arrival_station_id" />
 		<property name="travelTime" column="travel_time" type="time" not-null="true" />
 		<property name="status" type="string" not-null="true" />
-		<bag name="tariffs" table="tariff" inverse="true">
+		<bag name="tariffs" table="tariff" inverse="true" order-by="id">
 			<key column="segment_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean" />
 		</bag>
-		<bag name="routeDetails" table="route_details" inverse="true">
+		<bag name="routeDetails" table="route_details" inverse="true" order-by="id">
 			<key column="segment_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean" />
 		</bag>
@@ -58,15 +58,15 @@
 		</id>
 		<property name="name" type="string" not-null="true" />
 		<property name="status" type="string" not-null="true" />
-		<bag name="routeDetails" table="route_details" inverse="true">
+		<bag name="routeDetails" table="route_details" inverse="true" order-by="id">
 			<key column="route_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean" />
 		</bag>
-		<bag name="assignedForwardBuses" table="bus" inverse="true">
+		<bag name="assignedForwardBuses" table="bus" inverse="true" order-by="id">
 			<key column="assigned_route_forward_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
 		</bag>
-		<bag name="assignedReturnBuses" table="bus" inverse="true">
+		<bag name="assignedReturnBuses" table="bus" inverse="true" order-by="id">
 			<key column="assigned_route_return_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
 		</bag>
@@ -79,7 +79,7 @@
 		</id>
 		<many-to-one name="segment" column="segment_id" />
 		<many-to-one name="route" column="route_id" />
-		<bag name="trips" table="trip" inverse="true">
+		<bag name="trips" table="trip" inverse="true" order-by="id">
 			<key column="route_details_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
 		</bag>
@@ -91,11 +91,11 @@
 		</id>
 		<property name="name" type="string" not-null="true" />
 		<property name="numberOfSeats" column="number_of_seats" type="integer" not-null="true" />
-		<bag name="buses" table="bus" inverse="true">
+		<bag name="buses" table="bus" inverse="true" order-by="id">
 			<key column="bus_type_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
 		</bag>
-		<bag name="tariffs" table="tariff" inverse="true">
+		<bag name="tariffs" table="tariff" inverse="true" order-by="id">
 			<key column="bus_type_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean" />
 		</bag>
@@ -110,7 +110,7 @@
 		<property name="status" type="string" not-null="true" />
 		<many-to-one name="forwardRoute" column="assigned_route_forward_id" />
 		<many-to-one name="returnRoute" column="assigned_route_return_id" />
-		<bag name="statusList" table="bus_status" inverse="true">
+		<bag name="statusList" table="bus_status" inverse="true" order-by="id">
 			<key column="bus_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean" />
 		</bag>
@@ -136,7 +136,7 @@
 		<property name="toDate" column="to_date" type="timestamp" not-null="true" />
 		<many-to-one name="endStation" column="end_station_id" />
 		<property name="status" type="string" not-null="true" />
-		<bag name="trips" table="trip" inverse="true">
+		<bag name="trips" table="trip" inverse="true" order-by="departureTime">
 			<key column="bus_status_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
 		</bag>
@@ -152,7 +152,7 @@
 		<property name="departureTime" column="departure_time" type="timestamp" not-null="true" />
 		<property name="arrivalTime" column="arrival_time" type="timestamp" not-null="true" />
 		<property name="status" type="string" not-null="true" />
-		<bag name="reservations" table="trip_in_reservation" inverse="true">
+		<bag name="reservations" table="trip_in_reservation" inverse="true" order-by="id">
 			<key column="trip_id" />
 			<many-to-many column="reservation_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean" />
 		</bag>
@@ -163,7 +163,7 @@
 			<generator class="native" />
 		</id>
 		<property name="name" type="string" not-null="true" />
-		<bag name="users" table="user" inverse="true">
+		<bag name="users" table="user" inverse="true" order-by="id">
 			<key column="role_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.UserBean" />
 		</bag>
@@ -183,7 +183,7 @@
 		<property name="email" type="string" not-null="false" />
 		<property name="civilId" column="civil_id" type="string" not-null="false" />
 		<property name="status" type="string" not-null="true" />
-		<bag name="reservations" table="reservation" inverse="true">
+		<bag name="reservations" table="reservation" inverse="true" order-by="id">
 			<key column="user_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean" />
 		</bag>
@@ -201,15 +201,15 @@
 		<property name="bookerLastName" column="booker_last_name" type="string" not-null="true" />
 		<property name="phone" type="string" not-null="true" />
 		<property name="email" type="string" not-null="true" />
-		<bag name="seatPositions" table="seat_position" inverse="true">
+		<bag name="seatPositions" table="seat_position" inverse="true" order-by="name">
 			<key column="reservation_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" />
 		</bag>
-		<bag name="trips" table="trip_in_reservation">
+		<bag name="trips" table="trip_in_reservation" order-by="departureTime">
 			<key column="reservation_id" />
 			<many-to-many column="trip_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
 		</bag>
-		<bag name="payments" inverse="true">
+		<bag name="payments" inverse="true" order-by="id">
 			<key column="reservation_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean" />
 		</bag>
@@ -241,6 +241,13 @@
 		<many-to-one name="paymentMethod" column="payment_method_id" />
 		<property name="transactionId" column="transaction_id" type="string" not-null="true" />
 		<property name="type" type="string" not-null="true" />
+	</class>
+	<!-- SYSTEM_SETTING -->
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.SystemSettingBean" table="system_setting">
+		<id name="id" column="name" unsaved-value="" type="string">
+			<generator class="assigned" />
+		</id>
+		<property name="value" column="value" type="string" />
 	</class>
 	<!-- RESERVATION_INFO VIEW -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean" table="reservation_view">

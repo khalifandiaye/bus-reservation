@@ -14,7 +14,7 @@
 </head>
 	<body>
 	<jsp:include page="../common/header.jsp" />
-	<form method="post" action="<%=request.getContextPath()%>/pay/pay-paypal">
+	<form method="post" action="<%=request.getContextPath()%>/pay/pay01010.html">
 		<div class="container">
 			<s:select list="reservationList" name="reservationId" />
 			<s:submit id="pay01010" value="Test Pay"/>

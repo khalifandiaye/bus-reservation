@@ -10,16 +10,12 @@ import java.io.Serializable;
  *
  */
 public class ReservationInfo implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7740272488683962205L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private int id;
-	/**
-	 * 
-     * @deprecated
-	 */
-	private String routeName;
+	private String code;
 	private String subRouteName;
 	private String departureDate;
 	private String departureStationAddress;
@@ -33,11 +29,6 @@ public class ReservationInfo implements Serializable {
 	 * number of tickets
 	 */
 	private String quantity;
-	/**
-	 * conversion rate from USD
-	 * @deprecated
-	 */
-	private String conversionRate;
 	/**
 	 * base price of each ticket
 	 */
@@ -62,6 +53,14 @@ public class ReservationInfo implements Serializable {
 	 * total amount that must be paid in USD
 	 */
 	private String totalAmountInUSD;
+    /**
+     * total amount that was refunded
+     */
+    private String refundedAmount;
+    /**
+     * total amount that was refunded in USD
+     */
+    private String refundedAmountInUSD;
 	/**
 	 * status of the reservation
 	 */
@@ -78,21 +77,19 @@ public class ReservationInfo implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+	/**
+     * @return the code
+     */
+    public String getCode() {
+        return code;
+    }
     /**
-	 * @return the routeName
-     * @deprecated
-	 */
-	public String getRouteName() {
-		return routeName;
-	}
-	/**
-	 * @param routeName the routeName to set
-     * @deprecated
-	 */
-	public void setRouteName(String routeName) {
-		this.routeName = routeName;
-	}
-	/**
+     * @param code the code to set
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
+    /**
 	 * @return the subRouteName
 	 */
 	public String getSubRouteName() {
@@ -177,20 +174,6 @@ public class ReservationInfo implements Serializable {
 		this.quantity = quantity;
 	}
 	/**
-	 * @return the conversionRate
-     * @deprecated
-	 */
-	public String getConversionRate() {
-		return conversionRate;
-	}
-	/**
-	 * @param conversionRate the conversionRate to set
-     * @deprecated
-	 */
-	public void setConversionRate(String conversionRate) {
-		this.conversionRate = conversionRate;
-	}
-	/**
 	 * @return the basePrice
 	 */
 	public String getBasePrice() {
@@ -262,6 +245,30 @@ public class ReservationInfo implements Serializable {
 	public void setTotalAmountInUSD(String totalAmountInUSD) {
 		this.totalAmountInUSD = totalAmountInUSD;
 	}
+    /**
+     * @return the refundedAmount
+     */
+    public String getRefundedAmount() {
+        return refundedAmount;
+    }
+    /**
+     * @param refundedAmount the refundedAmount to set
+     */
+    public void setRefundedAmount(String refundedAmount) {
+        this.refundedAmount = refundedAmount;
+    }
+    /**
+     * @return the refundedAmountInUSD
+     */
+    public String getRefundedAmountInUSD() {
+        return refundedAmountInUSD;
+    }
+    /**
+     * @param refundedAmountInUSD the refundedAmountInUSD to set
+     */
+    public void setRefundedAmountInUSD(String refundedAmountInUSD) {
+        this.refundedAmountInUSD = refundedAmountInUSD;
+    }
     /**
      * @return the bookerName
      */

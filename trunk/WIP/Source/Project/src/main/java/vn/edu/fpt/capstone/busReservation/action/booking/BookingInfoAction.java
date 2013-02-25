@@ -12,6 +12,7 @@ import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.logic.ReservationLogic;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 public class BookingInfoAction extends BaseAction {
 
@@ -102,11 +103,11 @@ public class BookingInfoAction extends BaseAction {
     public String execute() {
     	
     	User user;
-		if(!(session.get("User") == null) || !(session.get("User_tmp") == null)){
+		if(!(session.get(CommonConstant.SESSION_KEY_USER) == null) || !(session.get("User_tmp") == null)){
 			if(!(session.get("User_tmp") == null)){
 				user = (User)session.get("User_tmp");
 			}else{
-				user = (User)session.get("User");
+				user = (User)session.get(CommonConstant.SESSION_KEY_USER);
 			}
 			this.inputFirstName = user.getFirstName();
 			this.inputLastName = user.getLastName();

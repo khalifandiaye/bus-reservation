@@ -3,7 +3,11 @@ package vn.edu.fpt.capstone.busReservation.displayModel;
 import java.io.Serializable;
 
 public class SeatInfo implements Serializable {
-	private String name;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private String name;
 	private String status;
 	
 	public SeatInfo(String name, String status) {

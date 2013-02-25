@@ -185,7 +185,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
             session.remove("User_tmp");
 			
 			return SUCCESS;
-		}else{
+		} else{
 			//send selectedSeat and  double 
 			request.put("backFrom","bookingPay");
 			request.put("doubleSeat", seatsDouble);//List<String>

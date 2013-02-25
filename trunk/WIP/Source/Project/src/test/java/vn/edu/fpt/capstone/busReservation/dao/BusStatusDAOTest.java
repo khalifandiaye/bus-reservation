@@ -3,12 +3,14 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.testUtil.DAOTest;
 
 /**
@@ -24,5 +26,17 @@ public class BusStatusDAOTest extends DAOTest {
         Assert.assertNotEquals(0, beans.size());
         Assert.assertNotNull(beans.get(0));
         Assert.assertNotEquals(0, beans.get(0).getTrips().size());
+    }
+    @Test
+    public void testUpdate001() {
+        BusStatusDAO busStatusDAO = (BusStatusDAO) getBean("busStatusDAO");
+        List<BusStatusBean> beans = busStatusDAO.getAll();
+        List<TripBean> trips = null;
+        for (BusStatusBean bs : beans) {
+            trips = bs.getTrips();
+            bs.setFromDate(trips.get(0).getDepartureTime());
+            bs.setToDate(trips.get(trips.size()-1).getArrivalTime());
+        }
+        busStatusDAO.update(beans);
     }
 }

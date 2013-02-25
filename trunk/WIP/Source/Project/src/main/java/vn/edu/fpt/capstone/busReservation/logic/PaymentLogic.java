@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
 import org.xml.sax.SAXException;
 
@@ -37,6 +38,7 @@ import urn.ebay.apis.CoreComponentTypes.BasicAmountType;
 import urn.ebay.apis.eBLBaseComponents.CurrencyCodeType;
 import urn.ebay.apis.eBLBaseComponents.DoExpressCheckoutPaymentRequestDetailsType;
 import urn.ebay.apis.eBLBaseComponents.ErrorType;
+import urn.ebay.apis.eBLBaseComponents.InvoiceItemType;
 import urn.ebay.apis.eBLBaseComponents.ItemCategoryType;
 import urn.ebay.apis.eBLBaseComponents.PaymentActionCodeType;
 import urn.ebay.apis.eBLBaseComponents.PaymentDetailsItemType;
@@ -46,12 +48,15 @@ import urn.ebay.apis.eBLBaseComponents.SetExpressCheckoutRequestDetailsType;
 import vn.edu.fpt.capstone.busReservation.dao.PaymentDAO;
 import vn.edu.fpt.capstone.busReservation.dao.PaymentMethodDAO;
 import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
+import vn.edu.fpt.capstone.busReservation.dao.ReservationInfoDAO;
+import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean.PaymentType;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.SystemSettingBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
@@ -80,8 +85,10 @@ public class PaymentLogic extends BaseLogic {
     private static final long serialVersionUID = -8459183174212009486L;
     // =====================Database Access Object=====================
     private ReservationDAO reservationDAO;
+    private ReservationInfoDAO reservationInfoDAO;
     private PaymentMethodDAO paymentMethodDAO;
     private PaymentDAO paymentDAO;
+    private SystemSettingDAO systemSettingDAO;
 
     /**
      * @param reservationDAO
@@ -89,6 +96,14 @@ public class PaymentLogic extends BaseLogic {
      */
     public void setReservationDAO(ReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
+    }
+
+    /**
+     * @param reservationInfoDAO
+     *            the reservationInfoDAO to set
+     */
+    public void setReservationInfoDAO(ReservationInfoDAO reservationInfoDAO) {
+        this.reservationInfoDAO = reservationInfoDAO;
     }
 
     /**
@@ -105,6 +120,14 @@ public class PaymentLogic extends BaseLogic {
      */
     public void setPaymentDAO(PaymentDAO paymentDAO) {
         this.paymentDAO = paymentDAO;
+    }
+
+    /**
+     * @param systemSettingDAO
+     *            the systemSettingDAO to set
+     */
+    public void setSystemSettingDAO(SystemSettingDAO systemSettingDAO) {
+        this.systemSettingDAO = systemSettingDAO;
     }
 
     // =========================Main Functions=========================
@@ -227,6 +250,67 @@ public class PaymentLogic extends BaseLogic {
                 converter.convert(totalAmount), 2, CommonConstant.LOCALE_VN));
     }
 
+    public double calculateRefundAmount(int reservationId)
+            throws CommonException {
+        ReservationInfoBean reservationInfo = null;
+        Double amount = null;
+        List<SystemSettingBean> settings = null;
+        int refundRate = 0;
+        int[] rates = null;
+        int[] limits = null;
+        String[] settingKey = null;
+        int settingCount = 0;
+        Calendar timelimit = null;
+        Date today = null;
+        reservationInfo = reservationInfoDAO.getById(reservationId);
+        amount = reservationInfo.getPaidAmount();
+        if (amount != null && amount > 0) {
+            settings = systemSettingDAO.getAllLike("refund%");
+            if (settings == null || settings.size() % 2 != 0) {
+                throw new CommonException();
+            }
+            settingCount = settings.size() / 2;
+            rates = new int[settingCount];
+            limits = new int[settingCount];
+            for (SystemSettingBean setting : settings) {
+                settingKey = setting.getId().split("\\.");
+                if (settingKey[2].equals("rate")) {
+                    rates[Integer.parseInt(settingKey[1]) - 1] = Integer
+                            .parseInt(setting.getValue());
+                } else {
+                    limits[Integer.parseInt(settingKey[1]) - 1] = Integer
+                            .parseInt(setting.getValue());
+                }
+            }
+            timelimit = Calendar.getInstance();
+            today = new Date();
+            for (int i = 0; i < settingCount; i++) {
+                timelimit.setTime(reservationInfo.getStartTrip()
+                        .getDepartureTime());
+                timelimit.add(Calendar.DATE, -limits[i]);
+                if (today.before(timelimit.getTime())) {
+                    refundRate = rates[i];
+                    break;
+                }
+            }
+            if (refundRate == 0) {
+                // TODO handle error
+                throw new CommonException();
+            }
+            amount = roundingVND(amount, RoundingMode.FLOOR) * refundRate / 100;
+            return amount;
+        } else {
+            // TODO handle error
+            throw new CommonException();
+        }
+    }
+
+    public String getRefundAmountString(int reservationId)
+            throws CommonException {
+        return FormatUtils.formatNumber(calculateRefundAmount(reservationId),
+                0, CommonConstant.LOCALE_VN);
+    }
+
     /**
      * @param reservation
      *            reservation information
@@ -235,8 +319,7 @@ public class PaymentLogic extends BaseLogic {
      *         VND, and the transaction id
      * @throws CommonException
      */
-    public String[] doPaypalRefund(ReservationInfoBean reservation)
-            throws CommonException {
+    public String[] doPaypalRefund(int reservationId) throws CommonException {
         String[] result = null;
         PayPalAPIInterfaceServiceService service = null;
         PaymentBean payment = null;
@@ -246,33 +329,56 @@ public class PaymentLogic extends BaseLogic {
         BasicAmountType amount = null;
         CurrencyConverter converter = null;
         BigDecimal refundAmount = null;
-        Calendar refundRate1Time = null;
-        Calendar refundRate2Time = null;
         Date today = null;
+        int[] limits = null;
+        int[] rates = null;
+        int refundRate = 0;
+        List<SystemSettingBean> settings = null;
+        int settingCount = 0;
+        String[] settingKey = null;
+        Calendar timelimit = null;
+        ReservationInfoBean reservation = null;
+
+        reservation = reservationInfoDAO.getById(reservationId);
         if (ReservationStatus.PAID.getValue().equals(
                 reservation.getId().getStatus())) {
-            // get today
+            refundAmount = BigDecimal.valueOf(reservation.getPaidAmount());
+            settings = systemSettingDAO.getAllLike("refund%");
+            if (settings == null || settings.size() % 2 != 0) {
+                throw new CommonException();
+            }
+            settingCount = settings.size() / 2;
+            rates = new int[settingCount];
+            limits = new int[settingCount];
+            for (SystemSettingBean setting : settings) {
+                settingKey = setting.getId().split("\\.");
+                if (settingKey[2].equals("rate")) {
+                    rates[Integer.parseInt(settingKey[1]) - 1] = Integer
+                            .parseInt(setting.getValue());
+                } else {
+                    limits[Integer.parseInt(settingKey[1]) - 1] = Integer
+                            .parseInt(setting.getValue());
+                }
+            }
+            timelimit = Calendar.getInstance();
             today = new Date();
-            // calculate date to apply refund rate 1
-            refundRate1Time = Calendar.getInstance();
-            refundRate1Time.setTime(reservation.getStartTrip()
-                    .getDepartureTime());
-            refundRate1Time.set(Calendar.HOUR_OF_DAY, 23);
-            refundRate1Time.set(Calendar.MINUTE, 59);
-            refundRate1Time.set(Calendar.SECOND, 59);
-            refundRate1Time.set(Calendar.MILLISECOND, 999);
-            refundRate1Time.add(Calendar.DATE,
-                    -CommonConstant.REFUND_TIME_LIMIT_1);
-            // calculate date to apply refund rate 2
-            refundRate2Time = Calendar.getInstance();
-            refundRate2Time.setTime(reservation.getStartTrip()
-                    .getDepartureTime());
-            refundRate2Time.set(Calendar.HOUR_OF_DAY, 23);
-            refundRate2Time.set(Calendar.MINUTE, 59);
-            refundRate2Time.set(Calendar.SECOND, 59);
-            refundRate2Time.set(Calendar.MILLISECOND, 999);
-            refundRate2Time.add(Calendar.DATE,
-                    -CommonConstant.REFUND_TIME_LIMIT_2);
+            for (int i = 0; i < settingCount; i++) {
+                timelimit
+                        .setTime(reservation.getStartTrip().getDepartureTime());
+                timelimit.add(Calendar.DATE, -limits[i]);
+                if (today.before(timelimit.getTime())) {
+                    refundRate = rates[i];
+                    break;
+                }
+            }
+            if (refundRate == 0) {
+                // TODO handle error
+                throw new CommonException();
+            }
+            refundAmount = roundingVND(
+                    refundAmount.multiply(BigDecimal.valueOf(refundRate))
+                            .divide(BigDecimal.valueOf(100)),
+                    RoundingMode.FLOOR);
             payment = reservation.getId().getPayments().get(0);
             request = new RefundTransactionReq();
             requestDetails = new RefundTransactionRequestType();
@@ -292,18 +398,8 @@ public class PaymentLogic extends BaseLogic {
                 // TODO handle error
                 throw new CommonException(e);
             }
-            refundAmount = converter.convert(BigDecimal.valueOf(payment
-                    .getPayAmount()));
-            if (today.before(refundRate1Time.getTime())) {
-                refundAmount.multiply(
-                        BigDecimal.valueOf(CommonConstant.REFUND_RATE_1))
-                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.FLOOR);
-            } else if (today.before(refundRate2Time.getTime())) {
-                refundAmount.multiply(
-                        BigDecimal.valueOf(CommonConstant.REFUND_RATE_2))
-                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.FLOOR);
-            }
-            amount.setValue(refundAmount.toString());
+            refundAmount = converter.convert(refundAmount);
+            amount.setValue(refundAmount.setScale(2, RoundingMode.FLOOR).toString());
             try {
                 service = new PayPalAPIInterfaceServiceService(this.getClass()
                         .getResourceAsStream("/paypal/sdk_config.properties"));
@@ -697,8 +793,14 @@ public class PaymentLogic extends BaseLogic {
         reservation = reservationDAO.getById(Integer.parseInt(reservationId));
         payment = new PaymentBean();
         payment.setReservation(reservation);
-        // Payment method = PAYPAL
-        payment.setPaymentMethod(paymentMethodDAO.getById(paymentMethodId));
+        // Payment method
+        if (paymentMethodId == 0 && PaymentType.REFUND.equals(paymentType)) {
+            // try to get payment method from payment
+            payment.setPaymentMethod(reservation.getPayments().get(0)
+                    .getPaymentMethod());
+        } else {
+            payment.setPaymentMethod(paymentMethodDAO.getById(paymentMethodId));
+        }
         try {
             converter = CurrencyConverter.getInstance(
                     Currency.getInstance("USD"), Currency.getInstance("VND"));
@@ -802,6 +904,37 @@ public class PaymentLogic extends BaseLogic {
             RoundingMode roundingMode) {
         return number.divide(BigDecimal.valueOf(500), 0, roundingMode)
                 .multiply(BigDecimal.valueOf(500));
+    }
+
+    private Double roundingVND(final Double number, RoundingMode roundingMode) {
+        if (number == null) {
+            return null;
+        } else if (roundingMode == null
+                || RoundingMode.CEILING.equals(roundingMode)) {
+            return Math.ceil(number / 500) * 500;
+        } else if (RoundingMode.FLOOR.equals(roundingMode)) {
+            return Math.floor(number / 500) * 500;
+        } else if (RoundingMode.DOWN.equals(roundingMode)) {
+            if (number > 0) {
+                return Math.floor(number / 500) * 500;
+            } else {
+                return Math.ceil(number / 500) * 500;
+            }
+        } else if (RoundingMode.UP.equals(roundingMode)) {
+            if (number > 0) {
+                return Math.ceil(number / 500) * 500;
+            } else {
+                return Math.floor(number / 500) * 500;
+            }
+        } else if (RoundingMode.UNNECESSARY.equals(roundingMode)) {
+            return number;
+        } else if (RoundingMode.HALF_UP.equals(roundingMode)) {
+            return (double) Math.round(number / 500) * 500;
+        } else if (RoundingMode.HALF_DOWN.equals(roundingMode)) {
+            return (double) Math.ceil(number / 500 - 0.5) * 500;
+        } else {
+            throw new UnsupportedOperationException();
+        }
     }
 
     // private BigDecimal calculateTicketPrice(final List<TariffBean> fares) {

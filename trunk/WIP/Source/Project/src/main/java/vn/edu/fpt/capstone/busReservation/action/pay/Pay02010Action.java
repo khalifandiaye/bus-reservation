@@ -10,7 +10,6 @@ import org.hibernate.HibernateException;
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
-import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.logic.ReservationLogic;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
 
@@ -27,16 +26,7 @@ public class Pay02010Action extends BaseAction {
 	private static final long serialVersionUID = 5713118155580163291L;
 
     // ==========================Logic Object==========================
-    private PaymentLogic paymentLogic;
     private ReservationLogic reservationLogic;
-
-    /**
-     * @param paymentLogic
-     *            the paymentLogic to set
-     */
-    public void setPaymentLogic(PaymentLogic paymentLogic) {
-        this.paymentLogic = paymentLogic;
-    }
 
     /**
      * @param reservationLogic
@@ -76,7 +66,7 @@ public class Pay02010Action extends BaseAction {
 	public String execute() {
         try {
             reservationInfo = reservationLogic
-                    .loadReservationInfoByCode(reservationCode);
+                    .loadReservationInfoByCode(reservationCode, true);
         } catch (HibernateException e) {
             // TODO error processing
             genericDatabaseErrorProcess(e);

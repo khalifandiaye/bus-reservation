@@ -100,6 +100,9 @@ public class Pay01010Action extends BaseAction {
         return reservationId;
     }
 
+    /* (non-Javadoc)
+     * @see com.opensymphony.xwork2.ActionSupport#execute()
+     */
     public String execute() {
         String reservationId = null;
         reservationId = (String) session.get("reservationId");
@@ -112,7 +115,7 @@ public class Pay01010Action extends BaseAction {
                 reservationId);
         try {
             reservationInfo = reservationLogic
-                    .loadReservationInfo(reservationId);
+                    .loadReservationInfo(reservationId, true);
             paymentLogic.updateReservationPaymentInfo(
                     reservationInfo, paymentMethods.get(0).getId());
         } catch (HibernateException e) {

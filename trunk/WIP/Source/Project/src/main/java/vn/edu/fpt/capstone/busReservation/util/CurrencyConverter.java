@@ -217,6 +217,22 @@ public class CurrencyConverter {
      *            the amount to convert
      * @return the converted amount
      */
+    public Double convert(Double amount) {
+        return amount != null ? BigDecimal.valueOf(amount)
+                .multiply(conversionRate).doubleValue() : null;
+    }
+
+    /**
+     * Convert the specified amount from <tt>fromCurrency</tt> to
+     * <tt>toCurrency</tt>
+     * <p>
+     * Please note that calling this method will not check if this converter has
+     * expired or not.
+     * 
+     * @param amount
+     *            the amount to convert
+     * @return the converted amount
+     */
     public BigDecimal convert(BigDecimal amount) {
         return amount != null ? amount.multiply(conversionRate) : null;
     }
