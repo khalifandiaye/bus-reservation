@@ -11,7 +11,7 @@
 <title>Đặt Vé</title>
 <jsp:include page="../common/xheader.jsp" />
 <link href="<%=request.getContextPath()%>/styles/booking.css" rel="stylesheet">
-<script src="<%=request.getContextPath()%>/js/booking.js" ></script>
+<script src="<%=request.getContextPath()%>/js/booking/booking.js" ></script>
 </head>
 	<body>
 	<jsp:include page="../common/header.jsp" />

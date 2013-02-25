@@ -12,8 +12,9 @@
 <jsp:include page="../common/xheader.jsp" />
 <link href="<%=request.getContextPath()%>/styles/booking.css" rel="stylesheet">
 <script src="<%=request.getContextPath()%>/js/jquery.validate.min.js" ></script>
-<script src="<%=request.getContextPath()%>/js/booking-validation.js" ></script> 
+<script src="<%=request.getContextPath()%>/js/booking/booking-validation.js" ></script> 
 <script src="<%=request.getContextPath()%>/js/pay/pay01010.js" ></script>
+<script src="<%=request.getContextPath()%>/js/booking/booking-info.js" ></script>
 </head>
 	<body>
 	<jsp:include page="../common/header.jsp" />
@@ -82,15 +83,19 @@
 						      <s:select list="paymentMethods" listKey="id" listValue="name" name="paymentMethodId" id="selectPaymentMethod"/>
 					    	</div>
 					  	</div>
-					  	
 					  	<div class="control-group">
 						    <label class="control-label">Số ghế chọn</label>
-						    <div class="controls">
+						    <div class="controls listSeats">
 						     	<s:iterator value="listSeats">
-						     		<s:div><s:property value="name" /></s:div>
+						     		<s:div cssClass="seatChecked">
+						     			<s:property value="name"/>
+					     			</s:div>
 						     	</s:iterator>						     	
 					    	</div>
 					  	</div>
+					  	
+					  	<s:hidden id="selectedSeat" name="selectedSeat"></s:hidden>
+					  	
 					  	<button class="btn btn-large" ><s:text name="pay" /></button>
 				</fieldset>
 			</form>

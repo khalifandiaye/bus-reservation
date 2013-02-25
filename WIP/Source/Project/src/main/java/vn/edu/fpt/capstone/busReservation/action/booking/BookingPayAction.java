@@ -67,7 +67,15 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 	private String inputMobile;
 	private String inputEmail;
 	private UserDAO userDAO = null;
+	private String selectedSeat;
 	
+	/**
+	 * @param selectedSeats the selectedSeats to set
+	 */
+	public void setSelectedSeat(String selectedSeat) {
+		this.selectedSeat = selectedSeat;
+	}
+
 	/**
 	 * @param userDAO the userDAO to set
 	 */
@@ -125,7 +133,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 		session.put("User_tmp", tmp_user);
 		
 		//Check double seat
-		String[] tmp = ((String)session.get("selectedSeats")).split(";");
+		String[] tmp = selectedSeat.split(";");
 		List<String> listSelectedSeat = new ArrayList<String>();  
 		for (String string : tmp) {
 			listSelectedSeat.add(string);
@@ -181,7 +189,6 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 	        session.put(CommonConstant.SESSION_KEY_PAYMENT_TOKEN, paymentToken);
             session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
             session.remove("listTripBean");
-            session.remove("selectedSeats");
             session.remove("User_tmp");
 			
 			return SUCCESS;
