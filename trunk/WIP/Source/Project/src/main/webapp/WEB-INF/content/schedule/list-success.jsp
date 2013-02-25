@@ -14,6 +14,11 @@
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript">
+	function loadDetails(id) {
+	    var url = $('#contextPath').val() + "/trip/list.html?id=" + id;
+	    window.location = url;
+	 };
+	 
 	$(document).ready(
 			function() {
 				var oTable;
@@ -61,12 +66,7 @@
 		    					$("#tripDialogArrivalTime").val(data.arrivalTime);
 		    				});
 					}
-				}
-				
-				$('input.btn-warning').bind('click', function(){
-					var url = $('#contextPath').val() + "/trip/list.html?id=" + $(this).data('view-details');
-					window.location = url;
-				});
+				};
 				
 				$('#addNewSchedule').bind('click', function(event) {
 					var form = $('#addNewTripForm');
@@ -116,7 +116,8 @@
 							<td><s:property value="endStation.city.name"/></td>
 							<td style="width: 6%">
 								<input data-view-details="<s:property value='id'/>"
-								class="btn btn-primary" type="button" value="View Details" /></td>
+								class="btn btn-primary" type="button" value="View Details" 
+								onclick='javascript: loadDetails(<s:property value='id'/>)'/></td>
 							<td><input data-delete="<s:property value='id'/>"
 								class="btn btn-danger" type="button" value="Delete" /></td>
 						</tr>
