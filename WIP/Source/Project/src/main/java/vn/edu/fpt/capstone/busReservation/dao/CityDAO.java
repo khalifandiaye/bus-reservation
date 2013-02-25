@@ -16,7 +16,8 @@ public class CityDAO extends GenericDAO<Integer, CityBean>{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public List<CityBean> getAllCity(){
+	@SuppressWarnings("unchecked")
+    public List<CityBean> getAllCity(){
 		List<CityBean> result = null;
 		Query query = null;
 		String queryString = null;

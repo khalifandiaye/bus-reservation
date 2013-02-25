@@ -16,7 +16,8 @@ public class BusTypeDAO extends GenericDAO<Integer, BusTypeBean>{
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<BusTypeBean> getAllBusType(){
+	@SuppressWarnings("unchecked")
+    public List<BusTypeBean> getAllBusType(){
 		List<BusTypeBean> result = null;
 		Query query = null;
 		String queryString = null;

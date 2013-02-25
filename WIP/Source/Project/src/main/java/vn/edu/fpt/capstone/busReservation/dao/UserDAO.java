@@ -14,7 +14,8 @@ public class UserDAO extends GenericDAO<Integer, UserBean> {
 		super(clazz);
 	}
 	
-	public boolean isExist(String username){
+	@SuppressWarnings("unchecked")
+    public boolean isExist(String username){
 		List<UserBean> result = null;
 		Query query = null;
 		String queryString = null;
@@ -39,7 +40,8 @@ public class UserDAO extends GenericDAO<Integer, UserBean> {
 		return false;
 	}
 	
-	public boolean isEmailExist(String email){
+	@SuppressWarnings("unchecked")
+    public boolean isEmailExist(String email){
 		List<UserBean> result = null;
 		Query query = null;
 		String queryString = null;

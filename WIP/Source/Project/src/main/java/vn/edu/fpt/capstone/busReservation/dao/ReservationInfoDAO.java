@@ -75,6 +75,29 @@ public class ReservationInfoDAO extends
     }
 
     @SuppressWarnings("unchecked")
+    public List<ReservationInfoBean> getByUsername(String username, int start, int range) {
+        List<ReservationInfoBean> result = null;
+        Query query = null;
+        String queryString = null;
+        Session session = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            queryString = "SELECT rif FROM ReservationInfoBean AS rif WHERE rif.id.booker.username = :username";
+            query = session.createQuery(queryString);
+            query.setFirstResult(start);
+            query.setMaxResults(range);
+            query.setString("username", username);
+            result = query.list();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+        // return result, if needed
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
     public ReservationInfoBean getByCode(String code) {
         List<ReservationInfoBean> result = null;
         Session session = null;

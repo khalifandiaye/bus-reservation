@@ -55,25 +55,25 @@
 						<div class="control-group">
 						    <label class="control-label" for="inputFirstName">Tên</label>
 						    <div class="controls">
-						      <input type="text" id="inputFirstName" name="inputFirstName" placeholder="Tên">
+						      <s:textfield type="text" id="inputFirstName" name="inputFirstName" placeholder="Tên" />
 					    	</div>
 					  	</div>
 					  	<div class="control-group">
 						    <label class="control-label" for="inputLastName">Họ</label>
 						    <div class="controls">
-						      <input type="text" id="inputLastName" name="inputLastName" placeholder="Họ">
+						      <input type="text" id="inputLastName" name="inputLastName" placeholder="Họ"/>
 					    	</div>
 					  	</div>
 					  	<div class="control-group">
 						    <label class="control-label" for="inputMobile">Điện Thoại Di Động</label>
 						    <div class="controls">
-						      <input type="text" id="inputMobile" name="inputMobile" placeholder="Điện Thoại Di Động">
+						      <input type="text" id="inputMobile" name="inputMobile" placeholder="Điện Thoại Di Động"/>
 					    	</div>
 					  	</div>
 					  	<div class="control-group">
 						    <label class="control-label" for="inputEmail">Email</label>
 						    <div class="controls">
-						      <input type="text" id="inputEmail" name="inputEmail" placeholder="Email">
+						      <input type="text" id="inputEmail" name="inputEmail" placeholder="Email" />
 					    	</div>
 					  	</div>
 					  	<div class="control-group">

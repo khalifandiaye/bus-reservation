@@ -3,48 +3,85 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 
+import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.testUtil.DAOTest;
+import vn.edu.fpt.capstone.busReservation.util.DateUtils;
 
 /**
  * @author Yoshimi
- *
+ * 
  */
 public class TripDAOTest extends DAOTest {
 
+//    @Test
+//    public void testUpdate001() {
+//        TripDAO tripDAO = (TripDAO) getBean("tripDAO");
+//        List<TripBean> trips = null;
+//        BusStatusDAO busStatusDAO = (BusStatusDAO) getBean("busStatusDAO");
+//        List<BusStatusBean> busStatusList = busStatusDAO.getAll();
+//        List<Date> dates = null;
+//        Iterator<Date> iterator = null;
+//        for (BusStatusBean busStatus : busStatusList) {
+//            trips = busStatus.getTrips();
+//            dates = new ArrayList<Date>();
+//            for (TripBean trip : trips) {
+//                dates.add(trip.getDepartureTime());
+//                dates.add(trip.getArrivalTime());
+//            }
+//            Collections.sort(dates);
+//            Collections.sort(trips, new Comparator<TripBean>() {
+//
+//                @Override
+//                public int compare(TripBean o1, TripBean o2) {
+//                    // TODO Auto-generated method stub
+//                    return o1.getRouteDetails().getId().compareTo(o2.getRouteDetails().getId());
+//                }
+//            });
+//            iterator = dates.iterator();
+//            for (TripBean trip : trips) {
+//                trip.setDepartureTime(iterator.next());
+//                trip.setArrivalTime(iterator.next());
+//            }
+//            tripDAO.update(trips);
+//        }
+//    }
+
     @Test
-    public void testUpdate001() {
+    public void testUpdate002() {
         TripDAO tripDAO = (TripDAO) getBean("tripDAO");
-        List<TripBean> beans = tripDAO.getAll();
-        BusStatusDAO busStatusDAO = (BusStatusDAO) getBean("busStatusDAO");
-        List<BusStatusBean> beans2 = busStatusDAO.getAll();
-        Assert.assertNotNull(beans);
-        Assert.assertNotEquals(0, beans.size());
-        Assert.assertNotNull(beans.get(0));
-        Calendar bookTime = Calendar.getInstance();
-        long shiftMilisecs = 0;
-        bookTime.setTimeInMillis(0);
-        bookTime.add(Calendar.DATE, 12);
-        shiftMilisecs = -bookTime.getTimeInMillis();
-        for (TripBean tripBean : beans) {
-                tripBean.setDepartureTime(new Date(tripBean.getDepartureTime().getTime() + shiftMilisecs));
-                tripBean.setArrivalTime(new Date(tripBean.getArrivalTime().getTime() + shiftMilisecs));
+        List<TripBean> trips = tripDAO.getAll();
+        Calendar calendar = Calendar.getInstance();
+        long travelTime = 0;
+        BusStatusBean lastBusStatus = null;
+        calendar.add(Calendar.DATE, 12);
+        for (TripBean tripBean : trips) {
+            if (lastBusStatus != null || !tripBean.getBusStatus().equals(lastBusStatus)) {
+                lastBusStatus = tripBean.getBusStatus();
+              // forward time
+              calendar.add(Calendar.HOUR, 48);
+            }
+            tripBean.setDepartureTime(calendar.getTime());
+            travelTime = DateUtils.getAbsoluteMiliseconds(tripBean.getRouteDetails().getSegment().getTravelTime());
+            calendar.setTimeInMillis(calendar.getTimeInMillis() + travelTime);
+            tripBean.setArrivalTime(calendar.getTime());
         }
-        for (BusStatusBean busStatusBean : beans2) {
-            busStatusBean.setFromDate(new Date(busStatusBean.getFromDate().getTime() + shiftMilisecs));
-            busStatusBean.setToDate(new Date(busStatusBean.getToDate().getTime() + shiftMilisecs));
+        tripDAO.update(trips);
     }
-        tripDAO.update(beans);
-        busStatusDAO.update(beans2);
-    }
+
 //    @Test
 //    public void testInsert001() {
 //        TripDAO tripDAO = (TripDAO) getBean("tripDAO");
@@ -69,17 +106,22 @@ public class TripDAOTest extends DAOTest {
 //                tripBean = new TripBean();
 //                tripBean.setRouteDetails(routeDetails);
 //                tripBean.setStatus("active");
-//                tripBean.setDepartureTime(new Date(calendar.getTime().getTime() + travelTimeTotal));
-//                travelTimeTotal += routeDetails.getSegment().getTravelTime().getTime();
-//                tripBean.setArrivalTime(new Date(calendar.getTime().getTime()  + travelTimeTotal));
+//                tripBean.setDepartureTime(new Date(calendar.getTime().getTime()
+//                        + travelTimeTotal));
+//                travelTimeTotal += routeDetails.getSegment().getTravelTime()
+//                        .getTime();
+//                tripBean.setArrivalTime(new Date(calendar.getTime().getTime()
+//                        + travelTimeTotal));
 //                tripBean.setBusStatus(busStatusBean);
 //                tripBeans.add(tripBean);
 //            }
 //            busStatusBean.setBus(bus);
 //            busStatusBean.setBusStatus("ontrip");
 //            busStatusBean.setFromDate(tripBeans.get(0).getDepartureTime());
-//            busStatusBean.setToDate(tripBeans.get(tripBeans.size() - 1).getArrivalTime());
-//            busStatusBean.setEndStation(tripBeans.get(tripBeans.size() - 1).getRouteDetails().getSegment().getEndAt());
+//            busStatusBean.setToDate(tripBeans.get(tripBeans.size() - 1)
+//                    .getArrivalTime());
+//            busStatusBean.setEndStation(tripBeans.get(tripBeans.size() - 1)
+//                    .getRouteDetails().getSegment().getEndAt());
 //            busStatusBean.setStatus("active");
 //            busStatusDAO.insert(busStatusBean);
 //            tripDAO.insert(tripBeans);
@@ -93,17 +135,22 @@ public class TripDAOTest extends DAOTest {
 //                tripBean = new TripBean();
 //                tripBean.setRouteDetails(routeDetails);
 //                tripBean.setStatus("active");
-//                tripBean.setDepartureTime(new Date(calendar.getTime().getTime() + travelTimeTotal));
-//                travelTimeTotal += routeDetails.getSegment().getTravelTime().getTime();
-//                tripBean.setArrivalTime(new Date(calendar.getTime().getTime()  + travelTimeTotal));
+//                tripBean.setDepartureTime(new Date(calendar.getTime().getTime()
+//                        + travelTimeTotal));
+//                travelTimeTotal += routeDetails.getSegment().getTravelTime()
+//                        .getTime();
+//                tripBean.setArrivalTime(new Date(calendar.getTime().getTime()
+//                        + travelTimeTotal));
 //                tripBean.setBusStatus(busStatusBean);
 //                tripBeans.add(tripBean);
 //            }
 //            busStatusBean.setBus(bus);
 //            busStatusBean.setBusStatus("ontrip");
 //            busStatusBean.setFromDate(tripBeans.get(0).getDepartureTime());
-//            busStatusBean.setToDate(tripBeans.get(tripBeans.size() - 1).getArrivalTime());
-//            busStatusBean.setEndStation(tripBeans.get(tripBeans.size() - 1).getRouteDetails().getSegment().getEndAt());
+//            busStatusBean.setToDate(tripBeans.get(tripBeans.size() - 1)
+//                    .getArrivalTime());
+//            busStatusBean.setEndStation(tripBeans.get(tripBeans.size() - 1)
+//                    .getRouteDetails().getSegment().getEndAt());
 //            busStatusBean.setStatus("active");
 //            busStatusDAO.insert(busStatusBean);
 //            tripDAO.insert(tripBeans);

@@ -23,6 +23,10 @@ public interface CommonConstant {
     /**
      * <b>Class<b> {@link java.lang.String}
      */
+    public final static String SESSION_KEY_PAYMENT_METHOD_ID = "paymentMethodId";
+    /**
+     * <b>Class<b> {@link java.lang.String}
+     */
     public final static String SESSION_KEY_RESERVATION_ID = "reservationId";
     /**
      * <b>Class<b> {@link java.lang.String}
