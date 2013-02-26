@@ -3,19 +3,13 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.user;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.xml.ws.Action;
 
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.convention.annotation.Actions;
 
 import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
-import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
 
 import com.opensymphony.xwork2.ActionSupport;
 
