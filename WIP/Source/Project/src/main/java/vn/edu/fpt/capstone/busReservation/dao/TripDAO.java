@@ -90,7 +90,7 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 		Session session = sessionFactory.getCurrentSession();
 		//String strQuery = "CALL search_trips(:deptCity, :arrvCity, :deptDate, :pssgrNo, :busType);";
 		try {
-			startTransaction();
+			//startTransaction();
 			 Query query = session.getNamedQuery("callSearchTripsProcedure")
 			 .setInteger("deptCity", deptCity)
 			 .setInteger("arrvCity", arrvCity)
@@ -108,7 +108,7 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 			for(int i=0; i<result.size(); i++){
 				returnVal.add((SearchResultInfo)result.get(i));
 			}*/
-			endTransaction();
+			//endTransaction();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
 		}
