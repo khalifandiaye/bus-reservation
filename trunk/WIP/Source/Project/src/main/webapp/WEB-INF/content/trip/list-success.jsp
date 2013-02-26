@@ -38,6 +38,11 @@
 							$('#deleteTripDialog').modal();
 							selectedTripId = tripId;
 						});
+				
+				$('input.btn-primary').bind('click', function(){
+					var url = $('#contextPath').val() + "/schedule/list.html";
+					window.location = url;
+				});
 			});
 </script>
 </head>
@@ -66,12 +71,14 @@
 								<td><s:property value="departureTime" /></td>
 								<td><s:property value="arrivalTime" /></td>
 								<td style="width: 6%"><input
-									data-edit="<s:property value='id'/>" class="btn btn-warning"
+									data-edit="<s:property value='id'/>" class="btn btn-primary"
 									type="button" value="Edit" /></td>
 							</tr>
 						</s:iterator>
 					</tbody>
 				</table>
+				</br>
+				<input class="btn btn-primary" type="button" value="Return to Schedule" />
 			</form>
 		</div>
 	</div>
