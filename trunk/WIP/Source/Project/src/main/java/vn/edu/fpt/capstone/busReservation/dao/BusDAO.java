@@ -44,10 +44,10 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 			int startStationId, int busTypeId) {
 		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id "
 				+ "FROM bus b LEFT JOIN (SELECT t1.* FROM bus_status t1 "
-				+ "JOIN (SELECT id, MAX(to_date) to_date FROM bus_status GROUP BY bus_id) t2 "
+				+ "JOIN (SELECT Max(id) id, MAX(to_date) to_date FROM bus_status WHERE status = 'active' GROUP BY bus_id ) t2 "
 				+ "ON t1.id = t2.id AND t1.to_date = t2.to_date) bs ON b.id = bs.bus_id "
 				+ "WHERE (b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId) "
-				+ "AND b.bus_type_id = :busTypeId "
+				+ "AND b.bus_type_id = :busTypeId AND b.status = 'active'" 
 				+ "GROUP BY b.id "
 				+ "HAVING bs.to_date < :departureTime AND bs.end_station_id = :startStationId";
 
