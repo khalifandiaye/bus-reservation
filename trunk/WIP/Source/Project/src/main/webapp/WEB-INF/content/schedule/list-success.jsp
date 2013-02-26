@@ -82,6 +82,11 @@
 					      }
 					});
 				});
+				
+				$('#saveSuccessDialogOk').bind('click', function(){
+					var url = $('#contextPath').val() + "/schedule/list.html";
+					window.location = url;
+				});
 			});
 </script>
 </head>
@@ -94,7 +99,7 @@
 				<input id="BusStatusInsertBtn" type="button" class="btn btn-success"
 					value="Add New Schedule" />
 			</div>
-			<table id="scheduleTable">
+			<table id="scheduleTable" align="center">
 				<thead>
 					<tr>
 						<th>Bus Number</th>
@@ -189,7 +194,7 @@
 		</div>
 	</div>
 
-	<!-- Modal Delete Dialog -->
+	<!-- Modal Save success Dialog -->
    <div id="saveSuccess" class="modal hide fade" tabindex="-1" role="dialog" 
       aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-header">
@@ -201,7 +206,7 @@
          <p id="saveSuccessDialogLabeMessage"></p>
       </div>
       <div class="modal-footer">
-         <button class="btn" data-dismiss="modal" aria-hidden="true">Ok</button>
+         <button class="btn" id="saveSuccessDialogOk" data-dismiss="modal" aria-hidden="true">Ok</button>
       </div>
    </div>
 	<jsp:include page="../common/footer.jsp" />
