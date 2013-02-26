@@ -1,9 +1,6 @@
 package vn.edu.fpt.capstone.busReservation.action.schedule;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -50,7 +47,7 @@ public class SaveAction extends ActionSupport{
 		this.stationDAO = stationDAO;
 	}
 
-	@Action(value = "/save", results = { @Result(type = "json", name = SUCCESS, params = {
+	@Action(value = "save", results = { @Result(type = "json", name = SUCCESS, params = {
             "root", "message" }) })
 	public String execute() {
 		try {
