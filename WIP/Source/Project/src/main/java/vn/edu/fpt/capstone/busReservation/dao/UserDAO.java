@@ -67,7 +67,8 @@ public class UserDAO extends GenericDAO<Integer, UserBean> {
 	}
 
 	
-	public UserBean checkLogin(String username ,String password){
+	@SuppressWarnings("unchecked")
+    public UserBean checkLogin(String username ,String password){
 		List<UserBean> result = null;
 		Query query = null;
 		String queryString = null;

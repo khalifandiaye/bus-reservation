@@ -3,20 +3,12 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.testUtil.DAOTest;
 
 /**
@@ -37,7 +29,7 @@ public class ReservationDAOTest extends DAOTest {
     @Test
     public void testGetById001() {
         ReservationDAO reservationDAO = (ReservationDAO) getBean("reservationDAO");
-        ReservationBean bean = reservationDAO.getById(1);
+        ReservationBean bean = reservationDAO.getById(130);
         Assert.assertNotNull(bean);
         Assert.assertNotEquals(0, bean.getSeatPositions().size());
     }

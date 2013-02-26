@@ -23,9 +23,9 @@ public class TariffViewDAOTest extends DAOTest {
     public void testGetTicketPrice001() {
         TripDAO tripDAO = (TripDAO) getBean("tripDAO");
         List<TripBean> trips = new ArrayList<TripBean>();
-        trips.add(tripDAO.getById(3));
-        trips.add(tripDAO.getById(4));
-        trips.add(tripDAO.getById(5));
+        trips.add(tripDAO.getById(7));
+        trips.add(tripDAO.getById(8));
+        trips.add(tripDAO.getById(9));
         TariffViewDAO tariffViewDAO = (TariffViewDAO) getBean("tariffViewDAO");
         Double ticketPrice = tariffViewDAO.getTicketPrice(trips, new Date());
         assertNotNull(ticketPrice);

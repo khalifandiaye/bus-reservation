@@ -152,7 +152,7 @@
 		<property name="departureTime" column="departure_time" type="timestamp" not-null="true" />
 		<property name="arrivalTime" column="arrival_time" type="timestamp" not-null="true" />
 		<property name="status" type="string" not-null="true" />
-		<bag name="reservations" table="trip_in_reservation" inverse="true" order-by="id">
+		<bag name="reservations" table="trip_in_reservation" inverse="true" order-by="reservation_id">
 			<key column="trip_id" />
 			<many-to-many column="reservation_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean" />
 		</bag>
@@ -205,7 +205,7 @@
 			<key column="reservation_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" />
 		</bag>
-		<bag name="trips" table="trip_in_reservation" order-by="departureTime">
+		<bag name="trips" table="trip_in_reservation" order-by="trip_id">
 			<key column="reservation_id" />
 			<many-to-many column="trip_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
 		</bag>
