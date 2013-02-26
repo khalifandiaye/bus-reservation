@@ -13,7 +13,7 @@ public class ReservationInfoDAOTest extends DAOTest {
     @Test
     public void testGetById001() {
         ReservationInfoDAO reservationInfoDAO = (ReservationInfoDAO) getBean("reservationInfoDAO");
-        ReservationInfoBean bean = reservationInfoDAO.getById(1);
+        ReservationInfoBean bean = reservationInfoDAO.getById(130);
         Assert.assertNotNull(bean);
     }
     
@@ -21,7 +21,7 @@ public class ReservationInfoDAOTest extends DAOTest {
     public void testGetById002() {
         ReservationDAO reservationDAO = (ReservationDAO) getBean("reservationDAO");
         ReservationInfoDAO reservationInfoDAO = (ReservationInfoDAO) getBean("reservationInfoDAO");
-        ReservationInfoBean bean = reservationInfoDAO.getById(reservationDAO.getById(1));
+        ReservationInfoBean bean = reservationInfoDAO.getById(reservationDAO.getById(130));
         Assert.assertNotNull(bean);
     }
     

@@ -7,8 +7,12 @@
 	<packaging>war</packaging>
 	<repositories>
 		<repository>
+			<id>central</id>
+			<url>http://repo.maven.apache.org/maven2/</url>
+		</repository>
+		<repository>
 			<id>jboss</id>
-			<url>http://repository.jboss.org/maven2/</url>
+			<url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
 		</repository>
 	</repositories>
 
@@ -32,12 +36,18 @@
 			<groupId>org.apache.struts</groupId>
 			<artifactId>struts2-core</artifactId>
 			<version>2.1.8</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>tools</artifactId>
+					<groupId>com.sun</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.struts</groupId> -->
-<!-- 			<artifactId>struts2-sitemesh-plugin</artifactId> -->
-<!-- 			<version>2.1.8</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.struts</groupId> -->
+		<!-- <artifactId>struts2-sitemesh-plugin</artifactId> -->
+		<!-- <version>2.1.8</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.apache.struts</groupId>
 			<artifactId>struts2-spring-plugin</artifactId>
@@ -145,7 +155,9 @@
 		<finalName>bus-reservation</finalName>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
