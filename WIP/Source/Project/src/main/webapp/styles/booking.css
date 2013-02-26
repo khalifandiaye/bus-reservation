@@ -113,3 +113,13 @@
 		display:none
 	}
 }
+.seatChecked{
+	height: 35px;
+	overflow: hidden;
+}
+.seatCheckedName{
+	padding-top: 3px;
+	padding-left: 20px;
+	width: 50px;
+	float: left;
+}

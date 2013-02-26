@@ -46,6 +46,12 @@
 	    </div>
 	</section>
 	<!-- End small nav -->
+	<!-- Start notify message -->
+	<section>
+	<div class="my-container notify-message">
+	</div>
+	</section>
+	<!-- End notify message -->
 	<!-- Start information content -->
 	<section>
 		<div class="my-container">
@@ -85,10 +91,13 @@
 					  	</div>
 					  	<div class="control-group">
 						    <label class="control-label">Số ghế chọn</label>
-						    <div class="controls listSeats">
-						     	<s:iterator value="listSeats">
+						    <div class="controls listCheckedSeats">
+						     	<s:iterator value="listSeats"> 
 						     		<s:div cssClass="seatChecked">
-						     			<s:property value="name"/>
+						     			<span class="seatCheckedName">
+						     				<s:property value="name"/>
+					     				</span>
+					     				<button class="btn btn-mini btn-danger" type="button">Bỏ ghế</button>
 					     			</s:div>
 						     	</s:iterator>						     	
 					    	</div>
@@ -96,7 +105,7 @@
 					  	
 					  	<s:hidden id="selectedSeat" name="selectedSeat"></s:hidden>
 					  	
-					  	<button class="btn btn-large" ><s:text name="pay" /></button>
+					  	<button class="btn btn-large" type="submit"><s:text name="pay" /></button>
 				</fieldset>
 			</form>
 			<div style="width:50%;float:left;padding-top:80px;">
