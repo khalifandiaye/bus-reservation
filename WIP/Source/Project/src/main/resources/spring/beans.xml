@@ -155,6 +155,12 @@
 		<constructor-arg
 			value="vn.edu.fpt.capstone.busReservation.dao.bean.BusFreeTimeBean" />
 	</bean>
+	
+	<bean id="segmentDAO" class="vn.edu.fpt.capstone.busReservation.dao.SegmentDAO">
+      <property name="sessionFactory" ref="sessionFactory" />
+      <constructor-arg
+         value="vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean" />
+   </bean>
 
 	<!-- <bean id="tripWithNumberOfRemainedSeatsInSubrouteDAO" class="vn.edu.fpt.capstone.busReservation.dao.TripWithNumberOfRemainedSeatsInSubrouteDAO"> -->
 	<!-- <property name="sessionFactory" ref="sessionFactory" /> -->
