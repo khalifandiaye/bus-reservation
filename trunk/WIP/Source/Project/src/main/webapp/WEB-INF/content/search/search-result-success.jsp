@@ -18,8 +18,19 @@
 	rel="stylesheet">
 <script src="<%=request.getContextPath()%>/js/index.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/jquery.json-2.4.min.js"></script>
 <script
 	src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript">
+	function setValue(depart, arrive, fare, status){
+		var obj = { departureTime: depart,
+					arrivalTime: arrive,
+					busStatus: status,
+					fare: fare};
+		var myString = JSON.stringify(obj);
+		$("#tripData").val(myString);
+	}
+	</script>
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
@@ -66,7 +77,7 @@
 				<legend>Vui lòng chọn chuyến</legend>
 				<div id="page">
 					<div class="post">
-						<form action="choose-itinerary.html">
+						<form action="../booking/booking.html">
 							<div align="center">
 								<table border="0" cellspacing="0" cellpadding="0"
 									class="bookingPages">
@@ -115,9 +126,10 @@
 															<th id="outward_select" align="left"
 																class="bookingHeader">Chọn</th>
 														</tr>
-														<s:iterator value="searchResult" status="srStatus">
+														<s:iterator value="searchResult" status="srStatus" var="sr">
 															<s:if test="#srStatus.even == true">
 																<tr style="background: #CCCCCC">
+															</s:if>
 																	<td align="center"><s:date name="departureTime"
 																			format="dd-MM-yyyy" />&nbsp;<br> <s:date
 																			name="departureTime" format="HH:mm" /></td>
@@ -127,27 +139,12 @@
 																	<td><s:property value="departureStation" />&nbsp;</td>
 																	<td><s:property value="arrivalStation" />&nbsp;</td>
 																	<td></td>
-																	<td><s:property value="fare" />&nbsp;</td>
+																	<td><s:property value="fare" />&nbsp;</td> 
 																	<td align="center"><input title="Chọn chuyến này" type="radio"
-																		name="oj" id="out_journey1" value="${busStatusId},${departureTime},${arrivalTime}"></td>
+																		name="out_journey" id="out_journey" value="" /></td>
+															<s:if test="#srStatus.even == true">
 																</tr>
 															</s:if>
-															<s:else>
-																<tr>
-																	<td align="center"><s:date name="departureTime"
-																			format="dd-MM-yyyy" />&nbsp;<br> <s:date
-																			name="departureTime" format="HH:mm" /></td>
-																	<td align="center"><s:date name="arrivalTime"
-																			format="dd-MM-yyyy" />&nbsp;<br> <s:date
-																			name="arrivalTime" format="HH:mm" /></td>
-																	<td><s:property value="departureStation" />&nbsp;</td>
-																	<td><s:property value="arrivalStation" />&nbsp;</td>
-																	<td></td>
-																	<td><s:property value="fare" />&nbsp;</td>
-																	<td align="center"><input title="Chọn chuyến này" type="radio"
-																		name="oj" id="out_journey1" value="${busStatusId},${departureTime},${arrivalTime}"></td>
-																</tr>
-															</s:else>
 														</s:iterator>
 
 													</tbody>
@@ -167,106 +164,8 @@
 										</tr>
 									</tbody>
 								</table>            
+								<input type="hidden" id="passengerNo" value="${passengerNo}" name="passengerNo"/>
 							</div>
-							<%-- 	<table id="searchResultTbl">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Bus Number</th>
-							<th>Departure Time</th>
-							<th>Arrival Time</th>
-							<th>Status</th>
-							<th></th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<s:iterator value="tripBeans" status="tripBeansStatus">
-							<tr id="trip_<s:property value='id'/>">
-								<td><s:property value="routeDetails.route.name" /></td>
-								<td><s:property value="busStatus.bus.plateNumber" /></td>
-								<td><s:property value="departureTime" /></td>
-								<td><s:property value="arrivalTime" /></td>
-								<td><s:property value="status" /></td>
-								<td style="width: 6%"><input
-									data-edit="<s:property value='id'/>" class="btn btn-warning"
-									type="button" value="Edit" /></td>
-								<td><input data-delete="<s:property value='id'/>"
-									class="btn btn-danger" type="button" value="Delete" /></td>
-							</tr>
-						</s:iterator>
-					</tbody>
-				</table>
-			</form>
-		</div>
-	</div>
-
-	<!-- Modal -->
-	<div id="editTripDialog" class="modal hide fade" tabindex="-1"
-		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<form id="addNewTripForm" action="insert.html" method="POST">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true">×</button>
-				<h3 id="tripEditDialogLabel"></h3>
-			</div>
-			<div class="modal-body">
-				<div id="trip-route">
-					<label id="trip-route-label" for="routeSelect">Select Route</label>
-					<s:select id="tripDialogRoutes" headerKey="-1"
-						headerValue="--- Select Route ---" list="routeBeans"
-						name="routeBeans" listKey="id" listValue="name" />
-				</div>
-				<label for="tripDialogDepartureTimeDiv">Departure Time: </label>
-				<div id="tripDialogDepartureTimeDiv"
-					class="input-append date form_datetime" data-date="">
-					<input id="tripDialogDepartureTime" size="16" type="text" value=""
-						readonly name="tripDialogDepartureTime"> <span
-						class="add-on"><i class="icon-remove"></i></span> <span
-						class="add-on"><i class="icon-calendar"></i></span>
-				</div>
-				<label for="tripDialogArrivalTimeDiv">Arrival Time: </label>
-				<div id="tripDialogArrivalTimeDiv"
-					class="input-append date form_datetime" data-date="">
-					<input id="tripDialogArrivalTime" size="16" type="text" value=""
-						readonly> <span class="add-on"><i
-						class="icon-remove"></i></span> <span class="add-on"><i
-						class="icon-calendar"></i></span>
-				</div>
-				<label for="tripDialogBusType">Bus Type: </label>
-				<s:select id="tripDialogBusType" headerKey="-1"
-					headerValue="--- Select Bus Type ---" list="busTypeBeans"
-					name="busTypeBeans" listKey="id" listValue="name" />
-				<div id="trip-plate-number">
-					<label for="routeSelect">Bus Plate Number</label> <select
-						id='tripDialogBusPlate' name='tripDialogBusPlate'></select>
-				</div>
-				<div id="tripDialogStatus"></div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-				<button id="addNewTrip" class="btn btn-primary">Save
-					changes</button>
-			</div>
-		</form>
-	</div>
-
-	<!-- Modal Delete Dialog -->
-	<div id="deleteTripDialog" class="modal hide fade" tabindex="-1"
-		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal"
-				aria-hidden="true">×</button>
-			<h3 id="tripDeleteDialogLabel"></h3>
-		</div>
-		<div class="modal-body">
-			<p>Do you want to delete this trip?</p>
-		</div>
-		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-			<button id="tripDeleteDialogOk" class="btn btn-danger">Delete</button>
-		</div>
-	</div> --%>
 						</form>
 			</s:else>
 		</div>

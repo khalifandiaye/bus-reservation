@@ -7,7 +7,10 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo;
+
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 /**
  * @author Monkey
  *
@@ -91,7 +94,10 @@ public class SearchResultAction extends ActionSupport {
 		return arrCity;
 	}
 	public String execute() throws Exception {
-		searchResult = tripDAO.searchAvailableTrips(departureCity, arrivalCity, departureDate, passengerNo, busType);
+		SimpleDateFormat fromFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+		SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+		String deptDate = toFormat.format(fromFormat.parse(departureDate));
+		searchResult = tripDAO.searchAvailableTrips(departureCity, arrivalCity, deptDate, passengerNo, busType);
 		if(searchResult.size() == 0){
 			deptCity = "";
 			arrCity = "";
