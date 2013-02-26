@@ -55,8 +55,8 @@
 	<div class="container">
 		<div class="well span11">
 			<!-- Start contents -->
-			<s:set name="deptCity" value="dept" />
-			<s:set name="arrCity" value="arrv" />
+			<s:set name="deptCity" value="deptCity" />
+			<s:set name="arrCity" value="arrCity" />
 			<s:if test="%{#deptCity==''}">
 				<legend>Không tìm thấy chuyến</legend>
 				<div>Không có chuyến đi nào phù hợp với điều kiện của quý
