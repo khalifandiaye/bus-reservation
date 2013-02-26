@@ -114,4 +114,24 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 		}
 		return returnVal;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<TripBean> getBookingTrips(int busStatus, Date deptTime, Date arrTime){
+		String hql = "Select trip from TripBean trip " +
+				"where tripBean.busStatus.id = :busStatusId " +
+				"  and tripBean.departureTime >= deptTime " +
+				"  and tripBean.arrivalTime <= arrTime ";
+		Session session = sessionFactory.getCurrentSession();
+		List<TripBean> result = new ArrayList<TripBean>();
+		try {
+			Query query = session.createQuery(hql);
+			query.setInteger("busStatusId", busStatus)
+				 .setDate("deptTime", deptTime)
+				 .setDate("arrTime", arrTime);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
 }

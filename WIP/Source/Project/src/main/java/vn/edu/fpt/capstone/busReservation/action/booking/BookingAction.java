@@ -23,6 +23,7 @@ import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
+import vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SeatInfo;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
@@ -41,11 +42,22 @@ public class BookingAction extends BaseAction implements SessionAware {
 	 */
 	private static final long serialVersionUID = 5962554617409673584L;
 	
+	//=============================input parameter====================
+	private String tripData;
+	
 	private TripDAO tripDAO;
 	private SeatInfo[][] seatMap;
 	private String selectedSeat;
 	private SeatPositionDAO seatPositionDAO;
 	
+	
+	/**
+	 * @return the tripData
+	 */
+	public String getTripData() {
+		return tripData;
+	}
+
 	public void setSeatPositionDAO(SeatPositionDAO seatPositionDAO) {
 		this.seatPositionDAO = seatPositionDAO;
 	}
@@ -68,10 +80,10 @@ public class BookingAction extends BaseAction implements SessionAware {
 	private List<TripBean> getListTripBean(){
 		List<TripBean> listTripBean = new ArrayList<TripBean>();
 		if(session.get("listTripBean") == null){
-			TripBean tripTmp = new TripBean();
-			tripTmp = tripDAO.getById(7);
-			listTripBean.add(tripTmp);
-			session.put("listTripBean", listTripBean);
+/*			listTripBean = tripDAO.getBookingTrips(out_journey.getBusStatusId(), 
+					  							   out_journey.getDepartureTime(), 
+					  							   out_journey.getArrivalTime());
+			session.put("listTripBean", listTripBean);*/
 		}else{
 			//redirect from some where
 			listTripBean = (List<TripBean>)session.get("listTripBean");
