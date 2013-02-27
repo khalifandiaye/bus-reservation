@@ -23,10 +23,8 @@ import vn.edu.fpt.capstone.busReservation.displayModel.TariffInfo;
 @ParentPackage("jsonPackage")
 public class GetPriceAction extends BaseAction {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	
 	private String data;
 	private static ObjectMapper mapper = new ObjectMapper();
 	private List<TariffInfo> tariffInfos = new ArrayList<TariffInfo>();
@@ -34,8 +32,7 @@ public class GetPriceAction extends BaseAction {
 	private TariffDAO tariffDAO;
 
 	@Action(value = "getPrice", results = { @Result(type = "json", name = SUCCESS ) })
-	public String execute() throws JsonParseException, JsonMappingException,
-			IOException, ParseException {
+	public String execute() throws JsonParseException, JsonMappingException,IOException, ParseException {
 		SegmentAddInfo segmentAddInfos = mapper.readValue(data, new TypeReference<SegmentAddInfo>() {});
 		List<SegmentInfo> segmentInfos = segmentAddInfos.getSegments();
 		for (SegmentInfo segmentInfo : segmentInfos) {
@@ -43,9 +40,9 @@ public class GetPriceAction extends BaseAction {
 			if (!resultList.isEmpty()) {
 				TariffBean tariffBean = resultList.get(0);
 				TariffInfo tariffInfo = new TariffInfo(tariffBean.getSegment().getId(), 
-						tariffBean.getSegment().getStartAt().getCity().getName(),
-						tariffBean.getSegment().getEndAt().getCity().getName(),
-						tariffBean.getFare());
+					tariffBean.getSegment().getStartAt().getCity().getName(),
+					tariffBean.getSegment().getEndAt().getCity().getName(),
+					tariffBean.getFare());
 				tariffInfos.add(tariffInfo);
 			}
 		}

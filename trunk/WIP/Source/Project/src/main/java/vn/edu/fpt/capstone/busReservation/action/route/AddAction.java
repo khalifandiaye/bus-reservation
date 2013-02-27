@@ -1,7 +1,6 @@
 package vn.edu.fpt.capstone.busReservation.action.route;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
@@ -12,14 +11,12 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.CityBean;
 
 public class AddAction extends BaseAction {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6692510134065137743L;
-	
+
 	private List<CityBean> cityBeans = new ArrayList<CityBean>();
 	private List<BusTypeBean> busTypeBeans = new ArrayList<BusTypeBean>();
-	
+
+	//Declaration
 	private CityDAO cityDAO;
 	private BusTypeDAO busTypeDAO;
 
@@ -33,20 +30,8 @@ public class AddAction extends BaseAction {
 		return cityBeans;
 	}
 
-	public void setCityBeans(List<CityBean> cityBeans) {
-		this.cityBeans = cityBeans;
-	}
-
-	public CityDAO getCityDAO() {
-		return cityDAO;
-	}
-
 	public void setCityDAO(CityDAO cityDAO) {
 		this.cityDAO = cityDAO;
-	}
-
-	public BusTypeDAO getBusTypeDAO() {
-		return busTypeDAO;
 	}
 
 	public void setBusTypeDAO(BusTypeDAO busTypeDAO) {
@@ -56,9 +41,4 @@ public class AddAction extends BaseAction {
 	public List<BusTypeBean> getBusTypeBeans() {
 		return busTypeBeans;
 	}
-
-	public void setBusTypeBeans(List<BusTypeBean> busTypeBeans) {
-		this.busTypeBeans = busTypeBeans;
-	}
-
 }

@@ -1,7 +1,9 @@
 package vn.edu.fpt.capstone.busReservation.action.route;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,8 +32,6 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentAddInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentInfo;
-import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
-import vn.edu.fpt.capstone.busReservation.util.DateUtils;
 
 @ParentPackage("jsonPackage")
 public class SaveSegmentAction extends BaseAction {
@@ -40,9 +40,12 @@ public class SaveSegmentAction extends BaseAction {
 	 * 
 	 */
 	private static final long serialVersionUID = -6013335986990979597L;
+
 	private String data;
+
 	private static ObjectMapper mapper = new ObjectMapper();
 
+	// Declare dao object
 	private StationDAO stationDAO;
 	private SegmentDAO segmentDAO;
 	private RouteDAO routeDAO;
@@ -54,21 +57,24 @@ public class SaveSegmentAction extends BaseAction {
 		this.busTypeDAO = busTypeDAO;
 	}
 
-	private String message = "";
+	private String message = "Save Success!";
 
 	@Action(value = "saveSegment", results = { @Result(type = "json", name = SUCCESS, params = {
 			"root", "message" }) })
-	public String execute() throws JsonParseException, JsonMappingException,
-			IOException, ParseException {
-		SegmentAddInfo segmentAddInfos = mapper.readValue(data, new TypeReference<SegmentAddInfo>() {});
+	public String execute() throws JsonParseException, JsonMappingException,IOException, ParseException {
+		SegmentAddInfo segmentAddInfos = mapper.readValue(data,
+			new TypeReference<SegmentAddInfo>() {});
 		String routeName = "";
 		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
 		List<SegmentInfo> segmentInfos = segmentAddInfos.getSegments();
 		if (!segmentInfos.isEmpty()) {
 			for (int i = 0; i < segmentInfos.size(); i++) {
 				SegmentBean segmentBean = new SegmentBean();
-				Date travelTime = DateUtils.string2Date(segmentInfos.get(i).getDuration(), "hh:mm", CommonConstant.LOCALE_US,
-						CommonConstant.DEFAULT_TIME_ZONE);
+				
+				String stravelTime = segmentInfos.get(i).getDuration();
+				DateFormat sdf = new SimpleDateFormat("hh:mm");
+				Date travelTime = sdf.parse(stravelTime);
+
 				StationBean startStation = stationDAO.getById(segmentInfos.get(i).getStationStartAt());
 				StationBean endStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
 				if (i == 0) {
@@ -84,8 +90,7 @@ public class SaveSegmentAction extends BaseAction {
 				segmentBeans.add(segmentBean);
 
 				TariffBean tariffBean = new TariffBean();
-				BusTypeBean busTypeBean = busTypeDAO.getById(segmentAddInfos
-						.getBusType());
+				BusTypeBean busTypeBean = busTypeDAO.getById(segmentAddInfos.getBusType());
 				tariffBean.setBusType(busTypeBean);
 				tariffBean.setFare(segmentInfos.get(i).getPrice());
 				tariffBean.setSegment(segmentBean);
@@ -124,32 +129,12 @@ public class SaveSegmentAction extends BaseAction {
 		this.segmentDAO = segmentDAO;
 	}
 
-	public RouteDAO getRouteDAO() {
-		return routeDAO;
-	}
-
 	public void setRouteDAO(RouteDAO routeDAO) {
 		this.routeDAO = routeDAO;
 	}
 
-	public RouteDetailsDAO getRouteDetailsDAO() {
-		return routeDetailsDAO;
-	}
-
 	public void setRouteDetailsDAO(RouteDetailsDAO routeDetailsDAO) {
 		this.routeDetailsDAO = routeDetailsDAO;
-	}
-
-	public StationDAO getStationDAO() {
-		return stationDAO;
-	}
-
-	public SegmentDAO getSegmentDAO() {
-		return segmentDAO;
-	}
-
-	public TariffDAO getTariffDAO() {
-		return tariffDAO;
 	}
 
 	public void setTariffDAO(TariffDAO tariffDAO) {
@@ -158,9 +143,5 @@ public class SaveSegmentAction extends BaseAction {
 
 	public String getMessage() {
 		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 }

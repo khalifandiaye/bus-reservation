@@ -31,21 +31,12 @@ public class SaveAction extends ActionSupport{
 	private int routeBeans;
 	private String tripDialogDepartureTime;
 	private String message;
-	//private String tripDialogArrivalTime;
 	private int tripDialogBusPlate;
 	private BusDAO busDAO;
 	private RouteDAO routeDAO;
 	private TripDAO tripDAO;
 	private BusStatusDAO busStatusDAO;
 	private StationDAO stationDAO;
-	
-	public StationDAO getStationDAO() {
-		return stationDAO;
-	}
-
-	public void setStationDAO(StationDAO stationDAO) {
-		this.stationDAO = stationDAO;
-	}
 
 	@Action(value = "save", results = { @Result(type = "json", name = SUCCESS, params = {
             "root", "message" }) })
@@ -112,35 +103,17 @@ public class SaveAction extends ActionSupport{
 	public void setBusStatusDAO(BusStatusDAO busStatusDAO) {
 		this.busStatusDAO = busStatusDAO;
 	}
-
-	public int getRouteBeans() {
-		return routeBeans;
+	
+	public void setStationDAO(StationDAO stationDAO) {
+		this.stationDAO = stationDAO;
 	}
 
 	public void setRouteBeans(int routeBeans) {
 		this.routeBeans = routeBeans;
 	}
 
-	public String getTripDialogDepartureTime() {
-		return tripDialogDepartureTime;
-	}
-
 	public void setTripDialogDepartureTime(String tripDialogDepartureTime) {
 		this.tripDialogDepartureTime = tripDialogDepartureTime;
-	}
-
-	/* cannot get tripDialogArrivalTime: GUI issue
-	public String getTripDialogArrivalTime() {
-		return tripDialogArrivalTime;
-	}
-
-	public void setTripDialogArrivalTime(String tripDialogArrivalTime) {
-		this.tripDialogArrivalTime = tripDialogArrivalTime;
-	}
-	*/
-
-	public int getTripDialogBusPlate() {
-		return tripDialogBusPlate;
 	}
 
 	public void setTripDialogBusPlate(int tripDialogBusPlate) {
@@ -150,9 +123,4 @@ public class SaveAction extends ActionSupport{
 	public String getMessage() {
 		return message;
 	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
 }
