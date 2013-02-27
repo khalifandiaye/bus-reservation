@@ -20,7 +20,7 @@ function initSelectedSeat(){
 		console.log(arraySelectedSeat);
 		for(var i = 0; i < arraySelectedSeat.length ;i++){
 			if(arraySelectedSeat[i] != ""){
-				selectSeat(arraySelectedSeat[i]);
+				seatClicked($('.seat-img[data-seat="'+arraySelectedSeat[i]+'"]'));
 			}
 		}
 	}

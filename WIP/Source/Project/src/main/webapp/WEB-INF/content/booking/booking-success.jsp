@@ -82,17 +82,21 @@
 	                </div>
 	            </div>
 	            <div class="seat-description" style="overflow: hidden;padding-left:20px;"> 
-	            	<div style="width: 33%;float:left">
-	            		<img src="../images/seat-available.png" width="20%">
+	            	<div style="width: 25%;float:left">
+	            		<img src="../images/seat-available.png" width="25%">
 	            		<span>Ghế Trống</span>
 	            	</div>
-	            	<div style="width: 33%;float:left">
-	            		<img src="../images/seat-selected.png" width="20%">
+	            	<div style="width: 25%;float:left">
+	            		<img src="../images/seat-selected.png" width="25%">
 	            		<span>Ghế đang chọn</span>
 	            	</div> 
-	            	<div style="width: 33%;float:left">
-	            		<img src="../images/seat-sold.png" width="20%">
+	            	<div style="width: 25%;float:left">
+	            		<img src="../images/seat-sold.png" width="25%">
 	            		<span>Ghế đã được bán</span>    
+	            	</div>
+	            	<div style="width: 25%;float:left">
+	            		<img src="../images/seat-block.png" width="25%">
+	            		<span>Ghế Không được chọn</span>
 	            	</div>
 	            </div>
 	            <div class="booking-wrapper" style="padding-left: 10px; padding-top: 30px; overflow: hidden;">
