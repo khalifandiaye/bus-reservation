@@ -23,6 +23,7 @@ import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 public class AvailBusAction extends BaseAction {
 
 	private static final long serialVersionUID = -1900533216154623510L;
+	
 	private BusDAO busDAO;
 	private RouteDAO routeDAO;
 

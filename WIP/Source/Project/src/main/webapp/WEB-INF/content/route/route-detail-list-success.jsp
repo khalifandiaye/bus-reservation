@@ -18,19 +18,19 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		accounting.settings = {
-                currency: {
-                   symbol : " VNĐ",   // default currency symbol is '$'
-                   format: "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
-                   decimal : ",",  // decimal point separator
-                   thousand: ".",  // thousands separator
-                   precision : 0   // decimal places
-                },
-                number: {
-                   precision : 0,  // default precision on numbers is 0
-                   thousand: ",",
-                   decimal : "."
-                }
-             };
+				currency: {
+					symbol : " VNĐ",   // default currency symbol is '$'
+					format: "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
+					decimal : ",",  // decimal point separator
+					thousand: ".",  // thousands separator
+					precision : 0   // decimal places
+				},
+				number: {
+					precision : 0,  // default precision on numbers is 0
+					thousand: ",",
+					decimal : "."
+				}
+			};
 		
 		var segmentTable = $('#segmentTable').dataTable({
 			"bSort" : false
@@ -38,7 +38,7 @@
 		
 		var priceTable = $('#priceTable').dataTable({
 	      "bSort" : false
-	   });
+		});
 		
 		$('#viewPrice').click(function() {
 			$("#priceDialog").modal();
@@ -68,8 +68,8 @@
 
 	function getPrice(busType, segments) {
 		var info = {};
-      info['busType'] = busType;
-      info['segments'] = segments;
+      	info['busType'] = busType;
+      	info['segments'] = segments;
 		$.ajax({
 			type : "POST",
 			url : 'getPrice.html',
@@ -80,14 +80,15 @@
 			success : function(response) {
 				var data = response.tariffInfos;
 				for (var i = 0; i < data.length; i++) {
-					  element = data[i];
-					  $('#priceTable').dataTable().fnAddData([ element.startAt + ' - ' + element.endAt , accounting.formatMoney(element.fare) ]);
-				}
+					element = data[i];
+					$('#priceTable').dataTable().fnAddData([ element.startAt + ' - ' + element.endAt , accounting.formatMoney(element.fare) ]);
+				};
 			}
 		});
 	};
 	
 	var segments = [];
+	
 </script>
 <style type="text/css">
 .dataTables_filter {

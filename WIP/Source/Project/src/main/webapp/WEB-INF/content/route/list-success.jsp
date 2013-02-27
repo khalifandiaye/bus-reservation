@@ -13,23 +13,21 @@
 <script src="<%=request.getContextPath()%>/js/index.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
-function loadDetails(routeid) {
-    var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId=" + routeid;
-    window.location = url;
- };
+	function loadDetails(routeid) {
+    	var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId=" + routeid;
+    	window.location = url;
+ 	};
  
 	$(document).ready(
-			function() {
-				var oTable = $('#routeTable').dataTable({
-                    "bSort" : false
-                });
+		function() {
+			var oTable = $('#routeTable').dataTable({"bSort" : false});
 				
-				$('#addRoute').bind('click', function(event) {
-					var url = $('#contextPath').val() + "/route/add.html";
-		               window.location = url;
-				});
-				
+			$('#addRoute').bind('click', function(event) {
+				var url = $('#contextPath').val() + "/route/add.html";
+		        window.location = url;
 			});
+		});
+	
 </script>
 <style type="text/css">
 .dataTables_filter {

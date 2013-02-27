@@ -15,9 +15,6 @@ import vn.edu.fpt.capstone.busReservation.displayModel.StationInfo;
 @ParentPackage("jsonPackage")
 public class GetStationAction extends BaseAction {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5439903464802687338L;
 	
 	private List<StationBean> stationBeans = new ArrayList<StationBean>();
@@ -51,9 +48,5 @@ public class GetStationAction extends BaseAction {
 
 	public List<StationInfo> getStationInfos() {
 		return stationInfos;
-	}
-
-	public void setStationInfos(List<StationInfo> stationInfos) {
-		this.stationInfos = stationInfos;
 	}
 }

@@ -20,31 +20,32 @@
 	        format: "yyyy/mm/dd hh:ii",
 	        autoclose: true,
 	        todayBtn: true,
-	    }).on('changeDate', function(ev){
+	    }).on('changeDate', 
+	    	function(ev){
 	    		var routeId = $("#routeSelect").val();
 	    		var departDate = $("#departDate").val();
 	    		if (routeId != "" && departDate != "") {
 	    			var travelTime = $("option[value="+routeId+"]").data('traveltime');
 	    			// calculate arriveTime here
 	    			$.ajax({
-	    				  url: "updateTripTime.html?date=" + departDate,
-	    				}).done(function(data) {
-	    					// cleare bus selection
-	    					$('#busPlateSelect').empty();
+	    				url: "updateTripTime.html?date=" + departDate,
+	    			}).done(function(data) {
+	    				// cleare bus selection
+	    				$('#busPlateSelect').empty();
 	    					
-	    					// process over response data
-	    					// add new avaible bus plateNumber
-	    					$.each(data.busBeans, function() {
-	    						$('#busPlateSelect').append('<option value="'+this.id+'">'+this.plateNumber+'</option>');
+	    				// process over response data
+	    				// add new avaible bus plateNumber
+	    				$.each(data.busBeans, function() {
+	    					$('#busPlateSelect').append('<option value="'+this.id+'">'+this.plateNumber+'</option>');
 	    					});
-	    				});
-	        };
-	    });
+	    			});
+	        	};
+	    	});
 		
 		$("#arrivalDate").datetimepicker({
 	        format: "dd MM yyyy - hh:ii",
 	    });
-	 });
+	});
 </script>
 </head>
 <body>

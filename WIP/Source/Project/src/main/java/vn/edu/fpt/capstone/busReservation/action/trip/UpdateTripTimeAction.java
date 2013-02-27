@@ -28,19 +28,11 @@ public class UpdateTripTimeAction extends ActionSupport {
 	private List<BusBean> busBeans = new ArrayList<BusBean>();
 
 	public String execute() throws ParseException {
-//		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
 		HttpServletRequest request = ServletActionContext.getRequest();
 		String dateString = request.getParameter("date");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm");
 		Date date = sdf.parse(dateString);
 		List<Integer> busyBusIds = busDAO.getBusyBus(date);
-//		busBeans = busDAO.getAvailBus(date, );
-
-//		segmentBeans = routeDAO.getAllSegmentByRouteId(routeId);
-//		for (SegmentBean segmentBean : segmentBeans) {
-//			
-//		}
-//		System.out.println(segmentBeans.toString());
 		return SUCCESS;
 	}
 
