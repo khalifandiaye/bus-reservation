@@ -148,7 +148,6 @@ public class BookingInfoAction extends BaseAction {
             return ERROR;
         }
         session.put(ReservationInfo.class.getName(), reservationInfo);
-        session.remove("selectedSeats");
         return SUCCESS;
     }
 }
