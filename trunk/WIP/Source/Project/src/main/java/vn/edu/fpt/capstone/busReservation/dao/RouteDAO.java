@@ -1,9 +1,13 @@
 package vn.edu.fpt.capstone.busReservation.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 
 public class RouteDAO extends GenericDAO<Integer, RouteBean> {
@@ -28,6 +32,30 @@ public class RouteDAO extends GenericDAO<Integer, RouteBean> {
 			exceptionHandling(e, session);
 		}
 
+		return result;
+	}
+	
+	/**
+	 * Common database exception handling
+	 * 
+	 * @param e
+	 *            the occurred exception
+	 * @throws HibernateException
+	 *             the occurred exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<RouteBean> getAllActiveRoute() {
+		String hql = "SELECT r FROM RouteBean r WHERE r.status = :status";
+		Session session = sessionFactory.getCurrentSession();
+		List<RouteBean> result = new ArrayList<RouteBean>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setString("status", "active");
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
 		return result;
 	}
 }

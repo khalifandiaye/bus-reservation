@@ -20,6 +20,7 @@
 <script
 	src="<%=request.getContextPath()%>/js/route/jquery-ui-1.10.1.custom.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/accounting.min.js"></script>
 <script
 	src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript">
@@ -40,6 +41,21 @@
 	$(document)
 			.ready(
 					function() {
+						accounting.settings = {
+								   currency: {
+								      symbol : " VNĐ",   // default currency symbol is '$'
+								      format: "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
+								      decimal : ",",  // decimal point separator
+								      thousand: ".",  // thousands separator
+								      precision : 0   // decimal places
+								   },
+								   number: {
+								      precision : 0,  // default precision on numbers is 0
+								      thousand: ",",
+								      decimal : "."
+								   }
+								}
+						
 						oTable = $('#segmentTable').dataTable({
 							"bSort" : false
 						});
@@ -70,10 +86,27 @@
 									var stationEndAt = $("#stationEndAt option:selected").text();
 									var duration = $("#duration").val();
 									var price = $("#price").val();
+									
+									if (stationStartAt.trim() == '') {
+										return;
+									}
+									
+									if (stationEndAt.trim() == '') {
+			                              return;
+			                           }
+									
+									if (duration.trim() == '') {
+			                              return;
+			                           }
+									
+									if (price.trim() == '') {
+			                              return;
+			                           }
+									
 									$('#segmentTable').dataTable()
 											.fnAddData(
 													[ startAt + ' - ' + stationStartAt, endAt + ' - ' + stationEndAt, duration,
-															price ]);
+													  accounting.formatMoney(price) ]);
 									giCount++;
 
 									$("#startAt").val(endAtKey);
@@ -84,6 +117,7 @@
 											.hide();
 									$("#endAt").val(-1);
 
+									var segment = {};
 									segment['startAt'] = startAtKey;
 									segment['stationStartAt'] = stationStartAtKey;
 									segment['endAt'] = endAtKey;
@@ -93,21 +127,18 @@
 									segments.push(segment);
 								});
 
-						$("#save")
-								.bind(
+						$("#save").bind(
 										'click',
 										function() {
 											var busType = $("#busType").val();
 											info['busType'] = busType;
 											info['segments'] = segments;
-											$
-													.ajax({
+											$.ajax({
 														type : "POST",
 														url : 'saveSegment.html',
 														contentType : "application/x-www-form-urlencoded; charset=utf-8",
 														data : {
-															data : JSON
-																	.stringify(info)
+															data : JSON.stringify(info)
 														},
 														success : function(
 																response) {
@@ -118,7 +149,6 @@
 
 	var info = {};
 	var segments = [];
-	var segment = {};
 	var giCount = 0;
 </script>
 <style type="text/css">

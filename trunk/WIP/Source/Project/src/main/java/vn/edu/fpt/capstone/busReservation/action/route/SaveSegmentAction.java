@@ -60,17 +60,14 @@ public class SaveSegmentAction extends BaseAction {
 			"root", "message" }) })
 	public String execute() throws JsonParseException, JsonMappingException,
 			IOException, ParseException {
-		SegmentAddInfo segmentAddInfos = mapper.readValue(data,
-				new TypeReference<SegmentAddInfo>() {
-				});
+		SegmentAddInfo segmentAddInfos = mapper.readValue(data, new TypeReference<SegmentAddInfo>() {});
 		String routeName = "";
 		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
 		List<SegmentInfo> segmentInfos = segmentAddInfos.getSegments();
 		if (!segmentInfos.isEmpty()) {
 			for (int i = 0; i < segmentInfos.size(); i++) {
 				SegmentBean segmentBean = new SegmentBean();
-				Date travelTime = DateUtils.string2Date(segmentInfos.get(i)
-						.getDuration(), "hh:mm", CommonConstant.LOCALE_US,
+				Date travelTime = DateUtils.string2Date(segmentInfos.get(i).getDuration(), "hh:mm", CommonConstant.LOCALE_US,
 						CommonConstant.DEFAULT_TIME_ZONE);
 				StationBean startStation = stationDAO.getById(segmentInfos.get(i).getStationStartAt());
 				StationBean endStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
