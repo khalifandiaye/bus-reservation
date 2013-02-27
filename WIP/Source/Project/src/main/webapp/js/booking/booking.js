@@ -1,14 +1,12 @@
 
-var t_bus = {
-    "busSeat":[{
-        "SeatsToAllocate" : 5,
-        "SeatsNotAllocatedCount": 5
-    }]
-};
+var SeatsToAllocate = 5;
+var SeatsNotAllocatedCount = 5;
 
 var t_selectedSeat = [{
         "seats" : []
 }];
+
+var CAN_CHOOSE = true;
 
 var SEAT_EMPTY = 0,
     SEAT_SOLD = 1,
@@ -71,18 +69,35 @@ function addSeatToSelectedList(seatImage){
 
 }
 
+function blockSeat(){
+	var listSeatImg = $(".seat-img");
+	if(SeatsNotAllocatedCount < 1){
+		for ( var i = 0; i < listSeatImg.length; i++) {
+			if(listSeatImg.eq(i).data('status') == 0){
+				listSeatImg.eq(i).attr('src', listSeatImg.eq(i).attr('src').replace('seat-available', 'seat-block'));
+			}	
+		} 
+	}else{
+		for ( var i = 0; i < listSeatImg.length; i++) {
+			if(listSeatImg.eq(i).data('status') == 0){
+				listSeatImg.eq(i).attr('src', listSeatImg.eq(i).attr('src').replace('seat-block', 'seat-available'));
+			}
+		}
+	} 
+}
+
 function selectSeat(seatNumber) {
     var seatImage = getSeatImage(seatNumber);
-
-    if(t_bus.busSeat[0].SeatsNotAllocatedCount == 0){
+    
+    if(SeatsNotAllocatedCount == 0){
         return false;
     }
-    t_bus.busSeat[0].SeatsNotAllocatedCount -= 1; // Reduce the number of available seats
+    SeatsNotAllocatedCount -= 1; // Reduce the number of available seats
 
     seatImage.attr('data-status',SEAT_SELECTED);
 
     // Change to the reserved image
-    seatImage.attr('src', seatImage.attr('src').replace('bus-one-seat', 'bus-one-seat-selected'));
+    seatImage.attr('src', seatImage.attr('src').replace('seat-available', 'seat-selected'));
 
     addSeatToSelectedList(seatImage);
 }
@@ -100,10 +115,10 @@ function removeSeatFromSelectedList(seatImage){
 function deselectSeat(seatNumber){
     var seatImage = getSeatImage(seatNumber);
 
-    t_bus.busSeat[0].SeatsNotAllocatedCount += 1; // Increase the number of available seats for this area category
+    SeatsNotAllocatedCount += 1; // Increase the number of available seats for this area category
 
     seatImage.attr('data-status',SEAT_EMPTY);
-    seatImage.attr('src', seatImage.attr('src').replace('bus-one-seat-selected', 'bus-one-seat'));
+    seatImage.attr('src', seatImage.attr('src').replace('seat-selected', 'seat-available'));
     
 
     removeSeatFromSelectedList(seatNumber);
@@ -114,10 +129,13 @@ function seatClicked(seatImage){
 	
 	thisImage = getSeatImage(seatImage.data('seat'));
 	
+	
+	
     if (seatAvailable(thisImage)) {
        
         if(selectSeat(seatImage.data('seat')) == false){
-            return "Đặt quá số ghế quy định";
+//            return "Đặt quá số ghế quy định";
+        	return;
         }
         updateSeatNum();
     }
@@ -132,6 +150,10 @@ function seatClicked(seatImage){
         return "Ghế đã có người đặt";
 
     }
+    
+    //check seat and block
+    blockSeat(); 
+    
     return message;
 }
 
@@ -143,7 +165,7 @@ function showPopup(message){
 }
 
 function updateSeatNum(){
-    $(".seat-number").text(t_bus.busSeat[0].SeatsToAllocate - t_bus.busSeat[0].SeatsNotAllocatedCount);
+    $(".seat-number").text(SeatsToAllocate - SeatsNotAllocatedCount);
     $("#selectedSeat").val(getSelectedSeatString());
 }
 
