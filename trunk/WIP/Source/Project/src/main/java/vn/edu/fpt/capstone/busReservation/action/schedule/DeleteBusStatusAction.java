@@ -23,8 +23,7 @@ public class DeleteBusStatusAction extends ActionSupport {
 	private int numberOfReservations;
 	private int busStatusId;
 
-	@Action(value = "/deleteBusStatus", results = { @Result(type = "json", name = SUCCESS, params = {
-			"busStatusId" }) })
+	@Action(value = "/deleteBusStatus", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
 		// check of the bus_status has any reservation
 		List<ReservationBean> reservations = reservationDAO.getByBusStatusId(busStatusId);
