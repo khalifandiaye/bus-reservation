@@ -1,5 +1,6 @@
 package vn.edu.fpt.capstone.busReservation.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -40,5 +41,28 @@ public class ReservationDAO extends GenericDAO<Integer,ReservationBean> {
 			return result.get(0);
 		}
 	}
-
+//"SELECT distinct bs.trips.reservations FROM BusStatusBean AS BS WHERE bs.id = ?"
+	@SuppressWarnings("unchecked")
+	public List<ReservationBean> getByBusStatusId(int busStatusId) {
+		List<ReservationBean> result = new ArrayList<ReservationBean>();
+		Query query = null;
+		String queryString = null;
+		Session session = null;
+		// get the current session
+		session = sessionFactory.getCurrentSession();
+		try {
+			// perform database access (query, insert, update, etc) here
+			queryString = "SELECT distinct bs.trips.reservations FROM BusStatusBean AS bs WHERE bs.id = :busStatusId";
+			query = session.createQuery(queryString);
+			query.setInteger("busStatusId", busStatusId);
+			result = query.list();
+			// commit transaction
+			// session.getTransaction().commit();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		// return result, if needed
+		return result;
+	}
+	
 }
