@@ -138,6 +138,8 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 		for (String string : tmp) {
 			listSelectedSeat.add(string);
 		}
+		//put selected seat
+        session.put("selectedSeats",selectedSeat);
 		
 		List<String> seatsDouble = seatPositionDAO.checkDoubleBooking(list, listSelectedSeat);
 		
@@ -189,6 +191,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 	        session.put(CommonConstant.SESSION_KEY_PAYMENT_TOKEN, paymentToken);
             session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
             session.remove("listTripBean");
+            session.remove("selectedSeats");
             session.remove("User_tmp");
 			
 			return SUCCESS;
@@ -196,7 +199,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 			//send selectedSeat and  double 
 			request.put("backFrom","bookingPay");
 			request.put("doubleSeat", seatsDouble);//List<String>
-			session.remove("listTripBean");
+			//session.remove("listTripBean");
 			return "double"; 
 		}		
 	}

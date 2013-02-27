@@ -84,6 +84,10 @@ public class BookingAction extends BaseAction implements SessionAware {
 					  							   out_journey.getDepartureTime(), 
 					  							   out_journey.getArrivalTime());
 			session.put("listTripBean", listTripBean);*/
+			
+			listTripBean.add(tripDAO.getById(7));
+			session.put("listTripBean", listTripBean);
+			
 		}else{
 			//redirect from some where
 			listTripBean = (List<TripBean>)session.get("listTripBean");
