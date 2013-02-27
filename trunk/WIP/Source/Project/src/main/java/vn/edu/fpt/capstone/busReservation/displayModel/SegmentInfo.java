@@ -13,6 +13,9 @@ public class SegmentInfo implements Serializable {
 	private Double price;
 	private int stationStartAt;
 	private int stationEndAt;
+	
+	private int id;
+	private String name;
 
 	public int getStartAt() {
 		return startAt;
@@ -64,6 +67,22 @@ public class SegmentInfo implements Serializable {
 
 	public void setStationEndAt(int stationEndAt) {
 		this.stationEndAt = stationEndAt;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

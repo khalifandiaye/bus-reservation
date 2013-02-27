@@ -3,6 +3,7 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -45,4 +46,19 @@ public class TariffDAO extends GenericDAO<Integer, TariffBean> {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<TariffBean> getPrice(int segmentId, int busTypeId) {
+		List<TariffBean> result = new ArrayList<TariffBean>();
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			String queryString = "FROM TariffBean t WHERE t.segment.id = :segmentId AND t.busType.id = :busTypeId";
+			Query query = session.createQuery(queryString);
+			query.setParameter("segmentId", segmentId);
+			query.setParameter("busTypeId", busTypeId);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
 }
