@@ -22,36 +22,31 @@
 <script type="text/javascript">
 	$(document).ready(
 			function() {
-				var oTable;
-				var selectedTripId = "";
-				oTable = $('#tripsTable').dataTable();
-
-				$('input[data-edit]').click(function() {
-					var tripId = this.dataset['edit'];
+				oTable = $('#tripsTable').dataTable({
+					'bSort' : false
 				});
 
-				$('input[data-delete]').click(
-						function() {
-							var tripId = this.dataset['delete'];
-							$('#tripDeleteDialogLabel').html(
-									$("#trip_" + tripId + " td")[0].innerHTML);
-							$('#deleteTripDialog').modal();
-							selectedTripId = tripId;
-						});
-				
 				$('input.btn-primary').bind('click', function(){
 					var url = $('#contextPath').val() + "/schedule/list.html";
 					window.location = url;
 				});
 			});
 </script>
+<style type="text/css">
+.dataTables_filter {
+   display: none;
+}
+
+.dataTables_length {
+   display: none;
+}
+</style>
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
 	<jsp:include page="../common/menu.jsp" />
 	<div id="page">
-		<div class="post">
-			<form action="insertNewTrip" method="post">
+		<div class="post" style="margin: 0px auto; width: 95%;">
 				<div style="height: 45px; margin-left: 1%;">
 				</div>
 				<h3><s:property value="tripBeans[0].routeDetails.route.name" /></h3>
@@ -61,7 +56,6 @@
 							<th>Name</th>
 							<th>Departure Time</th>
 							<th>Arrival Time</th>
-							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -70,67 +64,13 @@
 								<td><s:property value="routeDetails.segment.startAt.city.name" /> - <s:property value="routeDetails.segment.endAt.city.name" /></td>
 								<td><s:property value="departureTime" /></td>
 								<td><s:property value="arrivalTime" /></td>
-								<td style="width: 6%"><input
-									data-edit="<s:property value='id'/>" class="btn btn-primary"
-									type="button" value="Edit" /></td>
 							</tr>
 						</s:iterator>
 					</tbody>
 				</table>
 				</br>
 				<input class="btn btn-primary" type="button" value="Return to Schedule" />
-			</form>
 		</div>
-	</div>
-
-	<!-- Modal -->
-	<div id="editTripDialog" class="modal hide fade" tabindex="-1"
-		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<form id="addNewTripForm" action="insert.html" method="POST">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true">×</button>
-				<h3 id="tripEditDialogLabel"></h3>
-			</div>
-			<div class="modal-body">
-				<div id="trip-route">
-					<label id="trip-route-label" for="routeSelect">Select Route</label>
-					<s:select id="tripDialogRoutes" headerKey="-1"
-						headerValue="--- Select Route ---" list="routeBeans"
-						name="routeBeans" listKey="id" listValue="name" />
-				</div>
-				<label for="tripDialogDepartureTimeDiv">Departure Time: </label>
-				<div id="tripDialogDepartureTimeDiv"
-					class="input-append date form_datetime" data-date="">
-					<input id="tripDialogDepartureTime" size="16" type="text" value=""
-						readonly name="tripDialogDepartureTime"> <span
-						class="add-on"><i class="icon-remove"></i></span> <span
-						class="add-on"><i class="icon-calendar"></i></span>
-				</div>
-				<label for="tripDialogArrivalTimeDiv">Arrival Time: </label>
-				<div id="tripDialogArrivalTimeDiv"
-					class="input-append date form_datetime" data-date="">
-					<input id="tripDialogArrivalTime" size="16" type="text" value=""
-						readonly> <span class="add-on"><i
-						class="icon-remove"></i></span> <span class="add-on"><i
-						class="icon-calendar"></i></span>
-				</div>
-				<label for="tripDialogBusType">Bus Type: </label>
-				<s:select id="tripDialogBusType" headerKey="-1"
-					headerValue="--- Select Bus Type ---" list="busTypeBeans"
-					name="busTypeBeans" listKey="id" listValue="name" />
-				<div id="trip-plate-number">
-					<label for="routeSelect">Bus Plate Number</label> <select
-						id='tripDialogBusPlate' name='tripDialogBusPlate'></select>
-				</div>
-				<div id="tripDialogStatus"></div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-				<button id="addNewTrip" class="btn btn-primary">Save
-					changes</button>
-			</div>
-		</form>
 	</div>
 	<jsp:include page="../common/footer.jsp" />
 </body>
