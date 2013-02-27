@@ -54,7 +54,7 @@
 								      thousand: ",",
 								      decimal : "."
 								   }
-								}
+								};
 						
 						oTable = $('#segmentTable').dataTable({
 							"bSort" : false
@@ -133,6 +133,15 @@
 											var busType = $("#busType").val();
 											info['busType'] = busType;
 											info['segments'] = segments;
+											
+											if (busType == -1) {
+												alert('Bus Type must be selected!');
+											}
+											
+											if (giCount == 0) {
+												alert('Please add segment!');
+											}
+											
 											$.ajax({
 														type : "POST",
 														url : 'saveSegment.html',

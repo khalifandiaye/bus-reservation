@@ -1,5 +1,6 @@
 package vn.edu.fpt.capstone.busReservation.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -18,25 +19,39 @@ public class BusTypeDAO extends GenericDAO<Integer, BusTypeBean>{
 
 	@SuppressWarnings("unchecked")
     public List<BusTypeBean> getAllBusType(){
-		List<BusTypeBean> result = null;
-		Query query = null;
-		String queryString = null;
-		Session session = null;
-		// get the current session
-		session = sessionFactory.getCurrentSession();
+		List<BusTypeBean> result = new ArrayList<BusTypeBean>();
+		Session session = sessionFactory.getCurrentSession();
 		Transaction tx = session.beginTransaction();
 		try {
-			// perform database access (query, insert, update, etc) here
-			queryString = "SELECT bus FROM BusTypeBean bus";
-			query = session.createQuery(queryString);
+			String queryString = "SELECT bus FROM BusTypeBean bus";
+			Query query = session.createQuery(queryString);
 			result = query.list();
-			// commit transaction
-			// session.getTransaction().commit();
 			tx.commit();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
 		}
-		// return result, if needed
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+    public List<Object[]> getBusTypesInRoute(int routeId) {
+		List<Object[]> result = new ArrayList<Object[]>();
+		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = session.beginTransaction();
+		try {
+			String queryString = "SELECT bt.* FROM " +
+					"( SELECT rd.route_id AS id, t.bus_type_id AS bus_type_id " +
+					"FROM route_details rd LEFT JOIN tariff t ON rd.segment_id = t.segment_id " +
+					"GROUP BY rd.route_id, t.bus_type_id HAVING rd.route_id = :routeId ) " +
+					"AS bir LEFT JOIN bus_type bt " +
+					"ON bir.bus_type_id = bt.id";
+			Query query = session.createSQLQuery(queryString);
+			query.setParameter("routeId", routeId);
+			result = query.list();
+			tx.commit();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
 		return result;
 	}
 }

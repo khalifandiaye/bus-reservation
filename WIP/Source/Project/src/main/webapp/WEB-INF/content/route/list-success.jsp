@@ -59,10 +59,10 @@ function loadDetails(routeid) {
 					</tr>
 				</thead>
 				<tbody>
-					<s:iterator value="routeBeans">
+					<s:iterator value="routeInfos">
 						<tr id="route_<s:property value='id'/>">
-							<td><s:property value="name" /></td>
-							<td>Total Duration</td>
+							<td><s:property value="routeName" /></td>
+							<td><s:property value="travelTime" /></td>
 							<td style="width: 6%"><input class="btn btn-primary"
 								type="button" value="View Details"
 								onclick='javascript: loadDetails(<s:property value='id'/>)' /></td>

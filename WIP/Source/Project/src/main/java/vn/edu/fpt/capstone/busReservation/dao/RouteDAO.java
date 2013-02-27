@@ -7,7 +7,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 
 public class RouteDAO extends GenericDAO<Integer, RouteBean> {
@@ -16,18 +15,19 @@ public class RouteDAO extends GenericDAO<Integer, RouteBean> {
 		super(clazz);
 	}
 
-	public Object getTravelTimeByRouteId(int routeId) {
-		String strQuery = "select sec_to_time(sum(time_to_sec(segmentbea1_.travel_time))) " +
-				"as col_0_0_ from route_details routedetai0_, segment segmentbea1_ " +
-				"where routedetai0_.segment_id=segmentbea1_.id " +
-				"and routedetai0_.route_id = :id";
+	public String getTravelTimeByRouteId(int routeId) {
+		String strQuery = "SELECT CAST( sec_to_time( sum( time_to_sec(seg.travel_time))) " +
+				"AS CHAR CHARACTER SET utf8 ) " +
+				"FROM route_details rd, segment seg " +
+				"WHERE rd.segment_id = seg.id " +
+				"AND rd.route_id = :id";
 		Session session = sessionFactory.getCurrentSession();
-		Object result = null;
+		String result = "";
 		try {
 			// must have to start any transaction
 			Query query = session.createSQLQuery(strQuery);
 			query.setParameter("id", routeId);
-			result = query.list().get(0);
+			result = (String) query.list().get(0);
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
 		}
