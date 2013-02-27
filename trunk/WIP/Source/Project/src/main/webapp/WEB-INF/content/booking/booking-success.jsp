@@ -63,12 +63,12 @@
 		                   					<s:div cssClass="seat"> 
 								  				<s:if test="status != 1">
 								  					<span class="seat-name"><s:property value="name" /></span>
-			                						<img class="seat-img" src="../images/bus-one-seat.png" alt="" data-seat="<s:property value="name" />" data-status="<s:property value="status" />">
+			                						<img class="seat-img" src="../images/seat-available.png" alt="" data-seat="<s:property value="name" />" data-status="<s:property value="status" />">
 			               						</s:if>
 			               						<s:else>
 			               							<span class="seat-name"><s:property value="name"/></span>
-			               							<img class="seat-img" src="../images/bus-one-seat-sold.png" alt="" data-seat="<s:property value="name" />" data-status="<s:property value="status" />">
-			               						</s:else>
+			               							<img class="seat-img" src="../images/seat-sold.png" alt="" data-seat="<s:property value="name" />" data-status="<s:property value="status" />">
+			               						</s:else> 
 			                   				</s:div>
 		                   				</s:if>
 		                   				<s:else>
@@ -83,15 +83,15 @@
 	            </div>
 	            <div class="seat-description" style="overflow: hidden;padding-left:20px;"> 
 	            	<div style="width: 33%;float:left">
-	            		<img src="../images/bus-one-seat.png" width="20%">
+	            		<img src="../images/seat-available.png" width="20%">
 	            		<span>Ghế Trống</span>
 	            	</div>
 	            	<div style="width: 33%;float:left">
-	            		<img src="../images/bus-one-seat-selected.png" width="20%">
+	            		<img src="../images/seat-selected.png" width="20%">
 	            		<span>Ghế đang chọn</span>
-	            	</div>
+	            	</div> 
 	            	<div style="width: 33%;float:left">
-	            		<img src="../images/bus-one-seat-sold.png" width="20%">
+	            		<img src="../images/seat-sold.png" width="20%">
 	            		<span>Ghế đã được bán</span>    
 	            	</div>
 	            </div>
