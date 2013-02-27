@@ -24,7 +24,34 @@
 <script
 	src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript">
-	
+	function validate() {
+		var errorMessage = "";
+		var isValid = true;
+		var plateNumber = $("#plateNumber").val();
+		var busType = $("#busType").val();
+		var forwardRoute = $("#assignRouteForward").val();
+		var returnRoute = $("#assignRouteReturn").val();
+		if (plateNumber == '') {
+			errorMessage += "\nPlease input bus plate number";
+			isValid = false;
+		}
+		if (busType == -1) {
+			errorMessage += "\nPlease select bus type";
+			isValid = false;
+		}
+		if (forwardRoute == -1) {
+			errorMessage += "\nPlease select forward route";
+			isValid = false;
+		}
+		if (returnRoute == -1) {
+			errorMessage += "\nPlease select return route";
+			isValid = false;
+		}
+		if (!isValid) {
+			alert(errorMessage);
+		}
+		return isValid;
+	}
 </script>
 <style type="text/css">
 .dataTables_filter {
@@ -66,7 +93,8 @@
 						name="routeReturnBeans" listKey="id" listValue="name" />
 				</div>
 				<div style="margin-left: 10px; margin-top: 10px;">
-					<input class="btn btn-primary" type="submit" id="save" value="Save" />
+					<input class="btn btn-primary" type="submit" id="save" value="Save"
+						onclick="return validate()" />
 				</div>
 			</div>
 		</form>
