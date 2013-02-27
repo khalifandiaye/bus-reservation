@@ -5,7 +5,6 @@ package vn.edu.fpt.capstone.busReservation.dao;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 
-
 /**
  * @author Yoshimi
  *

@@ -19,7 +19,7 @@ public class RouteDetailsDAO extends GenericDAO<Integer, RouteDetailsBean>{
 	
 	@SuppressWarnings("unchecked")
 	public List<SegmentBean> getAllSegmemtsByRouteId(int routeId) {
-		String hql = "from RouteDetailsBean sir where sir.route.id = :routeId";
+		String hql = "select sir.segment from RouteDetailsBean sir where sir.route.id = :routeId";
 		Session session = sessionFactory.getCurrentSession();
 		List<SegmentBean> result = new ArrayList<SegmentBean>();
 		try {
