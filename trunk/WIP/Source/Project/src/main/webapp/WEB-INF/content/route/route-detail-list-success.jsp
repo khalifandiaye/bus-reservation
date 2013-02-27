@@ -36,12 +36,22 @@
             });
          });
 </script>
+<style type="text/css">
+.dataTables_filter {
+   display: none;
+}
+
+.dataTables_length {
+   display: none;
+}
+
+</style>
 </head>
 <body>
    <jsp:include page="../common/header.jsp" />
    <jsp:include page="../common/menu.jsp" />
    <div id="page">
-      <div class="post">
+      <div class="post" style="margin: 0px auto; width: 95%;">
          <form action="insertNewTrip" method="post">
             <div style="height: 45px; margin-left: 1%;">
             </div>

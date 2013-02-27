@@ -45,7 +45,7 @@ function loadDetails(routeid) {
 	<jsp:include page="../common/header.jsp" />
 	<jsp:include page="../common/menu.jsp" />
 	<div id="page">
-		<div class="post">
+		<div class="post" style="margin: 0px auto; width: 95%;">
 			<div style="height: 45px; margin-left: 1%;">
 			   <input class="btn btn-primary" id="addRoute" type="button" value="Add New Route" />
 			</div>

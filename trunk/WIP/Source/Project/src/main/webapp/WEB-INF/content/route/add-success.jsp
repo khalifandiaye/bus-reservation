@@ -173,7 +173,7 @@
 	<jsp:include page="../common/header.jsp" />
 	<jsp:include page="../common/menu.jsp" />
 	<div id="page">
-		<div class="post">
+		<div class="post" style="margin: 0px auto; width: 95%;">
 			<div style="margin-left: 10px; margin-top: 10px;">
 				<s:select id="busType" headerKey="-1"
 					headerValue="--- Select Bus Type ---" list="busTypeBeans"
