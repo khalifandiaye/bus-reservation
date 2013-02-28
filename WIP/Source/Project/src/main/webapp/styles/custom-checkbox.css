@@ -1,0 +1,13 @@
+input[type=checkbox].custom-checkbox{
+	display: none;
+}
+
+input[type=checkbox].custom-checkbox+label{
+	height:30px;
+	width:30px;
+	background-image: url("../images/checkbox30-blank.gif");
+}
+
+input[type=checkbox].custom-checkbox:checked+label{
+	background-image: url("../images/checkbox30-checked.gif");
+}

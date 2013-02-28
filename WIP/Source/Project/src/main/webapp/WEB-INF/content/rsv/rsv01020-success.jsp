@@ -110,7 +110,7 @@
 							</tr>
 							<s:if test="%{reservationInfo.refundedAmount != null}" >
 								<tr>
-									<th><s:text name="refunded_amount" /></th>
+									<th><s:text name="label.refunded_amount" /></th>
 									<td id="refundedAmount"><s:property value="reservationInfo.refundedAmount" /> VND</td>
 								</tr>
 							</s:if>

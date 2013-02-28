@@ -17,9 +17,16 @@ public class DateUtils {
      * @return the number of milliseconds represented in the interval
      */
     public static long getAbsoluteMiliseconds(Date date) {
+        return date.getTime() + TimeZone.getDefault().getOffset(date.getTime());
+    }
+    
+    public static Date getTime(int hour, int minute, int second) {
         Calendar c = Calendar.getInstance();
         c.clear();
-        return date.getTime() - c.getTimeInMillis();
+        c.set(Calendar.HOUR_OF_DAY, hour);
+        c.set(Calendar.MINUTE, minute);
+        c.set(Calendar.SECOND, second);
+        return c.getTime();
     }
 
     /**

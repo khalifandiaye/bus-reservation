@@ -170,6 +170,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 				
 				seatPositionDAO.insert(spb);
 			}
+			seatPositionDAO.endTransaction();
 			// moved below
 //			session.remove("listTripBean");
 //			session.remove("selectedSeats");
