@@ -25,101 +25,113 @@
 	src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript">
 	function getStation(el, des) {
-		cityId = $('#' + el).val();
-       	if (cityId != -1) {
-       	$.ajax({url: "getStation.html?cityId=" + cityId }).done(
-    		function(data) {
-            	$('#' + des).empty();
-                $.each(data.stationInfos, function() {
-                	$('#' + des).append('<option value="'+this.id+'">'+this.name+'</option>');
-                });
-            });
-       }
-   };
-   
-	$(document).ready(function() { 
-		accounting.settings = {
-			currency: {
-				symbol : " VNĐ",   // default currency symbol is '$'
-				format: "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
-				decimal : ",",  // decimal point separator
-				thousand: ".",  // thousands separator
-				precision : 0   // decimal places
-			},
-			number: {
-				precision : 0,  // default precision on numbers is 0
-				thousand: ",",
-				decimal : "."
-			}
-		};
-						
-		oTable = $('#segmentTable').dataTable({
-			"bSort" : false
-		});
-						
-		$('#startAt').change(function() {
-			getStation('startAt', 'stationStartAt');
-		});
-						
-		$('#endAt').change(function() {
-			getStation('endAt', 'stationEndAt');
-		});
-						
-		$("#add").bind(
-			'click',
-			function() {
-				if (giCount == 10) {
-					alert("maximun record added!");
-					return;
-				}
+	  	cityId = $('#' + el).val();
+	        if (cityId != -1) {
+	        $.ajax({url: "getStation.html?cityId=" + cityId }).done(
+	    		function(data) {
+		            $('#' + des).empty();
+		            	$.each(data.stationInfos, function() {
+		                	$('#' + des).append('<option value="'+this.id+'">'+this.name+'</option>');
+		                });
+		                if (el == 'startAt') {
+		                 $("#stationStartAt").val($("#stationEndAt").val());
+		                }
+	            });
+	       }
+	   };
 
-				var startAtKey = $("#startAt").val();
-				var stationStartAtKey = $("#stationStartAt").val();
-				var endAtKey = $("#endAt").val();
-				var stationEndAtKey = $("#stationEndAt").val();
-				var startAt = $("#startAt option:selected").text();
-				var stationStartAt = $("#stationStartAt option:selected").text();
-				var endAt = $("#endAt option:selected").text();
-				var stationEndAt = $("#stationEndAt option:selected").text();
-				var duration = $("#duration").val();
-				var price = $("#price").val();
-									
-				if (stationStartAt.trim() == '') {
-					return;
+	$(document).ready(
+		function() {
+			accounting.settings = {
+				currency : {
+					symbol : " VNĐ", // default currency symbol is '$'
+					format : "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
+					decimal : ",", // decimal point separator
+					thousand : ".", // thousands separator
+					precision : 0		// decimal places
+				},
+				number : {
+					precision : 0, // default precision on numbers is 0
+					thousand : ",",
+					decimal : "."
 				}
-									
-				if (stationEndAt.trim() == '') {
-			        return;
-			    }
-									
-				if (duration.trim() == '') {
-			        return;
-			    }
-									
-				if (price.trim() == '') {
-			        return;
-			    }
-									
-				$('#segmentTable').dataTable()
-					.fnAddData([ startAt + ' - ' + stationStartAt, endAt + ' - ' + stationEndAt, duration,
-						accounting.formatMoney(price) ]);
-				giCount++;
+			};
 
-				$("#startAt").val(endAtKey);
-				$("#startAt").disableSelection();
+			oTable = $('#segmentTable').dataTable({"bSort" : false});
+
+			$('#startAt').change(function() {
 				getStation('startAt', 'stationStartAt');
-									
-				$("#endAt option[value=" + endAtKey + "]").hide();
-				$("#endAt").val(-1);
+			});
 
-				var segment = {};
-				segment['startAt'] = startAtKey;
-				segment['stationStartAt'] = stationStartAtKey;
-				segment['endAt'] = endAtKey;
-				segment['stationEndAt'] = stationEndAtKey;
-				segment['duration'] = duration;
-				segment['price'] = price;
-				segments.push(segment);
+			$('#endAt').change(function() {
+				getStation('endAt', 'stationEndAt');
+			});
+
+			$("#add").bind('click',
+				function() {
+					if (giCount == 10) {
+						alert("maximun record added!");
+						return;
+					}
+
+					var startAtKey = $("#startAt").val();
+					var stationStartAtKey = $("#stationStartAt").val();
+					
+					var endAtKey = $("#endAt").val();
+					var stationEndAtKey = $("#stationEndAt").val();
+					
+					var startAt = $("#startAt option:selected").text();
+					var stationStartAt = $("#stationStartAt option:selected").text();
+					
+					var endAt = $("#endAt option:selected").text();
+					var stationEndAt = $("#stationEndAt option:selected").text();
+					
+					var duration = $("#duration").val();
+					var price = $("#price").val();
+					
+					if (stationEndAt.trim() == '') {
+						return;
+					}
+										     
+					if (endAtKey == -1) {
+						return;
+					}
+
+					if (duration.trim() == '') {
+						return;
+					}
+
+					if (price.trim() == '') {
+						return;
+					}
+
+					$('#segmentTable').dataTable().fnAddData([startAt + ' - '+ stationStartAt,
+																endAt + ' - '+ stationEndAt,
+																duration,
+																accounting.formatMoney(price) ]);
+					giCount++;
+					
+					
+					$("#startAt").val(endAtKey);
+					$("#startAt").prop("disabled", true);
+					
+					getStation('startAt','stationStartAt');
+					$("#stationStartAt").val(stationEndAtKey);
+					$("#stationStartAt").prop("disabled", true);
+					
+					$("#endAt option[value=" + endAtKey + "]").hide();
+					$("#endAt").val(-1);
+
+					var segment = {};
+					segment['startAt'] = startAtKey;
+					segment['stationStartAt'] = stationStartAtKey;
+					
+					segment['endAt'] = endAtKey;
+					segment['stationEndAt'] = stationEndAtKey;
+					
+					segment['duration'] = duration;
+					segment['price'] = price;
+					segments.push(segment);
 				});
 
 				$("#save").bind('click',
@@ -127,33 +139,34 @@
 						var busType = $("#busType").val();
 						info['busType'] = busType;
 						info['segments'] = segments;
-											
+
 						if (busType == -1) {
 							alert('Bus Type must be selected!');
+							return;
 						}
-											
+
 						if (giCount == 0) {
 							alert('Please add segment!');
+							return;
 						}
-											
-						$.ajax({
-							type : "POST",
-							url : 'saveSegment.html',
-							contentType : "application/x-www-form-urlencoded; charset=utf-8",
-							data : {
-								data : JSON.stringify(info)
-							},
-							success : function(response) {
-								alert("Save Success!");
-								var url = $('#contextPath').val() + "/route/list.html";
-								window.location = url;
-							},
-							error: function(){
-								alert("Save new route failed!");
-							}
+
+						$.ajax({type : "POST",
+								url : 'saveSegment.html',
+								contentType : "application/x-www-form-urlencoded; charset=utf-8",
+								data : {
+									data : JSON.stringify(info)
+								},
+								success : function(esponse) {
+									alert("Save Success!");
+									var url = $('#contextPath').val() + "/route/list.html";
+									window.location = url;
+								},
+								error : function() {
+									alert("Save new route failed!");
+								}
 						});
 					});
-	});
+		});
 
 	var info = {};
 	var segments = [];
@@ -208,9 +221,8 @@
 					<td><s:select id="endAt" headerKey="-1"
 							headerValue="--- Select Route ---" list="cityBeans"
 							name="routeBeans" listKey="id" listValue="name">
-							</s:select><select
-                  id="stationEndAt" headerKey="-1"
-                  headerValue="--- Select End Station ---"></select></td>
+						</s:select><select id="stationEndAt" headerKey="-1"
+						headerValue="--- Select End Station ---"></select></td>
 					<td><input type="text" id="duration" /></td>
 					<td><input type="text" id="price" /></td>
 					<td><input class="btn btn-primary" type="button" id="add"
