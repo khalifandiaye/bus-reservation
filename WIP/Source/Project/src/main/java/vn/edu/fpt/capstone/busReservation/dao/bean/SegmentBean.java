@@ -3,7 +3,6 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao.bean;
 
-import java.util.Date;
 import java.util.List;
 
 /**
