@@ -117,9 +117,9 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 	@SuppressWarnings("unchecked")
 	public List<TripBean> getBookingTrips(int busStatus, Date deptTime, Date arrTime){
 		String hql = "Select trip from TripBean trip " +
-				"where tripBean.busStatus.id = :busStatusId " +
-				"  and tripBean.departureTime >= deptTime " +
-				"  and tripBean.arrivalTime <= arrTime ";
+				"where trip.busStatus.id = :busStatusId " +
+				"  and trip.departureTime >= :deptTime " +
+				"  and trip.arrivalTime <= :arrTime ";
 		Session session = sessionFactory.getCurrentSession();
 		List<TripBean> result = new ArrayList<TripBean>();
 		try {

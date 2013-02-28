@@ -30,6 +30,15 @@
 		var myString = JSON.stringify(obj);
 		$("#tripData").val(myString);
 	}
+	
+	function setParam(){
+		var outRadio = $('form input[name="out_journey"]:checked');
+		$('input[name="outBusStatus"]').val($(outRadio).siblings('#out_status').val());
+		$('input[name="outDepartTime"]').val($(outRadio).siblings('#out_deptTime').val());
+		$('input[name="outArriveTime"]').val($(outRadio).siblings('#out_arrTime').val());
+		$('input[name="outFare"]').val($(outRadio).siblings('#out_fare').val());
+		return true;		
+	}
 	</script>
 </head>
 <body>
@@ -68,6 +77,7 @@
 			<!-- Start contents -->
 			<s:set name="deptCity" value="deptCity" />
 			<s:set name="arrCity" value="arrCity" />
+			<s:set name="pssgrNo" value="passengerNo" />
 			<s:if test="%{#deptCity==''}">
 				<legend>Không tìm thấy chuyến</legend>
 				<div>Không có chuyến đi nào phù hợp với điều kiện của quý
@@ -128,8 +138,11 @@
 														</tr>
 														<s:iterator value="searchResult" status="srStatus" var="sr">
 															<s:if test="#srStatus.even == true">
-																<tr style="background: #CCCCCC">
+																<tr style="background: #CCCCCC" class="tripDetails">
 															</s:if>
+															<s:else>
+																<tr class="tripDetails">
+															</s:else>
 																	<td align="center"><s:date name="departureTime"
 																			format="dd-MM-yyyy" />&nbsp;<br> <s:date
 																			name="departureTime" format="HH:mm" /></td>
@@ -140,11 +153,15 @@
 																	<td><s:property value="arrivalStation" />&nbsp;</td>
 																	<td></td>
 																	<td><s:property value="fare" />&nbsp;</td> 
-																	<td align="center"><input title="Chọn chuyến này" type="radio"
-																		name="out_journey" id="out_journey" value="" /></td>
-															<s:if test="#srStatus.even == true">
+																	<td align="center">
+																		<input title="Chọn chuyến này" type="radio"
+																			   name="out_journey" id="out_journey" />
+																		<input type="hidden" id="out_status" value="${sr.busStatusId}"/>	   
+																		<input type="hidden" id="out_deptTime" value="${sr.departureTime}"/>
+																		<input type="hidden" id="out_arrTime" value="${sr.arrivalTime}"/>
+																		<input type="hidden" id="out_fare" value="${sr.fare}"/>
+																	</td>
 																</tr>
-															</s:if>
 														</s:iterator>
 
 													</tbody>
@@ -160,11 +177,15 @@
 										</tr>
 										<tr>
 										<td colspan="3"></td>
-										<td><input type="submit" class="pull-right btn btn-small" style="width: 20%;margin-top: 9px;" value="Tiếp tục"/></td>
+										<td><input type="submit" onclick="setParam()" class="pull-right btn btn-small" style="width: 20%;margin-top: 9px;" value="Tiếp tục"/></td>
 										</tr>
 									</tbody>
 								</table>            
-								<input type="hidden" id="passengerNo" value="${passengerNo}" name="passengerNo"/>
+								<input type="hidden" id="passengerNo" value="${pssgrNo}" name="passengerNo"/>
+								<input type="hidden" name="outBusStatus" />	   
+								<input type="hidden" name="outDepartTime" />
+								<input type="hidden" name="outArriveTime" />
+								<input type="hidden" name="outFare" />
 							</div>
 						</form>
 			</s:else>

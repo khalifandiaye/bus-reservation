@@ -66,6 +66,13 @@ public class SearchResultAction extends ActionSupport {
 	 */
 	public void setPassengerNo(int passengerNo) {
 		this.passengerNo = passengerNo;
+		LOG.info("search result action passengerNo = " + passengerNo);
+	}
+	/**
+	 * @return the passengerNo
+	 */
+	public int getPassengerNo() {
+		return passengerNo;
 	}
 	/**
 	 * @param departureDate the departureDate to set
