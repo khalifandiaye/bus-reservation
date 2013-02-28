@@ -8,8 +8,10 @@ import org.apache.struts2.convention.annotation.Result;
 
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
+import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -20,6 +22,7 @@ public class DeleteBusStatusAction extends ActionSupport {
 	private BusStatusDAO busStatusDAO;
 	private BusStatusBean busStatusBean;
 	private ReservationDAO reservationDAO;
+	private TripDAO tripDAO;
 	private int numberOfReservations;
 	private int busStatusId;
 
@@ -34,6 +37,12 @@ public class DeleteBusStatusAction extends ActionSupport {
 			busStatusBean = busStatusDAO.getById(busStatusId);
 			busStatusBean.setStatus("inactive");
 			busStatusDAO.update(busStatusBean);
+			//set status inactive for trips
+			List<TripBean> tripBeans = busStatusBean.getTrips();
+			for (TripBean tripBean: tripBeans) {
+				tripBean.setStatus("inactive");
+				tripDAO.update(tripBean);
+			}
 		}
 		return SUCCESS;
 	}
@@ -44,6 +53,10 @@ public class DeleteBusStatusAction extends ActionSupport {
 
 	private void setBusStatusId(int busStatusId) {
 		this.busStatusId = busStatusId;
+	}
+
+	public void setTripDAO(TripDAO tripDAO) {
+		this.tripDAO = tripDAO;
 	}
 
 }

@@ -32,6 +32,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentAddInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentInfo;
+import vn.edu.fpt.capstone.busReservation.util.DateUtils;
 
 @ParentPackage("jsonPackage")
 public class SaveSegmentAction extends BaseAction {
@@ -86,13 +87,12 @@ public class SaveSegmentAction extends BaseAction {
 				SegmentBean segmentBean = new SegmentBean();
 
 				String stravelTime = segmentInfosFoward.get(i).getDuration();
-				DateFormat sdf = new SimpleDateFormat("hh:mm");
-				Date travelTime = sdf.parse(stravelTime);
+				String[] travelTime = stravelTime.split(":");
+				Date dtravelTime = DateUtils.getTime(Integer.parseInt(travelTime[0]), 
+						Integer.parseInt(travelTime[1]), Integer.parseInt(travelTime[2]));
 
-				StationBean startStation = stationDAO.getById(segmentInfosFoward.get(
-						i).getStationStartAt());
-				StationBean endStation = stationDAO.getById(segmentInfosFoward.get(i)
-						.getStationEndAt());
+				StationBean startStation = stationDAO.getById(segmentInfosFoward.get(i).getStationStartAt());
+				StationBean endStation = stationDAO.getById(segmentInfosFoward.get(i).getStationEndAt());
 				if (i == 0) {
 					routeNameForward += startStation.getCity().getName();
 				}
@@ -101,7 +101,7 @@ public class SaveSegmentAction extends BaseAction {
 				}
 				segmentBean.setStartAt(startStation);
 				segmentBean.setEndAt(endStation);
-				segmentBean.setTravelTime(travelTime);
+				segmentBean.setTravelTime(dtravelTime);
 				segmentBean.setStatus("active");
 				segmentDAO.insert(segmentBean);
 				segmentBeansForward.add(segmentBean);
@@ -133,14 +133,13 @@ public class SaveSegmentAction extends BaseAction {
 			for (int i = 0; i < segmentInfosReturn.size(); i++) {
 				SegmentBean segmentBean = new SegmentBean();
 
-				String stravelTime = segmentInfosReturn.get(i).getDuration();
-				DateFormat sdf = new SimpleDateFormat("hh:mm");
-				Date travelTime = sdf.parse(stravelTime);
+				String stravelTime = segmentInfosFoward.get(i).getDuration();
+				String[] travelTime = stravelTime.split(":");
+				Date dtravelTime = DateUtils.getTime(Integer.parseInt(travelTime[0]), 
+						Integer.parseInt(travelTime[1]), Integer.parseInt(travelTime[2]));
 
-				StationBean startStation = stationDAO.getById(segmentInfosReturn.get(
-						i).getStationEndAt());
-				StationBean endStation = stationDAO.getById(segmentInfosReturn.get(i)
-						.getStationStartAt());
+				StationBean startStation = stationDAO.getById(segmentInfosReturn.get(i).getStationEndAt());
+				StationBean endStation = stationDAO.getById(segmentInfosReturn.get(i).getStationStartAt());
 				if (i == 0) {
 					routeNameReturn += startStation.getCity().getName();
 				}
@@ -149,7 +148,7 @@ public class SaveSegmentAction extends BaseAction {
 				}
 				segmentBean.setStartAt(startStation);
 				segmentBean.setEndAt(endStation);
-				segmentBean.setTravelTime(travelTime);
+				segmentBean.setTravelTime(dtravelTime);
 				segmentBean.setStatus("active");
 				segmentDAO.insert(segmentBean);
 				segmentBeansReturn.add(segmentBean);

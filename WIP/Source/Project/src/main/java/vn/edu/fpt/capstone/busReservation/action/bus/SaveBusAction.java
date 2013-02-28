@@ -59,22 +59,14 @@ public class SaveBusAction extends BaseAction {
 		busStatusBean.setFromDate(now);
 		busStatusBean.setToDate(now);
 		busStatusBean.setStatus("active");
-		busStatusBean.setEndStation(routeDetailsList.get(routeDetailsList.size() - 1).getSegment().getStartAt());
+		busStatusBean.setEndStation(routeDetailsList.get(0).getSegment().getStartAt());
 		busStatusDAO.insert(busStatusBean);
 		
 		return SUCCESS;
 	}
 
-	public BusTypeDAO getBusTypeDAO() {
-		return busTypeDAO;
-	}
-
 	public void setBusTypeDAO(BusTypeDAO busTypeDAO) {
 		this.busTypeDAO = busTypeDAO;
-	}
-
-	public RouteDAO getRouteDAO() {
-		return routeDAO;
 	}
 
 	public void setRouteDAO(RouteDAO routeDAO) {
