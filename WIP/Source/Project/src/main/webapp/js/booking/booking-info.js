@@ -10,6 +10,7 @@ function removeSeatInHiddenInput(seatName){
 		nwHiddenInput += seatsSelected[i]+";";
 	}
 	$.cookie('selectedSeat', nwHiddenInput, { expires: 1 });
+	$("#selectedSeat").val(nwHiddenInput);
 }
 
 function removeSeat(parent){
@@ -33,6 +34,7 @@ function showPopup(message){
 
 function genSeatFromCookie(){
 	var listSeat = $.cookie('selectedSeat').split(";");
+	$("#selectedSeat").val($.cookie('selectedSeat'));
 	for ( var i = 0; i < listSeat.length; i++) {
 		if(listSeat[i] != ""){ 
 			$(".listCheckedSeats").append('<div class="seatChecked"><span class="seatCheckedName">'+listSeat[i]+'</span><button class="btn btn-mini btn-danger" type="button">Bỏ ghế</button></div>');
