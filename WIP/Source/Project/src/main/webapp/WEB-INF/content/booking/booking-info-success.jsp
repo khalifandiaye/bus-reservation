@@ -13,6 +13,7 @@
 <link href="<%=request.getContextPath()%>/styles/booking.css" rel="stylesheet">
 <script src="<%=request.getContextPath()%>/js/jquery.validate.min.js" ></script>
 <script src="<%=request.getContextPath()%>/js/booking/booking-validation.js" ></script> 
+<script src="<%=request.getContextPath()%>/js/jquery.cookie.js" ></script>
 <script src="<%=request.getContextPath()%>/js/pay/pay01010.js" ></script>
 <script src="<%=request.getContextPath()%>/js/booking/booking-info.js" ></script>
 </head>
@@ -91,15 +92,7 @@
 					  	</div>
 					  	<div class="control-group">
 						    <label class="control-label">Số ghế chọn</label>
-						    <div class="controls listCheckedSeats">
-						     	<s:iterator value="listSeats"> 
-						     		<s:div cssClass="seatChecked">
-						     			<span class="seatCheckedName">
-						     				<s:property value="name"/>
-					     				</span>
-					     				<button class="btn btn-mini btn-danger" type="button">Bỏ ghế</button>
-					     			</s:div>
-						     	</s:iterator>						     	
+						    <div class="controls listCheckedSeats"> 
 					    	</div>
 					  	</div>
 					  	

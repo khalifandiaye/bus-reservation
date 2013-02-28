@@ -40,7 +40,6 @@ public class BookingInfoAction extends BaseAction {
         this.reservationLogic = reservationLogic;
     }
 
-    private String selectedSeat;
     private List<SeatInfo> listSeats = new ArrayList<SeatInfo>();
     private List<PaymentMethodBean> paymentMethods;
     private ReservationInfo reservationInfo;
@@ -49,12 +48,6 @@ public class BookingInfoAction extends BaseAction {
 	private String inputMobile;
 	private String inputEmail;
 	
-	/**
-	 * @return the selectedSeat
-	 */
-	public String getSelectedSeat() {
-		return selectedSeat;
-	}
 
 	/**
 	 * @return the inputFirstName
@@ -102,10 +95,6 @@ public class BookingInfoAction extends BaseAction {
         return reservationInfo;
     }
 
-    public void setSelectedSeat(String selectedSeat) {
-        this.selectedSeat = selectedSeat;
-    }
-
     @SuppressWarnings("unchecked")
     public String execute() {
     	
@@ -122,20 +111,8 @@ public class BookingInfoAction extends BaseAction {
 			this.inputMobile = user.getMobilePhone();
 		}
     	
-        String[] seats;
         List<TripBean> tripBeanList = null;
-        //Save selectedSeats
-        if(selectedSeat != null){
-        	session.put("selectedSeats", selectedSeat);
-        }else{
-        	selectedSeat = (String)session.get("selectedSeats");
-        }
-        
-        seats = selectedSeat.split(";");
-        for (int i = 0; i < seats.length; i++) {
-            listSeats.add(new SeatInfo(seats[i], "2"));
-        }
-        //
+
         paymentMethods = paymentLogic.getPaymentMethods();
         tripBeanList = (List<TripBean>) session.get("listTripBean");
         try {

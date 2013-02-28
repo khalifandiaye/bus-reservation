@@ -11,6 +11,7 @@
 <title>Đặt Vé</title>
 <jsp:include page="../common/xheader.jsp" />
 <link href="<%=request.getContextPath()%>/styles/booking.css" rel="stylesheet">
+<script src="<%=request.getContextPath()%>/js/jquery.cookie.js" ></script>
 <script src="<%=request.getContextPath()%>/js/booking/booking.js" ></script>
 </head>
 	<body>
