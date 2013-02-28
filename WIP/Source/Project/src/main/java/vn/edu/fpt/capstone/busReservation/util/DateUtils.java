@@ -19,14 +19,15 @@ public class DateUtils {
     public static long getAbsoluteMiliseconds(Date date) {
         return date.getTime() + TimeZone.getDefault().getOffset(date.getTime());
     }
-    
-    public static Date getTime(int hour, int minute, int second) {
-        Calendar c = Calendar.getInstance();
-        c.clear();
-        c.set(Calendar.HOUR_OF_DAY, hour);
-        c.set(Calendar.MINUTE, minute);
-        c.set(Calendar.SECOND, second);
-        return c.getTime();
+
+    public static long getTime(String time) {
+        String[] part = time.split(":");
+        return getTime(Integer.parseInt(part[0]), Integer.parseInt(part[1]),
+                Integer.parseInt(part[2]));
+    }
+
+    public static long getTime(int hour, int minute, int second) {
+        return ((long) (hour * 60 + minute) * 60 + second) * 1000;
     }
 
     /**
