@@ -3,6 +3,8 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.booking;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -12,6 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -44,13 +47,52 @@ public class BookingAction extends BaseAction implements SessionAware {
 	
 	//=============================input parameter====================
 	private String tripData;
-	
+	private String outBusStatus;
+	private String passengerNo;
+	private String outDepartTime;
+	private String outArriveTime;
+	private String outFare;
 	private TripDAO tripDAO;
 	private SeatInfo[][] seatMap;
 	private String selectedSeat;
 	private SeatPositionDAO seatPositionDAO;
 	
 	
+	/**
+	 * @param outDepartTime the outDepartTime to set
+	 */
+	public void setOutDepartTime(String outDepartTime) {
+		this.outDepartTime = outDepartTime;
+	}
+
+	/**
+	 * @param outArriveTime the outArriveTime to set
+	 */
+	public void setOutArriveTime(String outArriveTime) {
+		this.outArriveTime = outArriveTime;
+	}
+
+	/**
+	 * @param outFare the outFare to set
+	 */
+	public void setOutFare(String outFare) {
+		this.outFare = outFare;
+	}
+
+	/**
+	 * @param passengerNo the passengerNo to set
+	 */
+	public void setPassengerNo(String passengerNo) {
+		this.passengerNo = passengerNo;
+	}
+
+	/**
+	 * @param busStatus the busStatus to set
+	 */
+	public void setOutBusStatus(String outBusStatus) {
+		this.outBusStatus = outBusStatus;
+	}
+
 	/**
 	 * @return the tripData
 	 */
@@ -77,20 +119,22 @@ public class BookingAction extends BaseAction implements SessionAware {
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<TripBean> getListTripBean(){
+	private List<TripBean> getListTripBean() {
 		List<TripBean> listTripBean = new ArrayList<TripBean>();
+		try{
 		if(session.get("listTripBean") == null){
-/*			listTripBean = tripDAO.getBookingTrips(out_journey.getBusStatusId(), 
-					  							   out_journey.getDepartureTime(), 
-					  							   out_journey.getArrivalTime());
-			session.put("listTripBean", listTripBean);*/
-			
-			listTripBean.add(tripDAO.getById(7));
-			session.put("listTripBean", listTripBean);
-			
+			int busStatus = Integer.parseInt(outBusStatus);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S", Locale.US);
+			Date depart = sdf.parse(outDepartTime);
+			Date arrive = sdf.parse(outArriveTime);
+			listTripBean = tripDAO.getBookingTrips(busStatus, depart, arrive);
+			session.put("listTripBean", listTripBean);			
 		}else{
 			//redirect from some where
 			listTripBean = (List<TripBean>)session.get("listTripBean");
+		}
+		} catch(ParseException e){
+			e.printStackTrace();
 		}
 		return listTripBean;
 	}
