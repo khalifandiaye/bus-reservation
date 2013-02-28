@@ -169,6 +169,7 @@ function showPopup(message){
 function updateSeatNum(){
     $(".seat-number").text(SeatsToAllocate - SeatsNotAllocatedCount);
     $.cookie('selectedSeat', getSelectedSeatString(), { expires: 1 });
+    $("#selectedSeat").val(getSelectedSeatString());
 }
 
 $(function(){
