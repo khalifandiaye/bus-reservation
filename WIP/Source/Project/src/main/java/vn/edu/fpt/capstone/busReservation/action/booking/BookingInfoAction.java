@@ -40,13 +40,13 @@ public class BookingInfoAction extends BaseAction {
         this.reservationLogic = reservationLogic;
     }
 
-    private List<SeatInfo> listSeats = new ArrayList<SeatInfo>();
     private List<PaymentMethodBean> paymentMethods;
     private ReservationInfo reservationInfo;
     private String inputFirstName;
 	private String inputLastName;
 	private String inputMobile;
 	private String inputEmail;
+	private String selectedSeat;
 	
 
 	/**
@@ -76,10 +76,6 @@ public class BookingInfoAction extends BaseAction {
 	public String getInputEmail() {
 		return inputEmail;
 	}
-	
-    public List<SeatInfo> getListSeats() {
-        return listSeats;
-    }
 
     /**
      * @return the paymentMethods
@@ -93,6 +89,13 @@ public class BookingInfoAction extends BaseAction {
      */
     public ReservationInfo getReservationInfo() {
         return reservationInfo;
+    }
+
+    /**
+     * @param selectedSeat the selectedSeat to set
+     */
+    public void setSelectedSeat(String selectedSeat) {
+        this.selectedSeat = selectedSeat;
     }
 
     @SuppressWarnings("unchecked")
@@ -117,7 +120,7 @@ public class BookingInfoAction extends BaseAction {
         tripBeanList = (List<TripBean>) session.get("listTripBean");
         try {
             reservationInfo = reservationLogic.createReservationInfo(
-                    tripBeanList, listSeats.size());
+                    tripBeanList, selectedSeat.split(";").length);
             paymentLogic.updateReservationPaymentInfo(reservationInfo,
                     paymentMethods.get(0).getId());
         } catch (CommonException e) {

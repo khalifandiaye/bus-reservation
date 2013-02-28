@@ -42,6 +42,7 @@ public class PayJSONAction extends BaseAction {
     // ==========================Action Input==========================
     private Integer paymentMethodId;
     private String reservationId;
+    private String selectedSeat;
 
     /**
      * @param paymentMethodId
@@ -57,6 +58,13 @@ public class PayJSONAction extends BaseAction {
      */
     public void setReservationId(String reservationId) {
         this.reservationId = reservationId;
+    }
+
+    /**
+     * @param selectedSeat the selectedSeat to set
+     */
+    public void setSelectedSeat(String selectedSeat) {
+        this.selectedSeat = selectedSeat;
     }
 
     // ==========================Action Output=========================
@@ -86,12 +94,13 @@ public class PayJSONAction extends BaseAction {
     }
 
     @Action(value = "/calculateFee", results = { @Result(type = "json", name = SUCCESS, params = {
-            "excludeProperties", "reservationInfo, cancelConfirmMessage" }) })
+            "excludeProperties", "cancelConfirmMessage" }) })
     public String calculateFee() {
         if (paymentMethodId != null) {
             reservationInfo = (ReservationInfo) session
                     .get(ReservationInfo.class.getName());
             if (reservationInfo != null) {
+                reservationInfo.setQuantity(Integer.toString(selectedSeat.split(";").length));
                 try {
                     paymentLogic.updateReservationPaymentInfo(reservationInfo,
                             paymentMethodId);
