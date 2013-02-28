@@ -1,12 +1,9 @@
 package vn.edu.fpt.capstone.busReservation.action.route;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -88,7 +85,7 @@ public class SaveSegmentAction extends BaseAction {
 
 				String stravelTime = segmentInfosFoward.get(i).getDuration();
 				String[] travelTime = stravelTime.split(":");
-				Date dtravelTime = DateUtils.getTime(Integer.parseInt(travelTime[0]), 
+				long dtravelTime = DateUtils.getTime(Integer.parseInt(travelTime[0]), 
 						Integer.parseInt(travelTime[1]), Integer.parseInt(travelTime[2]));
 
 				StationBean startStation = stationDAO.getById(segmentInfosFoward.get(i).getStationStartAt());
@@ -135,7 +132,7 @@ public class SaveSegmentAction extends BaseAction {
 
 				String stravelTime = segmentInfosFoward.get(i).getDuration();
 				String[] travelTime = stravelTime.split(":");
-				Date dtravelTime = DateUtils.getTime(Integer.parseInt(travelTime[0]), 
+				long dtravelTime = DateUtils.getTime(Integer.parseInt(travelTime[0]), 
 						Integer.parseInt(travelTime[1]), Integer.parseInt(travelTime[2]));
 
 				StationBean startStation = stationDAO.getById(segmentInfosReturn.get(i).getStationEndAt());
