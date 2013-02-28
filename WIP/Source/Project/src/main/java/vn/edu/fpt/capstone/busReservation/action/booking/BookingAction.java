@@ -121,20 +121,13 @@ public class BookingAction extends BaseAction implements SessionAware {
 	@SuppressWarnings("unchecked")
 	private List<TripBean> getListTripBean() {
 		List<TripBean> listTripBean = new ArrayList<TripBean>();
-		try{
 		if(session.get("listTripBean") == null){
 			int busStatus = Integer.parseInt(outBusStatus);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S", Locale.US);
-			Date depart = sdf.parse(outDepartTime);
-			Date arrive = sdf.parse(outArriveTime);
-			listTripBean = tripDAO.getBookingTrips(busStatus, depart, arrive);
+			listTripBean = tripDAO.getBookingTrips(busStatus, outDepartTime, outArriveTime);
 			session.put("listTripBean", listTripBean);			
 		}else{
 			//redirect from some where
 			listTripBean = (List<TripBean>)session.get("listTripBean");
-		}
-		} catch(ParseException e){
-			e.printStackTrace();
 		}
 		return listTripBean;
 	}
