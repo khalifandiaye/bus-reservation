@@ -115,7 +115,7 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<TripBean> getBookingTrips(int busStatus, Date deptTime, Date arrTime){
+	public List<TripBean> getBookingTrips(int busStatus, String deptTime, String arrTime){
 		String hql = "Select trip from TripBean trip " +
 				"where trip.busStatus.id = :busStatusId " +
 				"  and trip.departureTime >= :deptTime " +
@@ -125,8 +125,8 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 		try {
 			Query query = session.createQuery(hql);
 			query.setInteger("busStatusId", busStatus)
-				 .setDate("deptTime", deptTime)
-				 .setDate("arrTime", arrTime);
+				 .setString("deptTime", deptTime)
+				 .setString("arrTime", arrTime);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
