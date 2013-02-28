@@ -79,7 +79,8 @@ public class SaveSegmentAction extends BaseAction {
 				StationBean endStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
 				if (i == 0) {
 					routeName += startStation.getCity().getName();
-				} else if (i == segmentInfos.size() - 1) {
+				}
+				if (i == segmentInfos.size() - 1) {
 					routeName += " - " + endStation.getCity().getName();
 				}
 				segmentBean.setStartAt(startStation);
