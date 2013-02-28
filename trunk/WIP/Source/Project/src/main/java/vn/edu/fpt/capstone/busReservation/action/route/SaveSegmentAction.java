@@ -61,55 +61,122 @@ public class SaveSegmentAction extends BaseAction {
 
 	@Action(value = "saveSegment", results = { @Result(type = "json", name = SUCCESS, params = {
 			"root", "message" }) })
-	public String execute() throws JsonParseException, JsonMappingException,IOException, ParseException {
-		SegmentAddInfo segmentAddInfos = mapper.readValue(data,
-			new TypeReference<SegmentAddInfo>() {});
-		String routeName = "";
-		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
-		List<SegmentInfo> segmentInfos = segmentAddInfos.getSegments();
-		if (!segmentInfos.isEmpty()) {
-			for (int i = 0; i < segmentInfos.size(); i++) {
+	public String execute() throws JsonParseException, JsonMappingException,
+			IOException, ParseException {
+		SegmentAddInfo segmentAddInfos = mapper.readValue(data,new TypeReference<SegmentAddInfo>() {});
+		String routeNameForward = "";
+		String routeNameReturn = "";
+		List<SegmentBean> segmentBeansForward = new ArrayList<SegmentBean>();
+		List<SegmentInfo> segmentInfosFoward = segmentAddInfos.getSegments();
+
+		List<SegmentBean> segmentBeansReturn = new ArrayList<SegmentBean>();
+		List<SegmentInfo> segmentInfosReturn = new ArrayList<SegmentInfo>();
+
+		// add data for segmentBeanReturn segmentInfosReturn
+		for (int i = 0; i < segmentBeansReturn.size(); i++) {
+			segmentBeansReturn.add(segmentBeansForward.get(segmentBeansForward.size() - 1 - i));
+		}
+		for (int i = 0; i < segmentInfosFoward.size(); i++) {
+			segmentInfosReturn.add(segmentInfosFoward.get(segmentInfosFoward
+					.size() - 1 - i));
+		}
+
+		if (!segmentInfosFoward.isEmpty()) {
+			for (int i = 0; i < segmentInfosFoward.size(); i++) {
 				SegmentBean segmentBean = new SegmentBean();
-				
-				String stravelTime = segmentInfos.get(i).getDuration();
+
+				String stravelTime = segmentInfosFoward.get(i).getDuration();
 				DateFormat sdf = new SimpleDateFormat("hh:mm");
 				Date travelTime = sdf.parse(stravelTime);
 
-				StationBean startStation = stationDAO.getById(segmentInfos.get(i).getStationStartAt());
-				StationBean endStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
+				StationBean startStation = stationDAO.getById(segmentInfosFoward.get(
+						i).getStationStartAt());
+				StationBean endStation = stationDAO.getById(segmentInfosFoward.get(i)
+						.getStationEndAt());
 				if (i == 0) {
-					routeName += startStation.getCity().getName();
+					routeNameForward += startStation.getCity().getName();
 				}
-				if (i == segmentInfos.size() - 1) {
-					routeName += " - " + endStation.getCity().getName();
+				if (i == segmentInfosFoward.size() - 1) {
+					routeNameForward += " - " + endStation.getCity().getName();
 				}
 				segmentBean.setStartAt(startStation);
 				segmentBean.setEndAt(endStation);
 				segmentBean.setTravelTime(travelTime);
 				segmentBean.setStatus("active");
 				segmentDAO.insert(segmentBean);
-				segmentBeans.add(segmentBean);
+				segmentBeansForward.add(segmentBean);
 
 				TariffBean tariffBean = new TariffBean();
-				BusTypeBean busTypeBean = busTypeDAO.getById(segmentAddInfos.getBusType());
+				BusTypeBean busTypeBean = busTypeDAO.getById(segmentAddInfos
+						.getBusType());
 				tariffBean.setBusType(busTypeBean);
-				tariffBean.setFare(segmentInfos.get(i).getPrice());
+				tariffBean.setFare(segmentInfosFoward.get(i).getPrice());
 				tariffBean.setSegment(segmentBean);
 				tariffBean.setValidFrom(Calendar.getInstance().getTime());
 				tariffDAO.insert(tariffBean);
 			}
 
-			RouteBean routeBean = new RouteBean();
-			routeBean.setName(routeName);
-			routeBean.setStatus("active");
-			routeDAO.insert(routeBean);
+			RouteBean routeBeanForward = new RouteBean();
+			routeBeanForward.setName(routeNameForward);
+			routeBeanForward.setStatus("active");
+			routeDAO.insert(routeBeanForward);
 
-			for (SegmentBean segmentBean : segmentBeans) {
+			for (SegmentBean segmentBean : segmentBeansForward) {
 				RouteDetailsBean routeDetailsBean = new RouteDetailsBean();
 				routeDetailsBean.setSegment(segmentBean);
-				routeDetailsBean.setRoute(routeBean);
+				routeDetailsBean.setRoute(routeBeanForward);
 				routeDetailsDAO.insert(routeDetailsBean);
 			}
+			
+			routeNameReturn = "";
+			//Add return route
+			for (int i = 0; i < segmentInfosReturn.size(); i++) {
+				SegmentBean segmentBean = new SegmentBean();
+
+				String stravelTime = segmentInfosReturn.get(i).getDuration();
+				DateFormat sdf = new SimpleDateFormat("hh:mm");
+				Date travelTime = sdf.parse(stravelTime);
+
+				StationBean startStation = stationDAO.getById(segmentInfosReturn.get(
+						i).getStationEndAt());
+				StationBean endStation = stationDAO.getById(segmentInfosReturn.get(i)
+						.getStationStartAt());
+				if (i == 0) {
+					routeNameReturn += startStation.getCity().getName();
+				}
+				if (i == segmentInfosReturn.size() - 1) {
+					routeNameReturn += " - " + endStation.getCity().getName();
+				}
+				segmentBean.setStartAt(startStation);
+				segmentBean.setEndAt(endStation);
+				segmentBean.setTravelTime(travelTime);
+				segmentBean.setStatus("active");
+				segmentDAO.insert(segmentBean);
+				segmentBeansReturn.add(segmentBean);
+
+				TariffBean tariffBean = new TariffBean();
+				BusTypeBean busTypeBean = busTypeDAO.getById(segmentAddInfos
+						.getBusType());
+				tariffBean.setBusType(busTypeBean);
+				tariffBean.setFare(segmentInfosReturn.get(i).getPrice());
+				tariffBean.setSegment(segmentBean);
+				tariffBean.setValidFrom(Calendar.getInstance().getTime());
+				tariffDAO.insert(tariffBean);
+			}
+
+			RouteBean routeBeanReturn = new RouteBean();
+			routeBeanReturn.setName(routeNameReturn);
+			routeBeanReturn.setStatus("active");
+			routeDAO.insert(routeBeanReturn);
+
+			for (SegmentBean segmentBean : segmentBeansReturn) {
+				RouteDetailsBean routeDetailsBean = new RouteDetailsBean();
+				routeDetailsBean.setSegment(segmentBean);
+				routeDetailsBean.setRoute(routeBeanReturn);
+				routeDetailsDAO.insert(routeDetailsBean);
+			}
+			//Finish add return route
+
 		}
 		return SUCCESS;
 	}
