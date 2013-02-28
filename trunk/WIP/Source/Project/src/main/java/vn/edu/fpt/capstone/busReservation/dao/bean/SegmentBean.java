@@ -17,7 +17,7 @@ public class SegmentBean extends AbstractBean<Integer> {
 	private static final long serialVersionUID = -8476937436323359378L;
 	private StationBean startAt;
 	private StationBean endAt;
-	private Date travelTime;
+	private Long travelTime;
 	private String status;
 	private List<TariffBean> tariffs;
 	private List<RouteDetailsBean> routeDetails;
@@ -48,13 +48,13 @@ public class SegmentBean extends AbstractBean<Integer> {
 	/**
 	 * @return the travelTime
 	 */
-	public Date getTravelTime() {
+	public Long getTravelTime() {
 		return travelTime;
 	}
 	/**
 	 * @param travelTime the travelTime to set
 	 */
-	public void setTravelTime(Date travelTime) {
+	public void setTravelTime(Long travelTime) {
 		this.travelTime = travelTime;
 	}
 	/**
