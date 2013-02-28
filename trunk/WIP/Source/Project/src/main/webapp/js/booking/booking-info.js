@@ -1,5 +1,5 @@
 function removeSeatInHiddenInput(seatName){
-	var seatsSelected = $("#selectedSeat").val().split(";");
+	var seatsSelected = $.cookie('selectedSeat').split(";");
 	for(var i = 0; i < seatsSelected.length; i++){
 		if(seatsSelected[i] == seatName || seatsSelected[i] == ""){
 			seatsSelected.splice(i, 1);
@@ -9,7 +9,7 @@ function removeSeatInHiddenInput(seatName){
 	for(var i = 0;i < seatsSelected.length; i++){
 		nwHiddenInput += seatsSelected[i]+";";
 	}
-	$("#selectedSeat").val(nwHiddenInput);
+	$.cookie('selectedSeat', nwHiddenInput, { expires: 1 });
 }
 
 function removeSeat(parent){
@@ -31,7 +31,18 @@ function showPopup(message){
 	$(".notify-message").append('<div class="alert fade in"><button type="button" class="close" data-dismiss="alert">×</button>'+message+'</div>');
 }
 
+function genSeatFromCookie(){
+	var listSeat = $.cookie('selectedSeat').split(";");
+	for ( var i = 0; i < listSeat.length; i++) {
+		if(listSeat[i] != ""){ 
+			$(".listCheckedSeats").append('<div class="seatChecked"><span class="seatCheckedName">'+listSeat[i]+'</span><button class="btn btn-mini btn-danger" type="button">Bỏ ghế</button></div>');
+		}
+	}
+}
+
 $(function(){
+	genSeatFromCookie();
+	
 	$(".seatChecked button").bind("click",function(event){
 		var message = "";
 		if($(".seatChecked").size() > 1){

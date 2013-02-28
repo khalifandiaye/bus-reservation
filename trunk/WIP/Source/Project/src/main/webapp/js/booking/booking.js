@@ -11,18 +11,20 @@ var CAN_CHOOSE = true;
 var SEAT_EMPTY = 0,
     SEAT_SOLD = 1,
     SEAT_SELECTED = 2;
-
+ 
 function initSelectedSeat(){
 	var selectedSeatInput = $("#selectedSeat").val();
 	var arraySelectedSeat;
-	if(selectedSeatInput.length > 0){
+	
+	if(selectedSeatInput != ""){
 		arraySelectedSeat = selectedSeatInput.split(";");
-		console.log(arraySelectedSeat);
-		for(var i = 0; i < arraySelectedSeat.length ;i++){
-			if(arraySelectedSeat[i] != ""){
-				seatClicked($('.seat-img[data-seat="'+arraySelectedSeat[i]+'"]'));
+	}else{
+		arraySelectedSeat = $.cookie('selectedSeat').split(";");
+	}
+	for(var i = 0; i < arraySelectedSeat.length ;i++){
+		if(arraySelectedSeat[i] != ""){
+			seatClicked($('.seat-img[data-seat="'+arraySelectedSeat[i]+'"]'));
 			}
-		}
 	}
 }
 
@@ -166,7 +168,7 @@ function showPopup(message){
 
 function updateSeatNum(){
     $(".seat-number").text(SeatsToAllocate - SeatsNotAllocatedCount);
-    $("#selectedSeat").val(getSelectedSeatString());
+    $.cookie('selectedSeat', getSelectedSeatString(), { expires: 1 });
 }
 
 $(function(){
