@@ -28,8 +28,11 @@ $(document).ready(function(){
             "aTargets" : [ 3 ]
         }],
         "bAutoWidth": true,
-        "iDisplayLength": 20,
-        "aLengthMenu": [[-1, 20, 50, 75, 100], [$("span.hidden#sAll").text(), 20, 50, 75, 100]],
+        "bDeferRender": true,
+        "bStateSave": true,
+        "iDisplayLength": 10,
+        "sPaginationType": "full_numbers",
+        "aLengthMenu": [[-1, 10, 20, 50, 75, 100], [$("span.hidden#sAll").text(), 10, 20, 50, 75, 100]],
         "oLanguage": {
             "oPaginate": {
                 "sFirst": $("span.hidden#sFirst").text(),
@@ -106,8 +109,6 @@ $(document).ready(function(){
         $(target).parents('.modal').modal('hide');
     });
     $("#btnCancel").on('click.cancel', function(e) {
-        // get event target
-        var target = e.target ? e.target : e.source;
         // send request to calculate refund amount
         $.ajax({
             type : "POST",

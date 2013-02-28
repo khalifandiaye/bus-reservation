@@ -48,15 +48,33 @@ public class ReservationLogic extends BaseLogic {
 
         @Override
         public int compare(ReservationInfoBean o1, ReservationInfoBean o2) {
-            return o1 == null || o1.getStartTrip() == null
-                    || o1.getStartTrip().getDepartureTime() == null ? -1
-                    : o2 == null || o2.getStartTrip() == null
-                            || o2.getStartTrip().getDepartureTime() == null ? 1
-                            : o1.getStartTrip()
-                                    .getDepartureTime()
-                                    .compareTo(
-                                            o2.getStartTrip()
-                                                    .getDepartureTime());
+            long date1 = 0;
+            long date2 = 0;
+            long now = 0;
+            if ((o1 == null || o1.getStartTrip() == null
+                    || o1.getStartTrip().getDepartureTime() == null) && (o2 == null || o2.getStartTrip() == null
+                            || o2.getStartTrip().getDepartureTime() == null)) {
+                // null = null
+                return 0;
+            } else if (o1 == null || o1.getStartTrip() == null
+                    || o1.getStartTrip().getDepartureTime() == null) {
+                // null < everything
+                return -1;
+            } else if (o2 == null || o2.getStartTrip() == null
+                    || o2.getStartTrip().getDepartureTime() == null) {
+                // everything > null
+                return 1;
+            } else {
+                date1 = o1.getStartTrip().getDepartureTime().getTime();
+                date2 = o2.getStartTrip().getDepartureTime().getTime();
+                now = System.currentTimeMillis();
+                if ((date1 >= now && date2 < now) || (date1 < now && date2 >= now)) {
+                    // future date < past date
+                    return (int) (date2 - date1);
+                } else {
+                    return (int) (date1 - date2);
+                }
+            }
         }
     };
     // =====================Database Access Object=====================
@@ -108,7 +126,8 @@ public class ReservationLogic extends BaseLogic {
     }
 
     /**
-     * @param systemSettingDAO the systemSettingDAO to set
+     * @param systemSettingDAO
+     *            the systemSettingDAO to set
      */
     public void setSystemSettingDAO(SystemSettingDAO systemSettingDAO) {
         this.systemSettingDAO = systemSettingDAO;
@@ -135,12 +154,16 @@ public class ReservationLogic extends BaseLogic {
         List<SimpleReservationInfo> infoList = null;
         List<ReservationInfoBean> infoBeans = null;
         SimpleReservationInfo info = null;
+        Integer timeOutInterval = 0;
+        Integer lockInterval = 0;
+        timeOutInterval = Integer.parseInt(systemSettingDAO.getById("reservation.timeout").getValue());
+        lockInterval = systemSettingDAO.getReservationLockTime();
         infoBeans = reservationInfoDAO.getByUsername(username);
         if (infoBeans != null && infoBeans.size() > 0) {
             Collections.sort(infoBeans, COMPARE_RESERVATION_BY_DEPARTURE_DATE);
             infoList = new ArrayList<SimpleReservationInfo>();
             for (ReservationInfoBean bean : infoBeans) {
-                info = loadSimpleReservationInfo(bean);
+                info = loadSimpleReservationInfo(bean, timeOutInterval, lockInterval);
                 infoList.add(info);
             }
         }
@@ -148,7 +171,7 @@ public class ReservationLogic extends BaseLogic {
     }
 
     private SimpleReservationInfo loadSimpleReservationInfo(
-            ReservationInfoBean bean) throws CommonException {
+            ReservationInfoBean bean, Integer timeOutInterval, Integer lockInterval) throws CommonException {
         SimpleReservationInfo info = null;
         StationBean startStation = null;
         StationBean endStation = null;
@@ -168,7 +191,7 @@ public class ReservationLogic extends BaseLogic {
                 CommonConstant.DEFAULT_TIME_ZONE));
         info.setBookTimeInMilisec(bean.getId().getBookTime().getTime());
         info.setStatus(updateStatus(bean.getId(), bean.getStartTrip()
-                .getDepartureTime()));
+                .getDepartureTime(), timeOutInterval, lockInterval));
         return info;
     }
 
@@ -176,8 +199,12 @@ public class ReservationLogic extends BaseLogic {
             boolean convertToUSD) throws CommonException {
         ReservationInfo info = null;
         ReservationInfoBean bean = null;
+        Integer timeOutInterval = 0;
+        Integer lockInterval = 0;
+        timeOutInterval = Integer.parseInt(systemSettingDAO.getById("reservation.timeout").getValue());
+        lockInterval = systemSettingDAO.getReservationLockTime();
         bean = reservationInfoDAO.loadById(Integer.parseInt(reservationId));
-        info = loadReservationInfo(bean, convertToUSD);
+        info = loadReservationInfo(bean, convertToUSD, timeOutInterval, lockInterval);
         return info;
     }
 
@@ -186,13 +213,25 @@ public class ReservationLogic extends BaseLogic {
             throws CommonException {
         ReservationInfo info = null;
         ReservationInfoBean bean = null;
+        Integer timeOutInterval = 0;
+        Integer lockInterval = 0;
+        timeOutInterval = Integer.parseInt(systemSettingDAO.getById("reservation.timeout").getValue());
+        lockInterval = systemSettingDAO.getReservationLockTime();
         bean = reservationInfoDAO.getByCode(reservationCode);
-        info = loadReservationInfo(bean, convertToUSD);
+        info = loadReservationInfo(bean, convertToUSD, timeOutInterval, lockInterval);
         return info;
     }
 
+    /**
+     * @param bean
+     * @param convertToUSD
+     * @param lockInterval 
+     * @param timeOutInterval 
+     * @return
+     * @throws CommonException
+     */
     private ReservationInfo loadReservationInfo(final ReservationInfoBean bean,
-            boolean convertToUSD) throws CommonException {
+            boolean convertToUSD, Integer timeOutInterval, Integer lockInterval) throws CommonException {
         ReservationInfo info = null;
         StationBean startStation = null;
         StationBean endStation = null;
@@ -266,28 +305,34 @@ public class ReservationLogic extends BaseLogic {
             }
         }
         info.setStatus(updateStatus(bean.getId(), bean.getStartTrip()
-                .getDepartureTime()));
+                .getDepartureTime(), timeOutInterval, lockInterval));
         return info;
     }
 
     public String updateStatus(String reservationId) {
-        ReservationInfoBean infoBean = reservationInfoDAO.getById(Integer
+        ReservationInfoBean infoBean = null;
+        Integer timeOutInterval = 0;
+        Integer lockInterval = 0;
+        infoBean = reservationInfoDAO.getById(Integer
                 .parseInt(reservationId));
+        timeOutInterval = Integer.parseInt(systemSettingDAO.getById("reservation.timeout").getValue());
+        lockInterval = systemSettingDAO.getReservationLockTime();
         return updateStatus(infoBean.getId(), infoBean.getStartTrip()
-                .getDepartureTime());
+                .getDepartureTime(), timeOutInterval, lockInterval);
     }
 
-    private String updateStatus(ReservationBean bean, Date departureTime) {
+    private String updateStatus(ReservationBean bean, Date departureTime, int timeOutInterval, int lockInterval) {
         Calendar timeLimit = null;
         boolean changed = true;
         Calendar pendingTime = null;
         Date today = null;
         timeLimit = Calendar.getInstance();
-        timeLimit.add(Calendar.MINUTE, -CommonConstant.RESERVATION_TIMEOUT);
+        timeLimit.add(Calendar.MINUTE, -timeOutInterval);
         pendingTime = Calendar.getInstance(CommonConstant.DEFAULT_TIME_ZONE,
                 CommonConstant.LOCALE_VN);
         pendingTime.setTime(departureTime);
-        pendingTime.add(Calendar.DATE, -systemSettingDAO.getReservationLockTime());
+        pendingTime.add(Calendar.DATE,
+                -lockInterval);
         today = new Date();
         if (ReservationStatus.UNPAID.getValue().equals(bean.getStatus())
                 && timeLimit.getTime().after(bean.getBookTime())) {

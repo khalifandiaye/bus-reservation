@@ -40,7 +40,7 @@
 		</id>
 		<many-to-one name="startAt" column="departure_station_id" />
 		<many-to-one name="endAt" column="arrival_station_id" />
-		<property name="travelTime" column="travel_time" type="time" not-null="true" />
+		<property name="travelTime" column="travel_time" type="timestamp" not-null="true" />
 		<property name="status" type="string" not-null="true" />
 		<bag name="tariffs" table="tariff" inverse="true" order-by="id">
 			<key column="segment_id" />
