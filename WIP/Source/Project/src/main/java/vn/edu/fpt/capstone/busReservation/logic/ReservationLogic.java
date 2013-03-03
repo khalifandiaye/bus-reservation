@@ -254,8 +254,9 @@ public class ReservationLogic extends BaseLogic {
                 CommonConstant.LOCALE_VN, CommonConstant.DEFAULT_TIME_ZONE));
         info.setDepartureStationAddress(startStation.getAddress());
         info.setArrivalStationAddress(endStation.getAddress());
-        info.setSeatNumbers(getSeatNumbers(bean.getId().getSeatPositions()));
-        quantity = bean.getId().getSeatPositions().size();
+        //TODO implement multiple trips
+//        info.setSeatNumbers(getSeatNumbers(bean.getId().getTickets()));
+//        quantity = bean.getId().getSeatPositions().size();
         info.setQuantity(Integer.toString(quantity));
         // TODO first name last name order
         info.setBookerName(bean.getId().getBookerLastName() + " "

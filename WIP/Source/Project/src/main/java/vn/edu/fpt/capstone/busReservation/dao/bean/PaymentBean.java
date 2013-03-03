@@ -128,7 +128,9 @@ public class PaymentBean extends AbstractBean<Integer> {
         }
 
         public static final PaymentType fromValue(final String value) {
-            if (PAY.value.equalsIgnoreCase(value)) {
+            if (value == null) {
+                return null;
+            } else if (PAY.value.equalsIgnoreCase(value)) {
                 return PAY;
             } else if (REFUND.value.equalsIgnoreCase(value)) {
                 return REFUND;
