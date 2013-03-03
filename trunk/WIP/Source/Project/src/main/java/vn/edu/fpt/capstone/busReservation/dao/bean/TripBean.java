@@ -12,15 +12,15 @@ import java.util.List;
  */
 public class TripBean extends AbstractBean<Integer> {
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2386352728008778873L;
-	private BusStatusBean busStatus;
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private BusStatusBean busStatus;
 	private RouteDetailsBean routeDetails;
 	private Date departureTime;
 	private Date arrivalTime;
 	private String status;
-	private List<ReservationBean> reservations;
+	private List<TicketBean> tickets;
 	/**
 	 * @return the busStatus
 	 */
@@ -81,16 +81,16 @@ public class TripBean extends AbstractBean<Integer> {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	/**
-	 * @return the reservations
-	 */
-	public List<ReservationBean> getReservations() {
-		return reservations;
-	}
-	/**
-	 * @param reservations the reservations to set
-	 */
-	public void setReservations(List<ReservationBean> reservations) {
-		this.reservations = reservations;
-	}
+    /**
+     * @return the tickets
+     */
+    public List<TicketBean> getTickets() {
+        return tickets;
+    }
+    /**
+     * @param tickets the tickets to set
+     */
+    public void setTickets(List<TicketBean> tickets) {
+        this.tickets = tickets;
+    }
 }

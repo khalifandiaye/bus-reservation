@@ -152,9 +152,9 @@
 		<property name="departureTime" column="departure_time" type="timestamp" not-null="true" />
 		<property name="arrivalTime" column="arrival_time" type="timestamp" not-null="true" />
 		<property name="status" type="string" not-null="true" />
-		<bag name="reservations" table="trip_in_reservation" inverse="true" order-by="reservation_id">
+		<bag name="tickets" table="trip_in_ticket" inverse="true" order-by="ticket_id">
 			<key column="trip_id" />
-			<many-to-many column="reservation_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean" />
+			<many-to-many column="ticket_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean" />
 		</bag>
 	</class>
 	<!-- ROLE -->
@@ -201,24 +201,35 @@
 		<property name="bookerLastName" column="booker_last_name" type="string" not-null="true" />
 		<property name="phone" type="string" not-null="true" />
 		<property name="email" type="string" not-null="true" />
-		<bag name="seatPositions" table="seat_position" inverse="true" order-by="name">
+		<bag name="tickets" table="ticket" order-by="id">
 			<key column="reservation_id" />
-			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" />
-		</bag>
-		<bag name="trips" table="trip_in_reservation" order-by="trip_id">
-			<key column="reservation_id" />
-			<many-to-many column="trip_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean" />
 		</bag>
 		<bag name="payments" inverse="true" order-by="id">
 			<key column="reservation_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean" />
 		</bag>
 	</class>
+	<!-- TICKET -->
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean" table="ticket">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<many-to-one name="reservation" insert="false" update="false" column="reservation_id" not-null="true" />
+		<bag name="seatPositions" table="seat_position" order-by="name">
+			<key column="ticket_id" />
+			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" />
+		</bag>
+		<bag name="trips" table="trip_in_ticket" order-by="trip_id">
+			<key column="ticket_id" />
+			<many-to-many column="trip_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
+		</bag>
+	</class>
 	<!-- SEAT_POSITION -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" table="seat_position">
 		<composite-id>
 			<key-property name="name" column="seat_name" />
-			<key-many-to-one name="reservation" column="reservation_id" />
+			<key-many-to-one name="ticket" column="ticket_id" />
 		</composite-id>
 	</class>
 	<!-- PAYMENT_METHOD -->

@@ -24,8 +24,7 @@ public class ReservationBean extends AbstractBean<Integer> {
     private String bookerLastName;
     private String phone;
     private String email;
-    private List<SeatPositionBean> seatPositions;
-    private List<TripBean> trips;
+    private List<TicketBean> tickets;
     private List<PaymentBean> payments;
 
     /**
@@ -149,33 +148,17 @@ public class ReservationBean extends AbstractBean<Integer> {
     }
 
     /**
-     * @return the seatPositions
+     * @return the tickets
      */
-    public List<SeatPositionBean> getSeatPositions() {
-        return seatPositions;
+    public List<TicketBean> getTickets() {
+        return tickets;
     }
 
     /**
-     * @param seatPositions
-     *            the seatPositions to set
+     * @param tickets the tickets to set
      */
-    public void setSeatPositions(List<SeatPositionBean> seatPositions) {
-        this.seatPositions = seatPositions;
-    }
-
-    /**
-     * @return the trips
-     */
-    public List<TripBean> getTrips() {
-        return trips;
-    }
-
-    /**
-     * @param trips
-     *            the trips to set
-     */
-    public void setTrips(List<TripBean> trips) {
-        this.trips = trips;
+    public void setTickets(List<TicketBean> tickets) {
+        this.tickets = tickets;
     }
 
     /**
@@ -248,7 +231,9 @@ public class ReservationBean extends AbstractBean<Integer> {
         }
 
         public static final ReservationStatus fromValue(final String value) {
-            if (PAID.value.equalsIgnoreCase(value)) {
+            if (value == null) {
+                return null;
+            } else if (PAID.value.equalsIgnoreCase(value)) {
                 return PAID;
             } else if (UNPAID.value.equalsIgnoreCase(value)) {
                 return UNPAID;

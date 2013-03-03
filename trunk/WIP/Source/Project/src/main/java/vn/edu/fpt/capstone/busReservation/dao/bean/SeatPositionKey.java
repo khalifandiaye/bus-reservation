@@ -16,7 +16,7 @@ public class SeatPositionKey implements Serializable {
 	 */
 	private static final long serialVersionUID = 3947765243302644340L;
 	private String name;
-	private ReservationBean reservation;
+	private TicketBean ticket;
 
 	/**
 	 * @return the name
@@ -34,36 +34,35 @@ public class SeatPositionKey implements Serializable {
 	}
 
 	/**
-	 * @return the reservation
-	 */
-	public ReservationBean getReservation() {
-		return reservation;
-	}
+     * @return the ticket
+     */
+    public TicketBean getTicket() {
+        return ticket;
+    }
 
-	/**
-	 * @param reservation
-	 *            the reservation to set
-	 */
-	public void setReservation(ReservationBean reservation) {
-		this.reservation = reservation;
-	}
+    /**
+     * @param ticket the ticket to set
+     */
+    public void setTicket(TicketBean ticket) {
+        this.ticket = ticket;
+    }
 
-	@Override
+    @Override
 	public boolean equals(Object arg0) {
 		if (arg0 == null || !this.getClass().isAssignableFrom(arg0.getClass())) {
 			return false;
 		} else {
 			SeatPositionKey key = (SeatPositionKey) arg0;
-			if (this.name == null && this.reservation == null) {
-				return key.name == null && key.reservation == null;
+			if (this.name == null && this.ticket == null) {
+				return key.name == null && key.ticket == null;
 			} else if (this.name == null && key.name == null) {
 				return key.name == null
-						&& this.reservation.equals(key.reservation);
-			} else if (this.reservation == null) {
-				return this.name.equals(key.name) && key.reservation == null;
+						&& this.ticket.equals(key.ticket);
+			} else if (this.ticket == null) {
+				return this.name.equals(key.name) && key.ticket == null;
 			} else {
 				return this.name.equals(key.name)
-						&& this.reservation.equals(key.reservation);
+						&& this.ticket.equals(key.ticket);
 			}
 		}
 	}
@@ -72,7 +71,7 @@ public class SeatPositionKey implements Serializable {
     public int hashCode() {
         int hash = 5;
         hash = 89 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 89 * hash + (this.reservation != null ? this.reservation.hashCode() : 0);
+        hash = 89 * hash + (this.ticket != null ? this.ticket.hashCode() : 0);
         return hash;
     }
 }

@@ -30,13 +30,13 @@ public class SeatPositionBean extends AbstractBean<SeatPositionKey> {
 	/**
 	 * @return the reservation
 	 */
-	public ReservationBean getReservation() {
-		return getId().getReservation();
+	public TicketBean getTicket() {
+		return getId().getTicket();
 	}
 	/**
 	 * @param reservation the reservation to set
 	 */
-	public void setReservation(ReservationBean reservation) {
-		this.getId().setReservation(reservation);
+	public void setTicket(TicketBean ticket) {
+		this.getId().setTicket(ticket);
 	}
 }
