@@ -63,7 +63,7 @@
 	<!-- End small nav -->
 	<section class="body">
 	<div class="container">
-		<div class="well span11">
+		<div class="well"> 
 			<!-- Start contents -->
 			<s:set name="deptCity" value="deptCity" />
 			<s:set name="arrCity" value="arrCity" />

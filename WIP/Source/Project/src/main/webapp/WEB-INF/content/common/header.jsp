@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <div class="circle-back"> 
-<div style="height: 20px;"></div>   
+<div class="top-nav">
+	<div class="top-menu">
+		<a class="btn btn-mini pull-right" style="margin-top:5px;">Đăng Nhập</a>  
+	</div>
+</div>   
 <div class="container">
 <!-- Start header -->
 <input type="hidden" id="contextPath" value="<%=request.getContextPath()%>">
@@ -17,16 +21,7 @@
                     <li><a href="#">CHÍNH SÁCH GIÁ</a></li>
                     <li><a href="#">VỀ CHÚNG TÔI</a></li>
                     <li><a href="#">VÉ CỦA TÔI</a></li>
-                </ul>
-                <ul class="nav pull-right">
-               	 	<li class="dropdown"> 
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">TÀI KHOẢN <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="blog_1.html">Đăng Nhập</a></li>
-                            <li><a href="blog_2.html">Đăng Kí</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                </ul> 
             </div>
         </div> 
 </header>
