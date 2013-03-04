@@ -45,30 +45,20 @@
 	<jsp:include page="../common/header.jsp" />
 	<!-- Start small nav -->
 	<section class="small-nav">
-	<div class="my-container">
-		<div class="nav-step-wrapper">
-			<div class="nav-step nav-in-progress">
-				<span class="nav-step-num">1</span>
-				<div class="nav-step-header">Bước 1:</div>
-				<div class="nav-step-des">Chọn chuyến</div>
+		<div class="nav-step-wrapper step1">
+			<div class="nav-step">
+				<div class="nav-step-des" >Chọn chuyến</div>
 			</div>
-			<div class="nav-step nav-undone" style="margin-left: 100px;">
-				<span class="nav-step-num">2</span>
-				<div class="nav-step-header">Bước 2:</div>
-				<div class="nav-step-des">Chọn ghế</div>
+			<div class="nav-step">
+				<div class="nav-step-des" style="color:#008EDB">Chọn ghế</div>
 			</div>
-			<div class="nav-step nav-undone" style="margin-left: 100px;">
-				<span class="nav-step-num">3</span>
-				<div class="nav-step-header">Bước 3:</div>
-				<div class="nav-step-des">Điền thông tin</div>
+			<div class="nav-step">
+				<div class="nav-step-des" style="color:#008EDB">Điền thông tin</div>
 			</div>
-			<div class="nav-step nav-undone" style="margin-left: 100px;">
-				<span class="nav-step-num">4</span>
-				<div class="nav-step-header">Bước 4:</div>
-				<div class="nav-step-des">Thanh Toán</div>
+			<div class="nav-step">
+				<div class="nav-step-des" style="color:#008EDB">Thanh Toán</div>
 			</div>
 		</div>
-	</div>
 	</section>
 	<!-- End small nav -->
 	<section class="body">

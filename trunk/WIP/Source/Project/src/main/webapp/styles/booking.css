@@ -5,73 +5,37 @@
 .seat-map-img{
     width: 100%;
 }
+.small-nav{
+	padding-bottom: 20px; 
+}
 .nav-step-wrapper{
-    width: 550px;
+    width: 786px;
     margin: 0 auto;
-    height: 70px;
+    height: 43px;   
+    background: url("../img/spriteProgress.png");
+}
+.small-nav .step1{
+	background-position: -1px 0px;
+}
+.small-nav .step2{
+	background-position: -1px -48px;  
 }
 .nav-step{
-    height: 34px;
-    width: 34px;
-    border-radius: 30px;
-    border: 3px solid rgb(34, 170, 238);
-    background: #fff;
-    position: relative;
-    float: left;
+	float:left;
+	width: 196px; 
 }
-    .nav-step>.nav-step-num{
-        height: 34px;
-        width: 34px;
-        top: 0px;
-        position: absolute;
-        left: 0px;
-        line-height: 34px;
-        text-align: center;
-        font-size: 22px;
-        font-weight: bold;
-        color: rgb(34, 170, 238);
-    }
-    .nav-step>.nav-step-header{
-        width: 60px;
-        position: absolute;
-        top: 3px;
-        left: 45px;
-        font-weight: bold;
-        color: #777777;
-        font-size: 12px;
-        line-height: 12px;
-    }
-    .nav-step>.nav-step-des{
-        width: 100px;
-        position: absolute;
-        top:15px;
-        left: 45px;
-        color: rgb(34, 170, 238);
-        font-weight: bold;
-    }
-.nav-done>.nav-step-num,.nav-done>.nav-step-des{
-    color: #00c900 !important;
+.nav-step-des{
+	padding-left: 30px;
+	color: #fff;
+	line-height: 46px;
+	font-size: 17px;
+	font-weight: bold;
 }
-.nav-done{
-    border: #00c900 3px solid;
-}
-.nav-undone>.nav-step-num,.nav-undone>.nav-step-des{
-    color: #777 !important;
-}
-.nav-undone{
-    border: #777 3px solid;
-}
-.nav-in-progress>.nav-step-num,.nav-in-progress>.nav-step-des{
-    color: #F57A00 !important;
-}
-.nav-in-progress{
-    border: #F57A00 3px solid;
-}
-
 .seat-map-wrapper{
     overflow: hidden;
     background: url("../images/bus-seat-map.png") no-repeat;
     background-size: contain;
+    
 }
 .seat-map-inner{
     width: 742px;
