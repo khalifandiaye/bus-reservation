@@ -90,11 +90,16 @@
 						      <s:select list="paymentMethods" listKey="id" listValue="name" name="paymentMethodId" id="selectPaymentMethod"/>
 					    	</div>
 					  	</div>
-					  	<div class="control-group">
-						    <label class="control-label">Số ghế chọn</label>
-						    <div class="controls listCheckedSeats"> 
-					    	</div>
-					  	</div>
+					    <table class="listCheckedSeats table " style="width: 220px;">
+					    	<thead>
+						    	<tr>
+						    		<th>Số Ghế</th>
+						    		<th style="text-align: center"><button type="button" class="btn btn-mini btn-danger">Bỏ Ghế</button></th>
+						    	</tr> 
+					    	</thead>
+					    	<tbody>
+					    	</tbody>
+				    	</table>
 					  	
 					  	<s:hidden id="selectedSeat" name="selectedSeat"></s:hidden>
 					  	

@@ -27,13 +27,73 @@
 <jsp:include page="../common/header.jsp" />
 <!-- End header -->
 <!-- Start slider -->
-<section class="slider-search" >
-    <div class="container">
-        <div class="slider span8" style="margin-left: 0px;">
+<section class="slider-search" style="overflow: hidden;">
+<div class="search span5" style="margin-left: 0px">
+	        <form class="well well-custom" id="search-result" action="search-result.html">
+	                <fieldset>
+	                    <legend>ĐẶT VÉ </legend>
+	                    <div class="controls controls-row" id="radio-ticket">
+	                        <label>Loại vé</label>
+	                        <div class="radio-ticket-type">
+	                            <label class="radio">
+	                                <input type="radio" name="ticketType" id="optionsRadios2" value="oneway" checked>
+	                                Vé một chiều
+	                            </label>
+	                            <label class="radio">
+	                                <input type="radio" name="ticketType" id="optionsRadios1" value="roundtrip">
+	                                Vé khứ hồi
+	                            </label>
+	                        </div>
+	                    </div>
+	                    <div class="controls controls-row">
+	                        <label>Trạm khởi hành</label>
+	                        <s:select list="city" listKey="id" listValue="name" name="departureCity"/>
+	                    </div>
+	                    <div class="controls controls-row">
+	                        <label>Trạm kết thúc</label>
+	                        <s:select list="city" listKey="id" listValue="name" name="arrivalCity"/>
+	                    </div>
+	                    <div class="controls controls-row" id="select-pas">
+	                        <label>Số lượng hành khách</label>
+	                        <div class="custom-select">
+	                            <select name="passengerNo">
+	                                <option>1</option>
+	                                <option>2</option>
+	                                <option>3</option>
+	                                <option>4</option>
+	                                <option>5</option>
+	                            </select>
+	                        </div>
+	                    </div>
+	                    <div class="controls controls-row" id="input-depart">
+	                        <label>Ngày đi</label>
+	                        <input type="text" value="10-02-2013" id="dp1" name="departureDate" data-date-format="dd-mm-yyyy">
+	                    </div>
+	                    <div class="controls controls-row" id="input-return">
+	                        <label>Ngày về</label>
+	                        <input type="text" value="01-01-2013" id="dp2" name="returnDate" data-date-format="dd-mm-yyyy">
+	                    </div>
+	                    <div class="controls controls-row" id="select-bus-type">
+	                        <label>Loại xe bus</label>
+	                        <s:select list="busType" listKey="id" listValue="name" name="busType"/>
+	                    </div>
+	                    <input type="submit" class="pull-right btn btn-large" style="width: 100%;margin-top: 9px;" value="Đặt Vé"/>
+	                    <a id="btn-change" href="#" class="pull-right" style="color: #fff;padding-top: 15px;" onclick="showMore()">Đặt vé chi tiết</a>
+	                </fieldset>
+	            </form>
+            <script type="text/javascript">
+                $(function(){
+                    $('#dp1').datepicker();
+                    $('#dp2').datepicker();
+                })
+            </script>
+        </div>
+        
+        <div class="slider span7" style="margin-left: 20px;"> 
             <div class="well" id="guide-booking">
                 <img src="images/guide.png" alt="booking guide" >
             </div>
-            <div class="well">
+            <div> 
                 <div id="myCarousel" class="carousel slide">
                     <div class="carousel-inner">
                         <div class="active item">
@@ -49,67 +109,7 @@
                 </div>
             </div>
         </div>
-        <div class="search span4 ">
-        <form class="well well-custom" id="search-result" action="search-result.html">
-                <fieldset>
-                    <legend>ĐẶT VÉ </legend>
-                    <div class="controls controls-row" id="radio-ticket">
-                        <label>Loại vé</label>
-                        <div class="radio-ticket-type">
-                            <label class="radio">
-                                <input type="radio" name="ticketType" id="optionsRadios2" value="oneway" checked>
-                                Vé một chiều
-                            </label>
-                            <label class="radio">
-                                <input type="radio" name="ticketType" id="optionsRadios1" value="roundtrip">
-                                Vé khứ hồi
-                            </label>
-                        </div>
-                    </div>
-                    <div class="controls controls-row">
-                        <label>Trạm khởi hành</label>
-                        <s:select list="city" listKey="id" listValue="name" name="departureCity"/>
-                    </div>
-                    <div class="controls controls-row">
-                        <label>Trạm kết thúc</label>
-                        <s:select list="city" listKey="id" listValue="name" name="arrivalCity"/>
-                    </div>
-                    <div class="controls controls-row" id="select-pas">
-                        <label>Số lượng hành khách</label>
-                        <div class="custom-select">
-                            <select name="passengerNo">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="controls controls-row" id="input-depart">
-                        <label>Ngày đi</label>
-                        <input type="text" value="10-02-2013" id="dp1" name="departureDate" data-date-format="dd-mm-yyyy">
-                    </div>
-                    <div class="controls controls-row" id="input-return">
-                        <label>Ngày về</label>
-                        <input type="text" value="01-01-2013" id="dp2" name="returnDate" data-date-format="dd-mm-yyyy">
-                    </div>
-                    <div class="controls controls-row" id="select-bus-type">
-                        <label>Loại xe bus</label>
-                        <s:select list="busType" listKey="id" listValue="name" name="busType"/>
-                    </div>
-                    <input type="submit" class="pull-right btn btn-large" style="width: 100%;margin-top: 9px;" value="Đặt Vé"/>
-                    <a id="btn-change" href="#" class="pull-right" style="color: #fff;padding-top: 15px;" onclick="showMore()">Đặt vé chi tiết</a>
-                </fieldset>
-            </form>
-            <script type="text/javascript">
-                $(function(){
-                    $('#dp1').datepicker();
-                    $('#dp2').datepicker();
-                })
-            </script>
-        </div>
-    </div>
+
 </section>
 
 

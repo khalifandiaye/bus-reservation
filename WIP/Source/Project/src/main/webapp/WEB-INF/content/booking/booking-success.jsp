@@ -110,6 +110,7 @@
 	                    	<button class="btn btn-large pull-right" style="margin-top: 15px;margin-right: 30px;">Tiếp Tục</button>
 	                    </div>
 		            </form>
+		            <s:hidden id="passengerNo" name="passengerNo"></s:hidden>
 	        	</div>
 	        </div>
 	        

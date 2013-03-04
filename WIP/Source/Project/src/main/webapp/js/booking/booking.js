@@ -6,7 +6,6 @@ var t_selectedSeat = [{
         "seats" : []
 }];
 
-var CAN_CHOOSE = true;
 
 var SEAT_EMPTY = 0,
     SEAT_SOLD = 1,
@@ -173,6 +172,8 @@ function updateSeatNum(){
 }
 
 $(function(){
+	SeatsToAllocate = parseInt($("#passengerNo").val());
+	SeatsNotAllocatedCount = parseInt($("#passengerNo").val());
 	
     $(".seat").bind("click",function(event){
 

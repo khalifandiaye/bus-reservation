@@ -13,16 +13,17 @@ function removeSeatInHiddenInput(seatName){
 	$("#selectedSeat").val(nwHiddenInput);
 }
 
-function removeSeat(parent){
-	var seatName = $(parent).eq(0).find(".seatCheckedName").html().trim();
-	var message = "Có lỗi xảy ra.";
-
-	if(seatName != ""){
-		removeSeatInHiddenInput(seatName);
-		$(parent).remove();
-		message = "Bỏ ghế chọn "+seatName+".";
+function removeSeat(){
+	var isDel = false;
+	var seatList = $(".listCheckedSeats tbody tr");
+	for(var i = 0; i < seatList.length; i++ ){
+		if($(seatList).eq(i).find("input[type='checkbox']").is(":checked")){
+			$(seatList).eq(i).remove();
+			removeSeatInHiddenInput($(seatList).eq(i).find(".seatChecked").text());
+			isDel = true;
+		}
 	}
-	return message;
+	return isDel;
 }
 
 function showPopup(message){
@@ -37,7 +38,7 @@ function genSeatFromCookie(){
 	$("#selectedSeat").val($.cookie('selectedSeat'));
 	for ( var i = 0; i < listSeat.length; i++) {
 		if(listSeat[i] != ""){ 
-			$(".listCheckedSeats").append('<div class="seatChecked"><span class="seatCheckedName">'+listSeat[i]+'</span><button class="btn btn-mini btn-danger" type="button">Bỏ ghế</button></div>');
+			$(".listCheckedSeats tbody").append('<tr><td class="seatChecked">'+listSeat[i]+'</td><td style="text-align: center"><input type="checkbox" name="deleteSeats"></td></tr>');
 		}
 	}
 }
@@ -45,12 +46,18 @@ function genSeatFromCookie(){
 $(function(){
 	genSeatFromCookie();
 	
-	$(".seatChecked button").bind("click",function(event){
+	$(".listCheckedSeats button").bind("click",function(event){
 		var message = "";
 		if($(".seatChecked").size() > 1){
-			message = removeSeat($(this).parent());
-		}else{
+			if(removeSeat()){
+				message = ("Bỏ ghế thành công.");
+			}else{
+				message = ("Bạn chưa chọn ghế để bỏ.");
+			}
+		}else if($(".listCheckedSeats tbody tr").find("input[type='checkbox']").is(":checked") && $(".seatChecked").size() <= 1){
 			message = "Không được phép bỏ chọn tất cả các ghế.";
+		}else{
+			message = ("Bạn chưa chọn ghế để bỏ.");
 		}
 		if(message){
             showPopup(message);

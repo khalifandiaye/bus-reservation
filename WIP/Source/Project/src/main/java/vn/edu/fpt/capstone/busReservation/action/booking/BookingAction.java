@@ -59,6 +59,13 @@ public class BookingAction extends BaseAction implements SessionAware {
 	
 	
 	/**
+	 * @return the passengerNo
+	 */
+	public String getPassengerNo() {
+		return passengerNo;
+	}
+
+	/**
 	 * @param outDepartTime the outDepartTime to set
 	 */
 	public void setOutDepartTime(String outDepartTime) {
