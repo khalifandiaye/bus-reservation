@@ -66,5 +66,20 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 		}
 		return result;
 	}
+	
+	public List<BusBean> getBusByType(int busType) {
+		String hql = "FROM BusBean b WHERE b.busType.id = :busType";
+		Session session = sessionFactory.getCurrentSession();
+		List<BusBean> result = new ArrayList<BusBean>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameter("busType", busType);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
 
 }
