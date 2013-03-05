@@ -1,6 +1,5 @@
 package vn.edu.fpt.capstone.busReservation.action.schedule;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,11 +10,9 @@ import org.apache.struts2.convention.annotation.Result;
 import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
-import vn.edu.fpt.capstone.busReservation.dao.StationDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
@@ -32,11 +29,11 @@ public class SaveAction extends ActionSupport{
 	private String tripDialogDepartureTime;
 	private String message;
 	private int tripDialogBusPlate;
+	
 	private BusDAO busDAO;
 	private RouteDAO routeDAO;
 	private TripDAO tripDAO;
 	private BusStatusDAO busStatusDAO;
-	private StationDAO stationDAO;
 
 	@Action(value = "save", results = { @Result(type = "json", name = SUCCESS, params = {
             "root", "message" }) })
@@ -77,8 +74,6 @@ public class SaveAction extends ActionSupport{
 				trip.setArrivalTime(travelDate);
 				trip.setStatus("active");
 				trip.setRouteDetails(routeDetailsBean);
-				List<ReservationBean> reservations = new ArrayList<ReservationBean>();
-				trip.setReservations(reservations);
 				tripDAO.insert(trip);
 			}
 		} catch (Exception ex) {
@@ -104,10 +99,6 @@ public class SaveAction extends ActionSupport{
 		this.busStatusDAO = busStatusDAO;
 	}
 	
-	public void setStationDAO(StationDAO stationDAO) {
-		this.stationDAO = stationDAO;
-	}
-
 	public void setRouteBeans(int routeBeans) {
 		this.routeBeans = routeBeans;
 	}

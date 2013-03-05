@@ -28,7 +28,7 @@ public class AvailBusAction extends BaseAction {
 	private RouteDAO routeDAO;
 
 	private String departureTime;
-	private String arrivalTime;
+	
 	private int busType;
 	private int routeId;
 	private List<BusInfo> busInfos = new ArrayList<BusInfo>();
@@ -37,25 +37,18 @@ public class AvailBusAction extends BaseAction {
 	public String execute() throws ParseException, JSONException {
 		Date startDate = FormatUtils.deFormatDate(departureTime, "yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
 		
-		//calculate arrival time
-		long traTime = 0;
 		RouteBean routeBean = routeDAO.getById(routeId);
-		
 		List<RouteDetailsBean> routeDetailsBeans = routeBean.getRouteDetails();
-		for (RouteDetailsBean routeDetailsBean: routeDetailsBeans) {
-			traTime += routeDetailsBean.getSegment().getTravelTime().getTime();
-		}
-		
-		Date endDate = new Date(startDate.getTime() + traTime);
-		arrivalTime = FormatUtils.formatDate(endDate, "yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
 		
 		int startStationId = routeDetailsBeans.get(0).getSegment().getStartAt().getId();
+		
 		//get available bus
 		List<Object[]> bus = busDAO.getAvailBus(startDate, routeId, startStationId, busType);
 		for (Object b[] : bus) {
 			BusInfo busInfo = new BusInfo((Integer) b[0], (String) b[1]);
 			busInfos.add(busInfo);
 		}
+		
 		return SUCCESS;
 	}
 
@@ -77,10 +70,6 @@ public class AvailBusAction extends BaseAction {
 
 	public List<BusInfo> getBusInfos() {
 		return busInfos;
-	}
-
-	public String getArrivalTime() {
-		return arrivalTime;
 	}
 
 	public void setRouteDAO(RouteDAO routeDAO) {
