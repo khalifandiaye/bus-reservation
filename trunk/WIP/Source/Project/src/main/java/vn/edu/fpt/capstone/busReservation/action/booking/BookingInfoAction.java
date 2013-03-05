@@ -46,8 +46,15 @@ public class BookingInfoAction extends BaseAction {
 	private String inputLastName;
 	private String inputMobile;
 	private String inputEmail;
-	private String selectedSeat;
+	private String seatToPayment;
 	
+
+	/**
+	 * @param seatToPayment the seatToPayment to set
+	 */
+	public void setSeatToPayment(String seatToPayment) {
+		this.seatToPayment = seatToPayment;
+	}
 
 	/**
 	 * @return the inputFirstName
@@ -91,13 +98,6 @@ public class BookingInfoAction extends BaseAction {
         return reservationInfo;
     }
 
-    /**
-     * @param selectedSeat the selectedSeat to set
-     */
-    public void setSelectedSeat(String selectedSeat) {
-        this.selectedSeat = selectedSeat;
-    }
-
     @SuppressWarnings("unchecked")
     public String execute() {
     	
@@ -120,7 +120,7 @@ public class BookingInfoAction extends BaseAction {
         tripBeanList = (List<TripBean>) session.get("listTripBean");
         try {
             reservationInfo = reservationLogic.createReservationInfo(
-                    tripBeanList, selectedSeat.split(";").length);
+                    tripBeanList, seatToPayment.split(";").length);
             paymentLogic.updateReservationPaymentInfo(reservationInfo,
                     paymentMethods.get(0).getId());
         } catch (CommonException e) {

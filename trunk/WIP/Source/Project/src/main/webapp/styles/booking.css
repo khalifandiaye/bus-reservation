@@ -16,6 +16,12 @@
 .small-nav .step2{
 	background-position: -1px -48px;  
 }
+.small-nav .step3{
+	background-position: -1px -96px;  
+}
+.small-nav .step4{
+	background-position: -1px -144px;  
+} 
 .nav-step{
 	float:left;
 	width: 196px; 
