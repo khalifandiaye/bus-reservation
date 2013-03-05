@@ -5,13 +5,13 @@
 
 <hibernate-mapping package="vn.edu.fpt.capstone.busReservation">
 	<!-- CITY -->
-	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.CityBean" table="city">
+	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.CityBean" table="location">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
 		<property name="name" type="string" not-null="true" />
 		<bag name="stations" table="station" inverse="true" order-by="id">
-			<key column="city_id" />
+			<key column="location_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.StationBean" />
 		</bag>
 	</class>
@@ -21,7 +21,7 @@
 			<generator class="native" />
 		</id>
 		<property name="name" type="string" not-null="true" />
-		<many-to-one name="city" column="city_id" />
+		<many-to-one name="city" column="location_id" />
 		<property name="address" type="string" not-null="true" />
 		<property name="status" type="string" not-null="true" />
 		<bag name="inSegments" table="segment" inverse="true" order-by="id">
