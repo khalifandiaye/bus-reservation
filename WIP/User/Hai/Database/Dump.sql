@@ -171,7 +171,7 @@ CREATE TABLE `payment` (
   KEY `payment_payment_method_id_idx` (`payment_method_id`),
   CONSTRAINT `payment_payment_method_id` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_method` (`id`),
   CONSTRAINT `payment_reservation_id` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -240,13 +240,13 @@ CREATE TABLE `reservation` (
   `status` varchar(10) NOT NULL DEFAULT 'unpaid',
   `booker_first_name` varchar(45) NOT NULL,
   `booker_last_name` varchar(45) NOT NULL,
-  `phone` varchar(20) NOT NULL,
+  `phone` varchar(20) DEFAULT NULL,
   `email` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `reservation_booker_id_idx` (`user_id`),
   CONSTRAINT `reservation_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=271 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -366,7 +366,7 @@ CREATE TABLE `route_details` (
 
 LOCK TABLES `route_details` WRITE;
 /*!40000 ALTER TABLE `route_details` DISABLE KEYS */;
-INSERT INTO `route_details` VALUES (7,7,1),(20,7,2),(8,8,1),(19,8,2),(9,9,1),(18,9,2),(10,10,1),(17,10,2),(11,11,1),(16,11,2),(12,12,1),(15,12,2),(13,13,1),(14,13,2);
+INSERT INTO `route_details` VALUES (7,7,1),(8,8,1),(9,9,1),(10,10,1),(11,11,1),(12,12,1),(13,13,1),(14,14,2),(15,15,2),(16,16,2),(17,17,2),(18,18,2),(19,19,2),(20,20,2);
 /*!40000 ALTER TABLE `route_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -480,7 +480,7 @@ CREATE TABLE `segment` (
   KEY `segment_depart_station_id_idx` (`arrival_station_id`),
   CONSTRAINT `segment_arrive_station_id` FOREIGN KEY (`departure_station_id`) REFERENCES `station` (`id`),
   CONSTRAINT `segment_depart_station_id` FOREIGN KEY (`arrival_station_id`) REFERENCES `station` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -489,7 +489,7 @@ CREATE TABLE `segment` (
 
 LOCK TABLES `segment` WRITE;
 /*!40000 ALTER TABLE `segment` DISABLE KEYS */;
-INSERT INTO `segment` VALUES (1,1,2,5400000,'active'),(2,2,1,36000000,'active'),(3,3,5,3600000,'active'),(4,5,7,21600000,'active'),(5,7,6,32400000,'active'),(6,6,8,14400000,'active'),(7,3,35,16200000,'active'),(8,35,34,16200000,'active'),(9,34,33,4500000,'active'),(10,33,32,13500000,'active'),(11,32,31,10800000,'active'),(12,31,5,10800000,'active'),(13,5,8,57600000,'active');
+INSERT INTO `segment` VALUES (1,1,2,5400000,'active'),(2,2,1,36000000,'active'),(3,3,5,3600000,'active'),(4,5,7,21600000,'active'),(5,7,6,32400000,'active'),(6,6,8,14400000,'active'),(7,3,35,16200000,'active'),(8,35,34,16200000,'active'),(9,34,33,4500000,'active'),(10,33,32,13500000,'active'),(11,32,31,10800000,'active'),(12,31,5,10800000,'active'),(13,5,8,57600000,'active'),(14,8,5,57600000,'active'),(15,5,31,10800000,'active'),(16,31,32,10800000,'active'),(17,32,33,13500000,'active'),(18,33,34,4500000,'active'),(19,34,35,16200000,'active'),(20,35,3,16200000,'active');
 /*!40000 ALTER TABLE `segment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1089,4 +1089,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-03-03 10:21:20
+-- Dump completed on 2013-03-05 20:08:43
