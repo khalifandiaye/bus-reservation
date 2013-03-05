@@ -201,7 +201,7 @@
 		<property name="bookerLastName" column="booker_last_name" type="string" not-null="true" />
 		<property name="phone" type="string" not-null="true" />
 		<property name="email" type="string" not-null="true" />
-		<bag name="tickets" table="ticket" order-by="id">
+		<bag name="tickets" table="ticket" order-by="id" cascade="all">
 			<key column="reservation_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean" />
 		</bag>
@@ -215,8 +215,8 @@
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
-		<many-to-one name="reservation" insert="false" update="false" column="reservation_id" not-null="true" />
-		<bag name="seatPositions" table="seat_position" order-by="name">
+		<many-to-one name="reservation" column="reservation_id" not-null="true" />
+		<bag name="seatPositions" table="seat_position" order-by="name" cascade="all">
 			<key column="ticket_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" />
 		</bag>
