@@ -35,7 +35,14 @@ public class SeatPositionDAO extends
             timeLimit = Calendar.getInstance();
             timeLimit.add(Calendar.MINUTE, -CommonConstant.RESERVATION_TIMEOUT);
             // perform database access (query, insert, update, etc) here
-            queryString = "SELECT DISTINCT stp.name FROM TripBean AS trp INNER JOIN trp.reservations AS rsv INNER JOIN rsv.seatPositions AS stp WHERE trp IN (:trips) AND stp.name IN (:seatNames) AND (rsv.status = :statusPaid OR (rsv.status = :statusUnpaid AND rsv.bookTime > :timeLimit))";
+//            queryString = "SELECT DISTINCT stp.name FROM TripBean AS trp INNER JOIN trp.reservations AS rsv INNER JOIN rsv.seatPositions AS stp WHERE trp IN (:trips) AND stp.name IN (:seatNames) AND (rsv.status = :statusPaid OR (rsv.status = :statusUnpaid AND rsv.bookTime > :timeLimit))";
+            queryString = "SELECT DISTINCT stp.name FROM TripBean AS trp" +
+            		" INNER JOIN trp.tickets AS tic" +
+            		" INNER JOIN tic.seatPositions AS stp" +
+            		" INNER JOIN tic.reservation AS rsv" +
+            		" WHERE trp IN (:trips)" +
+            		" AND stp.name IN (:seatNames)" +
+            		" AND (rsv.status = :statusPaid OR (rsv.status = :statusUnpaid AND rsv.bookTime > :timeLimit))";
             query = session.createQuery(queryString);
             query.setParameterList("trips", trips);
             query.setParameterList("seatNames", seatNames);
@@ -48,29 +55,6 @@ public class SeatPositionDAO extends
         }
         return result;
     }
-    
-//    public void removeDoubleBooking(List<SeatPositionBean> stpList) {
-//        Query query = null;
-//        String queryString = null;
-//        Session session = null;
-//        Calendar timeLimit = null;
-//        // get the current session
-//        session = sessionFactory.getCurrentSession();
-//        try {
-//            timeLimit = Calendar.getInstance();
-//            timeLimit.add(Calendar.MINUTE, -CommonConstant.RESERVATION_TIMEOUT);
-//            // perform database access (query, insert, update, etc) here
-//            queryString = "DELETE SeatPositionBean stp WHERE stp IN (:stpList) AND stp IN (SELECT stp1 FROM SeatPositionBean AS stp1 INNER JOIN stp1.reservation.trips AS trp INNER JOIN trp.reservations AS rsv INNER JOIN rsv.seatPositions AS stp2 WHERE stp1 = stp AND rsv != stp1.reservation AND stp1.name = stp2.name)";
-//            query = session.createQuery(queryString);
-//            query.setParameterList("stpList", stpList);
-//            query.executeUpdate();
-//            queryString = "DELETE ReservationBean rsv WHERE rsv.seatPositions is empty";
-//            query = session.createQuery(queryString);
-//            query.executeUpdate();
-//        } catch (HibernateException e) {
-//            exceptionHandling(e, session);
-//        }
-//    }
     
     @SuppressWarnings("unchecked")
     public List<String> getSoldSeats(List<TripBean> trips) {
@@ -86,8 +70,9 @@ public class SeatPositionDAO extends
             timeLimit.add(Calendar.MINUTE, -CommonConstant.RESERVATION_TIMEOUT);
             // perform database access (query, insert, update, etc) here
             queryString = "SELECT DISTINCT stp.name FROM TripBean AS trp" +
-            		" INNER JOIN trp.reservations AS rsv" +
-            		" INNER JOIN rsv.seatPositions AS stp" +
+            		" INNER JOIN trp.tickets AS tic" +
+            		" INNER JOIN tic.seatPositions AS stp" +
+            		" INNER JOIN tic.reservation AS rsv" +
             		" WHERE trp IN (:trips)" +
             		" AND (rsv.status = :statusPaid OR (rsv.status = :statusUnpaid AND rsv.bookTime > :timeLimit))";
             query = session.createQuery(queryString);

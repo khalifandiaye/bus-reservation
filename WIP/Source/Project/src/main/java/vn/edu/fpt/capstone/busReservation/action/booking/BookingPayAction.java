@@ -17,6 +17,7 @@ import vn.edu.fpt.capstone.busReservation.dao.SeatPositionDAO;
 import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
@@ -146,6 +147,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 		if(seatsDouble.size() == 0){
 		
 			ReservationBean reservationBean = new ReservationBean();
+			
 			reservationBean.setBooker(userBean);
 			reservationBean.setBookerFirstName(inputFirstName);
 			reservationBean.setBookerLastName(inputLastName);
@@ -155,22 +157,31 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 			reservationBean.setBookTime(new Date());
 			reservationBean.setCode(null);//String Code
 			reservationBean.setPayments(null);//List<PaymentBean>
-			reservationBean.setSeatPositions(null);//List<seatPosition>
 			reservationBean.setStatus("unpaid");
-			reservationBean.setTrips(list);//List<tripBean>
 			
-			reservationId = Integer.toString((Integer) reservationDAO
-	                .insert(reservationBean));
-	        
+			List<TicketBean> listTicket = null;
+			
+			TicketBean ticketBean = new TicketBean();
+			ticketBean.setReservation(reservationBean);
+			ticketBean.setTrips(list);
+			
+			List<SeatPositionBean> listSeatPositionBean = null;
 			
 			for(int i = 0 ; i< tmp.length; i++){
 				SeatPositionBean spb = new SeatPositionBean();
 				spb.setName(tmp[i]);
-				spb.setReservation(reservationBean);
+				spb.setTicket(ticketBean);
 				
-				seatPositionDAO.insert(spb);
+				listSeatPositionBean.add(spb);
 			}
-			seatPositionDAO.endTransaction();
+			
+			ticketBean.setSeatPositions(listSeatPositionBean);
+			
+			reservationBean.setTickets(listTicket);
+			
+			reservationId = Integer.toString((Integer) reservationDAO
+	                .insert(reservationBean));
+	 
 			// moved below
 //			session.remove("listTripBean");
 //			session.remove("selectedSeats");

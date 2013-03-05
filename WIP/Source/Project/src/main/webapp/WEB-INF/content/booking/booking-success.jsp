@@ -18,42 +18,31 @@
 	<jsp:include page="../common/header.jsp" />
 	<!-- Start small nav -->
 	<section class="small-nav">
-	    <div class="my-container">
-	        <div class="nav-step-wrapper">
-	            <div class="nav-step nav-done">
-	                <span class="nav-step-num">1</span>
-	                <div class="nav-step-header">Bước 1:</div>
-	                <div class="nav-step-des">Chọn xe</div>
-	            </div>
-	            <div class="nav-step nav-in-progress" style="margin-left: 100px;">
-	                <span class="nav-step-num">2</span>
-	                <div class="nav-step-header">Bước 2:</div>
-	                <div class="nav-step-des">Chọn ghế</div>
-	            </div>
-	            <div class="nav-step nav-undone" style="margin-left: 100px;">
-	                <span class="nav-step-num">3</span>
-	                <div class="nav-step-header">Bước 3:</div>
-	                <div class="nav-step-des">Điền thông tin</div>
-	            </div>
-	            <div class="nav-step nav-undone" style="margin-left: 100px;">
-	                <span class="nav-step-num">4</span>
-	                <div class="nav-step-header">Bước 4:</div>
-	                <div class="nav-step-des">Thanh Toán</div>
-	            </div>
-	        </div>
-	    </div>
-	</section>
+		<div class="nav-step-wrapper step2">
+			<div class="nav-step">
+				<div class="nav-step-des" >Chọn chuyến</div>
+			</div>
+			<div class="nav-step">
+				<div class="nav-step-des">Chọn ghế</div> 
+			</div>
+			<div class="nav-step">
+				<div class="nav-step-des" style="color:#008EDB">Điền thông tin</div>
+			</div>
+			<div class="nav-step">
+				<div class="nav-step-des" style="color:#008EDB">Thanh Toán</div>
+			</div>
+		</div>
+	</section> 
 	<!-- End small nav -->
 	<!-- Start notify message -->
 	<section>
-	<div class="my-container notify-message">
-	</div>
+		<div class="notify-message">
+		</div>
 	</section>
 	<!-- End notify message -->
 	<!-- Start Boooking bus seat -->
 	<setion class="booking-bus-seat">
-	    <div class="my-container">
-	        <div class="well well-small">
+        <div class="well">
 	            <div class="seat-map ">
 	                <div class="seat-map-wrapper">
 	                    <div class="seat-map-inner" style="">
@@ -104,17 +93,17 @@
 		            <form class="booking" action="booking-info.html" method="post">
 	                    <div class="pull-right" style="padding-right: 30px;">Bạn đã chọn <span class="seat-number">0</span> trên tổng số 5 ghế được chọn</div>
 	                    
-	                    <s:hidden id="selectedSeat" name="selectedSeat"></s:hidden>
+	                    
+	                    <s:hidden id="seatToPayment" name="seatToPayment"></s:hidden>
 	                    
 	                    <div style="overflow: hidden;width: 100%;">
 	                    	<button class="btn btn-large pull-right" style="margin-top: 15px;margin-right: 30px;">Tiếp Tục</button>
 	                    </div>
 		            </form>
+		            <s:hidden id="selectedSeat" name="selectedSeat"></s:hidden>
 		            <s:hidden id="passengerNo" name="passengerNo"></s:hidden>
 	        	</div>
 	        </div>
-	        
-	    </div>
 	</setion>
 	<!-- End Booking bus seat -->
 	<jsp:include page="../common/footer.jsp" /> 

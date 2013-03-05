@@ -139,36 +139,8 @@ public class BookingAction extends BaseAction implements SessionAware {
 		return listTripBean;
 	}
 	
-	private boolean checkTime(Date bookTime){
-		Calendar timeLimit = null;
-		timeLimit = Calendar.getInstance();
-		timeLimit.add(Calendar.MINUTE, -CommonConstant.RESERVATION_TIMEOUT);
-		if (bookTime.after(timeLimit.getTime())) {
-			return true;
-		}
-		return false;
-	}
-	
 	private List<SeatInfo> getSeatsList(List<TripBean> listTripBean){
 		List<SeatInfo> seats = new ArrayList<SeatInfo>();		
-//		for(int k = 0; k < listTripBean.size(); k++){
-//			int reservationForTripSize = listTripBean.get(k).getReservations().size();
-//			for(int i = 0; i < reservationForTripSize; i++){
-//				ReservationBean reservationBean = listTripBean.get(k).getReservations().get(i);
-//				int positionSize = reservationBean.getSeatPositions().size();
-//				boolean isPaid = checkTime(reservationBean.getBookTime());
-//				if(reservationBean.getStatus().equals("paid") || 
-//						(reservationBean.getStatus().equals("unpaid") && isPaid)){
-//					for(int j = 0; j < positionSize; j++){
-//						SeatPositionBean seatBean = listTripBean.get(k).getReservations().get(i).getSeatPositions().get(j);
-//						SeatInfo tmp = new SeatInfo(seatBean.getName(), "1");
-//						if( !seats.contains(tmp)){
-//							seats.add(tmp);
-//						}
-//					}
-//				}
-//			}
-//		}
 		List<String> listSoldSeat = seatPositionDAO.getSoldSeats(listTripBean);
 		
 		for (String string : listSoldSeat) {

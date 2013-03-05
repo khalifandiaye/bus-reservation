@@ -104,6 +104,9 @@ footer{
 	width: 960px;
 	margin: 0 auto;
 }
+.container{
+	width: 960px; 	
+}
 /* Custom Css*/
 fieldset {
 	margin: 15px 25px 25px 25px;
