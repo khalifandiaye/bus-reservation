@@ -12,6 +12,8 @@ import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TicketDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
 
 @ParentPackage("jsonPackage")
 public class DeleteScheduleAction extends BaseAction {
@@ -26,9 +28,17 @@ public class DeleteScheduleAction extends BaseAction {
 	@Action(value = "/deleteSchedule", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() throws ParseException, JSONException {
 
-		List<Integer> reservationBeans = ticketDAO
-				.getTicketByBusStatusId(busStatusId);
-		if (reservationBeans.size() == 0) {
+		List<TicketBean> reservationBeans = ticketDAO.getTicketByBusStatusId(busStatusId);
+		boolean isHaveReservation = false;
+		for (TicketBean ticketBean : reservationBeans) {
+         if (ticketBean.getReservation() != null 
+               && ticketBean.getReservation().getStatus().equals("paid")) {
+            isHaveReservation = false;
+            break;
+         }
+      }
+		
+		if (!isHaveReservation) {
 			BusStatusBean busStatusBean = busStatusDAO.getById(busStatusId);
 			busStatusBean.setStatus("inactive");
 			busStatusDAO.update(busStatusBean);

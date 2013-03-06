@@ -11,6 +11,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean;
 
@@ -99,12 +100,12 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
     }
 
 	@SuppressWarnings("unchecked")
-	public List<Integer> getTicketByBusStatusId(int busStatusId) {
-		String hql = "SELECT tics.reservation.id FROM ((SELECT tr FROM TripBean tr WHERE tr.busStatus.id = :busStatusId) as busTr " +
-								"LEFT JOIN TicketBean " +
-								"WITH busTr.id = TicketBean.Trips.id) as tics";
+	public List<TicketBean> getTicketByBusStatusId(int busStatusId) {
+		String hql = "SELECT tr.tickets FROM TripBean tr " +
+				"LEFT JOIN tr.tickets " +
+				"WHERE tr.busStatus.id = :busStatusId ";
 		Session session = sessionFactory.getCurrentSession();
-		List<Integer> result = new ArrayList<Integer>();
+		List<TicketBean> result = new ArrayList<TicketBean>();
 		try {
 			// must have to start any transaction
 			Query query = session.createQuery(hql);
