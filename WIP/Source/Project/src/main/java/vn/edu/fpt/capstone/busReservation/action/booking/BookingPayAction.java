@@ -159,7 +159,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 			reservationBean.setPayments(null);//List<PaymentBean>
 			reservationBean.setStatus("unpaid");
 			
-			List<TicketBean> listTicket = null;
+			List<TicketBean> listTicket = new ArrayList<TicketBean>();
 			
 			TicketBean ticketBean = new TicketBean();
 			ticketBean.setReservation(reservationBean);
@@ -176,6 +176,8 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 			}
 			
 			ticketBean.setSeatPositions(listSeatPositionBean);
+			
+			listTicket.add(ticketBean);
 			
 			reservationBean.setTickets(listTicket);
 			

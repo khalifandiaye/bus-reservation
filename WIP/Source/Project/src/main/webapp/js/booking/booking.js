@@ -18,6 +18,9 @@ function initSelectedSeat(){
 	if(selectedSeatInput != ""){
 		arraySelectedSeat = selectedSeatInput.split(";");
 	}else{
+		if($.cookie('selectedSeat') == null){
+			return;
+		}
 		arraySelectedSeat = $.cookie('selectedSeat').split(";");
 	}
 	for(var i = 0; i < arraySelectedSeat.length ;i++){
