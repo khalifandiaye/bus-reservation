@@ -66,77 +66,77 @@ public class Pay01030Action extends BaseAction {
     }
 
     public String execute() {
-//        GetExpressCheckoutDetailsResponseType checkoutDetailsResponse = null;
-//        String token = null;
-//        String reservationId = null;
-//        String[] paymentDetails = null;
-//        String status = null;
-//
-//        token = (String) session.get(CommonConstant.SESSION_KEY_PAYMENT_TOKEN);
-//        reservationId = (String) session
-//                .get(CommonConstant.SESSION_KEY_RESERVATION_ID);
-//        if (CheckUtils.isNullOrBlank(reservationId)
-//                || CheckUtils.isNullOrBlank(token)
-//                || !CheckUtils.isPositiveInteger(reservationId)) {
-//            LOG.debug("paymentToken: " + token + "; reservationId: "
-//                    + reservationId);
-//            commonSessionTimeoutError();
-//            return ERROR;
-//        }
-//        status = reservationLogic.updateStatus(reservationId);
-//        if (ReservationStatus.DEPARTED.getValue().equals(status)) {
-//            // bus has departed
-//            addActionError(getText("msgerrrs001"));
-//            return ERROR;
-//        } else if (ReservationStatus.DELETED.getValue().equals(status)) {
-//            // reservation time out
-//            String[] args = new String[1];
-//            args[0] = Integer.toString(CommonConstant.RESERVATION_TIMEOUT);
-//            addActionError(getText("msgerrrs002", args));
-//            return ERROR;
-//        } else if (!ReservationStatus.UNPAID.getValue().equals(status)) {
-//            // unknown, but it should not be paid for anyway
-//            addActionError(getText("msgerrrs003"));
-//            return ERROR;
-//        }
-//        try {
-//            checkoutDetailsResponse = paymentLogic
-//                    .getPaypalExpressCheckoutDetails(token);
-//        } catch (CommonException e) {
-//            errorProcessing(e);
-//            return ERROR;
-//        }
-//        try {
-//            paymentDetails = paymentLogic
-//                    .doPaypalExpressCheckoutPayment(checkoutDetailsResponse);
-//        } catch (CommonException e) {
-//            errorProcessing(e);
-//            return ERROR;
-//        }
-//        try {
-//            reservationCode = paymentLogic.savePayment(reservationId,
-//                    paymentDetails, 2, PaymentType.PAY);
-//            reservationInfo = reservationLogic.loadReservationInfo(
-//                    reservationId, true);
-//        } catch (CommonException e) {
-//            errorProcessing(e);
-//            return ERROR;
-//        } catch (HibernateException e) {
-//            // TODO error processing
-//            genericDatabaseErrorProcess(e);
-//            return ERROR;
-//        }
-//        session.remove(ReservationInfo.class.getName());
-//        session.remove(CommonConstant.SESSION_KEY_RESERVATION_ID);
-//        session.remove(CommonConstant.SESSION_KEY_PAYMENT_TOKEN);
+        GetExpressCheckoutDetailsResponseType checkoutDetailsResponse = null;
+        String token = null;
+        String reservationId = null;
+        String[] paymentDetails = null;
+        String status = null;
 
+        token = (String) session.get(CommonConstant.SESSION_KEY_PAYMENT_TOKEN);
+        reservationId = (String) session
+                .get(CommonConstant.SESSION_KEY_RESERVATION_ID);
+        if (CheckUtils.isNullOrBlank(reservationId)
+                || CheckUtils.isNullOrBlank(token)
+                || !CheckUtils.isPositiveInteger(reservationId)) {
+            LOG.debug("paymentToken: " + token + "; reservationId: "
+                    + reservationId);
+            commonSessionTimeoutError();
+            return ERROR;
+        }
+        status = reservationLogic.updateStatus(reservationId);
+        if (ReservationStatus.DEPARTED.getValue().equals(status)) {
+            // bus has departed
+            addActionError(getText("msgerrrs001"));
+            return ERROR;
+        } else if (ReservationStatus.DELETED.getValue().equals(status)) {
+            // reservation time out
+            String[] args = new String[1];
+            args[0] = Integer.toString(CommonConstant.RESERVATION_TIMEOUT);
+            addActionError(getText("msgerrrs002", args));
+            return ERROR;
+        } else if (!ReservationStatus.UNPAID.getValue().equals(status)) {
+            // unknown, but it should not be paid for anyway
+            addActionError(getText("msgerrrs003"));
+            return ERROR;
+        }
         try {
-            reservationInfo = reservationLogic.loadReservationInfo("677", true);
+            checkoutDetailsResponse = paymentLogic
+                    .getPaypalExpressCheckoutDetails(token);
         } catch (CommonException e) {
             errorProcessing(e);
             return ERROR;
         }
-        reservationCode = "AAAAAA";
+        try {
+            paymentDetails = paymentLogic
+                    .doPaypalExpressCheckoutPayment(checkoutDetailsResponse);
+        } catch (CommonException e) {
+            errorProcessing(e);
+            return ERROR;
+        }
+        try {
+            reservationCode = paymentLogic.savePayment(reservationId,
+                    paymentDetails, 2, PaymentType.PAY);
+            reservationInfo = reservationLogic.loadReservationInfo(
+                    reservationId, true);
+        } catch (CommonException e) {
+            errorProcessing(e);
+            return ERROR;
+        } catch (HibernateException e) {
+            // TODO error processing
+            genericDatabaseErrorProcess(e);
+            return ERROR;
+        }
+        session.remove(ReservationInfo.class.getName());
+        session.remove(CommonConstant.SESSION_KEY_RESERVATION_ID);
+        session.remove(CommonConstant.SESSION_KEY_PAYMENT_TOKEN);
+
+//        try {
+//            reservationInfo = reservationLogic.loadReservationInfo("677", true);
+//        } catch (CommonException e) {
+//            errorProcessing(e);
+//            return ERROR;
+//        }
+//        reservationCode = "AAAAAA";
 
         return SUCCESS;
     }
