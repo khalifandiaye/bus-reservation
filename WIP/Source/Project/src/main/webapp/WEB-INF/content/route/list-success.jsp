@@ -33,9 +33,9 @@
 			});
 			
 			$('#routeDeleteDialogOk').click(function() {
-                var busStatusId = $('#routeId').val();
+                var routeId = $('#routeId').val();
                 $.ajax({
-                           url: "deleteRoute.html?routeId=" + busStatusId,
+                           url: "deleteRoute.html?routeId=" + routeId,
                          }).done(function(data) {
                             alert(data.message);
                             var url = $('#contextPath').val() + "/route/list.html";

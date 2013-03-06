@@ -19,7 +19,7 @@ public class ListAction extends BaseAction {
 	private BusDAO busDAO;
 
 	public String execute() {
-		busBeans = busDAO.getAll();
+		busBeans = busDAO.getBusByStatus("active");
 		return SUCCESS;
 	}
 
