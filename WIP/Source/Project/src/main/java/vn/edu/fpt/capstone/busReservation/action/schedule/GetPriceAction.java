@@ -39,10 +39,11 @@ public class GetPriceAction extends BaseAction {
 			List<TariffBean> resultList = tariffDAO.getPrice(segmentInfo.getId(), segmentAddInfos.getBusType());
 			if (!resultList.isEmpty()) {
 				TariffBean tariffBean = resultList.get(0);
-				TariffInfo tariffInfo = new TariffInfo(tariffBean.getSegment().getId(), 
-					tariffBean.getSegment().getStartAt().getCity().getName(),
-					tariffBean.getSegment().getEndAt().getCity().getName(),
-					tariffBean.getFare());
+				TariffInfo tariffInfo = new TariffInfo();
+            tariffInfo.setId(tariffBean.getSegment().getId()); 
+            tariffInfo.setStartAt(tariffBean.getSegment().getStartAt().getCity().getName());
+            tariffInfo.setEndAt(tariffBean.getSegment().getEndAt().getCity().getName());
+            tariffInfo.setFare(tariffBean.getFare());
 				tariffInfos.add(tariffInfo);
 			}
 		}

@@ -50,15 +50,18 @@
 						minuteStep : 10
 					}).on('changeDate', function(ev) {
 						getAvailBus();
+						getArrivalTime();
 					});
 				});
 				
 				$('#tripDialogBusType').change(function() {
 					getAvailBus();
+					getArrivalTime();
 				});
 				
 				$('#tripDialogRoutes').change(function() {
 					getAvailBus();
+					getArrivalTime();
 		      });
 								
 				function getAvailBus() {
@@ -78,10 +81,22 @@
 		    					$.each(data.busInfos, function() {
 		    						$('#tripDialogBusPlate').append('<option value="'+this.id+'">'+this.plateNumber+'</option>');
 		    					});
-		    					$("#tripDialogArrivalTime").val(data.arrivalTime);
+		    					/* $("#tripDialogArrivalTime").val(data.arrivalTime); */
 		    				});
 					}
 				};
+				
+				function getArrivalTime() {
+					var selectedRouteId = $("#tripDialogRoutes").val();
+		         var departureTime = $("#tripDialogDepartureTime").val();
+		         if (selectedRouteId != '-1' && departureTime != "") {
+		        	   $.ajax({
+		        		   url: "getArrivalTime.html?departureTime=" + departureTime + "&routeId=" + selectedRouteId,
+		        	   }).done(function(data) {
+		        		   $("#tripDialogArrivalTime").val(data.arrivalTime);
+		        		});
+		         }
+				}
 				
 				function getCurrentReservation(){
 					var selectedRouteId = $("#tripDialogRoutes").val();

@@ -39,14 +39,6 @@
 			errorMessage += "\nPlease select bus type";
 			isValid = false;
 		}
-		if (forwardRoute == -1) {
-			errorMessage += "\nPlease select forward route";
-			isValid = false;
-		}
-		if (returnRoute == -1) {
-			errorMessage += "\nPlease select return route";
-			isValid = false;
-		}
 		if (!isValid) {
 			alert(errorMessage);
 		}
@@ -78,19 +70,12 @@
 		<form action="save-bus.html" method="post">
 			<div class="post" style="margin: 0px auto; width: 95%;">
 				<div style="margin-left: 10px; margin-top: 10px;">
+				   Plate Number :
 					<input type="text" id="plateNumber" name="plateNumber" value="">
 					Select Bus Type :
 					<s:select id="busType" headerKey="-1"
 						headerValue="--- Select Bus Type ---" list="busTypeBeans"
 						name="busTypeBeans" listKey="id" listValue="name" />
-					Select Route Forward :
-					<s:select id="assignRouteForward" headerKey="-1"
-						headerValue="--- Select Route ---" list="routeBeans"
-						name="routeForwardBeans" listKey="id" listValue="name" />
-					Select Route Return :
-					<s:select id="assignRouteReturn" headerKey="-1"
-						headerValue="--- Select Route ---" list="routeBeans"
-						name="routeReturnBeans" listKey="id" listValue="name" />
 				</div>
 				<div style="margin-left: 10px; margin-top: 10px;">
 					<input class="btn btn-primary" type="submit" id="save" value="Save"

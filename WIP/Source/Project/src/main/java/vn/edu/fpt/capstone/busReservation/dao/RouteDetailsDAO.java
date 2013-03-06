@@ -33,4 +33,5 @@ public class RouteDetailsDAO extends GenericDAO<Integer, RouteDetailsBean>{
 
 		return result;
 	}
+	
 }

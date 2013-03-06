@@ -58,4 +58,28 @@ public class RouteDAO extends GenericDAO<Integer, RouteBean> {
 		}
 		return result;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getRouteTerminal(int routeId) {
+		String hql = "SELECT rdt.route_id, rdt_r.route_id " +
+				"FROM bus_reservation.route_details rdt INNER JOIN bus_reservation.segment seg " +
+				"ON rdt.segment_id = seg.id " +
+				"LEFT JOIN bus_reservation.route_details rdt_r " +
+				"INNER JOIN bus_reservation.segment seg_r ON rdt_r.segment_id = seg_r.id " +
+				"ON seg.departure_station_id = seg_r.arrival_station_id " +
+				"AND seg.arrival_station_id = seg_r.departure_station_id " +
+				"GROUP BY rdt.route_id, rdt_r.route_id HAVING COUNT(DISTINCT rdt_r.id) =" +
+				" ( SELECT COUNT(*) FROM bus_reservation.route_details rdt1 WHERE rdt1.route_id = rdt.route_id ) " +
+				"AND rdt.route_id = :routeId";
+		Session session = sessionFactory.getCurrentSession();
+		List<Object[]> result = new ArrayList<Object[]>();
+		try {
+			Query query = session.createSQLQuery(hql);
+			query.setParameter("routeId", routeId);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
 }
