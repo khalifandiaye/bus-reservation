@@ -81,5 +81,50 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 		}
 		return result;
 	}
+	
+	public List<Object[]> getBusByTypeInRoute(int routeId, int busTypeId) {
+		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id "
+				+ "FROM bus b LEFT JOIN (SELECT t1.* FROM bus_status t1 "
+				+ "JOIN (SELECT Max(id) id, MAX(to_date) to_date FROM bus_status WHERE status = 'active' GROUP BY bus_id ) t2 "
+				+ "ON t1.id = t2.id AND t1.to_date = t2.to_date) bs ON b.id = bs.bus_id "
+				+ "WHERE (b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId) "
+				+ "AND b.bus_type_id = :busTypeId AND b.status = 'active'" 
+				+ "GROUP BY b.id";
+
+		Session session = sessionFactory.getCurrentSession();
+		List<Object[]> result = new ArrayList<Object[]>();
+		try {
+			// must have to start any transaction
+			Query query = session.createSQLQuery(stringQuery);
+			query.setParameter("routeId", routeId);
+			query.setParameter("busTypeId", busTypeId);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+	
+	public List<Object[]> getBusByTypeNotInRoute(int busTypeId) {
+		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id "
+				+ "FROM bus b LEFT JOIN (SELECT t1.* FROM bus_status t1 "
+				+ "JOIN (SELECT Max(id) id, MAX(to_date) to_date FROM bus_status WHERE status = 'active' GROUP BY bus_id ) t2 "
+				+ "ON t1.id = t2.id AND t1.to_date = t2.to_date) bs ON b.id = bs.bus_id "
+				+ "WHERE (b.assigned_route_forward_id IS NULL OR b.assigned_route_return_id IS NULL) "
+				+ "AND b.bus_type_id = :busTypeId AND b.status = 'active'" 
+				+ "GROUP BY b.id";
+
+		Session session = sessionFactory.getCurrentSession();
+		List<Object[]> result = new ArrayList<Object[]>();
+		try {
+			// must have to start any transaction
+			Query query = session.createSQLQuery(stringQuery);
+			query.setParameter("busTypeId", busTypeId);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
 
 }

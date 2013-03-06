@@ -45,7 +45,9 @@ public class AvailBusAction extends BaseAction {
 		//get available bus
 		List<Object[]> bus = busDAO.getAvailBus(startDate, routeId, startStationId, busType);
 		for (Object b[] : bus) {
-			BusInfo busInfo = new BusInfo((Integer) b[0], (String) b[1]);
+			BusInfo busInfo = new BusInfo();
+			busInfo.setId((Integer) b[0]);
+			busInfo.setPlateNumber((String) b[1]);
 			busInfos.add(busInfo);
 		}
 		

@@ -133,4 +133,20 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 		}
 		return result;
 	}
+	
+	@SuppressWarnings("unchecked")
+   public List<TripBean> getTripsByRouteAndBus(int routeId, int busType){
+      String hql = "FROM TripBean t WHERE t.routeDetails.route.id = :routeId AND " +
+      		"t.busStatus.bus.busType = :busType";
+      Session session = sessionFactory.getCurrentSession();
+      List<TripBean> result = new ArrayList<TripBean>();
+      try {
+         Query query = session.createQuery(hql);
+         query.setParameter("routeId", routeId).setParameter("busType", busType);
+         result = query.list();
+      } catch (HibernateException e) {
+         exceptionHandling(e, session);
+      }
+      return result;
+   }
 }

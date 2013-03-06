@@ -40,6 +40,88 @@
 	      "bSort" : false
 		});
 		
+		var busDetailTable = $('#busDetailTable').dataTable({
+			  "bSort" : false
+	   });
+		
+		$("#assignBus").click(function() {
+			var routeId = $("#routeId").val();
+			var busType = $("#busType").val();
+			$.ajax({
+				   type : "GET",
+				   url : 'getBusInRoute.html?routeId=' + routeId + '&type=' + busType,
+				   contentType : "application/x-www-form-urlencoded; charset=utf-8",
+				   success : function(response) {
+					   var busInRoute = response.busInRouteBeans;
+					   var busNotInRoute = response.busNotInRouteBeans;
+			         
+					   $('#busDetailTable').dataTable().fnClearTable();
+					   $.each(busInRoute, function() {
+						   busDetailTable.dataTable()
+			            .fnAddData([ this.id, this.plateNumber, 
+			                         '<button type="button" data-id="'+ this.id +'" class="btn btn-danger">Delete</button>']);
+						   $("#busDetailTable tr button[data-id="+ this.id + "]").click(function() {
+					            var td = this.parentNode;
+					            var tr = td.parentNode;
+					            var aPos = busDetailTable.dataTable().fnGetPosition( td );
+					            var data = busDetailTable.fnGetData(tr);
+					            $('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1] +'</option>');
+					            busDetailTable.dataTable().fnDeleteRow(aPos[0]);
+					      });
+	               });
+					   
+						$('#busDetailbusPlate').empty();
+	               $.each(busNotInRoute, function() {
+	            	   $('#busDetailbusPlate').append('<option value="'+ this.id +'">'+this.plateNumber+'</option>');
+	               });
+	               $("#busDetailDialog").modal();
+					}
+		   });
+		});
+		
+		$("#busDetailAdd").click(function(){
+			var busId = $("#busDetailbusPlate").val();
+         var plateNumber = $("#busDetailbusPlate option:selected").text();
+         busDetailTable.dataTable()
+         .fnAddData([ busId, plateNumber,
+                      '<button type="button" data-id="'+ busId +'" class="btn btn-danger">Delete</button>' ]);
+         $("#busDetailbusPlate option[value=" + busId + "]").remove();
+         $("#busDetailTable tr button[data-id="+ busId + "]").click(function(){
+        	   var td = this.parentNode;
+        	   var tr = td.parentNode;
+        	   var aPos = busDetailTable.dataTable().fnGetPosition( td );
+        	   var data = busDetailTable.fnGetData(tr);
+        	   $('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1] +'</option>');
+            busDetailTable.dataTable().fnDeleteRow(aPos[0]);
+         });
+		});
+		
+		$("#busDetailSave").click(function() {
+			var routeId = $("#routeId").val();
+			var busInfos = [];
+			$.each($("#busDetailTable tr.odd,#busDetailTable .even"), function() {
+				var bus = {};
+				bus['id'] = $(this.cells[0]).html();
+				bus['plateNumber'] = $(this.cells[1]).html();
+				busInfos.push(bus);
+			});
+			var busDetailInfo = {};
+	      busDetailInfo['routeId'] = routeId;
+	      busDetailInfo['bus'] = busInfos;
+	      
+	      $.ajax({
+	          type : "POST",
+	          url : 'saveBusDetail.html',
+	          contentType : "application/x-www-form-urlencoded; charset=utf-8",
+	          data : {
+	             data : JSON.stringify(busDetailInfo)
+	          },
+	          success : function(response) {
+	            alert(12);
+	          }
+	       });
+		});
+		
 		$('#viewPrice').click(function() {
 			$("#priceDialog").modal();
 		});
@@ -68,8 +150,8 @@
 
 	function getPrice(busType, segments) {
 		var info = {};
-      	info['busType'] = busType;
-      	info['segments'] = segments;
+      info['busType'] = busType;
+      info['segments'] = segments;
 		$.ajax({
 			type : "POST",
 			url : 'getPrice.html',
@@ -86,9 +168,8 @@
 			}
 		});
 	};
-	
+
 	var segments = [];
-	
 </script>
 <style type="text/css">
 .dataTables_filter {
@@ -114,12 +195,13 @@
 	<div id="page">
 		<div class="post" style="margin: 0px auto; width: 95%;">
 			<div style="margin-left: 10px; margin-top: 10px;">
+			   <input type="hidden" id="routeId" value="<s:property value='routeId'/>" />
 				<s:select id="busType" list="busTypeBeans" name="busTypeBeans"
 					listKey="id" listValue="name" />
 				<input class="btn btn-primary" type="button" id="viewPrice"
                value="View Price" />
+            <input class="btn btn-primary" id="assignBus" type="button" value="Assign Bus to Route" />
 			</div>
-			<form action="insertNewTrip" method="post">
 				<div style="height: 45px; margin-left: 1%;"></div>
 				<h3>
 					<s:property value="segmentBeans[0].routeDetails.route.name" />
@@ -142,17 +224,14 @@
 				</table>
 				</br> <input class="btn btn-primary" type="button" id="return"
 					value="Return to Route List" />
-			</form>
 		</div>
 	</div>
 	
    <!-- Modal Show Route Details Price By BusType Dialog -->
-   <div id="priceDialog" class="modal hide fade" tabindex="-1"
-      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div id="priceDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-header">
-         <button type="button" class="close" data-dismiss="modal"
-            aria-hidden="true">×</button>
-         <h3 id="priceDialogLabel"></h3>
+         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+         <h3 id="priceDialogLabel">Price</h3>
       </div>
       <div class="modal-body">
 			<table id="priceTable">
@@ -171,6 +250,34 @@
          <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Update</button>
       </div>
    </div>
+   
+   <!-- Modal Show Route Details Price By BusType Dialog -->
+   <div id="busDetailDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">×</button>
+				<h3 id="busDetailDialogLabel">List Bus In Route</h3>
+			</div>
+			<div class="modal-body">
+				Select bus : <select id='busDetailbusPlate' name='busDetailBusPlate'></select>
+				<button type="button" id="busDetailAdd" class="btn btn-primary">Add</button>
+				<table id="busDetailTable">
+					<thead>
+						<tr>
+							<th>id</th>
+							<th>Plate Number</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button id="busDetailSave" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Save</button>
+			</div>
+	</div>
 	<jsp:include page="../common/footer.jsp" />
 </body>
 </html>

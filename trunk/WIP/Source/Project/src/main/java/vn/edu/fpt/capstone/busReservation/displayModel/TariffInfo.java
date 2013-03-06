@@ -7,19 +7,12 @@ public class TariffInfo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -2195287469199563262L;
+	private int id;
 	private int segmentId;
 	private String startAt;
 	private String endAt;
 	private Double fare;
 	
-	public TariffInfo(int segmentId, String startAt, String endAt, Double fare) {
-		super();
-		this.segmentId = segmentId;
-		this.startAt = startAt;
-		this.endAt = endAt;
-		this.fare = fare;
-	}
-
 	public int getSegmentId() {
 		return segmentId;
 	}
@@ -51,5 +44,13 @@ public class TariffInfo implements Serializable {
 	public void setEndAt(String endAt) {
 		this.endAt = endAt;
 	}
+
+   public int getId() {
+      return id;
+   }
+
+   public void setId(int id) {
+      this.id = id;
+   }
 	
 }

@@ -15,8 +15,8 @@ public class DateUtils {
      *            a relative time interval
      * @return the number of milliseconds represented in the interval
      */
-    public static long getAbsoluteMiliseconds(Date date) {
-        return date.getTime() + TimeZone.getDefault().getOffset(date.getTime());
+    public static long getAbsoluteMiliseconds(long time) {
+        return time + TimeZone.getDefault().getOffset(time);
     }
 
     public static long getTime(String time) {
@@ -45,7 +45,7 @@ public class DateUtils {
      */
     public static String date2String(Date date, String pattern, Locale locale,
             TimeZone timeZone) {
-        DateFormat formatter = new SimpleDateFormat(pattern, locale);
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern, locale);
         formatter.setTimeZone(timeZone);
         return formatter.format(date);
     }

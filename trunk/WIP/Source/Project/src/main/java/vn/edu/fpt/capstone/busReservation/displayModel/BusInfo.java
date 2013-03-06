@@ -10,12 +10,6 @@ public class BusInfo implements Serializable {
 	private int id;
 	private String plateNumber;
 	
-	public BusInfo(int id, String plateNumber) {
-		super();
-		this.setId(id);
-		this.setPlateNumber(plateNumber);
-	}
-
 	public int getId() {
 		return id;
 	}
