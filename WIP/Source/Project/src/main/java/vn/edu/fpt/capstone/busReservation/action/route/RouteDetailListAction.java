@@ -16,6 +16,8 @@ public class RouteDetailListAction extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
 	
+	private String routeName = "";
+	
 	private RouteDetailsDAO routeDetailsDAO;
 	private SegmentDAO segmentDAO;
 	private BusTypeDAO busTypeDAO;
@@ -45,6 +47,9 @@ public class RouteDetailListAction extends ActionSupport {
 			busTypeBean.setNumberOfSeats((Integer) objects[2]);
 			busTypeBeans.add(busTypeBean);
 		}
+		
+		routeName = segmentBeans.get(0).getStartAt().getCity().getName() 
+		      + " - " + segmentBeans.get(segmentBeans.size() - 1).getEndAt().getCity().getName();
 		
 		return SUCCESS;
 	}
@@ -76,4 +81,12 @@ public class RouteDetailListAction extends ActionSupport {
 	public void setBusTypeDAO(BusTypeDAO busTypeDAO) {
 		this.busTypeDAO = busTypeDAO;
 	}
+
+   public String getRouteName() {
+      return routeName;
+   }
+
+   public void setRouteName(String routeName) {
+      this.routeName = routeName;
+   }
 }

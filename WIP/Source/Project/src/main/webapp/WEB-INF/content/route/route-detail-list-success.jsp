@@ -205,16 +205,19 @@
 	<div id="page">
 		<div class="post" style="margin: 0px auto; width: 95%;">
 			<div style="margin-left: 10px; margin-top: 10px;">
-			   <input type="hidden" id="routeId" value="<s:property value='routeId'/>" />
-				<s:select id="busType" list="busTypeBeans" name="busTypeBeans"
-					listKey="id" listValue="name" />
-				<input class="btn btn-primary" type="button" id="viewPrice"
-               value="View Price" />
-            <input class="btn btn-primary" id="assignBus" type="button" value="Assign Bus to Route" />
+			<input type="hidden" id="routeId" value="<s:property value='routeId'/>" />
+			<table>
+			   <tr><s:select id="busType" list="busTypeBeans" name="busTypeBeans"
+               listKey="id" listValue="name" /></tr>
+				<tr>
+				  <td><input class="btn btn-primary" type="button" id="viewPrice"
+               value="View Price" /></td>
+               <td><input class="btn btn-primary" id="assignBus" type="button" value="Assign Bus to Route" /></td>
+            </tr>
+         </table>
 			</div>
-				<div style="height: 45px; margin-left: 1%;"></div>
 				<h3>
-					<s:property value="segmentBeans[0].routeDetails.route.name" />
+					<s:property value="routeName" />
 				</h3>
 				<table id="segmentTable">
 					<thead>
@@ -232,8 +235,10 @@
 						</s:iterator>
 					</tbody>
 				</table>
-				</br> <input class="btn btn-primary" type="button" id="return"
-					value="Return to Route List" />
+				</br> 
+				<div style="margin-bottom: 10px;">
+				  <input class="btn btn-primary" type="button" id="return" value="Return to Route List" />
+				</div>
 		</div>
 	</div>
 	
