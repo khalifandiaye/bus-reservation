@@ -71,6 +71,14 @@
 			getStation('endAt', 'stationEndAt');
 		});
 						
+		$("#validDateDiv").datetimepicker({
+            format : "yyyy/mm/dd - hh:ii",
+            autoclose : true,
+            todayBtn : true,
+            startDate : new Date(),
+            minuteStep : 10
+         });
+		
 		$("#add").bind(
 			'click',
 			function() {
@@ -135,6 +143,7 @@
 						var busType = $("#busType").val();
 						info['busType'] = busType;
 						info['segments'] = segments;
+						info['validDate'] = $('#validDate').val();
 											
 						if (busType == -1) {
 							alert('Bus Type must be selected!');
@@ -192,9 +201,26 @@
 	<div id="page">
 		<div class="post" style="margin: 0px auto; width: 95%;">
 			<div style="margin-left: 10px; margin-top: 10px;">
-				<s:select id="busType" headerKey="-1"
-					headerValue="--- Select Bus Type ---" list="busTypeBeans"
-					name="busTypeBeans" listKey="id" listValue="name" />
+			   <table>
+		          <tr>
+		             <td>Select Bus Type :</td>
+		             <td>Valid From : </td>
+		          </tr>
+			      <tr>
+			         <td style="width: 46%;"><s:select id="busType" headerKey="-1"
+               headerValue="--- Select Bus Type ---" list="busTypeBeans"
+               name="busTypeBeans" listKey="id" listValue="name" />
+               </td>
+			         <td>
+			            <div id="validDateDiv" class="input-append date form_datetime" style="margin-top: -5px;" data-date="">
+                     <input id="validDate" size="16" type="text" value="" readonly
+                        name="validDate"> <span class="add-on" required><i
+                        class="icon-remove"></i></span> <span class="add-on"><i
+                        class="icon-calendar"></i></span>
+                  </div>
+			         </td>
+			      </tr>
+			   </table>
 			</div>
 			<table id="segmentTable">
 				<thead>
@@ -225,7 +251,7 @@
 						value="Add" /></td>
 				</tr>
 			</table>
-			<div style="margin-left: 10px; margin-top: 10px;">
+			<div style="margin-left: 10px; margin-top: 10px;margin-bottom: 10px;">
 				<input class="btn btn-primary" type="button" id="save" value="Save" />
 			</div>
 		</div>

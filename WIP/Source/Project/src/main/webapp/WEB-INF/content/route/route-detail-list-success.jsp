@@ -102,15 +102,17 @@
 			var unSelectBusInfos = [];
 			$.each($("#busDetailTable tr.odd,#busDetailTable .even"), function() {
 				var bus = {};
-				bus['id'] = $(this.cells[0]).html();
-				bus['plateNumber'] = $(this.cells[1]).html();
-				busInfos.push(bus);
+				if ($(this.cells[0]).html() != 'No data available in table') {
+				   bus['id'] = $(this.cells[0]).html();
+				   bus['plateNumber'] = $(this.cells[1]).html();
+				   busInfos.push(bus);
+				}
 			});
 			
 			$.each($("#busDetailbusPlate option"), function() {
 				var unSelectBus = {};
 				unSelectBus['id'] = this.value;
-				unSelectBus['plateNumber'] = null;
+				unSelectBus['plateNumber'] = "0";
 				unSelectBusInfos.push(unSelectBus);
 			});
 			
