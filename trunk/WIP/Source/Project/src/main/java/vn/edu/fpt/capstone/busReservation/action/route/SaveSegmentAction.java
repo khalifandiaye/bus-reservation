@@ -3,7 +3,7 @@ package vn.edu.fpt.capstone.busReservation.action.route;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -29,7 +29,9 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentAddInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentInfo;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.DateUtils;
+import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
 @ParentPackage("jsonPackage")
 public class SaveSegmentAction extends BaseAction {
@@ -62,11 +64,16 @@ public class SaveSegmentAction extends BaseAction {
 	public String execute() throws JsonParseException, JsonMappingException,
 			IOException, ParseException {
 		SegmentAddInfo segmentAddInfos = mapper.readValue(data,new TypeReference<SegmentAddInfo>() {});
+		
+		Date validDate = FormatUtils.deFormatDate(segmentAddInfos.getValidDate(),
+            "yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US,
+            CommonConstant.DEFAULT_TIME_ZONE);
+		
 		String routeNameForward = "";
 		String routeNameReturn = "";
+		
 		List<SegmentBean> segmentBeansForward = new ArrayList<SegmentBean>();
 		List<SegmentInfo> segmentInfosFoward = segmentAddInfos.getSegments();
-
 		List<SegmentBean> segmentBeansReturn = new ArrayList<SegmentBean>();
 		List<SegmentInfo> segmentInfosReturn = new ArrayList<SegmentInfo>();
 
@@ -74,9 +81,9 @@ public class SaveSegmentAction extends BaseAction {
 		for (int i = 0; i < segmentBeansReturn.size(); i++) {
 			segmentBeansReturn.add(segmentBeansForward.get(segmentBeansForward.size() - 1 - i));
 		}
+		
 		for (int i = 0; i < segmentInfosFoward.size(); i++) {
-			segmentInfosReturn.add(segmentInfosFoward.get(segmentInfosFoward
-					.size() - 1 - i));
+			segmentInfosReturn.add(segmentInfosFoward.get(segmentInfosFoward.size() - 1 - i));
 		}
 
 		if (!segmentInfosFoward.isEmpty()) {
@@ -86,7 +93,7 @@ public class SaveSegmentAction extends BaseAction {
 				String stravelTime = segmentInfosFoward.get(i).getDuration();
 				String[] travelTime = stravelTime.split(":");
 				long dtravelTime = DateUtils.getTime(Integer.parseInt(travelTime[0]), 
-						Integer.parseInt(travelTime[1]), Integer.parseInt(travelTime[2]));
+						Integer.parseInt(travelTime[1]), 0);
 
 				StationBean startStation = stationDAO.getById(segmentInfosFoward.get(i).getStationStartAt());
 				StationBean endStation = stationDAO.getById(segmentInfosFoward.get(i).getStationEndAt());
@@ -109,7 +116,7 @@ public class SaveSegmentAction extends BaseAction {
 				tariffBean.setBusType(busTypeBean);
 				tariffBean.setFare(segmentInfosFoward.get(i).getPrice());
 				tariffBean.setSegment(segmentBean);
-				tariffBean.setValidFrom(Calendar.getInstance().getTime());
+				tariffBean.setValidFrom(validDate);
 				tariffDAO.insert(tariffBean);
 			}
 
@@ -133,7 +140,7 @@ public class SaveSegmentAction extends BaseAction {
 				String stravelTime = segmentInfosFoward.get(i).getDuration();
 				String[] travelTime = stravelTime.split(":");
 				long dtravelTime = DateUtils.getTime(Integer.parseInt(travelTime[0]), 
-						Integer.parseInt(travelTime[1]), Integer.parseInt(travelTime[2]));
+						Integer.parseInt(travelTime[1]), 0);
 
 				StationBean startStation = stationDAO.getById(segmentInfosReturn.get(i).getStationEndAt());
 				StationBean endStation = stationDAO.getById(segmentInfosReturn.get(i).getStationStartAt());
@@ -156,7 +163,7 @@ public class SaveSegmentAction extends BaseAction {
 				tariffBean.setBusType(busTypeBean);
 				tariffBean.setFare(segmentInfosReturn.get(i).getPrice());
 				tariffBean.setSegment(segmentBean);
-				tariffBean.setValidFrom(Calendar.getInstance().getTime());
+				tariffBean.setValidFrom(validDate);
 				tariffDAO.insert(tariffBean);
 			}
 

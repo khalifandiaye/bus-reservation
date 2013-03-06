@@ -48,10 +48,10 @@ public class SaveBusDetailAction extends BaseAction {
 		for (BusInfo busInfo : busInfos) {
 			BusBean busBean = busDAO.getById(busInfo.getId());
 			RouteBean routeBean = routeDAO.getById(routeId);
-			List<Object[]> routeBeans = routeDAO.getRouteTerminal(routeBean.getId());
+			List<Integer> routeBeans = routeDAO.getRouteTerminal(routeBean.getId());
 			if (routeBeans.size() != 0) {
-				busBean.setForwardRoute(routeDAO.getById((Integer) routeBeans.get(0)[0]));
-				busBean.setReturnRoute(routeDAO.getById((Integer) routeBeans.get(0)[1]));
+				busBean.setForwardRoute(routeDAO.getById(routeBeans.get(0)));
+				busBean.setReturnRoute(routeDAO.getById(routeBeans.get(1)));
 			}
 			busDAO.update(busBean);
 		}

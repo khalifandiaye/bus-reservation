@@ -32,17 +32,17 @@ public class DeleteRouteAction extends BaseAction {
 
 	@Action(value = "/deleteRoute", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() throws ParseException, JSONException {
-		List<Object[]> routeTerminals = routeDAO.getRouteTerminal(routeId);
+		List<Integer> routeTerminals = routeDAO.getRouteTerminal(routeId);
 		List<BusStatusBean> busStatusBeansForward = busStatusDAO
-				.getAllAvailTripByRouteId((Integer) routeTerminals.get(0)[0],
+				.getAllAvailTripByRouteId(routeTerminals.get(0),
 						Calendar.getInstance().getTime());
 		List<BusStatusBean> busStatusBeansReturn = busStatusDAO
-				.getAllAvailTripByRouteId((Integer) routeTerminals.get(0)[1],
+				.getAllAvailTripByRouteId((Integer) routeTerminals.get(1),
 						Calendar.getInstance().getTime());
 		if ((busStatusBeansForward.size() + busStatusBeansReturn.size()) == 0) {
 			
 			//unassigned buses
-			List<BusBean> busBeans = busDAO.getBusByRouteId((Integer) routeTerminals.get(0)[0]);
+			List<BusBean> busBeans = busDAO.getBusByRouteId(routeTerminals.get(0));
 			for (BusBean busBean : busBeans) {
 				busBean.setForwardRoute(null);
 				busBean.setReturnRoute(null);
@@ -50,8 +50,8 @@ public class DeleteRouteAction extends BaseAction {
 			}
 			
 			//delete route and its return
-			RouteBean routeBeanForward = routeDAO.getById((Integer) routeTerminals.get(0)[0]);
-			RouteBean routeBeanReturn = routeDAO.getById((Integer) routeTerminals.get(0)[1]);
+			RouteBean routeBeanForward = routeDAO.getById(routeTerminals.get(0));
+			RouteBean routeBeanReturn = routeDAO.getById(routeTerminals.get(1));
 			routeBeanForward.setStatus("inactive");
 			routeBeanReturn.setStatus("inactive");
 			routeDAO.update(routeBeanForward);

@@ -52,7 +52,7 @@ public class ReservationDAO extends GenericDAO<Integer,ReservationBean> {
 		session = sessionFactory.getCurrentSession();
 		try {
 			// perform database access (query, insert, update, etc) here
-			queryString = "SELECT distinct bs.trips.reservations FROM BusStatusBean AS bs WHERE bs.id = :busStatusId";
+			queryString = "SELECT distinct bs.trips.reservations FROM BusStatusBean bs WHERE bs.id = :busStatusId";
 			query = session.createQuery(queryString);
 			query.setInteger("busStatusId", busStatusId);
 			result = query.list();

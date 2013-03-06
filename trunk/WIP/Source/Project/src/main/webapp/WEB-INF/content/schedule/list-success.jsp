@@ -24,14 +24,8 @@
 	 };
 	 
 	function deleteTrip(id) {
-		$.ajax({
-			  url: "deleteSchedule.html?busStatusID=" + id,
-			}).done(function(data) {
-				//If return success then delete the trip
-				
-				//
-				
-			});
+		$('#busStatusId').val(id);
+		$("#deleteTripDialog").modal();
 	 };
 	 
 	$(document).ready(
@@ -52,6 +46,23 @@
 						getAvailBus();
 						getArrivalTime();
 					});
+				});
+				
+				$('#tripDeleteDialogOk').click(function() {
+					var busStatusId = $('#busStatusId').val();
+					$.ajax({
+	                       url: "deleteSchedule.html?busStatusId=" + busStatusId,
+	                     }).done(function(data) {
+	                        // cleare bus selection
+	                        $('#tripDialogBusPlate').empty();
+	                        
+	                        // process over response data
+	                        // add new avaible bus plateNumber
+	                        $.each(data.busInfos, function() {
+	                           $('#tripDialogBusPlate').append('<option value="'+this.id+'">'+this.plateNumber+'</option>');
+	                        });
+	                        /* $("#tripDialogArrivalTime").val(data.arrivalTime); */
+	                     });
 				});
 				
 				$('#tripDialogBusType').change(function() {
@@ -157,7 +168,8 @@
 								type="button" value="View Details"
 								onclick='javascript: loadDetails(<s:property value='id'/>)' /></td>
 							<td><input data-delete="<s:property value='id'/>"
-								class="btn btn-danger" type="button" value="Delete" /></td>
+								class="btn btn-danger" type="button" value="Delete" 
+								onclick='javascript: deleteTrip(<s:property value='id'/>)'/></td>
 						</tr>
 					</s:iterator>
 				</tbody>
@@ -218,7 +230,7 @@
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
 				aria-hidden="true">×</button>
-			<h3 id="tripDeleteDialogLabel"></h3>
+			<h3 id="tripDeleteDialogLabel">Delete</h3>
 		</div>
 		<div class="modal-body">
 			<p>Do you want to delete this trip?</p>
@@ -245,6 +257,8 @@
 				aria-hidden="true">Ok</button>
 		</div>
 	</div>
+	
+	<input id="busStatusId" value="" type="hidden"/>
 	<jsp:include page="../common/footer.jsp" />
 </body>
 

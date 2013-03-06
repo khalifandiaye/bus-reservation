@@ -73,7 +73,6 @@
 			</table>
 		</div>
 	</div>
-	<div style="margin-bottom: 10px;"></div>
 	<jsp:include page="../common/footer.jsp" />
 </body>
 
