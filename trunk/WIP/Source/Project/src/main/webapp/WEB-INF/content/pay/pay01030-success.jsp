@@ -15,34 +15,24 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
-	<!-- Start small nav 
-	<section class="small-nav">
-	    <div class="my-container">
-	        <div class="nav-step-wrapper">
-	            <div class="nav-step nav-done">
-	                <span class="nav-step-num">1</span>
-	                <div class="nav-step-header"><s:text name="step_1_header" /></div>
-	                <div class="nav-step-des"><s:text name="step_1_description" /></div>
-	            </div>
-	            <div class="nav-step nav-done" style="margin-left: 100px;">
-	                <span class="nav-step-num">2</span>
-	                <div class="nav-step-header"><s:text name="step_2_header" /></div>
-	                <div class="nav-step-des"><s:text name="step_2_description" /></div>
-	            </div>
-	            <div class="nav-step nav-done" style="margin-left: 100px;">
-	                <span class="nav-step-num">3</span>
-	                <div class="nav-step-header"><s:text name="step_3_header" /></div>
-	                <div class="nav-step-des"><s:text name="step_3_description" /></div>
-	            </div>
-	            <div class="nav-step nav-done" style="margin-left: 100px;">
-	                <span class="nav-step-num">4</span>
-	                <div class="nav-step-header"><s:text name="step_4_header" /></div>
-	                <div class="nav-step-des"><s:text name="step_4_description" /></div>
-	            </div>
-	        </div>
-	    </div>
-	</section>
-	 End small nav -->
+	<!-- Start small nav -->
+	<div class="small-nav">
+		<div class="nav-step-wrapper step3">
+			<div class="nav-step"> 
+				<div class="nav-step-des" ><s:text name="step_1_description" /></div>
+			</div>
+			<div class="nav-step">
+				<div class="nav-step-des"><s:text name="step_2_description" /></div> 
+			</div>
+			<div class="nav-step">
+				<div class="nav-step-des"><s:text name="step_3_description" /></div>
+			</div>
+			<div class="nav-step">
+				<div class="nav-step-des"><s:text name="step_4_description" /></div>
+			</div>
+		</div>
+	</div> 
+	<!-- End small nav -->
 	<div class="reservation-details">
 		<div class="container">
 			<div class="well">
