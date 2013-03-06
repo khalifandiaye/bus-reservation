@@ -99,15 +99,25 @@
 		$("#busDetailSave").click(function() {
 			var routeId = $("#routeId").val();
 			var busInfos = [];
+			var unSelectBusInfos = [];
 			$.each($("#busDetailTable tr.odd,#busDetailTable .even"), function() {
 				var bus = {};
 				bus['id'] = $(this.cells[0]).html();
 				bus['plateNumber'] = $(this.cells[1]).html();
 				busInfos.push(bus);
 			});
+			
+			$.each($("#busDetailbusPlate option"), function() {
+				var unSelectBus = {};
+				unSelectBus['id'] = this.value;
+				unSelectBus['plateNumber'] = null;
+				unSelectBusInfos.push(unSelectBus);
+			});
+			
 			var busDetailInfo = {};
 	      busDetailInfo['routeId'] = routeId;
 	      busDetailInfo['bus'] = busInfos;
+	      busDetailInfo['unSelectBus'] = unSelectBusInfos;
 	      
 	      $.ajax({
 	          type : "POST",
@@ -117,7 +127,7 @@
 	             data : JSON.stringify(busDetailInfo)
 	          },
 	          success : function(response) {
-	            alert(12);
+	            alert(response);
 	          }
 	       });
 		});
