@@ -53,7 +53,7 @@
 					$.ajax({
 	                       url: "deleteSchedule.html?busStatusId=" + busStatusId,
 	                     }).done(function(data) {
-	                        alert(data);
+	                        alert(data.message);
 	                        var url = $('#contextPath').val() + "/schedule/list.html";
 	                        window.location = url;
 	                     });

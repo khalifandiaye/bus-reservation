@@ -31,7 +31,7 @@ public class DeleteBusAction extends BaseAction {
 
 	private String message;
 
-	@Action(value = "/deleteRoute", results = { @Result(type = "json", name = SUCCESS) })
+	@Action(value = "/deleteBus", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() throws ParseException, JSONException {
 		List<BusStatusBean> busStatusBeans = busStatusDAO
 				.getAllAvailTripByBusId(busId, Calendar.getInstance().getTime());
