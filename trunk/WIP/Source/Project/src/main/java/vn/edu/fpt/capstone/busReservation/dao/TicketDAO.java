@@ -3,6 +3,8 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -96,4 +98,22 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
         return result;
     }
 
+	@SuppressWarnings("unchecked")
+	public List<Integer> getTicketByBusStatusId(int busStatusId) {
+		String hql = "SELECT tics.reservation.id FROM ((SELECT tr FROM TripBean tr WHERE tr.busStatus.id = :busStatusId) as busTr " +
+								"LEFT JOIN TicketBean " +
+								"WITH busTr.id = TicketBean.Trips.id) as tics";
+		Session session = sessionFactory.getCurrentSession();
+		List<Integer> result = new ArrayList<Integer>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setInteger("busStatusId", busStatusId);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+    
 }

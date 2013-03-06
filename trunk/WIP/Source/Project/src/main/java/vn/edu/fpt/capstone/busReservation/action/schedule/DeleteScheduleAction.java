@@ -10,33 +10,38 @@ import org.apache.struts2.json.JSONException;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
-import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
+import vn.edu.fpt.capstone.busReservation.dao.TicketDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 
 @ParentPackage("jsonPackage")
 public class DeleteScheduleAction extends BaseAction {
 
 	private static final long serialVersionUID = -1900533216154623510L;
 	private BusStatusDAO busStatusDAO;
-	private ReservationDAO reservationDAO;
+	private TicketDAO ticketDAO;
+
 	private int busStatusId;
 	private String message;
 
 	@Action(value = "/deleteSchedule", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() throws ParseException, JSONException {
-		
-		List<ReservationBean> reservationBeans = reservationDAO.getByBusStatusId(busStatusId);
+
+		List<Integer> reservationBeans = ticketDAO
+				.getTicketByBusStatusId(busStatusId);
 		if (reservationBeans.size() == 0) {
 			BusStatusBean busStatusBean = busStatusDAO.getById(busStatusId);
 			busStatusBean.setStatus("inactive");
 			busStatusDAO.update(busStatusBean);
 			message = "Delete trip successfully!";
-		}
-		else {
-			message = "Cannot delete trip. This trip has " + reservationBeans.size() + " on it";
+		} else {
+			message = "Cannot delete trip. This trip has "
+					+ reservationBeans.size() + " on it";
 		}
 		return SUCCESS;
+	}
+
+	public void setTicketDAO(TicketDAO ticketDAO) {
+		this.ticketDAO = ticketDAO;
 	}
 
 	public String getMessage() {
@@ -49,10 +54,6 @@ public class DeleteScheduleAction extends BaseAction {
 
 	public void setBusStatusDAO(BusStatusDAO busStatusDAO) {
 		this.busStatusDAO = busStatusDAO;
-	}
-
-	public void setReservationDAO(ReservationDAO reservationDAO) {
-		this.reservationDAO = reservationDAO;
 	}
 
 }

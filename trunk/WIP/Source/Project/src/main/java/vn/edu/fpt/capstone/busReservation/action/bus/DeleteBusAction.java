@@ -44,7 +44,7 @@ public class DeleteBusAction extends BaseAction {
 			message = "Bus is deleted!";
 		} else {
 			message = "Cannot delete this bus due to this bus has "
-					+ busStatusBeans.size() + " in the future";
+					+ busStatusBeans.size() + " trips in the future";
 		}
 		return SUCCESS;
 	}
