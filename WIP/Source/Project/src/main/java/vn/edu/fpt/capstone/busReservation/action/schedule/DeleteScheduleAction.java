@@ -30,11 +30,12 @@ public class DeleteScheduleAction extends BaseAction {
 
 		List<TicketBean> reservationBeans = ticketDAO.getTicketByBusStatusId(busStatusId);
 		boolean isHaveReservation = false;
+		int countReservation = 0;
 		for (TicketBean ticketBean : reservationBeans) {
          if (ticketBean.getReservation() != null 
                && ticketBean.getReservation().getStatus().equals("paid")) {
             isHaveReservation = false;
-            break;
+            countReservation++;
          }
       }
 		
@@ -45,7 +46,7 @@ public class DeleteScheduleAction extends BaseAction {
 			message = "Delete trip successfully!";
 		} else {
 			message = "Cannot delete trip. This trip has "
-					+ reservationBeans.size() + " on it";
+					+ countReservation + "reservation on it";
 		}
 		return SUCCESS;
 	}
