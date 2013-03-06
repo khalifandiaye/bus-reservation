@@ -98,28 +98,26 @@
 			<div style="width:50%;float:left;padding-top:80px;">
 				<div class="reservation_info">
 					<h4><s:text name="reservation_info" /> </h4>
-					<table class="table table-bordered">
-						<tr>
-							<th><s:text name="subroute" /></th>
-							<td><s:property value="reservationInfo.subRouteName" /></td>
-						</tr>
-						<tr>
-							<th><s:text name="departure_date" /></th>
-							<td><s:property value="reservationInfo.departureDate" /></td>
-						</tr>
-						<tr>
-							<th><s:text name="departure_station_address" /></th>
-							<td><s:property value="reservationInfo.departureStationAddress" /></td>
-						</tr>
-						<tr>
-							<th><s:text name="arrival_date" /></th>
-							<td><s:property value="reservationInfo.arrivalDate" /></td>
-						</tr>
-						<tr>
-							<th><s:text name="arrival_station_address" /></th>
-							<td><s:property value="reservationInfo.arrivalStationAddress" /></td>
-						</tr>
-					</table>
+					<s:iterator value="reservationInfo.tickets">
+						<table class="table table-bordered">
+							<tr>
+								<th><s:text name="reservation.ticket.from" /></th>
+								<td><s:property value="departureStation" /></td>
+							</tr>
+							<tr>
+								<th><s:text name="reservation.ticket.departureTime" /></th>
+								<td><s:property value="departureDate" /></td>
+							</tr>
+							<tr>
+								<th><s:text name="reservation.ticket.to" /></th>
+								<td><s:property value="arrivalStation" /></td>
+							</tr>
+							<tr>
+								<th><s:text name="reservation.ticket.arrivalTime" /></th>
+								<td><s:property value="arrivalDate" /></td>
+							</tr>
+						</table>
+					</s:iterator>
 				</div>
 				<div class="payment_info">
 					<table>
@@ -128,19 +126,19 @@
 		<%-- 					<td><s:select list="paymentMethods" listKey="id" listValue="name" name="paymentMethodId" /></td> --%>
 		<!-- 				</tr> -->
 						<tr>
-							<th><s:text name="ticket_price" /></th>
+							<th style="text-align: left"><s:text name="ticket_price" /></th>
 							<td><s:property value="reservationInfo.basePrice" /> VND
-								= $<s:property value="reservationInfo.basePriceInUSD" /></td>
+								($<s:property value="reservationInfo.basePriceInUSD" />)</td>
 						</tr>
 						<tr>
-							<th><s:text name="online_transaction_fee" /></th>
+							<th style="text-align: left"><s:text name="online_transaction_fee" /></th>
 							<td id="transactionFee"><s:property value="reservationInfo.transactionFee" /> VND
-								= $<s:property value="reservationInfo.transactionFeeInUSD" /></td>
+								($<s:property value="reservationInfo.transactionFeeInUSD" />)</td>
 						</tr>
 						<tr>
-							<th><s:text name="total_amount" /></th>
+							<th style="text-align: left"><s:text name="total_amount" /></th>
 							<td id="totalAmount"><s:property value="reservationInfo.totalAmount" /> VND
-								= $<s:property value="reservationInfo.totalAmountInUSD" /></td>
+								($<s:property value="reservationInfo.totalAmountInUSD" />)</td>
 						</tr>
 					</table> 
 				</div>
