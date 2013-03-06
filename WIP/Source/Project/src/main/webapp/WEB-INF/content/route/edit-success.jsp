@@ -91,6 +91,8 @@
 														success : function(
 																response) {
 															alert(response);
+															var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId=" + $('#routeId').val();
+													      window.location = url;
 														},
 														error : function() {
 															alert("Save new route failed!");
@@ -150,11 +152,11 @@
 					</tr>
 				<thead>
 				<tbody>
-					<s:iterator value="tariffInfos">
+					<s:iterator value="segmentBeans">
 						<tr>
-							<td><s:property value="startAt" /></td>
-							<td><s:property value="endAt" /></td>
-							<td><input id="<s:property value='segmentId'/>" type="text"
+							<td><s:property value="startAt.name" /></td>
+							<td><s:property value="endAt.name" /></td>
+							<td><input id="<s:property value='id'/>" type="text"
 								value="" /></td>
 						</tr>
 					</s:iterator>
