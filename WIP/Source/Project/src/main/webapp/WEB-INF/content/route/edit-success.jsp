@@ -67,12 +67,12 @@
 															$("#segmentTable input"),
 															function() {
 																var tariff = {};
-																tariff['id'] = this.id;
+																tariff['segmentId'] = this.id;
 																tariff['fare'] = this.value;
 																tariffs
 																		.push(tariff);
 															});
-
+											info['routeId'] = $('#routeId').val();
 											info['validDate'] = $('#validDate')
 													.val();
 											info['tariffs'] = tariffs;
@@ -121,6 +121,7 @@
 	<jsp:include page="../common/header.jsp" />
 	<jsp:include page="../common/menu.jsp" />
 	<div id="page">
+	<input type="hidden" value='<s:property value="routeId"/>' id='routeId'/>
 		<div class="post" style="margin: 0px auto; width: 95%;">
 			<table>
 				<tr>
