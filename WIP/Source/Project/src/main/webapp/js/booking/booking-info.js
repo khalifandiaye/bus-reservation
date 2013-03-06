@@ -63,4 +63,11 @@ $(function(){
             showPopup(message);
         }
 	});
+	
+	$("#booking-info-submit").bind("click",function(event){
+		if($("#booking-form").valid()){
+			$.removeCookie('selectedSeat');
+			console.log("removed cookie");
+		}
+	});
 });
