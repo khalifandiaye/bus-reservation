@@ -5,7 +5,6 @@ import java.util.List;
 
 import vn.edu.fpt.capstone.busReservation.dao.BusTypeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO;
-import vn.edu.fpt.capstone.busReservation.dao.SegmentDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentInfo;
@@ -19,7 +18,6 @@ public class RouteDetailListAction extends ActionSupport {
 	private String routeName = "";
 	
 	private RouteDetailsDAO routeDetailsDAO;
-	private SegmentDAO segmentDAO;
 	private BusTypeDAO busTypeDAO;
 	
 	private List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
@@ -35,7 +33,12 @@ public class RouteDetailListAction extends ActionSupport {
 							+ segmentBean.getEndAt().getCity().getName(); 
 			segmentInfo.setId(segmentBean.getId());
 			segmentInfo.setName(name);
-			segmentInfo.setDuration(segmentDAO.getTravelTime(segmentBean.getId()));
+			
+         long travelTime = segmentBean.getTravelTime();
+         Long hours = travelTime / (1000 * 60 * 60);
+         Long minutes = (travelTime % (1000 * 60 * 60)) / (1000 * 60);
+			segmentInfo.setDuration((hours < 10 ? ("0" + hours.toString()) : hours)
+               + ":" + (minutes < 10 ? ("0" + minutes.toString()) : minutes));
 			segmentInfos.add(segmentInfo);
 		}
 		
@@ -64,10 +67,6 @@ public class RouteDetailListAction extends ActionSupport {
 
 	public void setRouteId(int routeId) {
 		this.routeId = routeId;
-	}
-
-	public void setSegmentDAO(SegmentDAO segmentDAO) {
-		this.segmentDAO = segmentDAO;
 	}
 
 	public List<SegmentInfo> getSegmentInfos() {

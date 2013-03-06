@@ -83,7 +83,11 @@ public class UpdateTariffAction extends BaseAction {
 
       int revertRouteId = 0;
       if (rt.size() != 0) {
-         revertRouteId = rt.get(1);
+         if (routeId == rt.get(0)) {
+            revertRouteId = rt.get(1);
+         } else {
+            revertRouteId = rt.get(0);
+         }
          for (TariffInfo tariffInfo : tariffInfos) {
             SegmentBean segmentBean = segmentDAO.getById(tariffInfo
                   .getSegmentId());
