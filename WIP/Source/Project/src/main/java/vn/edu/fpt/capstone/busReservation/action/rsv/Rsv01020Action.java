@@ -70,7 +70,7 @@ public class Rsv01020Action extends BaseAction {
     public String execute() {
         try {
             reservationInfo = reservationLogic.loadReservationInfo(
-                    reservationId, false);
+                    reservationId, true);
         } catch (CommonException e) {
             // TODO handle exception
             errorProcessing(e);

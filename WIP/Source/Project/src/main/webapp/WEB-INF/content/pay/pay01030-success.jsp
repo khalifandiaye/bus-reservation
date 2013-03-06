@@ -11,10 +11,11 @@
 <title>Payment Success</title>
 <jsp:include page="../common/xheader.jsp" />
 <link href="<%=request.getContextPath()%>/styles/booking.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/styles/pay.css" rel="stylesheet">
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
-	<!-- Start small nav -->
+	<!-- Start small nav 
 	<section class="small-nav">
 	    <div class="my-container">
 	        <div class="nav-step-wrapper">
@@ -41,66 +42,91 @@
 	        </div>
 	    </div>
 	</section>
-	<!-- End small nav -->
-	<div class="container">
-		<div class="well">
-			<div style="width:50%;float:left;padding-top:80px;">
-				<div class="reservation_info">
-					<h4><s:text name="reservation_info" /> </h4>
-					<table class="table table-bordered">
-						<tr>
-							<th><s:text name="booker" /></th>
-							<td><s:property value="reservationInfo.bookerName" /></td>
-						</tr>
-						<tr>
-							<th><s:text name="phone" /></th>
-							<td><s:property value="reservationInfo.phone" /></td>
-						</tr>
-						<tr>
-							<th><s:text name="email" /></th>
-							<td><s:property value="reservationInfo.email" /></td>
-						</tr>
-						<tr>
-							<th><s:text name="reservation_code" /></th>
-							<td><s:property value="reservationCode"/></td>
-						</tr>
-						<tr>
-							<th><s:text name="subroute" /></th>
-							<td><s:property value="reservationInfo.subRouteName" /></td>
-						</tr>
-						<tr>
-							<th><s:text name="departure_date" /></th>
-							<td><s:property value="reservationInfo.departureDate" /></td>
-						</tr>
-						<tr>
-							<th><s:text name="departure_station_address" /></th>
-							<td><s:property value="reservationInfo.departureStationAddress" /></td>
-						</tr>
-						<tr>
-							<th><s:text name="arrival_date" /></th>
-							<td><s:property value="reservationInfo.arrivalDate" /></td>
-						</tr>
-						<tr>
-							<th><s:text name="arrival_station_address" /></th>
-							<td><s:property value="reservationInfo.arrivalStationAddress" /></td>
-						</tr>
-						<tr>
-							<th><s:text name="seat_numbers" /></th>
-							<td><s:property value="reservationInfo.seatNumbers" /></td>
-						</tr>
-						<tr>
-							<th><s:text name="ticket_price" /></th>
-							<td><s:property value="reservationInfo.basePrice" /> VND ($<s:property value="reservationInfo.basePriceInUSD" />)</td>
-						</tr>
-						<tr>
-							<th><s:text name="online_transaction_fee" /></th>
-							<td id="transactionFee"><s:property value="reservationInfo.transactionFee" /> VND ($<s:property value="reservationInfo.transactionFeeInUSD" />)</td>
-						</tr>
-						<tr>
-							<th><s:text name="total_amount" /></th>
-							<td id="totalAmount"><s:property value="reservationInfo.totalAmount" /> VND ($<s:property value="reservationInfo.totalAmountInUSD" />)</td>
-						</tr>
+	 End small nav -->
+	<div class="reservation-details">
+		<div class="container">
+			<div class="well">
+				<h3><s:text name="reservationInfo" /></h3>
+				<div class="general-info">
+					<div class="item">
+						<label><s:text name="reservation.booker" /></label>
+						<span><s:property value="reservationInfo.bookerName" /></span>
+					</div>
+					<div class="item">
+						<label><s:text name="reservation.code" /></label>
+						<span><s:property value="reservationInfo.code"/></span>
+					</div>
+					<div class="item">
+						<label><s:text name="reservation.phone" /></label>
+						<span><s:property value="reservationInfo.phone" /></span>
+					</div>
+					<div class="item">
+						<label><s:text name="reservation.email" /></label>
+						<span><s:property value="reservationInfo.email" /></span>
+					</div>
+					<div class="item">
+						<label><s:text name="reservation.departureDate" /></label>
+						<span><s:property value="reservationInfo.tickets[0].departureDate" /></span>
+					</div>
+					<div class="item">
+						<label><s:text name="reservation.status" /></label>
+						<span><s:text name="%{reservationInfo.status}" /></span>
+					</div>
+				</div>
+				<div class="ticket-list">
+					<table>
+						<thead>
+							<tr>
+								<th><s:text name="index" /></th>
+								<th><s:text name="reservation.ticket.station" /></th>
+								<th><s:text name="reservation.ticket.departureTime" /> / <s:text name="reservation.ticket.arrivalTime" /></th>
+								<th><s:text name="reservation.ticket.seatNumbers" /></th>
+								<th><s:text name="reservation.ticket.busType" /></th>
+							</tr>
+						</thead>
+						<tbody>
+							<s:iterator value="reservationInfo.tickets" status="status">
+								<tr>
+									<td class="index" rowspan="2"><s:property value="#status.count" /></td>
+									<td><s:text name="reservation.ticket.from" /> <s:property value="departureStation" /></td>
+									<td><s:property value="departureDate" /></td>
+									<td rowspan="2">
+										<s:iterator value="seats" ><s:property/> </s:iterator>
+									</td>
+									<td rowspan="2"><s:property value="busType" /></td>
+								</tr>
+								<tr>
+									<td><s:text name="reservation.ticket.to" /> <s:property value="arrivalStation" /></td>
+									<td><s:property value="arrivalDate" /></td>
+								</tr>
+							</s:iterator>
+						</tbody>
 					</table>
+				</div>
+				<div class="payment-info">
+					<div class="item">
+						<label><s:text name="resevation.ticketPrice" /></label>
+						<span class="vnd"><s:property value="%{reservationInfo.basePrice + ' đồng'}" /></span>
+						<span class="usd"><s:property value="%{'($' + reservationInfo.basePriceInUSD + ')'}" /></span>
+					</div>
+					<div class="item">
+						<label><s:text name="resevation.transactionFee" /></label>
+						<span class="vnd"><s:property value="%{reservationInfo.transactionFee + ' đồng'}" /></span>
+						<span class="usd"><s:property value="%{'($' + reservationInfo.transactionFeeInUSD + ')'}" /></span>
+					</div>
+					<div class="item">
+						<label><s:text name="reservation.totalAmount" /></label>
+						<span class="vnd"><s:property value="%{reservationInfo.totalAmount + ' đồng'}" /></span>
+						<span class="usd"><s:property value="%{'($' + reservationInfo.totalAmountInUSD + ')'}" /></span>
+					</div>
+					<s:if test="%{reservation.refundedAmount != null && reservation.refundedAmount != ''}">
+						<div class="item">
+							<label><s:text name="reservation.refundedAmount" /></label>
+							<span class="vnd"><s:property value="%{reservationInfo.refundedAmount + ' đồng'}" /></span>
+							<span class="usd"><s:property value="%{'($' + reservationInfo.refundedAmountInUSD + ')'}" /></span>
+							<span class="rate"><s:property value="%{'(' + reservationInfo.refundRate + '%)'}" /></span>
+						</div>
+					</s:if>
 				</div>
 			</div>
 		</div>

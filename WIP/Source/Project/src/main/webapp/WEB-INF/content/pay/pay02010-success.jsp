@@ -11,10 +11,15 @@
 <title>Test page</title>
 <jsp:include page="../common/xheader.jsp" />
 <script src="<%=request.getContextPath()%>/js/index.js" ></script>
+<script src="<%=request.getContextPath()%>/js/pay/pay02010.js"></script>
 </head>
 	<body>
 	<jsp:include page="../common/header.jsp" />
-	<form method="post" action="<%=request.getContextPath()%>/pay/pay-paypal">
+	<span id="subRouteName"></span>
+	<span id="seatNumbers"></span>
+	<div id="strings"></div>
+	<button>Click here</button>
+	<!-- <form method="post" action="<%=request.getContextPath()%>/pay/pay-paypal">
 		<section class="reservation_info">
 			<div class="container">
 				<h4>Thông tin đặt vé</h4>
@@ -42,7 +47,7 @@
 				<s:submit id="pay02020" value="Cancel" disabled="true"/>
 			</div>
 		</section>
-	</form>
+	</form> -->
 	<jsp:include page="../common/footer.jsp" />
 	</body>
 </html>
