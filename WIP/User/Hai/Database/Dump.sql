@@ -864,7 +864,8 @@ BEGIN
 			AND `tit_new`.`ticket_id` = `ticket_id`
 	WHERE
 		`rsv`.`status` = 'paid'
-			AND (`rsv`.`status` = 'unpaid'
+		OR `rsv`.`status` = 'pending'
+			OR (`rsv`.`status` = 'unpaid'
 			AND `rsv`.`book_time` > SUBDATE(NOW(), INTERVAL 15 MINUTE));
 	RETURN `count`;
 END */;;
@@ -903,7 +904,8 @@ BEGIN
 			AND `stp_new`.`ticket_id` = `ticket_id`
 	WHERE
 		`rsv`.`status` = 'paid'
-			AND (`rsv`.`status` = 'unpaid'
+		OR `rsv`.`status` = 'pending'
+			OR (`rsv`.`status` = 'unpaid'
 			AND `rsv`.`book_time` > SUBDATE(NOW(), INTERVAL 15 MINUTE));
 	RETURN `count`;
 END */;;
@@ -1188,4 +1190,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-03-07  0:28:58
+-- Dump completed on 2013-03-07  0:31:48
