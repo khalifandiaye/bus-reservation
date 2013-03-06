@@ -30,6 +30,7 @@ public class DeleteScheduleAction extends BaseAction {
 		if (reservationBeans.size() == 0) {
 			BusStatusBean busStatusBean = busStatusDAO.getById(busStatusId);
 			busStatusBean.setStatus("inactive");
+			busStatusDAO.update(busStatusBean);
 			message = "Delete trip successfully!";
 		}
 		else {
