@@ -33,6 +33,20 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
+   public List<BusBean> getBusByStatus(String status) {
+      String hql = "from BusBean busBean where busBean.status = :status";
+      Session session = sessionFactory.getCurrentSession();
+      List<BusBean> result = new ArrayList<BusBean>();
+      try {
+         Query query = session.createQuery(hql);
+         query.setParameter("status", status);
+         result = query.list();
+      } catch (HibernateException e) {
+         exceptionHandling(e, session);
+      }
+      return result;
+   }
 	/*
 	 * SELECT b.id, b.plate_number, MAX(bs.to_date) FROM bus b LEFT JOIN
 	 * bus_status bs ON b.id = bs.bus_id WHERE bs.end_station_id = 8 AND
