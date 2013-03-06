@@ -69,3 +69,140 @@ input.pay {
                 50% 50% 
                 no-repeat;
 }
+
+.reservation-details label {
+	font-weight: bold;
+	font-size: 14px;
+	cursor: default;
+	display: inline-block;
+}
+
+.reservation-details .general-info {
+	margin-top: 20px;
+	overflow: hidden;
+}
+
+.reservation-details .general-info .item {
+	width: 50%;
+	height: 30px;
+	float: left;
+}
+
+.reservation-details .general-info .item label {
+	width: 40%;
+}
+
+.reservation-details .general-info .item span {
+	width: 60%;
+}
+
+.reservation-details .ticket-list {
+	margin-top: 20px;
+	overflow: hidden;
+}
+
+.reservation-details .ticket-list table {
+	margin: 0 auto;
+	clear: both;
+	width: 100%;
+}
+
+.reservation-details .ticket-list thead th {
+	padding: 3px 18px 3px 10px;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	/* border: 1px solid black; */
+	font-weight: bold;
+}
+
+.reservation-details .ticket-list thead th.datetime {
+	width: 150px;
+}
+
+.reservation-details .ticket-list thead th:last-child {
+	border-right: none;
+}
+
+.reservation-details .ticket-list td {
+	padding: 3px 10px;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+}
+
+.reservation-details .ticket-list td.right {
+	text-align: right;
+}
+
+.reservation-details .ticket-list td.center {
+	text-align: center;
+}
+
+.reservation-details .ticket-list td.small {
+	/* padding-right: 3px; */
+	border-right-style: dashed;
+	border-right-color: #c0c0c0;
+	/* width: 30px; */
+}
+
+.reservation-details .ticket-list td:last-child {
+	border-right: none;
+}
+
+.reservation-details .ticket-list tr:last-child td {
+	border-bottom: none;
+}
+
+.reservation-details .ticket-list tr:nth-child(odd) td:not([rowspan='2']) {
+	border-bottom-style: dashed;
+}
+
+.reservation-details .ticket-list tr:nth-last-child(2) td[rowspan='2'] {
+	border-bottom: none;
+}
+
+.reservation-details .ticket-list td.index {
+	text-align: center;
+}
+
+.reservation-details .ticket-list tbody tr {
+	background-color: white;
+}
+
+.reservation-details .ticket-list tbody tr:nth-child(4n) {
+	background-color: #E2E4FF;
+}
+
+.reservation-details .ticket-list tbody tr:nth-child(4n+3) {
+	background-color: #E2E4FF;
+}
+
+.reservation-details .payment-info {
+	margin-top: 20px;
+	overflow: hidden;
+}
+
+.reservation-details .payment-info .item {
+	height: 30px;
+	clear: both;
+}
+
+.reservation-details .payment-info .item label {
+	width: 20%;
+}
+
+.reservation-details .payment-info .item span {
+	display: inline-block;
+	text-align: right;
+}
+
+.reservation-details .payment-info .item span.vnd {
+	min-width: 100px;
+}
+
+.reservation-details .payment-info .item span.usd {
+	width: 60px;
+}
+
+.reservation-details .payment-info .item span.rate {
+	width: 60px;
+}

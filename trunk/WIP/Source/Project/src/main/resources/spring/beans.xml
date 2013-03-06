@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC 
-	"-//SPRING//DTD BEAN//EN" 
-	"http://www.springframework.org/dtd/spring-beans.dtd">
+<!-- <!DOCTYPE beans PUBLIC  -->
+<!-- 	"-//SPRING//DTD BEAN//EN"  -->
+<!-- 	"http://www.springframework.org/dtd/spring-beans.dtd"> -->
 
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 	<!-- define Action here -->
 	<!-- <bean id="helloWorldAction" class="vn.edu.fpt.capstone.busReservation.action.HelloWorldAction"> 
 		<property name="helloWorldLogic" ref="helloWorldLogic" /> </bean> -->
@@ -17,12 +24,13 @@
 		</bean> -->
 
 	<!-- ****************define Logic here**************** -->
+	<context:annotation-config />
 	<bean id="helloWorldLogic"
 		class="vn.edu.fpt.capstone.busReservation.logic.HelloWorldLogicImpl">
 		<property name="helloWorldDAO" ref="helloWorldDAO" />
 	</bean>
 	<bean id="paymentLogic" class="vn.edu.fpt.capstone.busReservation.logic.PaymentLogic"
-		singleton="true">
+		scope="singleton">
 		<property name="reservationDAO" ref="reservationDAO" />
 		<property name="reservationInfoDAO" ref="reservationInfoDAO" />
 		<property name="paymentMethodDAO" ref="paymentMethodDAO" />
@@ -31,13 +39,13 @@
 	</bean>
 	<bean id="reservationLogic"
 		class="vn.edu.fpt.capstone.busReservation.logic.ReservationLogic"
-		singleton="true">
-		<property name="userDAO" ref="userDAO" />
-		<property name="reservationInfoDAO" ref="reservationInfoDAO" />
-		<property name="tariffViewDAO" ref="tariffViewDAO" />
-		<property name="tripDAO" ref="tripDAO" />
-		<property name="reservationDAO" ref="reservationDAO" />
-		<property name="systemSettingDAO" ref="systemSettingDAO" />
+		scope="singleton">
+<!-- 		<property name="userDAO" ref="userDAO" /> -->
+<!-- 		<property name="reservationInfoDAO" ref="reservationInfoDAO" /> -->
+<!-- 		<property name="tariffViewDAO" ref="tariffViewDAO" /> -->
+<!-- 		<property name="tripDAO" ref="tripDAO" /> -->
+<!-- 		<property name="reservationDAO" ref="reservationDAO" /> -->
+<!-- 		<property name="systemSettingDAO" ref="systemSettingDAO" /> -->
 	</bean>
 	<!-- *****************define DAO here***************** -->
 	<bean id="helloWorldDAO"
@@ -117,6 +125,12 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 		<constructor-arg
 			value="vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean" />
+	</bean>
+
+	<bean id="ticketDAO" class="vn.edu.fpt.capstone.busReservation.dao.TicketDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean" />
 	</bean>
 
 	<bean id="reservationInfoDAO"

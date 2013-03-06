@@ -55,6 +55,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SystemSettingBean;
+import vn.edu.fpt.capstone.busReservation.displayModel.RefundInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
@@ -248,8 +249,9 @@ public class PaymentLogic extends BaseLogic {
                 converter.convert(totalAmount), 2, CommonConstant.LOCALE_VN));
     }
 
-    public double calculateRefundAmount(int reservationId)
+    public RefundInfo calculateRefundAmount(int reservationId)
             throws CommonException {
+        RefundInfo refundInfo = null;
         ReservationInfoBean reservationInfo = null;
         Double amount = null;
         List<SystemSettingBean> settings = null;
@@ -260,6 +262,7 @@ public class PaymentLogic extends BaseLogic {
         int settingCount = 0;
         Calendar timelimit = null;
         Date today = null;
+        CurrencyConverter converter = null;
         reservationInfo = reservationInfoDAO.getById(reservationId);
         amount = reservationInfo.getPaidAmount();
         if (amount != null && amount > 0) {
@@ -295,18 +298,25 @@ public class PaymentLogic extends BaseLogic {
                 // TODO handle error
                 throw new CommonException();
             }
+            try {
+                converter = CurrencyConverter.getInstance(
+                        Currency.getInstance("VND"), Currency.getInstance("USD"));
+            } catch (InstantiationException e) {
+                LOG.error("Impossible error", e);
+            } catch (IOException e) {
+                // TODO handle error
+                throw new CommonException(e);
+            }
             amount = roundingVND(amount, RoundingMode.FLOOR) * refundRate / 100;
-            return amount;
+            refundInfo = new RefundInfo();
+            refundInfo.setRefundAmount(amount);
+            refundInfo.setRefundRate(refundRate);
+            refundInfo.setRefundAmountInUSD(converter.convert(amount));
+            return refundInfo;
         } else {
             // TODO handle error
             throw new CommonException();
         }
-    }
-
-    public String getRefundAmountString(int reservationId)
-            throws CommonException {
-        return FormatUtils.formatNumber(calculateRefundAmount(reservationId),
-                0, CommonConstant.LOCALE_VN);
     }
 
     /**

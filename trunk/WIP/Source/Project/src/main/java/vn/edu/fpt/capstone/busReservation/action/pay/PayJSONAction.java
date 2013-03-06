@@ -10,6 +10,7 @@ import org.hibernate.HibernateException;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean.PaymentType;
+import vn.edu.fpt.capstone.busReservation.displayModel.RefundInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
@@ -136,6 +137,7 @@ public class PayJSONAction extends BaseAction {
     public String calculateRefund() {
         String amount = null;
         String args[] = null;
+        RefundInfo refundInfo = null;
         if (CheckUtils.isNullOrBlank(reservationId)) {
             // TODO handle error
             errorMessage = getText("msgerrcm000");
@@ -148,10 +150,12 @@ public class PayJSONAction extends BaseAction {
             return SUCCESS;
         }
         try {
-            amount = paymentLogic.getRefundAmountString(Integer
+            refundInfo = paymentLogic.calculateRefundAmount(Integer
                     .parseInt(reservationId));
-            args = new String[1];
-            args[0] = amount;
+            args = new String[3];
+            args[0] = refundInfo.getRefundAmountString();
+            args[1] = refundInfo.getRefundAmountInUSDString();
+            args[2] = refundInfo.getRefundRateString();
             cancelConfirmMessage = getText("message.cancelConfirm", args);
         } catch (CommonException e) {
             errorMessage = getText(e.getMessageId(), e.getParameters());

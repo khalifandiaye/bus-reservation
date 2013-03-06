@@ -30,7 +30,7 @@
 						<th class="subroute"><s:text name="subroute" /></th>
 						<th class="book_time"><s:text name="book_time" /></th>
 						<th class="book_time_mili"><s:text name="book_time_mili" /></th>
-						<th class="departure_date"><s:text name="departure_date" /></th>
+						<th class="departure_date"><s:text name="reservation.departureDate" /></th>
 						<th class="details"><s:text name="details" /></th>
 						<th class="status"><s:text name="cancel" /></th>
 					</tr>
