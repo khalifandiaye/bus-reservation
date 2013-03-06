@@ -42,10 +42,11 @@ public class SeatPositionDAO extends
             		" INNER JOIN tic.reservation AS rsv" +
             		" WHERE trp IN (:trips)" +
             		" AND stp.name IN (:seatNames)" +
-            		" AND (rsv.status = :statusPaid OR (rsv.status = :statusUnpaid AND rsv.bookTime > :timeLimit))";
+            		" AND (rsv.status = :statusPaid OR rsv.status = :statusPending OR (rsv.status = :statusUnpaid AND rsv.bookTime > :timeLimit))";
             query = session.createQuery(queryString);
             query.setParameterList("trips", trips);
             query.setParameterList("seatNames", seatNames);
+            query.setString("statusPending", ReservationStatus.PENDING.getValue());
             query.setString("statusPaid", ReservationStatus.PAID.getValue());
             query.setString("statusUnpaid", ReservationStatus.UNPAID.getValue());
             query.setTimestamp("timeLimit", timeLimit.getTime());
@@ -74,9 +75,10 @@ public class SeatPositionDAO extends
             		" INNER JOIN tic.seatPositions AS stp" +
             		" INNER JOIN tic.reservation AS rsv" +
             		" WHERE trp IN (:trips)" +
-            		" AND (rsv.status = :statusPaid OR (rsv.status = :statusUnpaid AND rsv.bookTime > :timeLimit))";
+            		" AND (rsv.status = :statusPaid OR rsv.status = :statusPending OR (rsv.status = :statusUnpaid AND rsv.bookTime > :timeLimit))";
             query = session.createQuery(queryString);
             query.setParameterList("trips", trips);
+            query.setString("statusPending", ReservationStatus.PENDING.getValue());
             query.setString("statusPaid", ReservationStatus.PAID.getValue());
             query.setString("statusUnpaid", ReservationStatus.UNPAID.getValue());
             query.setTimestamp("timeLimit", timeLimit.getTime());
