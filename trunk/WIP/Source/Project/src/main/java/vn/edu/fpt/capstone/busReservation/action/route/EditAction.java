@@ -7,7 +7,6 @@ import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.BusTypeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TariffDAO;
-import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
@@ -24,18 +23,9 @@ public class EditAction extends BaseAction {
 	private int type;
 	
 	//Declaration
-	private TripDAO tripDAO;
 	private RouteDetailsDAO routeDetailsDAO;
 	private TariffDAO tariffDAO;
 	private BusTypeDAO busTypeDAO;
-
-	public TariffDAO getTariffDAO() {
-      return tariffDAO;
-   }
-
-   public void setTariffDAO(TariffDAO tariffDAO) {
-      this.tariffDAO = tariffDAO;
-   }
 
    public String execute() {
 	   List<SegmentBean> segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
@@ -55,6 +45,10 @@ public class EditAction extends BaseAction {
 		return SUCCESS;
 	}
 
+   public void setTariffDAO(TariffDAO tariffDAO) {
+      this.tariffDAO = tariffDAO;
+   }
+
    public int getRouteId() {
       return routeId;
    }
@@ -63,24 +57,12 @@ public class EditAction extends BaseAction {
       this.routeId = routeId;
    }
 
-   public TripDAO getTripDAO() {
-      return tripDAO;
-   }
-
-   public void setTripDAO(TripDAO tripDAO) {
-      this.tripDAO = tripDAO;
-   }
-
    public int getType() {
       return type;
    }
 
    public void setType(int type) {
       this.type = type;
-   }
-
-   public RouteDetailsDAO getRouteDetailsDAO() {
-      return routeDetailsDAO;
    }
 
    public void setRouteDetailsDAO(RouteDetailsDAO routeDetailsDAO) {
@@ -101,10 +83,6 @@ public class EditAction extends BaseAction {
 
    public void setTariffInfos(List<TariffInfo> tariffInfos) {
       this.tariffInfos = tariffInfos;
-   }
-
-   public BusTypeDAO getBusTypeDAO() {
-      return busTypeDAO;
    }
 
    public void setBusTypeDAO(BusTypeDAO busTypeDAO) {
