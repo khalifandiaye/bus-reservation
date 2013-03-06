@@ -67,6 +67,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<BusBean> getBusByType(int busType) {
 		String hql = "FROM BusBean b WHERE b.busType.id = :busType";
 		Session session = sessionFactory.getCurrentSession();
@@ -82,6 +83,23 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<BusBean> getBusByRouteId(int routeId) {
+		String hql = "FROM BusBean b WHERE b.forwardRoute.id = :routeId OR b.returnRoute.id = :routeId";
+		Session session = sessionFactory.getCurrentSession();
+		List<BusBean> result = new ArrayList<BusBean>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameter("routeId", routeId);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Object[]> getBusByTypeInRoute(int routeId, int busTypeId) {
 		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id "
 				+ "FROM bus b LEFT JOIN (SELECT t1.* FROM bus_status t1 "
@@ -105,6 +123,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Object[]> getBusByTypeNotInRoute(int busTypeId) {
 		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id "
 				+ "FROM bus b LEFT JOIN (SELECT t1.* FROM bus_status t1 "
