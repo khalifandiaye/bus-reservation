@@ -53,15 +53,9 @@
 					$.ajax({
 	                       url: "deleteSchedule.html?busStatusId=" + busStatusId,
 	                     }).done(function(data) {
-	                        // cleare bus selection
-	                        $('#tripDialogBusPlate').empty();
-	                        
-	                        // process over response data
-	                        // add new avaible bus plateNumber
-	                        $.each(data.busInfos, function() {
-	                           $('#tripDialogBusPlate').append('<option value="'+this.id+'">'+this.plateNumber+'</option>');
-	                        });
-	                        /* $("#tripDialogArrivalTime").val(data.arrivalTime); */
+	                        alert(data);
+	                        var url = $('#contextPath').val() + "/schedule/list.html";
+	                        window.location = url;
 	                     });
 				});
 				
@@ -168,8 +162,8 @@
 								type="button" value="View Details"
 								onclick='javascript: loadDetails(<s:property value='id'/>)' /></td>
 							<td><input data-delete="<s:property value='id'/>"
-								class="btn btn-danger" type="button" value="Delete" 
-								onclick='javascript: deleteTrip(<s:property value='id'/>)'/></td>
+								class="btn btn-danger" type="button" value="Delete"
+								onclick='javascript: deleteTrip(<s:property value='id'/>)' /></td>
 						</tr>
 					</s:iterator>
 				</tbody>
@@ -219,7 +213,8 @@
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-				<button id="addNewSchedule" class="btn btn-primary">Save changes</button>
+				<button id="addNewSchedule" class="btn btn-primary">Save
+					changes</button>
 			</div>
 		</form>
 	</div>
@@ -257,8 +252,8 @@
 				aria-hidden="true">Ok</button>
 		</div>
 	</div>
-	
-	<input id="busStatusId" value="" type="hidden"/>
+
+	<input id="busStatusId" value="" type="hidden" />
 	<jsp:include page="../common/footer.jsp" />
 </body>
 
