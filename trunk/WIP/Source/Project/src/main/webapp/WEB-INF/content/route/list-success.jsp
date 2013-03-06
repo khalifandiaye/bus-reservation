@@ -37,7 +37,7 @@
                 $.ajax({
                            url: "deleteRoute.html?routeId=" + busStatusId,
                          }).done(function(data) {
-                            alert(data);
+                            alert(data.message);
                             var url = $('#contextPath').val() + "/route/list.html";
                             window.location = url;
                          });
