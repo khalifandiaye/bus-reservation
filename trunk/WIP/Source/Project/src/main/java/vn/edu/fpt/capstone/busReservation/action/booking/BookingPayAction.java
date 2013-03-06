@@ -165,7 +165,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 			ticketBean.setReservation(reservationBean);
 			ticketBean.setTrips(list);
 			
-			List<SeatPositionBean> listSeatPositionBean = null;
+			List<SeatPositionBean> listSeatPositionBean = new ArrayList<SeatPositionBean>();
 			
 			for(int i = 0 ; i< tmp.length; i++){
 				SeatPositionBean spb = new SeatPositionBean();
