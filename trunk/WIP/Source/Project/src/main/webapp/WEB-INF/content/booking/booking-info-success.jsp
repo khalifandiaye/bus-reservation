@@ -39,13 +39,12 @@
 	<!-- End small nav -->
 	<!-- Start notify message -->
 	<section>
-	<div class="my-container notify-message">
+	<div class="container notify-message">
 	</div>
 	</section>
 	<!-- End notify message -->
 	<!-- Start information content -->
 	<section>
-		<div class="my-container">
 		<div class="well" style="overflow: hidden;">
 			<form style="width:50%;float:left" action="booking-pay.html" method="post" id="booking-form">
 				<fieldset>
@@ -93,7 +92,7 @@
 					  	
 					  	<s:hidden id="selectedSeat" name="selectedSeat"></s:hidden>
 					  	
-					  	<button class="btn btn-large" type="submit"><s:text name="pay" /></button>
+					  	<button id="booking-info-submit" class="btn btn-large" type="submit"><s:text name="pay" /></button>
 				</fieldset>
 			</form>
 			<div style="width:50%;float:left;padding-top:80px;">
@@ -146,7 +145,6 @@
 					</table> 
 				</div>
 			</div>
-		</div>
 		</div>
 	</section>
 		

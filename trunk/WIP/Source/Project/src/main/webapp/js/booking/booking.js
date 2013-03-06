@@ -173,6 +173,8 @@ function updateSeatNum(){
 
 $(function(){
 	SeatsToAllocate = parseInt($("#passengerNo").val());
+	$(".seat-number-selected").text($("#passengerNo").val()); 
+	
 	SeatsNotAllocatedCount = parseInt($("#passengerNo").val());
 	
     $(".seat").bind("click",function(event){
