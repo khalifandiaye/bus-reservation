@@ -15,7 +15,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 
 @ParentPackage("jsonPackage")
-public class deleteScheduleAction extends BaseAction {
+public class DeleteScheduleAction extends BaseAction {
 
 	private static final long serialVersionUID = -1900533216154623510L;
 	private BusStatusDAO busStatusDAO;
