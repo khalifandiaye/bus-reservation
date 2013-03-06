@@ -28,6 +28,7 @@ public class ListAction extends ActionSupport {
 	private List<BusStatusBean> busStatusBeans = new ArrayList<BusStatusBean>();
 
 	public String execute() {
+		RouteBean routeBean = routeDAO.getReturnRouteByRouteId(1).get(0); 
 		busTypeBeans = busTypeDAO.getAll();
 		busStatusBeans = busStatusDAO.getAllTrip();
 		routeBeans = routeDAO.getAll();

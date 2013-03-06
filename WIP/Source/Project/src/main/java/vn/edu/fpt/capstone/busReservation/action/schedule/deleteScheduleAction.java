@@ -1,8 +1,6 @@
 package vn.edu.fpt.capstone.busReservation.action.schedule;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -32,7 +30,7 @@ public class deleteScheduleAction extends BaseAction {
 		if (reservationBeans.size() == 0) {
 			BusStatusBean busStatusBean = busStatusDAO.getById(busStatusId);
 			busStatusBean.setStatus("inactive");
-			message = "Delete trip successfully";
+			message = "Delete trip successfully!";
 		}
 		else {
 			message = "Cannot delete trip. This trip has " + reservationBeans.size() + " on it";
