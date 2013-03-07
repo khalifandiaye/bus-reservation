@@ -97,7 +97,7 @@
 	                    <s:hidden id="seatToPayment" name="seatToPayment"></s:hidden>
 	                    
 	                    <div style="overflow: hidden;width: 100%;">
-	                    	<button class="btn btn-large pull-right" style="margin-top: 15px;margin-right: 30px;">Tiếp Tục</button>
+	                    	<button id="booking-submit" class="btn btn-large pull-right" style="margin-top: 15px;margin-right: 30px;">Tiếp Tục</button>
 	                    </div>
 		            </form>
 		            <s:hidden id="selectedSeat" name="selectedSeat"></s:hidden>

@@ -212,4 +212,8 @@ $(function(){
     
     //init selected seat 
 	initSelectedSeat();
+	
+	$("#booking-submit").bind("click",function(event){
+		$("#selectedSeat").val("");
+	});
 });

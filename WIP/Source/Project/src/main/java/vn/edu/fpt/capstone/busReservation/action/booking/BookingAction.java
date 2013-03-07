@@ -196,6 +196,9 @@ public class BookingAction extends BaseAction implements SessionAware {
 			List<String> doubleSeats = (List<String>)request.get("doubleSeat");
 			String selSeat = (String)session.get("selectedSeats");
 			String[] list = selSeat.split(";");
+			
+			this.passengerNo = list.length+"";
+			
 			String nwSelectedSeat = "";
 			
 			for (String string : list) {
