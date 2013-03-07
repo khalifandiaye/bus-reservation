@@ -80,6 +80,14 @@ public class SearchResultAction extends ActionSupport {
 	public void setDepartureDate(String departureDate) {
 		this.departureDate = departureDate;
 	}
+	
+	
+	/**
+	 * @return the departureDate
+	 */
+	public String getDepartureDate() {
+		return departureDate;
+	}
 	/**
 	 * @param busType the busType to set
 	 */

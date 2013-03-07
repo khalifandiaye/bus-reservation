@@ -39,6 +39,30 @@
 		$('input[name="outFare"]').val($(outRadio).siblings('#out_fare').val());
 		return true;		
 	}
+	
+	$(function(){
+		$('.trip-details').bind('click',(function() {
+		var busStatus = $(this).parent("td").next().next().find('#out_status').val();
+		var departTime = $(this).parent("td").next().next().find('#out_deptTime').val();
+		var arriveTime = $(this).parent("td").next().next().find('#out_arrTime').val();
+		//console.log(departTime);
+		$.ajax({
+	        type : "GET",
+	        url : $('#contextPath') + "/search/getTripDetails.html",
+	        data : {
+	        	busStatus : busStatus,
+	        	departTime : departTime,
+	        	arriveTime : arriveTime
+	        },
+	        success : function(data) {
+	        	console.log(data.tripList);
+	        	//$.each(data.tripList, function(k, v) {
+	        	//$('#trips-list tbody').append();
+		  }
+	    });	 
+		
+	}))});
+	
 	</script>
 </head>
 <body>
@@ -116,11 +140,9 @@
 													class="bookingPages"
 													summary="A selection of travel times for your outward journey will follow. Please select the journey you would like to book.">
 													<tbody>
-														<tr>
+														<tr style="background: #CCCCCC">
 															<th id="outward_departs">Ngày giờ đi</th>
 															<th id="outward_arrive">Ngày giờ đến</th>
-															<th id="outward_departs_station">Trạm khởi hành</th>
-															<th id="outward_arrive_station">Trạm kết thúc</th>
 															<th id="outward_details">Xem chi tiết</th>
 															<th id="outward_funfares">Giá vé</th>
 															<th id="outward_select" align="left"
@@ -139,13 +161,20 @@
 																	<td align="center"><s:date name="arrivalTime"
 																			format="dd-MM-yyyy" />&nbsp;<br> <s:date
 																			name="arrivalTime" format="HH:mm" /></td>
-																	<td><s:property value="departureStation" />&nbsp;</td>
-																	<td><s:property value="arrivalStation" />&nbsp;</td>
-																	<td></td>
-																	<td><s:property value="fare" />&nbsp;</td> 
+																	<td align="center"><a href="#trip-details" role="button" data-toggle="modal" class="trip-details">Chi tiết</a></td>
+																	<td><s:text name="format.number">
+																			<s:property value="fare" />
+																		</s:text>&nbsp;VND&nbsp;
+																	</td> 
 																	<td align="center">
+																	 <s:if test="#srStatus.first == true">
+      																		<input title="Chọn chuyến này" type="radio"
+																			   name="out_journey" id="out_journey" checked />
+    																	</s:if>
+    																	<s:else>
 																		<input title="Chọn chuyến này" type="radio"
 																			   name="out_journey" id="out_journey" />
+																			   </s:else>
 																		<input type="hidden" id="out_status" value="${sr.busStatusId}"/>	   
 																		<input type="hidden" id="out_deptTime" value="${sr.departureTime}"/>
 																		<input type="hidden" id="out_arrTime" value="${sr.arrivalTime}"/>
@@ -182,6 +211,32 @@
 		</div>
 	</div>
 	</section>
+
+<!-- Modal -->
+<div id="trip-details" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Chi tiết chuyến đi</h3>
+  </div>
+  <div class="modal-body">
+    <table border="0" cellspacing="0" cellpadding="0" id="trips-list">
+    <thead>
+    <tr>
+    	<th>Giờ khởi hành</th>
+    	<th>Giờ dừng nghỉ</th>
+    	<th>Trạm khởi hành</th>
+    	<th>Trạm dừng nghỉ</th>
+    	</tr>
+    </thead>
+    <tbody>
+    	    	
+    </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Đóng</button>
+  </div>
+</div>
 
 	<jsp:include page="../common/footer.jsp" />
 </body>
