@@ -144,7 +144,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 		
 		List<String> seatsDouble = seatPositionDAO.checkDoubleBooking(list, listSelectedSeat);
 		
-		if(seatsDouble.size() == 0){
+		
 		
 			ReservationBean reservationBean = new ReservationBean();
 			
@@ -181,9 +181,12 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 			
 			reservationBean.setTickets(listTicket);
 			
+		if(seatsDouble.size() == 0){
+				
 			reservationId = Integer.toString((Integer) reservationDAO
 	                .insert(reservationBean));
-	 
+			
+			reservationDAO.endTransaction();
 			// moved below
 //			session.remove("listTripBean");
 //			session.remove("selectedSeats");
