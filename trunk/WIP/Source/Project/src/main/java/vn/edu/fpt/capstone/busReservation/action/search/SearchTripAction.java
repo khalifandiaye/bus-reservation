@@ -19,14 +19,22 @@ public class SearchTripAction extends ActionSupport {
     private BusTypeDAO busTypeDAO;
     
     //======================Action Outputs=============================
-    private List<CityBean> city;
+    private List<CityBean> deptCity;
+    private List<CityBean> arrCity;
     private List<BusTypeBean> busType;
        
 	/**
 	 * @return the city
 	 */
-	public List<CityBean> getCity() {
-		return city;
+	public List<CityBean> getDeptCity() {
+		return deptCity;
+	}
+	
+	/**
+	 * @return the arrCity
+	 */
+	public List<CityBean> getArrCity() {
+		return arrCity;
 	}
 
 	/**
@@ -40,7 +48,8 @@ public class SearchTripAction extends ActionSupport {
 	 * execute function
 	 */
 	public String execute() throws Exception {
-    	city = cityDAO.getAllCity();
+    	deptCity = cityDAO.getDepartCity();
+    	arrCity = cityDAO.getArriveCity(deptCity.get(0).getId());
 	   	busType = busTypeDAO.getAllBusType();
         
         return SUCCESS;
