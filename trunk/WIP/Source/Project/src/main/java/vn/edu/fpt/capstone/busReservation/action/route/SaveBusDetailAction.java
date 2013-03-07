@@ -65,7 +65,7 @@ public class SaveBusDetailAction extends BaseAction {
 				Date currentTime = Calendar.getInstance().getTime();
 				BusStatusBean busStatusBean = new BusStatusBean();
 				busStatusBean.setBus(busBean);
-				busStatusBean.setBusStatus("ontrip");
+				busStatusBean.setBusStatus("initiation");
 				busStatusBean.setFromDate(currentTime);
 				busStatusBean.setToDate(currentTime);
 				StationBean endStationBean = routeDAO.getById(routeId).getRouteDetails().get(0).getSegment().getStartAt();
