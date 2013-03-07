@@ -137,7 +137,7 @@ public class SaveSegmentAction extends BaseAction {
 			for (int i = 0; i < segmentInfosReturn.size(); i++) {
 				SegmentBean segmentBean = new SegmentBean();
 
-				String stravelTime = segmentInfosFoward.get(i).getDuration();
+				String stravelTime = segmentInfosReturn.get(i).getDuration();
 				String[] travelTime = stravelTime.split(":");
 				long dtravelTime = DateUtils.getTime(Integer.parseInt(travelTime[0]), 
 						Integer.parseInt(travelTime[1]), 0);

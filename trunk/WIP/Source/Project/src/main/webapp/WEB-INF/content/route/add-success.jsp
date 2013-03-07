@@ -41,7 +41,13 @@
        }
    };
    
-	$(document).ready(function() { 
+	$(document).ready(function() {
+		
+	    $('#return').bind('click', function() {
+	         var url = $('#contextPath').val() + "/route/list.html";
+	         window.location = url;
+	      });
+	    
 		$("#duration").mask("99:99");
 		
 		accounting.settings = {
@@ -98,6 +104,10 @@
 				var duration = $("#duration").val();
 				var price = $("#price").val();
 									
+				if (endAt.trim() == '' || endAtKey == -1) {
+	                 return;
+	         }
+				
 				if (stationStartAt.trim() == '' || stationStartAtKey == -1) {
 					return;
 				}
@@ -123,6 +133,7 @@
 
 				$("#startAt").val(endAtKey);
 				$("#startAt").prop("disabled", true);
+				$("#stationStartAt").prop("disabled", true);
 				getStation('startAt', 'stationStartAt');
 									
 				$("#endAt option[value=" + endAtKey + "]").hide();
@@ -147,10 +158,17 @@
 											
 						if (busType == -1) {
 							alert('Bus Type must be selected!');
+							return;
 						}
 											
 						if (giCount == 0) {
 							alert('Please add segment!');
+							return;
+						}
+						
+						if($('#validDate').val() == '' || $('#validDate').val() == null){
+							alert('Please add valid Date!');
+							return;
 						}
 											
 						$.ajax({
@@ -253,6 +271,7 @@
 			</table>
 			<div style="margin-left: 10px; margin-top: 10px;margin-bottom: 10px;">
 				<input class="btn btn-primary" type="button" id="save" value="Save" />
+				<input class="btn btn-primary" type="button" id="return" value="Return to Route List" />
 			</div>
 		</div>
 	</div>
