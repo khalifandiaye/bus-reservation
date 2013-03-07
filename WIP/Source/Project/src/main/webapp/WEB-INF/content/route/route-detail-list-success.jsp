@@ -208,15 +208,20 @@
 		<div class="post" style="margin: 0px auto; width: 95%;">
 			<div style="margin-left: 10px; margin-top: 10px;">
 			<input type="hidden" id="routeId" value="<s:property value='routeId'/>" />
-			<table>
-			   <tr><s:select id="busType" list="busTypeBeans" name="busTypeBeans"
-               listKey="id" listValue="name" /></tr>
-				<tr>
-				  <td><input class="btn btn-primary" type="button" id="viewPrice"
-               value="View Price" /></td>
-               <td><input class="btn btn-primary" id="assignBus" type="button" value="Assign Bus to Route" /></td>
-            </tr>
-         </table>
+				<s:if test="%{busTypeBeans.size()==0}">
+					<table>
+						<tr>
+							<s:select id="busType" list="busTypeBeans" name="busTypeBeans"
+								listKey="id" listValue="name" />
+						</tr>
+						<tr>
+							<td><input class="btn btn-primary" type="button"
+								id="viewPrice" value="View Price" /></td>
+							<td><input class="btn btn-primary" id="assignBus"
+								type="button" value="Assign Bus to Route" /></td>
+						</tr>
+					</table>
+				</s:if>
 			</div>
 				<h3>
 					<s:property value="routeName" />
@@ -277,7 +282,7 @@
 			</div>
 			<div class="modal-body">
 				Select bus : <select id='busDetailbusPlate' name='busDetailBusPlate'></select>
-				<button type="button" id="busDetailAdd" class="btn btn-primary">Add</button>
+				<button style="margin-top: -10px;" type="button" id="busDetailAdd" class="btn btn-primary">Add</button>
 				<table id="busDetailTable">
 					<thead>
 						<tr>
