@@ -60,7 +60,7 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 	public List<BusStatusBean> getAllAvailTripByRouteId(int routeId, Date date) {
 		String hql = "SELECT bs.id FROM BusStatusBean bs WHERE bs.bus.forwardRoute.id = :routeId "
 				+ "OR  bs.bus.returnRoute.id = :routeId "
-				+ "AND bs.busStatus != :busStatus"
+				+ "AND bs.busStatus != :busStatus "
 				+ "AND bs.fromDate >= :date " + "AND bs.status = :status";
 		Session session = sessionFactory.getCurrentSession();
 		List<BusStatusBean> result = new ArrayList<BusStatusBean>();
