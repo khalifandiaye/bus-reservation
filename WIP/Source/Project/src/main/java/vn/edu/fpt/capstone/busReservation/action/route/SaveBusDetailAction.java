@@ -21,7 +21,6 @@ import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.BusDetailInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.BusInfo;
@@ -69,13 +68,11 @@ public class SaveBusDetailAction extends BaseAction {
 				busStatusBean.setBusStatus("ontrip");
 				busStatusBean.setFromDate(currentTime);
 				busStatusBean.setToDate(currentTime);
-				int lastIndex = routeDAO.getById(routeId).getRouteDetails().size() -1;
-				StationBean endStationBean = routeDAO.getById(routeId).getRouteDetails().get(lastIndex).getSegment().getEndAt();
+				StationBean endStationBean = routeDAO.getById(routeId).getRouteDetails().get(0).getSegment().getStartAt();
 				busStatusBean.setEndStation(endStationBean);
 				busStatusBean.setStatus("active");
 				busStatusDAO.insert(busStatusBean);
 			}
-
 		}
 
 		for (BusInfo busInfo : unSelectBus) {
