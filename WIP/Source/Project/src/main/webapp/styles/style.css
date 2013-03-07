@@ -112,6 +112,16 @@ fieldset {
 	margin: 15px 25px 25px 25px;
 }
 
+.search{
+	width: 370px;
+	float:left;
+}
+
+.slider{
+	width: 570px;
+	float:right;
+}
+
 .search .well {
 	background: #0088cc;
 	color: #fff;
@@ -137,6 +147,12 @@ fieldset {
 	margin-bottom: 10px;
 }
 
+#radio-ticket{
+	margin-bottom: 10px;
+	border-bottom: 1px #fff dashed;
+	padding-bottom: 5px;
+}
+
 .radio-ticket-type label {
 	width: 50%;
 	float: left;
@@ -148,7 +164,7 @@ fieldset {
 	font-size: 14px;
 }
 
-#radio-ticket,#select-pas,#input-depart,#input-return,#select-bus-type {
+#input-return{
 	display: none;
 }
 
@@ -157,15 +173,21 @@ fieldset {
 	overflow: hidden;
 }
 
-.custom-select label {
-	width: 50%;
+.custom-select .passenger-img {
+	padding-left: 34px;
+	font-weight: bold;
+	padding-top: 5px;
+	width: 160px;
 	float: left;
 	margin-top: 3px;
+	height: 30px;
+	background: url("../img/passenger_number.png") no-repeat;
 }
 
 .custom-select select {
-	width: 50%;
-	float: left;
+	width: 70px;
+	margin-top: 3px; 
+	float: right;
 }
 
 #guide-booking {
