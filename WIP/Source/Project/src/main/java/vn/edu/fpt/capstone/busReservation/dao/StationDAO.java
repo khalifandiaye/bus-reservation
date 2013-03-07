@@ -23,6 +23,7 @@ public class StationDAO extends GenericDAO<Integer, StationBean> {
 		super(clazz);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<StationBean> getStationsByCity(int cityId) {
 		List<StationBean> result = new ArrayList<StationBean>();
 		Query query = null;
