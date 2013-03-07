@@ -40,7 +40,8 @@ public class SegmentDAO extends GenericDAO<Integer, SegmentBean> {
       return result;
    }
 
-   public List<SegmentBean> getSegmentInRouteTerminal(int routeId,
+   @SuppressWarnings("unchecked")
+public List<SegmentBean> getSegmentInRouteTerminal(int routeId,
          int startAtId, int endAtId) {
       String hql = "select sir.segment from RouteDetailsBean sir where sir.route.id = :routeId "
             + "and sir.segment.startAt.id = :startAtId "
