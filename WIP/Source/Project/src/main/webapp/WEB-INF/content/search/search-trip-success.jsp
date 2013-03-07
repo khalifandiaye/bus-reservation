@@ -10,16 +10,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bus Travel</title>
     <!-- Fonts -->
-    <link href = 'http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,800' rel = 'stylesheet' type = 'text/css'>
-    
     <jsp:include page="../common/xheader.jsp" />
+    <link href = 'http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,800' rel = 'stylesheet' type = 'text/css'>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+  	<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
     <script src="<%=request.getContextPath()%>/js/index.js" ></script>
-    <script src="<%=request.getContextPath()%>/js/bootstrap-datepicker.js" ></script>
+    <script src="<%=request.getContextPath()%>/js/search-common.js" ></script>
     <script type="text/javascript">
-        function showMore(){
-            $("#radio-ticket,#select-pas,#input-depart,#input-return,#select-bus-type,#guide-booking").slideToggle(500);
-        }
+        var d = new Date();
+ 		var now = d.toMyString();
+ 	
+    $(function(){
+        $('#dp1').datepicker({ 
+        	dateFormat: 'dd-mm-yy', 
+        	minDate: 0, 
+        	maxDate: '+3M'
+        });
+        $('#dp1').val(now);
 
+        $('#dp2').datepicker({ 
+        	dateFormat: 'dd-mm-yy', 
+        	minDate: 0, 
+        	maxDate: '+3M'
+        });
+        $('#dp2').val(now);
+        $("#radio-ticket,#select-pas,#input-depart,#input-return,#select-bus-type,#guide-booking").slideToggle(500);
+    });
+    
+    function findArriveCity(){
+    $.ajax({
+        type : "GET",
+        url : $('#contextPath') + "/search/getArriveCity.html",
+        data : {
+        	deptCity : $('#departureCity option:selected').val()
+        },
+        success : function(data) {
+        	$('#arrivalCity option').remove();
+        	$.each(data.cityList, function(k, v) {
+        	    /// do stuff
+        		 $('#arrivalCity').append('<option value="' + k + '">' + v + '</option>');
+        	});
+	  }
+    });
+    }
     </script>
 </head>
 <body>
@@ -47,11 +80,11 @@
 	                    </div>
 	                    <div class="controls controls-row">
 	                        <label>Trạm khởi hành</label>
-	                        <s:select list="city" listKey="id" listValue="name" name="departureCity"/>
+	                        <s:select list="deptCity" listKey="id" listValue="name" name="departureCity" onchange="findArriveCity()"/>
 	                    </div>
 	                    <div class="controls controls-row">
 	                        <label>Trạm kết thúc</label>
-	                        <s:select list="city" listKey="id" listValue="name" name="arrivalCity"/>
+	                        <s:select list="arrCity" listKey="id" listValue="name" name="arrivalCity"/>
 	                    </div>
 	                    <div class="controls controls-row" id="select-pas">
 	                        <label>Số lượng hành khách</label>
@@ -67,26 +100,20 @@
 	                    </div>
 	                    <div class="controls controls-row" id="input-depart">
 	                        <label>Ngày đi</label>
-	                        <input type="text" value="10-02-2013" id="dp1" name="departureDate" data-date-format="dd-mm-yyyy">
+	                        <input type="text" id="dp1" name="departureDate">
 	                    </div>
 	                    <div class="controls controls-row" id="input-return">
 	                        <label>Ngày về</label>
-	                        <input type="text" value="01-01-2013" id="dp2" name="returnDate" data-date-format="dd-mm-yyyy">
+	                        <input type="text" id="dp2" name="returnDate">
 	                    </div>
 	                    <div class="controls controls-row" id="select-bus-type">
 	                        <label>Loại xe bus</label>
 	                        <s:select list="busType" listKey="id" listValue="name" name="busType"/>
 	                    </div>
 	                    <input type="submit" class="pull-right btn btn-large" style="width: 100%;margin-top: 9px;" value="Đặt Vé"/>
-	                    <a id="btn-change" href="#" class="pull-right" style="color: #fff;padding-top: 15px;" onclick="showMore()">Đặt vé chi tiết</a>
+	                    <!-- <a id="btn-change" href="#" class="pull-right" style="color: #fff;padding-top: 15px;" onclick="showMore()">Đặt vé chi tiết</a> -->
 	                </fieldset>
 	            </form>
-            <script type="text/javascript">
-                $(function(){
-                    $('#dp1').datepicker();
-                    $('#dp2').datepicker();
-                })
-            </script>
         </div>
         
         <div class="slider span7" style="margin-left: 20px;"> 
