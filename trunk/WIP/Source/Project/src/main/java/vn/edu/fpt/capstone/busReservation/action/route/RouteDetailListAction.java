@@ -45,9 +45,11 @@ public class RouteDetailListAction extends ActionSupport {
 		List<Object[]> busTypeObjects = busTypeDAO.getBusTypesInRoute(routeId);
 		for (Object[] objects : busTypeObjects) {
 			BusTypeBean busTypeBean = new BusTypeBean();
-			busTypeBean.setId((Integer) objects[0]);
-			busTypeBean.setName((String) objects[1]);
-			busTypeBean.setNumberOfSeats((Integer) objects[2]);
+			if (objects[0] != null && objects[1] != null && objects[2] != null) {
+			   busTypeBean.setId((Integer) objects[0]);
+			   busTypeBean.setName((String) objects[1]);
+			   busTypeBean.setNumberOfSeats((Integer) objects[2]);
+			}
 			busTypeBeans.add(busTypeBean);
 		}
 		
