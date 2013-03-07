@@ -34,7 +34,7 @@
         	maxDate: '+3M'
         });
         $('#dp2').val(now);
-        $("#radio-ticket,#select-pas,#input-depart,#input-return,#select-bus-type,#guide-booking").slideToggle(500);
+        $("#radio-ticket,#select-pas,#input-depart,#select-bus-type,#guide-booking").slideToggle(500);
     });
     
     function findArriveCity(){
@@ -53,6 +53,24 @@
 	  }
     });
     }
+    
+    /* function findArriveDate(){
+        $.ajax({
+            type : "GET",
+            url : $('#contextPath') + "/search/getTravelTime.html",
+            data : {
+            	deptCity : $('#departureCity option:selected').val(),
+            	arrCity : $('#arrivalCity option:selected').val()
+            },
+            success : function(data) {
+            	
+    	  }
+        });
+        } */
+    
+    function showArrive(){
+    	$("#input-return").slideToggle(500);
+    }
     </script>
 </head>
 <body>
@@ -69,11 +87,11 @@
 	                        <label>Loại vé</label>
 	                        <div class="radio-ticket-type">
 	                            <label class="radio">
-	                                <input type="radio" name="ticketType" id="optionsRadios2" value="oneway" checked>
+	                                <input type="radio" name="ticketType" id="rdoOneway" value="oneway" onclick="showArrive()" checked>
 	                                Vé một chiều
 	                            </label>
 	                            <label class="radio">
-	                                <input type="radio" name="ticketType" id="optionsRadios1" value="roundtrip">
+	                                <input type="radio" name="ticketType" id="rdoRoundtrip" value="roundtrip" onclick="showArrive()">
 	                                Vé khứ hồi
 	                            </label>
 	                        </div>

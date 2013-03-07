@@ -135,6 +135,31 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<TripBean> getTripDetails(int busStatus, String deptTime, String arrTime){
+		String hql = "Select trip from TripBean trip " +
+				"	join trip.routeDetails.segment.startAt " +
+				"   join trip.routeDetails.segment.endAt " +
+				"	join trip.routeDetails.segment.startAt.city " +
+				"	join trip.routeDetails.segment.endAt.city " +
+				" where trip.busStatus.id = :busStatusId " +
+				"  	and trip.departureTime >= :deptTime " +
+				"  	and trip.arrivalTime <= :arrTime ";
+		Session session = sessionFactory.getCurrentSession();
+		List<TripBean> result = new ArrayList<TripBean>();
+		try {
+			Query query = session.createQuery(hql);
+			query.setInteger("busStatusId", busStatus)
+				 .setString("deptTime", deptTime)
+				 .setString("arrTime", arrTime);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
    public List<TripBean> getTripsByRouteAndBus(int routeId, int busType){
       String hql = "FROM TripBean t WHERE t.routeDetails.route.id = :routeId AND " +
       		"t.busStatus.bus.busType = :busType";
@@ -149,4 +174,5 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
       }
       return result;
    }
+	
 }
