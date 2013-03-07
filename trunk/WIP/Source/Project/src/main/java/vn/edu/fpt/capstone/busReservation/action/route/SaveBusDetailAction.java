@@ -2,6 +2,8 @@ package vn.edu.fpt.capstone.busReservation.action.route;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -14,9 +16,13 @@ import org.codehaus.jackson.type.TypeReference;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
+import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.BusDetailInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.BusInfo;
 
@@ -33,37 +39,57 @@ public class SaveBusDetailAction extends BaseAction {
 	private static ObjectMapper mapper = new ObjectMapper();
 
 	private String message = "Update Success!";
-	
+
 	private BusDAO busDAO;
 	private RouteDAO routeDAO;
+	private BusStatusDAO busStatusDAO;
 
 	@Action(value = "saveBusDetail", results = { @Result(type = "json", name = SUCCESS, params = {
 			"root", "message" }) })
 	public String execute() throws JsonParseException, JsonMappingException,
 			IOException, ParseException {
-		BusDetailInfo busDetailInfo = mapper.readValue(data, new TypeReference<BusDetailInfo>() {});
+		BusDetailInfo busDetailInfo = mapper.readValue(data,
+				new TypeReference<BusDetailInfo>() {
+				});
 		List<BusInfo> busInfos = busDetailInfo.getBus();
 		List<BusInfo> unSelectBus = busDetailInfo.getUnSelectBus();
 		int routeId = busDetailInfo.getRouteId();
 		for (BusInfo busInfo : busInfos) {
 			BusBean busBean = busDAO.getById(busInfo.getId());
 			RouteBean routeBean = routeDAO.getById(routeId);
-			List<Integer> routeBeans = routeDAO.getRouteTerminal(routeBean.getId());
-			if (routeBeans.size() != 0) {
-				busBean.setForwardRoute(routeDAO.getById(routeBeans.get(0)));
-				busBean.setReturnRoute(routeDAO.getById(routeBeans.get(1)));
+			List<Integer> routeIDs = routeDAO.getRouteTerminal(routeBean.getId());
+			if (routeIDs.size() != 0) {
+				busBean.setForwardRoute(routeDAO.getById(routeIDs.get(0)));
+				busBean.setReturnRoute(routeDAO.getById(routeIDs.get(1)));
+
+				busDAO.update(busBean);
+				Date currentTime = Calendar.getInstance().getTime();
+				BusStatusBean busStatusBean = new BusStatusBean();
+				busStatusBean.setBus(busBean);
+				busStatusBean.setBusStatus("ontrip");
+				busStatusBean.setFromDate(currentTime);
+				busStatusBean.setToDate(currentTime);
+				int lastIndex = routeDAO.getById(routeId).getRouteDetails().size() -1;
+				StationBean endStationBean = routeDAO.getById(routeId).getRouteDetails().get(lastIndex).getSegment().getEndAt();
+				busStatusBean.setEndStation(endStationBean);
+				busStatusBean.setStatus("active");
+				busStatusDAO.insert(busStatusBean);
 			}
+
+		}
+
+		for (BusInfo busInfo : unSelectBus) {
+			BusBean busBean = busDAO.getById(busInfo.getId());
+			busBean.setForwardRoute(null);
+			busBean.setReturnRoute(null);
 			busDAO.update(busBean);
 		}
-		
-		for (BusInfo busInfo : unSelectBus) {
-         BusBean busBean = busDAO.getById(busInfo.getId());
-         busBean.setForwardRoute(null);
-         busBean.setReturnRoute(null);
-         busDAO.update(busBean);
-      }
-		
+
 		return SUCCESS;
+	}
+
+	public void setBusStatusDAO(BusStatusDAO busStatusDAO) {
+		this.busStatusDAO = busStatusDAO;
 	}
 
 	public String getData() {
