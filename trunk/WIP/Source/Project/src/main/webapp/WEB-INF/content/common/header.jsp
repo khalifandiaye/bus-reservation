@@ -1,11 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib prefix="s" uri="/struts-tags" %>
+<link href="<%=request.getContextPath()%>/styles/header.css" rel="stylesheet">
+<script src="<%=request.getContextPath()%>/js/common/header.js" ></script>
 <div class="circle-back"> 
 <div class="top-nav">
-	<div class="top-menu">
-		<a class="btn btn-mini pull-right" style="margin-top:5px;">Đăng Nhập</a>  
+	<div class="top-menu" style="color: #ffffff">
+		<div class="login pull-right">
+		<span id="errorMessage"></span>Username <s:textfield name="username" /> Password <s:password name="password" /> <a id="btn_login" class="btn btn-mini" style="margin-top:5px;">Đăng Nhập</a>
+		</div>
+		<div class="logout pull-right hidden">
+		Hello <span id="name"></span><a id="btn_logout" class="btn btn-mini" style="margin-top:5px;">Đăng Xuất</a>
+		</div>
 	</div>
-</div>   
+</div>
 <div class="container">
 <!-- Start header -->
 <input type="hidden" id="contextPath" value="<%=request.getContextPath()%>">
