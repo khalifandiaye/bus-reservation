@@ -12,7 +12,6 @@ import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TicketDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
 
 @ParentPackage("jsonPackage")

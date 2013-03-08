@@ -37,7 +37,7 @@ public class DeleteRouteAction extends BaseAction {
 				.getAllAvailTripByRouteId(routeTerminals.get(0),
 						Calendar.getInstance().getTime());
 		List<BusStatusBean> busStatusBeansReturn = busStatusDAO
-				.getAllAvailTripByRouteId((Integer) routeTerminals.get(1),
+				.getAllAvailTripByRouteId(routeTerminals.get(1),
 						Calendar.getInstance().getTime());
 		if ((busStatusBeansForward.size() + busStatusBeansReturn.size()) == 0) {
 			

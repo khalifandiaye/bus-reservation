@@ -56,11 +56,13 @@ public class SaveBusDetailAction extends BaseAction {
 		for (BusInfo busInfo : busInfos) {
 			BusBean busBean = busDAO.getById(busInfo.getId());
 			RouteBean routeBean = routeDAO.getById(routeId);
-			List<Integer> routeIDs = routeDAO.getRouteTerminal(routeBean.getId());
+			List<Integer> routeIDs = routeDAO.getRouteTerminal(routeBean
+					.getId());
 			if (routeIDs.size() != 0) {
 				busBean.setForwardRoute(routeDAO.getById(routeIDs.get(0)));
 				busBean.setReturnRoute(routeDAO.getById(routeIDs.get(1)));
 
+				// create initiation bus status
 				busDAO.update(busBean);
 				Date currentTime = Calendar.getInstance().getTime();
 				BusStatusBean busStatusBean = new BusStatusBean();
@@ -68,7 +70,8 @@ public class SaveBusDetailAction extends BaseAction {
 				busStatusBean.setBusStatus("initiation");
 				busStatusBean.setFromDate(currentTime);
 				busStatusBean.setToDate(currentTime);
-				StationBean endStationBean = routeDAO.getById(routeId).getRouteDetails().get(0).getSegment().getStartAt();
+				StationBean endStationBean = routeDAO.getById(routeId)
+						.getRouteDetails().get(0).getSegment().getStartAt();
 				busStatusBean.setEndStation(endStationBean);
 				busStatusBean.setStatus("active");
 				busStatusDAO.insert(busStatusBean);
@@ -76,10 +79,16 @@ public class SaveBusDetailAction extends BaseAction {
 		}
 
 		for (BusInfo busInfo : unSelectBus) {
-			BusBean busBean = busDAO.getById(busInfo.getId());
-			busBean.setForwardRoute(null);
-			busBean.setReturnRoute(null);
-			busDAO.update(busBean);
+			// checking available trip of this bus
+			List<BusStatusBean> busStatusBeans = busStatusDAO
+					.getAllAvailTripByBusId(busInfo.getId(), Calendar
+							.getInstance().getTime());
+			if (busStatusBeans.size() == 0) {
+				BusBean busBean = busDAO.getById(busInfo.getId());
+				busBean.setForwardRoute(null);
+				busBean.setReturnRoute(null);
+				busDAO.update(busBean);
+			}
 		}
 
 		return SUCCESS;
