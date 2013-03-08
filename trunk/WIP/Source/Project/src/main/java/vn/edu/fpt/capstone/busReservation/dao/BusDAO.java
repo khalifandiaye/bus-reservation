@@ -130,7 +130,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 			Query query = session.createSQLQuery(stringQuery);
 			query.setParameter("routeId", routeId);
 			query.setParameter("busTypeId", busTypeId);
-			query.setString("busStatus", "acitve");
+			query.setString("busStatus", "active");
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
@@ -154,7 +154,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 			// must have to start any transaction
 			Query query = session.createSQLQuery(stringQuery);
 			query.setParameter("busTypeId", busTypeId);
-			query.setString("busStatus", "acitve");
+			query.setString("busStatus", "active");
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
