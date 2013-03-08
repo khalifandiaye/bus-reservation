@@ -156,8 +156,7 @@
 						<tr>
 							<td><s:property value="startAt.name" /></td>
 							<td><s:property value="endAt.name" /></td>
-							<td><input id="<s:property value='id'/>" type="text"
-								value="" /></td>
+							<td><input id="<s:property value='id'/>" type="text" value="" maxlength="7"/> .000 VNĐ</td>
 						</tr>
 					</s:iterator>
 				</tbody>

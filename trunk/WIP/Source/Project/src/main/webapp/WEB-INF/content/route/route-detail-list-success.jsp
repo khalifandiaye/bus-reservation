@@ -212,7 +212,7 @@
 		<div class="post" style="margin: 0px auto; width: 95%;">
 			<div style="margin-left: 10px; margin-top: 10px;">
 			<input type="hidden" id="routeId" value="<s:property value='routeId'/>" />
-				<s:if test="%{busTypeBeans.size()==0}">
+				<s:if test="%{busTypeBeans.size()!=0}">
 					<table>
 						<tr>
 							<s:select id="busType" list="busTypeBeans" name="busTypeBeans"

@@ -82,11 +82,11 @@ public class SaveSegmentAction extends BaseAction {
          StationBean endStation = new StationBean();
          
          if (!isReturnRoute) {
-            startStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
-            endStation = stationDAO.getById(segmentInfos.get(i).getStationStartAt());
-         } else {
-            endStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
             startStation = stationDAO.getById(segmentInfos.get(i).getStationStartAt());
+            endStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
+         } else {
+            endStation = stationDAO.getById(segmentInfos.get(i).getStationStartAt());
+            startStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
          }
          
          if (i == 0) {
