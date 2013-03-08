@@ -135,7 +135,6 @@ public class PayJSONAction extends BaseAction {
     @Action(value = "/calculateRefund", results = { @Result(type = "json", name = SUCCESS, params = {
             "excludeProperties", "reservationInfo" }) })
     public String calculateRefund() {
-        String amount = null;
         String args[] = null;
         RefundInfo refundInfo = null;
         if (CheckUtils.isNullOrBlank(reservationId)) {

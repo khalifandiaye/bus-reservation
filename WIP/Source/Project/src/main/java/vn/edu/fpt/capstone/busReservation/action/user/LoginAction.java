@@ -48,6 +48,7 @@ public class LoginAction extends BaseAction {
     // ==========================Action Output=========================
     private boolean success;
     private String name;
+    private int roleId;
     private String errorMessage;
 
     public boolean isSuccess() {
@@ -56,6 +57,13 @@ public class LoginAction extends BaseAction {
 
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return the roleId
+     */
+    public int getRoleId() {
+        return roleId;
     }
 
     public String getErrorMessage() {
@@ -80,15 +88,16 @@ public class LoginAction extends BaseAction {
             userBean = userDAO.checkLogin(username, password);
             if (userBean != null) {
                 user = new User();
-                user.setUserId(Integer.toString(userBean.getId()));
+                user.setUserId(userBean.getId());
                 user.setUsername(userBean.getUsername());
-                user.setRoleId(Integer.toString(userBean.getRole().getId()));
+                user.setRoleId(userBean.getRole().getId());
                 user.setFirstName(userBean.getFirstName());
                 user.setLastName(userBean.getLastName());
                 user.setEmail(userBean.getEmail());
                 user.setMobilePhone(userBean.getMobileNumber());
                 session.put(CommonConstant.SESSION_KEY_USER, user);
                 name = user.getLastName() + " " + user.getFirstName();
+                roleId = user.getRoleId();
                 success = true;
             } else {
                 params = new String[1];
@@ -110,6 +119,7 @@ public class LoginAction extends BaseAction {
             if (User.class.isAssignableFrom(user.getClass())) {
                 name = ((User) user).getLastName() + ""
                         + ((User) user).getFirstName();
+                roleId = ((User) user).getRoleId();
                 success = true;
             } else {
                 // wrong object on session
@@ -120,7 +130,7 @@ public class LoginAction extends BaseAction {
     }
 
     @Action(value = "/logOut", results = { @Result(type = "json", name = SUCCESS, params = {
-            "excludeProperties", "name, errorMessage" }) })
+            "excludeProperties", "name, roleId, errorMessage" }) })
     public String logOut() {
         success = false;
         if (session != null

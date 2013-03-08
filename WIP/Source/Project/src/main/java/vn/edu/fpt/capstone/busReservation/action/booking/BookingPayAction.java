@@ -126,11 +126,11 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 		
 		if(!(session.get(CommonConstant.SESSION_KEY_USER) == null)){
 			User user = (User)session.get(CommonConstant.SESSION_KEY_USER);
-			userBean = userDAO.getById(Integer.parseInt(user.getUserId()));
+			userBean = userDAO.getById(user.getUserId());
 		}
 		
 		//Set tmp user info
-		User tmp_user = new User("","","",inputFirstName,inputLastName,inputMobile,inputEmail);
+		User tmp_user = new User(1,"",1,inputFirstName,inputLastName,inputMobile,inputEmail);
 		session.put("User_tmp", tmp_user);
 		
 		//Check double seat

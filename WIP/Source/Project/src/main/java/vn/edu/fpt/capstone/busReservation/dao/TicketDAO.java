@@ -69,7 +69,7 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
         session = sessionFactory.getCurrentSession();
         try {
             // perform database access (query, insert, update, etc) here
-            queryString = "SELECT new vn.edu.fpt.capstone.busReservation.displayModel.SimpleReservationInfo(tkt.id, stas, stae, trps.departureTime, rsv.bookTime, rsv.status, tkt.status)"
+            queryString = "SELECT new vn.edu.fpt.capstone.busReservation.displayModel.SimpleReservationInfo(rsv.id, tkt.id, stas, stae, trps.departureTime, rsv.bookTime, rsv.status, tkt.status)"
                     + " FROM TicketBean tkt"
                     + "     INNER JOIN tkt.trips trps"
                     + "     INNER JOIN trps.routeDetails.segment.startAt stas"

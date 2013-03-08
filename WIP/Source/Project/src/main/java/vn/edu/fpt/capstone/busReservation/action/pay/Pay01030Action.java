@@ -10,6 +10,7 @@ import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean.PaymentType;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
+import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.logic.ReservationLogic;
@@ -71,6 +72,19 @@ public class Pay01030Action extends BaseAction {
         String reservationId = null;
         String[] paymentDetails = null;
         String status = null;
+        int userId = 0;
+        Object user = null;
+        
+        if (session != null
+                || session.containsKey(CommonConstant.SESSION_KEY_USER)) {
+            user = session.get(CommonConstant.SESSION_KEY_USER);
+            if (User.class.isAssignableFrom(user.getClass())) {
+                userId = ((User) user).getUserId();
+            } else {
+                // wrong object on session
+                session.remove(CommonConstant.SESSION_KEY_USER);
+            }
+        }
 
         token = (String) session.get(CommonConstant.SESSION_KEY_PAYMENT_TOKEN);
         reservationId = (String) session
@@ -113,7 +127,7 @@ public class Pay01030Action extends BaseAction {
             reservationCode = paymentLogic.savePayment(reservationId,
                     paymentDetails, 2, PaymentType.PAY);
             reservationInfo = reservationLogic.loadReservationInfo(
-                    reservationId, true);
+                    reservationId, userId);
         } catch (CommonException e) {
             errorProcessing(e);
             return ERROR;

@@ -52,7 +52,7 @@
 								</a>
 							</td>
 							<td>
-								<s:if test="%{status == 'paid'}" >
+								<s:if test="%{status == 'active'}" >
 									<a id="<s:property value="%{'cancel_' + id}"/>" href="#">
 										<s:text name="cancel" />
 									</a>
