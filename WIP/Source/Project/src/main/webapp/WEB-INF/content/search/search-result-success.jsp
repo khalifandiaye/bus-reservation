@@ -48,7 +48,7 @@
 		//console.log(departTime);
 		$.ajax({
 	        type : "GET",
-	        url : $('#contextPath') + "/search/getTripDetails.html",
+	        url : $('#contextPath').val() + "/search/getTripDetails.html",
 	        data : {
 	        	busStatus : busStatus,
 	        	departTime : departTime,

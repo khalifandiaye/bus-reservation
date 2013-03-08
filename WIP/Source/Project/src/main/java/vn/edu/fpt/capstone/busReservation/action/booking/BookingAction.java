@@ -28,6 +28,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SeatInfo;
+import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 import com.opensymphony.xwork2.ActionChainResult;
@@ -127,12 +128,12 @@ public class BookingAction extends BaseAction implements SessionAware {
 
 	@SuppressWarnings("unchecked")
 	private List<TripBean> getListTripBean() {
-		List<TripBean> listTripBean = new ArrayList<TripBean>();
-		if(session.get("listTripBean") == null){
+		List<TripBean> listTripBean = null;
+		if(!CheckUtils.isNullOrBlank(outBusStatus)){
 			int busStatus = Integer.parseInt(outBusStatus);
 			listTripBean = tripDAO.getBookingTrips(busStatus, outDepartTime, outArriveTime);
-			session.put("listTripBean", listTripBean);			
-		}else{
+			session.put("listTripBean", listTripBean);	
+		}else if(session.containsKey("listTripBean")){
 			//redirect from some where
 			listTripBean = (List<TripBean>)session.get("listTripBean");
 		}
@@ -188,8 +189,10 @@ public class BookingAction extends BaseAction implements SessionAware {
 	
 	@SuppressWarnings("unchecked")
 	public String execute(){
-		List<TripBean> listTripBeans = null;
-		listTripBeans = getListTripBean();
+		List<TripBean> listTripBeans = getListTripBean();
+		if(listTripBeans == null){
+			return ERROR;
+		}
 		
 		if(request.get("backFrom") != null){
 			//remove doubleSeat and build new seletedSeat
