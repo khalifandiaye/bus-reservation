@@ -44,6 +44,11 @@
 			  "bSort" : false
 	   });
 		
+		$("#addBusPrice").click(function() { 
+			var url = $('#contextPath').val() + "/route/edit.html?routeId=" + $("#routeId").val();
+	      window.location = url;
+		});
+		
 		$("#assignBus").click(function() {
 			var routeId = $("#routeId").val();
 			var busType = $("#busType").val();
@@ -82,8 +87,7 @@
 		$("#busDetailAdd").click(function(){
 			var busId = $("#busDetailbusPlate").val();
          var plateNumber = $("#busDetailbusPlate option:selected").text();
-         busDetailTable.dataTable()
-         .fnAddData([ busId, plateNumber,
+         busDetailTable.dataTable().fnAddData([ busId, plateNumber,
                       '<button type="button" data-id="'+ busId +'" class="btn btn-danger">Delete</button>' ]);
          $("#busDetailbusPlate option[value=" + busId + "]").remove();
          $("#busDetailTable tr button[data-id="+ busId + "]").click(function(){
@@ -245,6 +249,7 @@
 				</br> 
 				<div style="margin-bottom: 10px;">
 				  <input class="btn btn-primary" type="button" id="return" value="Return to Route List" />
+				  <input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price" />
 				</div>
 		</div>
 	</div>

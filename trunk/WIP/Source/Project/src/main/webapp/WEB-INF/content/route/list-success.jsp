@@ -52,6 +52,16 @@
 	   var segmentTable = $('#segmentTable').dataTable({ "bSort" : false });
        
       $('#addRoute').bind('click', function(event) {
+    	   giCount = 0;
+    	   segmentTable.dataTable().fnClearTable();
+    	   $("#startAt").prop("disabled", false);
+    	   $("#stationStartAt").prop("disabled", false);
+    	   $("#startAt").val(-1);
+    	   $("#endAt").val(-1);
+    	   $("#duration").val('');
+    	   $('#stationStartAt').empty();
+    	   $('#stationEndAt').empty();
+    	   $("#endAt option").show();
     	   $("#addRouteDialog").modal();
       });
        
@@ -89,7 +99,11 @@
       };
                   
       $('#startAt').change(function() {
-         getStation('startAt', 'stationStartAt');
+    	   $("#endAt option").show();
+    	   $("#endAt").val(-1);
+    	   $('#stationEndAt').empty();
+    	   getStation('startAt', 'stationStartAt');
+    	   $("#endAt option[value=" + $("#startAt").val() + "]").hide();
       });
                   
       $('#endAt').change(function() {
