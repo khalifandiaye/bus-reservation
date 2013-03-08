@@ -54,17 +54,17 @@
 							startDate : new Date(),
 							minuteStep : 10
 						});
+						
+						$("#returnRoute").click(function(){
+							var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId=" + $("#routeId").val();
+					      window.location = url;
+						});
 
-						$("#save")
-								.bind(
-										'click',
-										function() {
+						$("#save").bind('click', function() {
 											var info = {};
 											var tariffs = [];
 
-											$
-													.each(
-															$("#segmentTable input"),
+											$.each($("#segmentTable input"),
 															function() {
 																var tariff = {};
 																tariff['segmentId'] = this.id;
@@ -162,8 +162,9 @@
 					</s:iterator>
 				</tbody>
 			</table>
-			<div style="margin-left: 10px; margin-top: 10px;">
+			<div style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">
 				<input class="btn btn-primary" type="submit" id="save" value="Save" />
+				<input class="btn btn-danger" type="button" id="returnRoute" value="Cancel" />
 			</div>
 		</div>
 	</div>
