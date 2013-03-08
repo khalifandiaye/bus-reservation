@@ -5,9 +5,11 @@ package vn.edu.fpt.capstone.busReservation.action.rsv;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
+import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.ReservationLogic;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 /**
  * @author Yoshimi
@@ -68,9 +70,21 @@ public class Rsv01020Action extends BaseAction {
      */
     @Override
     public String execute() {
+        int userId = 0;
+        Object user = null;
+        if (session != null
+                || session.containsKey(CommonConstant.SESSION_KEY_USER)) {
+            user = session.get(CommonConstant.SESSION_KEY_USER);
+            if (User.class.isAssignableFrom(user.getClass())) {
+                userId = ((User) user).getUserId();
+            } else {
+                // wrong object on session
+                session.remove(CommonConstant.SESSION_KEY_USER);
+            }
+        }
         try {
             reservationInfo = reservationLogic.loadReservationInfo(
-                    reservationId, true);
+                    reservationId, userId);
         } catch (CommonException e) {
             // TODO handle exception
             errorProcessing(e);

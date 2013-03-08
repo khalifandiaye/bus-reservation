@@ -179,6 +179,7 @@ public class ReservationLogic extends BaseLogic {
         List<SimpleReservationInfo> infoList = null;
         updateReservationsStatus(username);
         infoList = ticketDAO.getSimpleInfoByUsername(username);
+        Collections.sort(infoList);
         return infoList;
     }
 
@@ -248,44 +249,51 @@ public class ReservationLogic extends BaseLogic {
                     && now > lockPoint.getTimeInMillis()) {
                 bean.getTicket1().getId().setStatus(stsTktPending);
             }
-            // if ticket 2 is active, and past departed time => DEPARTED
-            lockPoint.clear();
-            lockPoint.setTime(bean.getTicket2().getDepartureDate());
-            if ((stsActive.equals(bean.getTicket2().getId().getStatus()) || stsTktPending
-                    .equals(bean.getTicket2().getId().getStatus()))
-                    && now > lockPoint.getTimeInMillis()) {
-                bean.getTicket2().getId().setStatus(stsTktDeparted);
-            }
-            // if ticket 2 is active, and past lock time => PENDING
-            lockPoint.add(Calendar.DATE, -lockInterval);
-            if (stsPaid.equals(bean.getId().getStatus())
-                    && (stsActive.equals(bean.getTicket2().getId().getStatus()))
-                    && now > lockPoint.getTimeInMillis()) {
-                bean.getTicket2().getId().setStatus(stsTktPending);
+            if (bean.getTicket2() != null) {
+                // if ticket 2 is active, and past departed time => DEPARTED
+                lockPoint.clear();
+                lockPoint.setTime(bean.getTicket2().getDepartureDate());
+                if ((stsActive.equals(bean.getTicket2().getId().getStatus()) || stsTktPending
+                        .equals(bean.getTicket2().getId().getStatus()))
+                        && now > lockPoint.getTimeInMillis()) {
+                    bean.getTicket2().getId().setStatus(stsTktDeparted);
+                }
+                // if ticket 2 is active, and past lock time => PENDING
+                lockPoint.add(Calendar.DATE, -lockInterval);
+                if (stsPaid.equals(bean.getId().getStatus())
+                        && (stsActive.equals(bean.getTicket2().getId()
+                                .getStatus()))
+                        && now > lockPoint.getTimeInMillis()) {
+                    bean.getTicket2().getId().setStatus(stsTktPending);
+                }
             }
             // if both ticket is PENDING, or one is PENDING, the other is
             // not ACTIVE => reservation PENDING
             if ((stsPaid.equals(bean.getId().getStatus()))
                     && ((stsTktPending.equals(bean.getTicket1().getId()
-                            .getStatus()) && stsTktPending.equals(bean
-                            .getTicket2().getId().getStatus())) || ((stsTktPending
-                            .equals(bean.getTicket1().getId().getStatus()) || stsTktPending
-                            .equals(bean.getTicket2().getId().getStatus())) && (!stsActive
-                            .equals(bean.getTicket1().getId().getStatus()) || stsActive
-                            .equals(bean.getTicket2().getId().getStatus()))))) {
+                            .getStatus()) && (bean.getTicket2() == null || stsTktPending
+                            .equals(bean.getTicket2().getId().getStatus()))) || ((stsTktPending
+                            .equals(bean.getTicket1().getId().getStatus()) || (bean
+                            .getTicket2() != null && stsTktPending.equals(bean
+                            .getTicket2().getId().getStatus()))) && (!stsActive
+                            .equals(bean.getTicket1().getId().getStatus()) || (bean
+                            .getTicket2() != null && !stsActive.equals(bean
+                            .getTicket2().getId().getStatus())))))) {
                 bean.getId().setStatus(stsRsvPending);
             }
             // if both ticket is DEPARTED, or one is DEPARTED, the other is
             // neither ACTIVE nor PENDING => reservation DEPARTED
-            if ((stsTktDeparted.equals(bean.getTicket1().getId().getStatus()) && stsTktDeparted
-                    .equals(bean.getTicket2().getId().getStatus()))
+            if ((stsTktDeparted.equals(bean.getTicket1().getId().getStatus()) && (bean
+                    .getTicket2() == null || stsTktDeparted.equals(bean
+                    .getTicket2().getId().getStatus())))
                     || ((stsTktDeparted.equals(bean.getTicket1().getId()
-                            .getStatus()) || stsTktDeparted.equals(bean
-                            .getTicket2().getId().getStatus())) && (!(stsActive
+                            .getStatus()) || (bean.getTicket2() != null && stsTktDeparted
+                            .equals(bean.getTicket2().getId().getStatus()))) && (!(stsActive
                             .equals(bean.getTicket1().getId().getStatus()) && stsTktPending
-                            .equals(bean.getTicket1().getId().getStatus())) || (stsActive
-                            .equals(bean.getTicket2().getId().getStatus()) && stsTktPending
-                            .equals(bean.getTicket2().getId().getStatus()))))) {
+                            .equals(bean.getTicket1().getId().getStatus())) || (bean
+                            .getTicket2() != null && !(stsActive.equals(bean
+                            .getTicket2().getId().getStatus()) && stsTktPending
+                            .equals(bean.getTicket2().getId().getStatus())))))) {
                 bean.getId().setStatus(ReservationStatus.DEPARTED.getValue());
             }
         }
@@ -293,11 +301,16 @@ public class ReservationLogic extends BaseLogic {
     }
 
     public ReservationInfo loadReservationInfo(final String reservationId,
-            boolean convertToUSD) throws CommonException {
+            int userId) throws CommonException {
         ReservationInfo info = null;
         ReservationInfoBean bean = null;
         bean = reservationInfoDAO.loadById(Integer.parseInt(reservationId));
-        info = loadReservationInfo(bean, convertToUSD);
+        if (bean.getId().getBooker() == null
+                || userId == bean.getId().getBooker().getId()) {
+            info = loadReservationInfo(bean, true);
+        } else {
+            throw new CommonException("msgerrrs004");
+        }
         return info;
     }
 

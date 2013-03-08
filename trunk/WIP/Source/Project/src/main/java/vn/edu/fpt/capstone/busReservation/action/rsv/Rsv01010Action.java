@@ -52,7 +52,7 @@ public class Rsv01010Action extends BaseAction {
         // create dummy session object
         if (!CheckUtils.isNullOrBlank(servletRequest.getParameter("username"))) {
             username = servletRequest.getParameter("username");
-            user = new User("1", username, "1", "First", "Customer", null,
+            user = new User(1, username, 1, "First", "Customer", null,
                     "cust1_1357703483_per@fpt.edu.vn");
             session.put(CommonConstant.SESSION_KEY_USER, user);
         }
@@ -61,20 +61,27 @@ public class Rsv01010Action extends BaseAction {
     @Override
     public String execute() {
         String username = null;
+        Object user = null;
         forTest();
-        if (session.containsKey(CommonConstant.SESSION_KEY_USER)) {
-            username = ((User) session.get(CommonConstant.SESSION_KEY_USER))
-                    .getUsername();
-        } else {
-            // TODO handle error
-            commonSessionTimeoutError();
-            return ERROR;
+        if (session != null
+                || session.containsKey(CommonConstant.SESSION_KEY_USER)) {
+            user = session.get(CommonConstant.SESSION_KEY_USER);
+            if (User.class.isAssignableFrom(user.getClass())) {
+                username = ((User) user).getUsername();
+            } else {
+                // wrong object on session
+                session.remove(CommonConstant.SESSION_KEY_USER);
+            }
         }
-        try {
-            reservationList = reservationLogic.loadReservations(username);
-        } catch (CommonException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (!CheckUtils.isNullOrBlank(username)) {
+            try {
+                reservationList = reservationLogic.loadReservations(username);
+            } catch (CommonException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else {
+            return "alt";
         }
         return SUCCESS;
     }

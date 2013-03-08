@@ -28,7 +28,7 @@
                     <li class="active"><a href="<%=request.getContextPath()%>/">TRANG CHỦ</a></li>
                     <li><a href="#">CHÍNH SÁCH GIÁ</a></li>
                     <li><a href="#">VỀ CHÚNG TÔI</a></li>
-                    <li><a href="#">VÉ CỦA TÔI</a></li>
+                    <li id="tab_reservationList"><a href="<%=request.getContextPath()%>/rsv/rsv01010.html">VÉ CỦA TÔI</a></li>
                 </ul> 
             </div>
         </div> 

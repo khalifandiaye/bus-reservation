@@ -15,9 +15,9 @@ public class User implements Serializable {
      * 
      */
     private static final long serialVersionUID = 8105614715760282101L;
-    private String userId;
+    private int userId;
     private String username;
-    private String roleId;
+    private int roleId;
     private String firstName;
     private String lastName;
     private String mobilePhone;
@@ -40,7 +40,7 @@ public class User implements Serializable {
 	 * @param mobilePhone
 	 * @param email
 	 */
-	public User(String userId, String username, String roleId,
+	public User(int userId, String username, int roleId,
 			String firstName, String lastName, String mobilePhone, String email) {
 		super();
 		this.userId = userId;
@@ -53,20 +53,20 @@ public class User implements Serializable {
 	}
 
 	/**
-	 * @return the userId
-	 */
-	public String getUserId() {
-		return userId;
-	}
+     * @return the userId
+     */
+    public int getUserId() {
+        return userId;
+    }
 
-	/**
-	 * @param userId the userId to set
-	 */
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-	/**
+    /**
 	 * @return the mobilePhone
 	 */
 	public String getMobilePhone() {
@@ -114,15 +114,14 @@ public class User implements Serializable {
     /**
      * @return the roleId
      */
-    public String getRoleId() {
+    public int getRoleId() {
         return roleId;
     }
 
     /**
-     * @param roleId
-     *            the roleId to set
+     * @param roleId the roleId to set
      */
-    public void setRoleId(String roleId) {
+    public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
 

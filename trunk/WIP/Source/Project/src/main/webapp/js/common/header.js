@@ -7,6 +7,7 @@ $(document).ready(function(){
                 if (data.success) {
                     $("div.login").addClass('hidden');
                     $("div.logout").removeClass('hidden');
+                    $("#tab_reservationList").removeClass('hidden');
                     $("span#name").html(data.name);
                 } else {
                     $("div.logout").addClass('hidden');
@@ -23,6 +24,18 @@ $(document).ready(function(){
         // run it every 5 minutes
         setTimeout(checkUser, 5*60*1000);
     };
+    
+    function loginDisplay(data) {
+        $("div.login").addClass('hidden');
+        $("div.logout").removeClass('hidden');
+        $("span#name").html(data.name);
+    }
+    
+    function logoutDisplay() {
+        $("div.logout").addClass('hidden');
+        $("div.login").removeClass('hidden');
+        $("span#name").html('');
+    }
     
     checkUser();
     

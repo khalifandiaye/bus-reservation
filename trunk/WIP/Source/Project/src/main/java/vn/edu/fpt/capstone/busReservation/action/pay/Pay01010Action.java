@@ -10,9 +10,11 @@ import org.hibernate.HibernateException;
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
+import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.logic.ReservationLogic;
+import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 /**
@@ -105,7 +107,22 @@ public class Pay01010Action extends BaseAction {
      */
     public String execute() {
         String reservationId = null;
+        int userId = 0;
+        Object user = null;
+        if (session != null
+                || session.containsKey(CommonConstant.SESSION_KEY_USER)) {
+            user = session.get(CommonConstant.SESSION_KEY_USER);
+            if (User.class.isAssignableFrom(user.getClass())) {
+                userId = ((User) user).getUserId();
+            } else {
+                // wrong object on session
+                session.remove(CommonConstant.SESSION_KEY_USER);
+            }
+        }
         reservationId = (String) session.get("reservationId");
+        if (CheckUtils.isNullOrBlank(reservationId)) {
+            
+        }
 
         // TODO remove this later
         reservationId = forTest();
@@ -115,7 +132,7 @@ public class Pay01010Action extends BaseAction {
                 reservationId);
         try {
             reservationInfo = reservationLogic
-                    .loadReservationInfo(reservationId, true);
+                    .loadReservationInfo(reservationId, userId);
             paymentLogic.updateReservationPaymentInfo(
                     reservationInfo, paymentMethods.get(0).getId());
         } catch (HibernateException e) {

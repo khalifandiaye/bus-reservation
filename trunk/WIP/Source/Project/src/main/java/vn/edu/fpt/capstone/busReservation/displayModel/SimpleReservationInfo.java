@@ -20,19 +20,14 @@ public class SimpleReservationInfo implements Serializable, Comparable<SimpleRes
      * 
      */
     private static final long serialVersionUID = 1L;
-    private int id;
-    private StationBean from;
-    private StationBean to;
-    private Date departureDate;
-    private Date bookTime;
-    private String reservationStatus;
-    private String ticketStatus;
-
-    /**
-     * 
-     */
-    public SimpleReservationInfo() {
-    }
+    private final int id;
+    private final int ticketId;
+    private final StationBean from;
+    private final StationBean to;
+    private final Date departureDate;
+    private final Date bookTime;
+    private final String reservationStatus;
+    private final String ticketStatus;
 
     /**
      * @param reservationId
@@ -43,10 +38,11 @@ public class SimpleReservationInfo implements Serializable, Comparable<SimpleRes
      * @param bookTime
      * @param status
      */
-    public SimpleReservationInfo(int id,
+    public SimpleReservationInfo(int id, int ticketId,
             StationBean from, StationBean to, Date departureDate,
             Date bookTime, String reservationStatus, String ticketStatus) {
         this.id = id;
+        this.ticketId = ticketId;
         this.from = from;
         this.to = to;
         this.departureDate = departureDate;
@@ -63,10 +59,10 @@ public class SimpleReservationInfo implements Serializable, Comparable<SimpleRes
     }
 
     /**
-     * @param id the id to set
+     * @return the ticketId
      */
-    public void setId(int id) {
-        this.id = id;
+    public int getTicketId() {
+        return ticketId;
     }
 
     /**
@@ -77,26 +73,10 @@ public class SimpleReservationInfo implements Serializable, Comparable<SimpleRes
     }
 
     /**
-     * @param from
-     *            the from to set
-     */
-    public void setFrom(StationBean from) {
-        this.from = from;
-    }
-
-    /**
      * @return the to
      */
     public StationBean getTo() {
         return to;
-    }
-
-    /**
-     * @param to
-     *            the to to set
-     */
-    public void setTo(StationBean to) {
-        this.to = to;
     }
 
     /**
@@ -114,27 +94,11 @@ public class SimpleReservationInfo implements Serializable, Comparable<SimpleRes
     }
 
     /**
-     * @param departureDate
-     *            the departureDate to set
-     */
-    public void setDepartureDate(Date departureDate) {
-        this.departureDate = departureDate;
-    }
-
-    /**
      * @return the departureDate
      */
     public String getDepartureDateStr() {
         return DateUtils.date2String(departureDate, "dd/MM/yyyy hh:mm aa",
                 CommonConstant.LOCALE_VN, CommonConstant.DEFAULT_TIME_ZONE);
-    }
-
-    /**
-     * @param bookTime
-     *            the bookTime to set
-     */
-    public void setBookTime(Date bookTime) {
-        this.bookTime = bookTime;
     }
 
     /**
@@ -160,13 +124,6 @@ public class SimpleReservationInfo implements Serializable, Comparable<SimpleRes
     }
 
     /**
-     * @param reservationStatus the reservationStatus to set
-     */
-    public void setReservationStatus(String reservationStatus) {
-        this.reservationStatus = reservationStatus;
-    }
-
-    /**
      * @return the ticketStatus
      */
     public String getTicketStatus() {
@@ -174,21 +131,14 @@ public class SimpleReservationInfo implements Serializable, Comparable<SimpleRes
     }
 
     /**
-     * @param ticketStatus the ticketStatus to set
-     */
-    public void setTicketStatus(String ticketStatus) {
-        this.ticketStatus = ticketStatus;
-    }
-
-    /**
      * @return the status
      */
     public String getStatus() {
-        if (ReservationStatus.CANCELLED.equals(reservationStatus)
-                || ReservationStatus.DELETED.equals(reservationStatus)
-                || ReservationStatus.REFUNDED.equals(reservationStatus)
-                || ReservationStatus.MOVED.equals(reservationStatus)
-                || ReservationStatus.UNPAID.equals(reservationStatus)) {
+        if (ReservationStatus.CANCELLED.getValue().equals(reservationStatus)
+                || ReservationStatus.DELETED.getValue().equals(reservationStatus)
+                || ReservationStatus.REFUNDED.getValue().equals(reservationStatus)
+                || ReservationStatus.MOVED.getValue().equals(reservationStatus)
+                || ReservationStatus.UNPAID.getValue().equals(reservationStatus)) {
             return reservationStatus;
         } else {
             return ticketStatus;
