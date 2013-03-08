@@ -2,6 +2,7 @@ package vn.edu.fpt.capstone.busReservation.action.route;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -56,31 +57,12 @@ public class UpdateTariffAction extends BaseAction {
          "root", "message" }) })
    public String execute() throws JsonParseException, JsonMappingException,
          IOException, ParseException {
-      TariffUpdateInfo tariffUpdateInfo = mapper.readValue(data,
-            new TypeReference<TariffUpdateInfo>() {
-            });
+      TariffUpdateInfo tariffUpdateInfo = mapper.readValue(data, new TypeReference<TariffUpdateInfo>() {});
       List<TariffInfo> tariffInfos = tariffUpdateInfo.getTariffs();
-      Date validDate = FormatUtils.deFormatDate(
-            tariffUpdateInfo.getValidDate(), "yyyy/MM/dd - hh:mm",
-            CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
       int routeId = tariffUpdateInfo.getRouteId();
-      BusTypeBean busTypeBean = busTypeDAO.getById(tariffUpdateInfo
-            .getBusTypeId());
-
-      for (TariffInfo tariffInfo : tariffInfos) {
-         SegmentBean segmentBean = segmentDAO
-               .getById(tariffInfo.getSegmentId());
-         TariffBean tariffBean = new TariffBean();
-         tariffBean.setFare(tariffInfo.getFare());
-         tariffBean.setValidFrom(validDate);
-         tariffBean.setBusType(busTypeBean);
-         tariffBean.setSegment(segmentBean);
-         tariffDAO.insert(tariffBean);
-      }
-
+      updateTarrif(tariffInfos, tariffUpdateInfo, routeId, false);
       Collections.reverse(tariffInfos);
       List<Integer> rt = routeDAO.getRouteTerminal(routeId);
-
       int revertRouteId = 0;
       if (rt.size() != 0) {
          if (routeId == rt.get(0)) {
@@ -88,24 +70,37 @@ public class UpdateTariffAction extends BaseAction {
          } else {
             revertRouteId = rt.get(0);
          }
-         for (TariffInfo tariffInfo : tariffInfos) {
-            SegmentBean segmentBean = segmentDAO.getById(tariffInfo
-                  .getSegmentId());
-            List<SegmentBean> segments = segmentDAO.getSegmentInRouteTerminal(
-                  revertRouteId, segmentBean.getEndAt().getId(), segmentBean
-                        .getStartAt().getId());
-            if (segments.size() != 0) {
-               TariffBean tariffBean = new TariffBean();
-               tariffBean.setFare(tariffInfo.getFare());
-               tariffBean.setValidFrom(validDate);
-               tariffBean.setBusType(busTypeBean);
-               tariffBean.setSegment(segments.get(0));
-               tariffDAO.insert(tariffBean);
-            }
-         }
+         updateTarrif(tariffInfos, tariffUpdateInfo, revertRouteId, true);
       }
 
       return SUCCESS;
+   }
+   
+   private void updateTarrif(List<TariffInfo> tariffInfos, TariffUpdateInfo tariffUpdateInfo, 
+         int routeId, boolean isRevertRoute) throws ParseException {
+      Date validDate = FormatUtils.deFormatDate(
+            tariffUpdateInfo.getValidDate(), "yyyy/MM/dd - hh:mm",
+            CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
+      BusTypeBean busTypeBean = busTypeDAO.getById(tariffUpdateInfo.getBusTypeId());
+      for (TariffInfo tariffInfo : tariffInfos) {
+         SegmentBean segmentBean = segmentDAO.getById(tariffInfo.getSegmentId());
+         List<SegmentBean> segments = new ArrayList<SegmentBean>();
+         if (!isRevertRoute) {
+            segments = segmentDAO.getSegmentInRouteTerminal(
+                  routeId, segmentBean.getStartAt().getId(), segmentBean.getEndAt().getId());
+         } else {
+            segments = segmentDAO.getSegmentInRouteTerminal(
+                  routeId, segmentBean.getEndAt().getId(), segmentBean.getStartAt().getId());
+         }
+         if (segments.size() != 0) {
+            TariffBean tariffBean = new TariffBean();
+            tariffBean.setFare(tariffInfo.getFare() * 1000);
+            tariffBean.setValidFrom(validDate);
+            tariffBean.setBusType(busTypeBean);
+            tariffBean.setSegment(segments.get(0));
+            tariffDAO.insert(tariffBean);
+         }
+      }
    }
 
    public String getData() {
