@@ -45,7 +45,7 @@
 							<td><s:property value="%{subRouteName}"/></td>
 							<td><s:property value="%{bookTime}"/></td>
 							<td><s:property value="%{bookTimeInMilisec}"/></td>
-							<td><s:property value="%{departureDate}"/></td>
+							<td><s:property value="%{departureDateStr}"/></td>
 							<td>
 								<a id="<s:property value="%{'details_' + id}"/>" href="#">
 									<s:text name="details" />

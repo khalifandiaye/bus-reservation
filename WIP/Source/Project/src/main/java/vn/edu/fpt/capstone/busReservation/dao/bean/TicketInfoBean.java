@@ -15,7 +15,6 @@ public class TicketInfoBean extends AbstractBean<TicketBean> implements
     private static final long serialVersionUID = 1L;
     private TripBean startTrip;
     private TripBean endTrip;
-    private Double ticketPrice;
 
     /**
      * 
@@ -28,12 +27,10 @@ public class TicketInfoBean extends AbstractBean<TicketBean> implements
      * @param endTrip
      * @param ticketPrice
      */
-    public TicketInfoBean(TicketBean id, TripBean startTrip, TripBean endTrip,
-            Double ticketPrice) {
+    public TicketInfoBean(final TicketBean id, final TripBean startTrip, final TripBean endTrip) {
         setId(id);
         this.startTrip = startTrip;
         this.endTrip = endTrip;
-        this.ticketPrice = ticketPrice;
     }
 
     /**
@@ -64,21 +61,6 @@ public class TicketInfoBean extends AbstractBean<TicketBean> implements
      */
     public void setEndTrip(TripBean endTrip) {
         this.endTrip = endTrip;
-    }
-
-    /**
-     * @return the ticketPrice
-     */
-    public Double getTicketPrice() {
-        return ticketPrice;
-    }
-
-    /**
-     * @param ticketPrice
-     *            the ticketPrice to set
-     */
-    public void setTicketPrice(Double ticketPrice) {
-        this.ticketPrice = ticketPrice;
     }
 
     @Override

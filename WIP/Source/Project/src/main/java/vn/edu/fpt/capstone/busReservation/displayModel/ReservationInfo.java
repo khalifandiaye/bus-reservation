@@ -276,6 +276,7 @@ public class ReservationInfo implements Serializable {
 
     /**
      * @return the status
+     * @deprecated
      */
     public String getStatus() {
         return status;
@@ -283,6 +284,7 @@ public class ReservationInfo implements Serializable {
 
     /**
      * @param status the status to set
+     * @deprecated
      */
     public void setStatus(String status) {
         this.status = status;
@@ -306,6 +308,7 @@ public class ReservationInfo implements Serializable {
         private String arrivalStation;
         private String busType;
         private String[] seats;
+        private String status;
         /**
          * @return the id
          */
@@ -401,6 +404,18 @@ public class ReservationInfo implements Serializable {
          */
         public void setSeats(String[] seats) {
             this.seats = seats;
+        }
+        /**
+         * @return the status
+         */
+        public String getStatus() {
+            return status;
+        }
+        /**
+         * @param status the status to set
+         */
+        public void setStatus(String status) {
+            this.status = status;
         }
         @Override
         public int compareTo(Ticket o) {

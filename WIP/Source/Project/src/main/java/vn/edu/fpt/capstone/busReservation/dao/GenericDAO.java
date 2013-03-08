@@ -318,7 +318,11 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
         if (sessionFactory.getCurrentSession().getTransaction().isActive()
                 && !sessionFactory.getCurrentSession().getTransaction()
                         .wasCommitted()) {
-            sessionFactory.getCurrentSession().getTransaction().commit();
+            try {
+                sessionFactory.getCurrentSession().getTransaction().commit();
+            } catch (HibernateException e) {
+                exceptionHandling(e, sessionFactory.getCurrentSession());
+            }
         } else {
             log.debug("The database transaction has been comnitted somewhere else");
         }
