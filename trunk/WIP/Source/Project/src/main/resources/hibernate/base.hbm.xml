@@ -224,6 +224,7 @@
 			<key column="ticket_id" />
 			<many-to-many column="trip_id" class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
 		</bag>
+		<property name="status" type="string" insert="false" />
 	</class>
 	<!-- SEAT_POSITION -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean" table="seat_position">
@@ -231,6 +232,7 @@
 			<key-property name="name" column="seat_name" />
 			<key-many-to-one name="ticket" column="ticket_id" />
 		</composite-id>
+		<property name="status" type="string" insert="false" />
 	</class>
 	<!-- PAYMENT_METHOD -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean" table="payment_method">

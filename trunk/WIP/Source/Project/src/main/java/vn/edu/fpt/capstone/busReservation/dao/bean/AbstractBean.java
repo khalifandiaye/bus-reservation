@@ -15,7 +15,18 @@ public abstract class AbstractBean<K extends Serializable> implements Serializab
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private K id;
+	/**
+     * 
+     */
+    public AbstractBean() {
+    }
+    /**
+     * @param id
+     */
+    public AbstractBean(K id) {
+        this.id = id;
+    }
+    private K id;
 	/**
 	 * @return the id
 	 */

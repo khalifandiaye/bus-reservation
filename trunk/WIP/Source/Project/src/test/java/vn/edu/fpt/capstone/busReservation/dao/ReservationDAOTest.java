@@ -3,25 +3,18 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import org.junit.Test;
 
-import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.ArrangedReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
-import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
 import vn.edu.fpt.capstone.busReservation.testUtil.DAOTest;
 
 /**
@@ -42,9 +35,34 @@ public class ReservationDAOTest extends DAOTest {
     @Test
     public void testGetById001() {
         ReservationDAO reservationDAO = (ReservationDAO) getBean("reservationDAO");
-        ReservationBean bean = reservationDAO.getById(130);
+        ReservationBean bean = reservationDAO.getById(964);
         assertNotNull(bean);
         assertNotEquals(0, bean.getTickets().size());
+    }
+    
+//    @Test
+//    public void testGetSimpleReservationInfos001() {
+//        ReservationDAO reservationDAO = (ReservationDAO) getBean("reservationDAO");
+//        List<SimpleReservationInfo> beans = reservationDAO.getSimpleReservationInfos("customer1");
+//        assertNotNull(beans);
+//        assertEquals(89, beans.size());
+//        assertNotNull(beans.get(0));
+////        assertNotEquals(0, beans.get(0).getForwardTickets().size());
+//    }
+    
+    @Test
+    public void testGetArrangedReservations001() {
+        ReservationDAO reservationDAO = (ReservationDAO) getBean("reservationDAO");
+        List<ArrangedReservationBean> beans = reservationDAO.getArrangedReservations("customer1");
+        assertNotNull(beans);
+        assertEquals(89, beans.size());
+        assertNotNull(beans.get(0));
+    }
+    @Test
+    public void testGetArrangedReservation001() {
+        ReservationDAO reservationDAO = (ReservationDAO) getBean("reservationDAO");
+        ArrangedReservationBean bean = reservationDAO.getArrangedReservation(971);
+        assertNotNull(bean);
     }
 
     // @Test(expected = HibernateException.class)
@@ -168,124 +186,138 @@ public class ReservationDAOTest extends DAOTest {
         reservationDAO.update(beans);
     }
 
-    @Test
-    public void testInsert001() {
-        Random random = new Random();
-        UserBean booker = ((UserDAO) getBean("userDAO")).getById(1);
-        ReservationDAO reservationDAO = (ReservationDAO) getBean("reservationDAO");
-        ReservationBean bean = null;
-        List<ReservationBean> beans = null;
-        Calendar bookTime = Calendar.getInstance();
-        BusStatusDAO busStatusDAO = (BusStatusDAO) getBean("busStatusDAO");
-        BusStatusBean busStatusBean = null;
-        BusStatusBean busStatusBean2 = null;
-        List<TripBean> trips = null;
-        List<SeatPositionBean> seatPositionBeans = null;
-        Set<String> seatNames = null;
-        SeatPositionBean seatPositionBean = null;
-        List<TicketBean> ticketBeans = null;
-        TicketBean ticketBean = null;
-        int from = 0;
-        int to = 0;
-        int temp = 0;
-        int seatCount = 0;
-        char letter = 0;
-        int number = 0;
-        int count = 0;
-        // clear all
-        // beans = reservationDAO.getAll();
-        // delete(beans);
-        beans = new ArrayList<ReservationBean>();
-        // bookTime.add(Calendar.DATE, 7);
-        count = random.nextInt(100) + 50;
-        seatNames = new HashSet<String>();
-        for (int i = 0; i < count; i++) {
-            busStatusBean = busStatusDAO.getById(random.nextInt(10) + 4);
-            busStatusBean2 = busStatusDAO.getById(busStatusBean.getId()
-                    + random.nextInt(5) * 2 + 1);
-            if (busStatusBean != null) {
-                bean = new ReservationBean();
-                beans.add(bean);
-                bean.setBooker(booker);
-                bean.setBookerFirstName(booker.getFirstName());
-                bean.setBookerLastName(booker.getLastName());
-                bean.setEmail(booker.getEmail());
-                bean.setPhone(booker.getPhoneNumber() == null ? "123456789"
-                        : booker.getPhoneNumber());
-                bookTime = Calendar.getInstance();
-                bookTime.add(Calendar.DATE, random.nextInt(20));
-                bookTime.add(Calendar.HOUR, random.nextInt(23) - 11);
-                bookTime.add(Calendar.MINUTE, random.nextInt(119) - 59);
-                bookTime.add(Calendar.SECOND, random.nextInt(119) - 59);
-                bean.setBookTime(bookTime.getTime());
-                from = random.nextInt(busStatusBean.getTrips().size());
-                to = from
-                        + random.nextInt(busStatusBean.getTrips().size() - from)
-                        + 1;
-                while (bookTime.after(busStatusBean.getTrips().get(from)
-                        .getDepartureTime())) {
-                    bookTime.add(Calendar.DATE, -random.nextInt(10) - 1);
-                }
-                ticketBeans = new ArrayList<TicketBean>();
-                bean.setTickets(ticketBeans);
-                ticketBean = new TicketBean();
-                ticketBeans.add(ticketBean);
-                ticketBean.setReservation(bean);
-                trips = new ArrayList<TripBean>();
-                ticketBean.setTrips(trips);
-                for (int j = from; j < to; j++) {
-                    trips.add(busStatusBean.getTrips().get(j));
-                }
-                bean.setStatus(ReservationStatus.UNPAID.getValue());
-                seatCount = random.nextInt(5) + 1;
-                seatPositionBeans = new ArrayList<SeatPositionBean>();
-                ticketBean.setSeatPositions(seatPositionBeans);
-                seatNames.clear();
-                for (int j = 0; j < seatCount; j++) {
-                    seatPositionBean = new SeatPositionBean();
-                    letter = (char) ('A' + random.nextInt(4));
-                    number = 1 + random.nextInt(11);
-                    seatPositionBean.setName(Character.toString(letter)
-                            + Integer.toString(number));
-                    if (!seatNames.contains(seatPositionBean.getName())) {
-                        seatNames.add(seatPositionBean.getName());
-                        seatPositionBean.setTicket(ticketBean);
-                        seatPositionBeans.add(seatPositionBean);
-                    }
-                }
-                if (busStatusBean2 != null && random.nextInt(4) > 0) {
-                    ticketBean = new TicketBean();
-                    ticketBeans.add(ticketBean);
-                    ticketBean.setReservation(bean);
-                    trips = new ArrayList<TripBean>();
-                    ticketBean.setTrips(trips);
-                    temp = to;
-                    from = busStatusBean2.getTrips().size() - to;
-                    to = busStatusBean2.getTrips().size() - temp;
-                    for (int j = from; j < to; j++) {
-                        trips.add(busStatusBean2.getTrips().get(j));
-                    }
-                    bean.setStatus(ReservationStatus.UNPAID.getValue());
-                    seatPositionBeans = new ArrayList<SeatPositionBean>();
-                    ticketBean.setSeatPositions(seatPositionBeans);
-                    seatNames.clear();
-                    for (int j = 0; j < seatCount; j++) {
-                        seatPositionBean = new SeatPositionBean();
-                        letter = (char) ('A' + random.nextInt(4));
-                        number = 1 + random.nextInt(11);
-                        seatPositionBean.setName(Character.toString(letter)
-                                + Integer.toString(number));
-                        if (!seatNames.contains(seatPositionBean.getName())) {
-                            seatNames.add(seatPositionBean.getName());
-                            seatPositionBean.setTicket(ticketBean);
-                            seatPositionBeans.add(seatPositionBean);
-                        }
-                    }
-                }
-            }
-        }
-        reservationDAO.insert(beans);
-        // seatPositionDAO.insert(seatPositionBeans);
-        // seatPositionDAO.removeDoubleBooking(seatPositionBeans);
-    }
+//    @Test
+//    public void testInsert001() {
+//        Random random = new Random();
+//        UserBean booker = ((UserDAO) getBean("userDAO")).getById(1);
+//        ReservationDAO reservationDAO = (ReservationDAO) getBean("reservationDAO");
+////        TicketDAO ticketDAO = (TicketDAO) getBean("ticketDAO");
+//        ReservationBean bean = null;
+//        List<ReservationBean> beans = null;
+//        Calendar bookTime = Calendar.getInstance();
+//        BusStatusDAO busStatusDAO = (BusStatusDAO) getBean("busStatusDAO");
+//        BusStatusBean busStatusBean = null;
+//        BusStatusBean busStatusBean2 = null;
+//        List<TripBean> trips = null;
+//        List<SeatPositionBean> seatPositionBeans = null;
+//        Set<String> seatNames = null;
+//        SeatPositionBean seatPositionBean = null;
+//        List<TicketBean> ticketBeans = null;
+//        TicketBean ticketBean = null;
+//        int from = 0;
+//        int to = 0;
+//        int temp = 0;
+//        int seatCount = 0;
+//        char letter = 0;
+//        int number = 0;
+//        int count = 0;
+//        // clear all
+////        beans = reservationDAO.getAll();
+////        for (ReservationBean reservationBean : beans) {
+////            for (TicketBean ticketBean2 : reservationBean.getTickets()) {
+////                ticketBean2.setSeatPositions(null);
+////                ticketBean2.setTrips(null);
+////            }
+////            ticketDAO.update(reservationBean.getTickets());
+//////            delete(reservationBean.getTickets());
+////            delete(reservationBean.getPayments());
+////            reservationBean.setTickets(null);
+////        }
+////        reservationDAO.update(beans);
+////        delete(beans);
+//        beans = new ArrayList<ReservationBean>();
+//        // bookTime.add(Calendar.DATE, 7);
+//        count = random.nextInt(150) + 50;
+//        seatNames = new HashSet<String>();
+//        for (int i = 0; i < count; i++) {
+//            busStatusBean = busStatusDAO.getById(random.nextInt(10) + 4);
+//            busStatusBean2 = busStatusDAO.getById(busStatusBean.getId()
+//                    + random.nextInt(5) * 2 + 1);
+//            if (busStatusBean != null) {
+//                bean = new ReservationBean();
+//                beans.add(bean);
+//                bean.setBooker(booker);
+//                bean.setBookerFirstName(booker.getFirstName());
+//                bean.setBookerLastName(booker.getLastName());
+//                bean.setEmail(booker.getEmail());
+//                bean.setPhone(booker.getPhoneNumber() == null ? "123456789"
+//                        : booker.getPhoneNumber());
+//                bookTime = Calendar.getInstance();
+//                bookTime.add(Calendar.DATE, random.nextInt(60));
+//                bookTime.add(Calendar.HOUR, random.nextInt(23) - 11);
+//                bookTime.add(Calendar.MINUTE, random.nextInt(59) - 29);
+//                bookTime.add(Calendar.SECOND, random.nextInt(59) - 29);
+//                bean.setBookTime(bookTime.getTime());
+//                from = random.nextInt(busStatusBean.getTrips().size());
+//                to = from
+//                        + random.nextInt(busStatusBean.getTrips().size() - from)
+//                        + 1;
+//                System.out.println("Forward from " + from + " to " + to + " in " + busStatusBean.getTrips().size());
+//                while (bookTime.after(busStatusBean.getTrips().get(from)
+//                        .getDepartureTime())) {
+//                    bookTime.add(Calendar.DATE, -random.nextInt(10) - 1);
+//                }
+//                ticketBeans = new ArrayList<TicketBean>();
+//                bean.setTickets(ticketBeans);
+//                ticketBean = new TicketBean();
+//                ticketBeans.add(ticketBean);
+//                ticketBean.setReservation(bean);
+//                trips = new ArrayList<TripBean>();
+//                ticketBean.setTrips(trips);
+//                for (int j = from; j < to; j++) {
+//                    trips.add(busStatusBean.getTrips().get(j));
+//                }
+//                bean.setStatus(ReservationStatus.UNPAID.getValue());
+//                seatCount = random.nextInt(5) + 1;
+//                seatPositionBeans = new ArrayList<SeatPositionBean>();
+//                ticketBean.setSeatPositions(seatPositionBeans);
+//                seatNames.clear();
+//                for (int j = 0; j < seatCount; j++) {
+//                    seatPositionBean = new SeatPositionBean();
+//                    letter = (char) ('A' + random.nextInt(4));
+//                    number = 1 + random.nextInt(11);
+//                    seatPositionBean.setName(Character.toString(letter)
+//                            + Integer.toString(number));
+//                    if (!seatNames.contains(seatPositionBean.getName())) {
+//                        seatNames.add(seatPositionBean.getName());
+//                        seatPositionBean.setTicket(ticketBean);
+//                        seatPositionBeans.add(seatPositionBean);
+//                    }
+//                }
+//                if (busStatusBean2 != null && random.nextInt(4) > 0) {
+//                    ticketBean = new TicketBean();
+//                    ticketBeans.add(ticketBean);
+//                    ticketBean.setReservation(bean);
+//                    trips = new ArrayList<TripBean>();
+//                    ticketBean.setTrips(trips);
+//                    temp = from;
+//                    from = busStatusBean2.getTrips().size() - to;
+//                    to = busStatusBean2.getTrips().size() - temp;
+//                    System.out.println("Return from " + from + " to " + to + " in " + busStatusBean2.getTrips().size());
+//                    for (int j = from; j < to; j++) {
+//                        trips.add(busStatusBean2.getTrips().get(j));
+//                    }
+//                    bean.setStatus(ReservationStatus.UNPAID.getValue());
+//                    seatPositionBeans = new ArrayList<SeatPositionBean>();
+//                    ticketBean.setSeatPositions(seatPositionBeans);
+//                    seatNames.clear();
+//                    for (int j = 0; j < seatCount; j++) {
+//                        seatPositionBean = new SeatPositionBean();
+//                        letter = (char) ('A' + random.nextInt(4));
+//                        number = 1 + random.nextInt(11);
+//                        seatPositionBean.setName(Character.toString(letter)
+//                                + Integer.toString(number));
+//                        if (!seatNames.contains(seatPositionBean.getName())) {
+//                            seatNames.add(seatPositionBean.getName());
+//                            seatPositionBean.setTicket(ticketBean);
+//                            seatPositionBeans.add(seatPositionBean);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        reservationDAO.insert(beans);
+//        // seatPositionDAO.insert(seatPositionBeans);
+//        // seatPositionDAO.removeDoubleBooking(seatPositionBeans);
+//    }
 }

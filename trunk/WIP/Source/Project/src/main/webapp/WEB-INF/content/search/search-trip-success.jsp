@@ -36,6 +36,25 @@
         $('#dp2').val(now);
         $("#radio-ticket,#select-pas,#input-depart,#select-bus-type,#guide-booking").slideToggle(500);
     });
+
+    $(document).ready(function() {
+        $('select[name="departureCity"]').on('change', function(e) {
+	            $.ajax({
+	                type : "GET",
+	                url : $('#contextPath').val() + "/search/getArriveCity.html",
+	                data : {
+	                	deptCity : $('select[name="departureCity"]').val()
+	                },
+	                success : function(data) {
+	                	$('select[name="departureCity"] option').remove();
+	                	$.each(data.cityList, function(k, v) {
+	                	    /// do stuff
+	                		 $('select[name="departureCity"]').append('<option value="' + k + '">' + v + '</option>');
+	                	});
+	        	  }
+	            });
+            });
+        });
     
     function findArriveCity(){
     $.ajax({
@@ -98,7 +117,7 @@
 	                    </div>
 	                    <div class="controls controls-row">
 	                        <label>Trạm khởi hành</label>
-	                        <s:select list="deptCity" listKey="id" listValue="name" name="departureCity" onchange="findArriveCity()"/>
+	                        <s:select list="deptCity" listKey="id" listValue="name" name="departureCity"/>
 	                    </div>
 	                    <div class="controls controls-row">
 	                        <label>Trạm kết thúc</label>

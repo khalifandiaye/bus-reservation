@@ -83,12 +83,8 @@ public class Pay01030Action extends BaseAction {
             commonSessionTimeoutError();
             return ERROR;
         }
-        status = reservationLogic.updateStatus(reservationId);
-        if (ReservationStatus.DEPARTED.getValue().equals(status)) {
-            // bus has departed
-            addActionError(getText("msgerrrs001"));
-            return ERROR;
-        } else if (ReservationStatus.DELETED.getValue().equals(status)) {
+        status = reservationLogic.updateReservationStatus(Integer.parseInt(reservationId));
+        if (ReservationStatus.DELETED.getValue().equals(status)) {
             // reservation time out
             String[] args = new String[1];
             args[0] = Integer.toString(CommonConstant.RESERVATION_TIMEOUT);

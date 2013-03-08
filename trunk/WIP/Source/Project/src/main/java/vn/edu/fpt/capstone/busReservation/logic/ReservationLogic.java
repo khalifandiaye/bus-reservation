@@ -22,13 +22,12 @@ import vn.edu.fpt.capstone.busReservation.dao.TariffViewDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TicketDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
-import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.ArrangedReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean.TicketStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
@@ -50,41 +49,43 @@ public class ReservationLogic extends BaseLogic {
      * 
      */
     private static final long serialVersionUID = 1L;
-//    private static final Comparator<ReservationInfoBean> COMPARE_RESERVATION_BY_DEPARTURE_DATE = new Comparator<ReservationInfoBean>() {
-//
-//        @Override
-//        public int compare(ReservationInfoBean o1, ReservationInfoBean o2) {
-//            long date1 = 0;
-//            long date2 = 0;
-//            long now = 0;
-//            if ((o1 == null || o1.getStartTrip() == null || o1.getStartTrip()
-//                    .getDepartureTime() == null)
-//                    && (o2 == null || o2.getStartTrip() == null || o2
-//                            .getStartTrip().getDepartureTime() == null)) {
-//                // null = null
-//                return 0;
-//            } else if (o1 == null || o1.getStartTrip() == null
-//                    || o1.getStartTrip().getDepartureTime() == null) {
-//                // null < everything
-//                return -1;
-//            } else if (o2 == null || o2.getStartTrip() == null
-//                    || o2.getStartTrip().getDepartureTime() == null) {
-//                // everything > null
-//                return 1;
-//            } else {
-//                date1 = o1.getStartTrip().getDepartureTime().getTime();
-//                date2 = o2.getStartTrip().getDepartureTime().getTime();
-//                now = System.currentTimeMillis();
-//                if ((date1 >= now && date2 < now)
-//                        || (date1 < now && date2 >= now)) {
-//                    // future date < past date
-//                    return (int) (date2 - date1);
-//                } else {
-//                    return (int) (date1 - date2);
-//                }
-//            }
-//        }
-//    };
+    // private static final Comparator<ReservationInfoBean>
+    // COMPARE_RESERVATION_BY_DEPARTURE_DATE = new
+    // Comparator<ReservationInfoBean>() {
+    //
+    // @Override
+    // public int compare(ReservationInfoBean o1, ReservationInfoBean o2) {
+    // long date1 = 0;
+    // long date2 = 0;
+    // long now = 0;
+    // if ((o1 == null || o1.getStartTrip() == null || o1.getStartTrip()
+    // .getDepartureTime() == null)
+    // && (o2 == null || o2.getStartTrip() == null || o2
+    // .getStartTrip().getDepartureTime() == null)) {
+    // // null = null
+    // return 0;
+    // } else if (o1 == null || o1.getStartTrip() == null
+    // || o1.getStartTrip().getDepartureTime() == null) {
+    // // null < everything
+    // return -1;
+    // } else if (o2 == null || o2.getStartTrip() == null
+    // || o2.getStartTrip().getDepartureTime() == null) {
+    // // everything > null
+    // return 1;
+    // } else {
+    // date1 = o1.getStartTrip().getDepartureTime().getTime();
+    // date2 = o2.getStartTrip().getDepartureTime().getTime();
+    // now = System.currentTimeMillis();
+    // if ((date1 >= now && date2 < now)
+    // || (date1 < now && date2 >= now)) {
+    // // future date < past date
+    // return (int) (date2 - date1);
+    // } else {
+    // return (int) (date1 - date2);
+    // }
+    // }
+    // }
+    // };
     // =====================Database Access Object=====================
     private UserDAO userDAO;
     private ReservationInfoDAO reservationInfoDAO;
@@ -176,66 +177,127 @@ public class ReservationLogic extends BaseLogic {
     public List<SimpleReservationInfo> loadReservations(String username)
             throws CommonException {
         List<SimpleReservationInfo> infoList = null;
-        List<TicketInfoBean> infoBeans = null;
-        SimpleReservationInfo info = null;
-        Integer timeOutInterval = 0;
-        Integer lockInterval = 0;
-        timeOutInterval = Integer.parseInt(systemSettingDAO.getById(
-                "reservation.timeout").getValue());
-        lockInterval = systemSettingDAO.getReservationLockTime();
-        infoBeans = ticketDAO.getInfoByUsername(username);
-        if (infoBeans != null && infoBeans.size() > 0) {
-            Collections.sort(infoBeans);
-            infoList = new ArrayList<SimpleReservationInfo>();
-            for (TicketInfoBean bean : infoBeans) {
-                info = loadSimpleReservationInfo(bean, timeOutInterval,
-                        lockInterval);
-                infoList.add(info);
-            }
-        }
+        updateReservationsStatus(username);
+        infoList = ticketDAO.getSimpleInfoByUsername(username);
         return infoList;
     }
 
-    private SimpleReservationInfo loadSimpleReservationInfo(
-            TicketInfoBean bean, Integer timeOutInterval, Integer lockInterval)
-            throws CommonException {
-        SimpleReservationInfo info = null;
-        StationBean startStation = null;
-        StationBean endStation = null;
-        info = new SimpleReservationInfo();
-        info.setId(bean.getId().getReservation().getId());
-        startStation = bean.getStartTrip().getRouteDetails().getSegment()
-                .getStartAt();
-        endStation = bean.getEndTrip().getRouteDetails().getSegment()
-                .getEndAt();
-        info.setSubRouteName(startStation.getCity().getName() + " - "
-                + endStation.getCity().getName());
-        info.setDepartureDate(FormatUtils.formatDate(bean.getStartTrip()
-                .getDepartureTime(), "dd/MM/yyyy hh:mm aa",
-                CommonConstant.LOCALE_VN, CommonConstant.DEFAULT_TIME_ZONE));
-        info.setBookTime(FormatUtils.formatDate(bean.getId().getReservation()
-                .getBookTime(), "dd/MM/yyyy hh:mm aa",
-                CommonConstant.LOCALE_VN, CommonConstant.DEFAULT_TIME_ZONE));
-        info.setBookTimeInMilisec(bean.getId().getReservation().getBookTime()
-                .getTime());
-        info.setStatus(updateStatus(bean.getId().getReservation(), bean
-                .getStartTrip().getDepartureTime(), timeOutInterval,
-                lockInterval));
-        return info;
+    public void updateReservationsStatus(String bookerName) {
+        int lockInterval = 0;
+        int timeOutInterval = 0;
+        List<ArrangedReservationBean> arrRsvBeans = null;
+        timeOutInterval = Integer.parseInt(systemSettingDAO.getById(
+                "reservation.timeout").getValue());
+        lockInterval = systemSettingDAO.getReservationLockTime();
+        arrRsvBeans = reservationDAO.getArrangedReservations(bookerName);
+        for (ArrangedReservationBean arrRsvBean : arrRsvBeans) {
+            updateReservationStatus(arrRsvBean, timeOutInterval, lockInterval);
+        }
+    }
+
+    public String updateReservationStatus(int reservationId) {
+        int lockInterval = 0;
+        int timeOutInterval = 0;
+        ArrangedReservationBean arrRsvBean = null;
+        timeOutInterval = Integer.parseInt(systemSettingDAO.getById(
+                "reservation.timeout").getValue());
+        lockInterval = systemSettingDAO.getReservationLockTime();
+        arrRsvBean = reservationDAO.getArrangedReservation(reservationId);
+        updateReservationStatus(arrRsvBean, timeOutInterval, lockInterval);
+        return arrRsvBean.getId().getStatus();
+    }
+
+    private void updateReservationStatus(ArrangedReservationBean bean,
+            Integer timeOutInterval, Integer lockInterval) {
+        long now = 0;
+        Calendar timeOutPoint = null;
+        Calendar lockPoint = null;
+        String stsUnpaid = null;
+        String stsPaid = null;
+        String stsActive = null;
+        String stsRsvPending = null;
+        String stsTktPending = null;
+        String stsTktDeparted = null;
+        now = System.currentTimeMillis();
+        timeOutPoint = Calendar.getInstance();
+        timeOutPoint.add(Calendar.MINUTE, timeOutInterval);
+        lockPoint = Calendar.getInstance();
+        stsUnpaid = ReservationStatus.UNPAID.getValue();
+        stsPaid = ReservationStatus.PAID.getValue();
+        stsActive = TicketStatus.ACTIVE.getValue();
+        stsRsvPending = ReservationStatus.PENDING.getValue();
+        stsTktPending = TicketStatus.PENDING.getValue();
+        stsTktDeparted = TicketStatus.DEPARTED.getValue();
+        if (stsUnpaid.equals(bean.getId().getStatus())
+                && now > timeOutPoint.getTimeInMillis()) {
+            bean.getId().setStatus(ReservationStatus.DELETED.getValue());
+        } else if (stsPaid.equals(bean.getId().getStatus())
+                || stsRsvPending.equals(bean.getId().getStatus())) {
+            lockPoint.clear();
+            lockPoint.setTime(bean.getTicket1().getDepartureDate());
+            // if ticket 1 is active, and past departed time => DEPARTED
+            if (stsActive.equals(bean.getTicket1().getId().getStatus())
+                    || stsTktPending.equals(bean.getTicket1().getId()
+                            .getStatus()) && now > lockPoint.getTimeInMillis()) {
+                bean.getTicket1().getId().setStatus(stsTktDeparted);
+            }
+            // if ticket 1 is active, and past lock time => PENDING
+            lockPoint.add(Calendar.DATE, -lockInterval);
+            if (stsPaid.equals(bean.getId().getStatus())
+                    && (stsActive.equals(bean.getTicket1().getId().getStatus()))
+                    && now > lockPoint.getTimeInMillis()) {
+                bean.getTicket1().getId().setStatus(stsTktPending);
+            }
+            // if ticket 2 is active, and past departed time => DEPARTED
+            lockPoint.clear();
+            lockPoint.setTime(bean.getTicket2().getDepartureDate());
+            if ((stsActive.equals(bean.getTicket2().getId().getStatus()) || stsTktPending
+                    .equals(bean.getTicket2().getId().getStatus()))
+                    && now > lockPoint.getTimeInMillis()) {
+                bean.getTicket2().getId().setStatus(stsTktDeparted);
+            }
+            // if ticket 2 is active, and past lock time => PENDING
+            lockPoint.add(Calendar.DATE, -lockInterval);
+            if (stsPaid.equals(bean.getId().getStatus())
+                    && (stsActive.equals(bean.getTicket2().getId().getStatus()))
+                    && now > lockPoint.getTimeInMillis()) {
+                bean.getTicket2().getId().setStatus(stsTktPending);
+            }
+            // if both ticket is PENDING, or one is PENDING, the other is
+            // not ACTIVE => reservation PENDING
+            if ((stsPaid.equals(bean.getId().getStatus()))
+                    && ((stsTktPending.equals(bean.getTicket1().getId()
+                            .getStatus()) && stsTktPending.equals(bean
+                            .getTicket2().getId().getStatus())) || ((stsTktPending
+                            .equals(bean.getTicket1().getId().getStatus()) || stsTktPending
+                            .equals(bean.getTicket2().getId().getStatus())) && (!stsActive
+                            .equals(bean.getTicket1().getId().getStatus()) || stsActive
+                            .equals(bean.getTicket2().getId().getStatus()))))) {
+                bean.getId().setStatus(stsRsvPending);
+            }
+            // if both ticket is DEPARTED, or one is DEPARTED, the other is
+            // neither ACTIVE nor PENDING => reservation DEPARTED
+            if ((stsTktDeparted.equals(bean.getTicket1().getId().getStatus()) && stsTktDeparted
+                    .equals(bean.getTicket2().getId().getStatus()))
+                    || ((stsTktDeparted.equals(bean.getTicket1().getId()
+                            .getStatus()) || stsTktDeparted.equals(bean
+                            .getTicket2().getId().getStatus())) && (!(stsActive
+                            .equals(bean.getTicket1().getId().getStatus()) && stsTktPending
+                            .equals(bean.getTicket1().getId().getStatus())) || (stsActive
+                            .equals(bean.getTicket2().getId().getStatus()) && stsTktPending
+                            .equals(bean.getTicket2().getId().getStatus()))))) {
+                bean.getId().setStatus(ReservationStatus.DEPARTED.getValue());
+            }
+        }
+        reservationDAO.update(bean.getId());
     }
 
     public ReservationInfo loadReservationInfo(final String reservationId,
             boolean convertToUSD) throws CommonException {
         ReservationInfo info = null;
         ReservationInfoBean bean = null;
-        Integer timeOutInterval = 0;
-        Integer lockInterval = 0;
-        timeOutInterval = Integer.parseInt(systemSettingDAO.getById(
-                "reservation.timeout").getValue());
-        lockInterval = systemSettingDAO.getReservationLockTime();
         bean = reservationInfoDAO.loadById(Integer.parseInt(reservationId));
-        info = loadReservationInfo(bean, convertToUSD, timeOutInterval,
-                lockInterval);
+        info = loadReservationInfo(bean, convertToUSD);
         return info;
     }
 
@@ -244,14 +306,8 @@ public class ReservationLogic extends BaseLogic {
             throws CommonException {
         ReservationInfo info = null;
         ReservationInfoBean bean = null;
-        Integer timeOutInterval = 0;
-        Integer lockInterval = 0;
-        timeOutInterval = Integer.parseInt(systemSettingDAO.getById(
-                "reservation.timeout").getValue());
-        lockInterval = systemSettingDAO.getReservationLockTime();
         bean = reservationInfoDAO.getByCode(reservationCode);
-        info = loadReservationInfo(bean, convertToUSD, timeOutInterval,
-                lockInterval);
+        info = loadReservationInfo(bean, convertToUSD);
         return info;
     }
 
@@ -264,12 +320,12 @@ public class ReservationLogic extends BaseLogic {
      * @throws CommonException
      */
     private ReservationInfo loadReservationInfo(final ReservationInfoBean bean,
-            boolean convertToUSD, Integer timeOutInterval, Integer lockInterval)
-            throws CommonException {
+            boolean convertToUSD) throws CommonException {
         ReservationInfo info = null;
         CurrencyConverter converter = null;
         int quantity = 0;
         int refundRate = 0;
+        updateReservationStatus(bean.getId().getId());
         info = new ReservationInfo();
         info.setId(bean.getId().getId());
         info.setCode(bean.getId().getCode());
@@ -328,57 +384,55 @@ public class ReservationLogic extends BaseLogic {
                 }
             }
         }
-        info.setStatus(updateStatus(bean.getId(), bean.getStartTrip()
-                .getDepartureTime(), timeOutInterval, lockInterval));
+        // info.setStatus(updateStatus(bean.getId(), bean.getStartTrip()
+        // .getDepartureTime(), timeOutInterval, lockInterval));
         return info;
     }
 
-    public String updateStatus(String reservationId) {
-        ReservationInfoBean infoBean = null;
-        Integer timeOutInterval = 0;
-        Integer lockInterval = 0;
-        infoBean = reservationInfoDAO.getById(Integer.parseInt(reservationId));
-        timeOutInterval = Integer.parseInt(systemSettingDAO.getById(
-                "reservation.timeout").getValue());
-        lockInterval = systemSettingDAO.getReservationLockTime();
-        return updateStatus(infoBean.getId(), infoBean.getStartTrip()
-                .getDepartureTime(), timeOutInterval, lockInterval);
-    }
-
-    private String updateStatus(ReservationBean bean, Date departureTime,
-            int timeOutInterval, int lockInterval) {
-        Calendar timeLimit = null;
-        boolean changed = true;
-        Calendar pendingTime = null;
-        Date today = null;
-        timeLimit = Calendar.getInstance();
-        timeLimit.add(Calendar.MINUTE, -timeOutInterval);
-        pendingTime = Calendar.getInstance(CommonConstant.DEFAULT_TIME_ZONE,
-                CommonConstant.LOCALE_VN);
-        pendingTime.setTime(departureTime);
-        pendingTime.add(Calendar.DATE, -lockInterval);
-        today = new Date();
-        if (ReservationStatus.UNPAID.getValue().equals(bean.getStatus())
-                && timeLimit.getTime().after(bean.getBookTime())) {
-            // status UNPAID, bookTime < timeOutLimit : DELETED
-            bean.setStatus(ReservationStatus.DELETED.getValue());
-        } else if (ReservationStatus.PAID.getValue().equals(bean.getStatus())
-                && today.after(pendingTime.getTime())) {
-            // status PAID, today > pendingTime: PENDING
-            bean.setStatus(ReservationStatus.PENDING.getValue());
-        } else if ((ReservationStatus.PAID.getValue().equals(bean.getStatus()) || ReservationStatus.PENDING
-                .getValue().equals(bean.getStatus()))
-                && today.after(departureTime)) {
-            // status PAID/PENDING, today > departureTime: DEPARTED
-            bean.setStatus(ReservationStatus.DEPARTED.getValue());
-        } else {
-            changed = false;
-        }
-        if (changed) {
-            reservationDAO.update(bean);
-        }
-        return bean.getStatus();
-    }
+    // public String updateStatus(String reservationId) {
+    // ReservationInfoBean infoBean = null;
+    // Integer timeOutInterval = 0;
+    // Integer lockInterval = 0;
+    // infoBean = reservationInfoDAO.getById(Integer.parseInt(reservationId));
+    // timeOutInterval = Integer.parseInt(systemSettingDAO.getById(
+    // "reservation.timeout").getValue());
+    // lockInterval = systemSettingDAO.getReservationLockTime();
+    // return updateStatus(infoBean.getId(), infoBean.getStartTrip()
+    // .getDepartureTime(), timeOutInterval, lockInterval);
+    // }
+    //
+    // private String updateStatus(ReservationBean bean, Date departureTime,
+    // int timeOutInterval, int lockInterval) {
+    //
+    // // Calendar timeLimit = null; boolean changed = true; Calendar
+    // // pendingTime = null; long today = 0; boolean pendingAll = true; String
+    // // status = null; timeLimit = Calendar.getInstance();
+    // // timeLimit.add(Calendar.MINUTE, -timeOutInterval); pendingTime =
+    // // Calendar.getInstance(CommonConstant.DEFAULT_TIME_ZONE,
+    // // CommonConstant.LOCALE_VN); today = System.currentTimeMillis(); if
+    // // (ReservationStatus
+    // // .UNPAID.getValue().equals(bean.getReservation().getStatus()) &&
+    // // timeLimit.getTime().after(bean.getReservation().getBookTime())) { //
+    // // status UNPAID, bookTime < timeOutLimit : DELETED
+    // // bean.getReservation()
+    // // .setStatus(ReservationStatus.DELETED.getValue()); } else if
+    // // (ReservationStatus.PAID.getValue().equals(bean.getStatus())) { for
+    // // (TicketBean ticketBean : bean.getTickets()) {
+    // // pendingTime.setTime(ticketBean.getTrips().get(0).getDepartureTime());
+    // // pendingTime.add(Calendar.DATE, -lockInterval); if (today >=
+    // // pendingTime.getTimeInMillis()) {
+    // // ticketBean.setStatus(TicketStatus.PENDING.getValue()); } else {
+    // // pendingAll = false; } } if (pendingAll) {
+    // // bean.setStatus(ReservationStatus.PENDING.getValue()); } } else if
+    // // ((ReservationStatus.PAID.getValue().equals(bean.getStatus()) ||
+    // // ReservationStatus.PENDING .getValue().equals(bean.getStatus())) &&
+    // // today >= departureTime) { // status PAID/PENDING, today >
+    // // departureTime: DEPARTED
+    // // bean.setStatus(ReservationStatus.DEPARTED.getValue()); } else {
+    // // changed = false; } if (changed) { reservationDAO.update(bean); }
+    //
+    // return bean.getStatus();
+    // }
 
     private int loadTickets(ReservationInfo info,
             final List<TicketBean> ticketBeans) {
@@ -416,6 +470,7 @@ public class ReservationLogic extends BaseLogic {
             for (SeatPositionBean seat : bean.getSeatPositions()) {
                 seats[index++] = seat.getName();
             }
+            ticket.setStatus(bean.getStatus());
         }
         return quantity;
     }

@@ -96,7 +96,7 @@
 				</fieldset>
 			</form>
 			<div style="width:50%;float:left;padding-top:80px;">
-				<div class="reservation_info">
+				<div class="reservationInfo">
 					<h4><s:text name="reservation_info" /> </h4>
 					<s:iterator value="reservationInfo.tickets">
 						<table class="table table-bordered">
@@ -126,7 +126,7 @@
 		<%-- 					<td><s:select list="paymentMethods" listKey="id" listValue="name" name="paymentMethodId" /></td> --%>
 		<!-- 				</tr> -->
 						<tr>
-							<th style="text-align: left"><s:text name="ticket_price" /></th>
+							<th style="text-align: left"><s:text name="resevation.ticketPrice" /></th>
 							<td><s:property value="reservationInfo.basePrice" /> VND
 								($<s:property value="reservationInfo.basePriceInUSD" />)</td>
 						</tr>
@@ -136,7 +136,7 @@
 								($<s:property value="reservationInfo.transactionFeeInUSD" />)</td>
 						</tr>
 						<tr>
-							<th style="text-align: left"><s:text name="total_amount" /></th>
+							<th style="text-align: left"><s:text name="reservation.totalAmount" /></th>
 							<td id="totalAmount"><s:property value="reservationInfo.totalAmount" /> VND
 								($<s:property value="reservationInfo.totalAmountInUSD" />)</td>
 						</tr>
