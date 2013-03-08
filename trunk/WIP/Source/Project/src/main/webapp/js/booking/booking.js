@@ -170,8 +170,7 @@ function showPopup(message){
 
 function updateSeatNum(){
     $(".seat-number").text(SeatsToAllocate - SeatsNotAllocatedCount);
-    $.cookie('selectedSeat', getSelectedSeatString(), { expires: 1 });
-    $("#seatToPayment").val(getSelectedSeatString());
+    
 }
 
 $(function(){
@@ -213,7 +212,15 @@ $(function(){
     //init selected seat 
 	initSelectedSeat();
 	
-	$("#booking-submit").bind("click",function(event){
+	$("#booking-submit").bind("click",function(){
+		var date = new Date();
+		var minutes = 15;
+		date.setTime(date.getTime() + (minutes * 60 * 1000));
+		
+		$.cookie('selectedSeat', getSelectedSeatString(), { expires: date });
+		
 		$("#selectedSeat").val("");
+		
+	    $("#seatToPayment").val(getSelectedSeatString());
 	});
 });
