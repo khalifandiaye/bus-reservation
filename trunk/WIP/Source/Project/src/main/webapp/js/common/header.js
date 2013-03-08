@@ -20,11 +20,11 @@ $(document).ready(function(){
                 $("span#name").html('');
             }
         });
+        // run it every 5 minutes
+        setTimeout(checkUser, 5*60*1000);
     };
     
     checkUser();
-    // run it every 5 minutes
-    setTimeout(checkUser, 5*60*1000);
     
 	$('#btn_login').on('click.auth', function(e) {
         $.ajax({
