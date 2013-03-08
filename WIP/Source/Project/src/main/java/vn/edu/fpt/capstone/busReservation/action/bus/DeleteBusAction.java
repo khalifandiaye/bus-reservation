@@ -35,16 +35,19 @@ public class DeleteBusAction extends BaseAction {
 	public String execute() throws ParseException, JSONException {
 		List<BusStatusBean> busStatusBeans = busStatusDAO
 				.getAllAvailTripByBusId(busId, Calendar.getInstance().getTime());
-		if (busStatusBeans.size() == 0) {
+		BusBean busBean = busDAO.getById(busId);
+		if (busStatusBeans.size() == 0 && busBean.getForwardRoute() == null) {
 			// unassigned buses
-			BusBean busBean = busDAO.getById(busId);
 			busBean.setStatus("inactive");
 			busDAO.update(busBean);
 
-			message = "Bus is deleted!";
-		} else {
+			message = "Bus is deleted succesfully!";
+		} else if (busStatusBeans.size() != 0) {
 			message = "Cannot delete this bus due to this bus has "
 					+ busStatusBeans.size() + " trips in the future";
+		} else if (busBean.getForwardRoute() != null) {
+			message = "Cannot delete this bus due to this bus is being assigned to route "
+					+ busBean.getForwardRoute().getName()+ ". Please unassign this bus and try again!";
 		}
 		return SUCCESS;
 	}

@@ -120,7 +120,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 				+ "JOIN (SELECT Max(id) id, MAX(to_date) to_date FROM bus_status WHERE status = 'active' GROUP BY bus_id ) t2 "
 				+ "ON t1.id = t2.id AND t1.to_date = t2.to_date) bs ON b.id = bs.bus_id "
 				+ "WHERE (b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId) "
-				+ "AND b.bus_type_id = :busTypeId AND b.status = 'active'" 
+				+ "AND b.bus_type_id = :busTypeId AND b.status = :busStatus" 
 				+ "GROUP BY b.id";
 
 		Session session = sessionFactory.getCurrentSession();
@@ -130,6 +130,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 			Query query = session.createSQLQuery(stringQuery);
 			query.setParameter("routeId", routeId);
 			query.setParameter("busTypeId", busTypeId);
+			query.setString("busStatus", "acitve");
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
@@ -144,7 +145,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 				+ "JOIN (SELECT Max(id) id, MAX(to_date) to_date FROM bus_status WHERE status = 'active' GROUP BY bus_id ) t2 "
 				+ "ON t1.id = t2.id AND t1.to_date = t2.to_date) bs ON b.id = bs.bus_id "
 				+ "WHERE (b.assigned_route_forward_id IS NULL OR b.assigned_route_return_id IS NULL) "
-				+ "AND b.bus_type_id = :busTypeId AND b.status = 'active'" 
+				+ "AND b.bus_type_id = :busTypeId AND b.status = :busStatus " 
 				+ "GROUP BY b.id";
 
 		Session session = sessionFactory.getCurrentSession();
@@ -153,6 +154,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 			// must have to start any transaction
 			Query query = session.createSQLQuery(stringQuery);
 			query.setParameter("busTypeId", busTypeId);
+			query.setString("busStatus", "acitve");
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
