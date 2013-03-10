@@ -37,7 +37,7 @@ public class SaveBusDetailAction extends BaseAction {
 
 	private static ObjectMapper mapper = new ObjectMapper();
 
-	private String message = "";
+	private String message = "Update success!";
 
 	private BusDAO busDAO;
 	private RouteDAO routeDAO;
@@ -75,8 +75,6 @@ public class SaveBusDetailAction extends BaseAction {
 				busStatusBean.setEndStation(endStationBean);
 				busStatusBean.setStatus("active");
 				busStatusDAO.insert(busStatusBean);
-				
-				message += busBean.getPlateNumber() + " assigned to route succefully </br>";
 			}
 		}
 
@@ -85,16 +83,11 @@ public class SaveBusDetailAction extends BaseAction {
 			List<BusStatusBean> busStatusBeans = busStatusDAO
 					.getAllAvailTripByBusId(busInfo.getId(), Calendar
 							.getInstance().getTime());
-			message = "";
 			if (busStatusBeans.size() == 0) {
 				BusBean busBean = busDAO.getById(busInfo.getId());
 				busBean.setForwardRoute(null);
 				busBean.setReturnRoute(null);
 				busDAO.update(busBean);
-				
-				message += (busDAO.getById(busInfo.getId()).getPlateNumber() + " is removed from this route successfully</br>");
-			} else {
-				message += ("Cannot remove " + busDAO.getById(busInfo.getId()).getPlateNumber() + "</br>");
 			}
 		}
 

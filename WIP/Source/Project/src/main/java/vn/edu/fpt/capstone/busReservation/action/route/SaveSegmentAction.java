@@ -71,6 +71,51 @@ public class SaveSegmentAction extends BaseAction {
       String routeName = "";
       List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
 
+		//
+		// for (int i = 0; i < segmentInfos.size(); i++) {
+		// StationBean startStation = new StationBean();
+		// StationBean endStation = new StationBean();
+		//
+		// List<SegmentBean> duplicatedSegments = segmentDAO
+		// .getDupicatedSegment(startStation, endStation);
+		// SegmentBean segmentBean = new SegmentBean();
+		// if (duplicatedSegments.size() > 0) {
+		// String stravelTime = segmentInfos.get(i).getDuration();
+		// String[] travelTime = stravelTime.split(":");
+		// long dtravelTime = DateUtils.getTime(
+		// Integer.parseInt(travelTime[0]),
+		// Integer.parseInt(travelTime[1]), 0);
+		//
+		// if (!isReturnRoute) {
+		// startStation = stationDAO.getById(segmentInfos.get(i)
+		// .getStationStartAt());
+		// endStation = stationDAO.getById(segmentInfos.get(i)
+		// .getStationEndAt());
+		// } else {
+		// endStation = stationDAO.getById(segmentInfos.get(i)
+		// .getStationStartAt());
+		// startStation = stationDAO.getById(segmentInfos.get(i)
+		// .getStationEndAt());
+		// }
+		//
+		// if (i == 0) {
+		// routeName += startStation.getCity().getName();
+		// }
+		// if (i == segmentInfos.size() - 1) {
+		// routeName += " - " + endStation.getCity().getName();
+		// }
+		//
+		// segmentBean.setStartAt(startStation);
+		// segmentBean.setEndAt(endStation);
+		// segmentBean.setTravelTime(dtravelTime);
+		// segmentBean.setStatus("active");
+		// segmentDAO.insert(segmentBean);
+		// } else {
+		// segmentBean = duplicatedSegments.get(0);
+		// }
+		// segmentBeans.add(segmentBean);
+		// }
+      
       for (int i = 0; i < segmentInfos.size(); i++) {
          SegmentBean segmentBean = new SegmentBean();
          String stravelTime = segmentInfos.get(i).getDuration();
