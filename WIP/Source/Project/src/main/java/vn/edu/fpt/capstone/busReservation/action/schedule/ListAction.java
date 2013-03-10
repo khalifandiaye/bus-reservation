@@ -30,7 +30,7 @@ public class ListAction extends ActionSupport {
 	public String execute() {
 		busTypeBeans = busTypeDAO.getAll();
 		busStatusBeans = busStatusDAO.getAllTrip();
-		routeBeans = routeDAO.getAll();
+		routeBeans = routeDAO.getAllActiveRoute();
 		return SUCCESS;
 	}
 
