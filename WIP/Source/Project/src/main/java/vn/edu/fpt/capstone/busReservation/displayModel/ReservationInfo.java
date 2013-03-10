@@ -276,7 +276,6 @@ public class ReservationInfo implements Serializable {
 
     /**
      * @return the status
-     * @deprecated
      */
     public String getStatus() {
         return status;
@@ -284,7 +283,6 @@ public class ReservationInfo implements Serializable {
 
     /**
      * @param status the status to set
-     * @deprecated
      */
     public void setStatus(String status) {
         this.status = status;
