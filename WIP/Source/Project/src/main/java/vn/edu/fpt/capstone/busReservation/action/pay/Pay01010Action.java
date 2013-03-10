@@ -110,7 +110,7 @@ public class Pay01010Action extends BaseAction {
         int userId = 0;
         Object user = null;
         if (session != null
-                || session.containsKey(CommonConstant.SESSION_KEY_USER)) {
+                && session.containsKey(CommonConstant.SESSION_KEY_USER)) {
             user = session.get(CommonConstant.SESSION_KEY_USER);
             if (User.class.isAssignableFrom(user.getClass())) {
                 userId = ((User) user).getUserId();
