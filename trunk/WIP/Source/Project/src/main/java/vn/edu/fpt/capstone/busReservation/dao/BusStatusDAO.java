@@ -40,8 +40,8 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 		try {
 			// must have to start any transaction
 			Query query = session.createQuery(hql);
-			query.setString("status", "active");
-			query.setString("busStatus", "initiation");
+			query.setParameter("status", "active");
+			query.setParameter("busStatus", "initiation");
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
@@ -68,10 +68,10 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 		try {
 			// must have to start any transaction
 			Query query = session.createQuery(hql);
-			query.setInteger("routeId", routeId);
-			query.setString("busStatus", "initiation");
-			query.setDate("date", date);
-			query.setString("status", "inactive");
+			query.setParameter("routeId", routeId);
+			query.setParameter("busStatus", "initiation");
+			query.setParameter("date", date);
+			query.setParameter("status", "inactive");
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
@@ -82,16 +82,16 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 	@SuppressWarnings("unchecked")
 	public List<BusStatusBean> getAllAvailTripByBusId(int busId, Date date) {
 		String hql = "SELECT bs.id FROM BusStatusBean bs WHERE bs.bus.id = :busId "
-				+ "AND bs.fromDate >= :date AND bs.status = :status AND bs.status != :status";
+				+ "AND bs.fromDate >= :date AND bs.status = :status AND bs.busStatus != :busStatus";
 		Session session = sessionFactory.getCurrentSession();
 		List<BusStatusBean> result = new ArrayList<BusStatusBean>();
 		try {
 			// must have to start any transaction
 			Query query = session.createQuery(hql);
-			query.setInteger("busId", busId);
-			query.setDate("date", date);
-			query.setString("status", "active");
-			query.setString("busStatus", "initiation");
+			query.setParameter("busId", busId);
+			query.setParameter("date", date);
+			query.setParameter("status", "active");
+			query.setParameter("busStatus", "initiation");
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);

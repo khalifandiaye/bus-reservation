@@ -217,6 +217,7 @@
 						<tr>
 							<s:select id="busType" list="busTypeBeans" name="busTypeBeans"
 								listKey="id" listValue="name" />
+							<input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price" />
 						</tr>
 						<tr>
 							<td><input class="btn btn-primary" type="button"
@@ -249,7 +250,6 @@
 				</br> 
 				<div style="margin-bottom: 10px;">
 				  <input class="btn btn-primary" type="button" id="return" value="Return to Route List" />
-				  <input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price" />
 				</div>
 		</div>
 	</div>
