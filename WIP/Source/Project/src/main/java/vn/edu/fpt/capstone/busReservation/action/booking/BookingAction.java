@@ -3,6 +3,7 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.booking;
 
+import java.lang.ProcessBuilder.Redirect;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,11 +55,18 @@ public class BookingAction extends BaseAction implements SessionAware {
 	private String outArriveTime;
 	private String outFare;
 	private TripDAO tripDAO;
-	private SeatInfo[][] seatMap;
+	private List<SeatInfo[][]> seatMap;
 	private String selectedSeat;
 	private SeatPositionDAO seatPositionDAO;
+	private String busType;
 	
-	
+	/**
+	 * @param busType the busType to set
+	 */
+	public void setBusType(String busType) {
+		this.busType = busType;
+	}
+
 	/**
 	 * @return the passengerNo
 	 */
@@ -116,7 +124,7 @@ public class BookingAction extends BaseAction implements SessionAware {
 		return selectedSeat;
 	}
 
-	public SeatInfo[][] getSeatMap() {
+	public List<SeatInfo[][]> getSeatMap() {
 		return seatMap;
 	}
 
@@ -152,17 +160,47 @@ public class BookingAction extends BaseAction implements SessionAware {
 		return seats;
 	}
 	
-	private SeatInfo[][] buildSeatMap(List<TripBean> listTripBean){
+	private List<SeatInfo[][]> buildSeatMap(List<TripBean> listTripBean){
 		
 		List<SeatInfo> seats = getSeatsList(listTripBean);
-		
+		int tmpBustType = listTripBean.get(0).getBusStatus().getBus().getBusType().getId();
 		String[] bigText = {"A","B","C","D","E"}; 
 		
-		SeatInfo[][] tmpSeatMap = new SeatInfo[5][11];
+		List<SeatInfo[][]> listSeatMap = new ArrayList<SeatInfo[][]>();
 		
-		for(int i = 0; i < 5; i++){
-			if(i != 2){
-				for(int j = 0; j < 11;j++ ){
+		if(tmpBustType == 1){
+			SeatInfo[][] tmpSeatMap = new SeatInfo[5][11];
+			
+			for(int i = 0; i < 5; i++){
+				if(i != 2){
+					for(int j = 0; j < 11;j++ ){
+						String seatNum = bigText[i] + Integer.toString(j+1);
+						String status = "0";
+						for(int k = 0; k < seats.size(); k++){
+							if(seats.get(k).getName().equals(seatNum)){
+								status = "1";
+							}
+						}
+						tmpSeatMap[i][j] = new SeatInfo(seatNum, status);
+					}
+				}else{
+					//Bonus seat
+					String seatNum = bigText[i] + Integer.toString(1);
+					String status = "0";
+					for(int k = 0; k < seats.size(); k++){
+						if(seats.get(k).getName().equals(seatNum)){
+							status = "1";
+						}
+					}
+					tmpSeatMap[i][0] = new SeatInfo(seatNum, status);
+				}
+			}
+			listSeatMap.add(tmpSeatMap);
+		}else{
+			SeatInfo[][] tmpSeatMapUp = new SeatInfo[3][7];
+			SeatInfo[][] tmpSeatMapDown = new SeatInfo[3][7];
+			for(int i = 0; i < 3; i++){
+				for(int j = 0; j < 14; j++){
 					String seatNum = bigText[i] + Integer.toString(j+1);
 					String status = "0";
 					for(int k = 0; k < seats.size(); k++){
@@ -170,21 +208,17 @@ public class BookingAction extends BaseAction implements SessionAware {
 							status = "1";
 						}
 					}
-					tmpSeatMap[i][j] = new SeatInfo(seatNum, status);
-				}
-			}else{
-				//Bonus seat
-				String seatNum = bigText[i] + Integer.toString(1);
-				String status = "0";
-				for(int k = 0; k < seats.size(); k++){
-					if(seats.get(k).getName().equals(seatNum)){
-						status = "1";
+					if(j < 7){
+						tmpSeatMapDown[i][j] = new SeatInfo(seatNum, status);
+					}else{
+						tmpSeatMapUp[i][j-7] = new SeatInfo(seatNum, status);
 					}
 				}
-				tmpSeatMap[i][0] = new SeatInfo(seatNum, status);
 			}
+			listSeatMap.add(tmpSeatMapDown);
+			listSeatMap.add(tmpSeatMapUp);
 		}
-		return tmpSeatMap;
+		return listSeatMap;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -194,23 +228,24 @@ public class BookingAction extends BaseAction implements SessionAware {
 			return ERROR;
 		}
 		
-		if(request.get("backFrom") != null){
-			//remove doubleSeat and build new seletedSeat
-			List<String> doubleSeats = (List<String>)request.get("doubleSeat");
+		if(session != null
+                && session.containsKey("seatsDouble")){
 			String selSeat = (String)session.get("selectedSeats");
 			String[] list = selSeat.split(";");
+			List<String> listDouble = (List<String>)session.get("seatsDouble");
 			
 			this.passengerNo = list.length+"";
 			
 			String nwSelectedSeat = "";
 			
 			for (String string : list) {
-				if(!doubleSeats.contains(string)){
+				if(!listDouble.contains(string)){ 
 					nwSelectedSeat += string+";";
 				}
 			}
 			
 			this.selectedSeat = nwSelectedSeat;
+			session.remove("seatsDouble");
 		}
 		
 		seatMap = buildSeatMap(listTripBeans);

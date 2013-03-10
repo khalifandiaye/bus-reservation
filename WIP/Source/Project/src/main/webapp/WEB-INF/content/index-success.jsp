@@ -10,7 +10,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Bus travel</title>
 <jsp:include page="common/xheader.jsp" />
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+<link rel="stylesheet"
+	href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
 
 <script src="<%=request.getContextPath()%>/js/index.js"></script>
 <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
