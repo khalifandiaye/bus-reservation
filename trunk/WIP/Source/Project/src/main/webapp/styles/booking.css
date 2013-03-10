@@ -1,6 +1,9 @@
 .seat-map-img{
     width: 100%;
 }
+.seat-map{
+	margin-bottom: 30px;
+}
 .small-nav{
 	padding-bottom: 30px;  
 }
@@ -34,6 +37,9 @@
 	font-weight: bold;
 }
 .seat-map-wrapper{
+	border: 1px solid #008EDB;
+	width: 920px;
+	height: 230px;
     overflow: hidden;
     background: url("../images/bus-seat-map.png") no-repeat;
     background-size: contain;
@@ -51,10 +57,21 @@
     width: 100%;
     float:left;
 }
+.bed-row{
+	padding-top: 31px;
+}
+.seat-map-inner .bed-row:first-child{
+	padding-top: 0px;
+}
 .seat{
-    width: 8.6%;
+    width: 61px;
+	height: 35px;
     float: left;
     position: relative;
+}
+.bed-seat{
+	width: 90px;
+	height: 38px; 
 }
 .seat img{
 	float:left;
@@ -65,18 +82,6 @@
 	padding-left: 30px;
 	padding-top: 8px;
 	cursor: pointer;
-}
-@media (max-width: 979px) and (min-width: 768px){
-	.seat-name{
-		font-size: 80%;
-		padding-top: 0%;
-		padding-left: 40%;
-	}
-}
-@media (max-width: 767px){
-	.seat-name{
-		display:none
-	}
 }
 .seatChecked{
 	height: 35px;

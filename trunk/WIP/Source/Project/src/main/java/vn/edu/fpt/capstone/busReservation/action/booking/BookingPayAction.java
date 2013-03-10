@@ -28,38 +28,37 @@ import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 /**
  * @author NoName
- *
+ * 
  */
 public class BookingPayAction extends BaseAction implements SessionAware {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5962554617409673584L;
 
-    // ==========================Logic Object==========================
-    private PaymentLogic paymentLogic;
+	// ==========================Logic Object==========================
+	private PaymentLogic paymentLogic;
 
-    /**
-     * @param paymentLogic
-     *            the paymentLogic to set
-     */
-    public void setPaymentLogic(PaymentLogic paymentLogic) {
-        this.paymentLogic = paymentLogic;
-    }
+	/**
+	 * @param paymentLogic
+	 *            the paymentLogic to set
+	 */
+	public void setPaymentLogic(PaymentLogic paymentLogic) {
+		this.paymentLogic = paymentLogic;
+	}
 
-    // =========================Action Output==========================
+	// =========================Action Output==========================
 
-    private String redirectUrl;
+	private String redirectUrl;
 
-    /**
-     * @return the redirectUrl
-     */
-    public String getRedirectUrl() {
-        return redirectUrl;
-    }
-	
-	
+	/**
+	 * @return the redirectUrl
+	 */
+	public String getRedirectUrl() {
+		return redirectUrl;
+	}
+
 	private TripBean tripBean;
 	private ReservationDAO reservationDAO = null;
 	private SeatPositionDAO seatPositionDAO = null;
@@ -69,16 +68,18 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 	private String inputEmail;
 	private UserDAO userDAO = null;
 	private String selectedSeat;
-	
+
 	/**
-	 * @param selectedSeats the selectedSeats to set
+	 * @param selectedSeats
+	 *            the selectedSeats to set
 	 */
 	public void setSelectedSeat(String selectedSeat) {
 		this.selectedSeat = selectedSeat;
 	}
 
 	/**
-	 * @param userDAO the userDAO to set
+	 * @param userDAO
+	 *            the userDAO to set
 	 */
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
@@ -112,113 +113,120 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 		this.tripBean = tripBean;
 	}
 
-    @SuppressWarnings("unchecked")
-    @Action(results = { /*@Result(name = SUCCESS, type = "chain", params = {
-        			"namespace", "/pay", "actionName", "pay01010" }),*/
-            @Result(name = "double",type="chain",params = {
-                    "namespace", "/booking", "actionName", "booking" }) })
-    public String execute(){
-		List<TripBean> list = (List<TripBean>)session.get("listTripBean");
+	@SuppressWarnings("unchecked")
+	@Action(results = { /*
+						 * @Result(name = SUCCESS, type = "chain", params = {
+						 * "namespace", "/pay", "actionName", "pay01010" }),
+						 */
+	@Result(name = "double", type = "redirectAction", params = { "namespace",
+			"/booking", "actionName", "booking" }) })
+	public String execute() {
+		List<TripBean> list = (List<TripBean>) session.get("listTripBean");
 		String reservationId = null;
-		
-		//Check user logged in and set user info  
+
+		// Check user logged in and set user info
 		UserBean userBean = null;
-		
-		if(!(session.get(CommonConstant.SESSION_KEY_USER) == null)){
-			User user = (User)session.get(CommonConstant.SESSION_KEY_USER);
+
+		if (!(session.get(CommonConstant.SESSION_KEY_USER) == null)) {
+			User user = (User) session.get(CommonConstant.SESSION_KEY_USER);
 			userBean = userDAO.getById(user.getUserId());
 		}
-		
-		//Set tmp user info
-		User tmp_user = new User(1,"",1,inputFirstName,inputLastName,inputMobile,inputEmail);
+
+		// Set tmp user info
+		User tmp_user = new User(1, "", 1, inputFirstName, inputLastName,
+				inputMobile, inputEmail);
 		session.put("User_tmp", tmp_user);
-		
-		//Check double seat
+
+		// Check double seat
 		String[] tmp = selectedSeat.split(";");
-		List<String> listSelectedSeat = new ArrayList<String>();  
+		List<String> listSelectedSeat = new ArrayList<String>();
 		for (String string : tmp) {
 			listSelectedSeat.add(string);
 		}
-		//put selected seat
-        session.put("selectedSeats",selectedSeat);
-		
-		List<String> seatsDouble = seatPositionDAO.checkDoubleBooking(list, listSelectedSeat);
-		
-		
-		
-			ReservationBean reservationBean = new ReservationBean();
+		// put selected seat
+		session.put("selectedSeats", selectedSeat);
+
+		ReservationBean reservationBean = new ReservationBean();
+
+		reservationBean.setBooker(userBean);
+		reservationBean.setBookerFirstName(inputFirstName);
+		reservationBean.setBookerLastName(inputLastName);
+		reservationBean.setEmail(inputEmail);
+		reservationBean.setPhone(inputMobile);
+
+		reservationBean.setBookTime(new Date());
+		reservationBean.setCode(null);// String Code
+		reservationBean.setPayments(null);// List<PaymentBean>
+		reservationBean.setStatus("unpaid");
+
+		List<TicketBean> listTicket = new ArrayList<TicketBean>();
+
+		TicketBean ticketBean = new TicketBean();
+		ticketBean.setReservation(reservationBean);
+		ticketBean.setTrips(list);
+
+		List<SeatPositionBean> listSeatPositionBean = new ArrayList<SeatPositionBean>();
+
+		for (int i = 0; i < tmp.length; i++) {
+			SeatPositionBean spb = new SeatPositionBean();
+			spb.setName(tmp[i]);
+			spb.setTicket(ticketBean);
+
+			listSeatPositionBean.add(spb);
+		}
+
+		ticketBean.setSeatPositions(listSeatPositionBean);
+
+		listTicket.add(ticketBean);
+
+		reservationBean.setTickets(listTicket);
+
+		List<String> seatsDouble = seatPositionDAO.checkDoubleBooking(list,
+				listSelectedSeat);
+
+		if (seatsDouble.size() == 0) {
+
+			reservationId = Integer.toString((Integer) reservationDAO
+					.insert(reservationBean));
+
+			reservationDAO.endTransaction();
 			
-			reservationBean.setBooker(userBean);
-			reservationBean.setBookerFirstName(inputFirstName);
-			reservationBean.setBookerLastName(inputLastName);
-			reservationBean.setEmail(inputEmail); 
-			reservationBean.setPhone(inputMobile);
-			
-			reservationBean.setBookTime(new Date());
-			reservationBean.setCode(null);//String Code
-			reservationBean.setPayments(null);//List<PaymentBean>
-			reservationBean.setStatus("unpaid");
-			
-			List<TicketBean> listTicket = new ArrayList<TicketBean>();
-			
-			TicketBean ticketBean = new TicketBean();
-			ticketBean.setReservation(reservationBean);
-			ticketBean.setTrips(list);
-			
-			List<SeatPositionBean> listSeatPositionBean = new ArrayList<SeatPositionBean>();
-			
-			for(int i = 0 ; i< tmp.length; i++){
-				SeatPositionBean spb = new SeatPositionBean();
-				spb.setName(tmp[i]);
-				spb.setTicket(ticketBean);
-				
-				listSeatPositionBean.add(spb);
+			String paymentToken = null;
+			ReservationInfo reservationInfo = null;
+
+			reservationInfo = (ReservationInfo) session
+					.get(ReservationInfo.class.getName());
+			try {
+				paymentToken = paymentLogic.setPaypalExpressCheckout(
+						reservationInfo, servletRequest.getContextPath());
+			} catch (CommonException e) {
+				errorProcessing(e);
+				return ERROR;
+			}
+			redirectUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token="
+					+ paymentToken;
+			session.put(CommonConstant.SESSION_KEY_PAYMENT_TOKEN, paymentToken);
+			session.put(CommonConstant.SESSION_KEY_RESERVATION_ID,
+					reservationId);
+			session.remove("listTripBean");
+			session.remove("selectedSeats");
+			session.remove("User_tmp");
+
+			return SUCCESS;
+		} else {
+			//check full seats
+			List<String> soldSeat = seatPositionDAO.getSoldSeats(list);
+			int numBusSeat = list.get(0).getBusStatus().getBus().getBusType().getNumberOfSeats();
+			int numSelectSeat = listSelectedSeat.size();
+			if((numBusSeat - soldSeat.size()) < numSelectSeat){
+				session.remove("listTripBean");
+				session.remove("selectedSeats");
+				return "full";
 			}
 			
-			ticketBean.setSeatPositions(listSeatPositionBean);
-			
-			listTicket.add(ticketBean);
-			
-			reservationBean.setTickets(listTicket);
-			
-		if(seatsDouble.size() == 0){
-				
-			reservationId = Integer.toString((Integer) reservationDAO
-	                .insert(reservationBean));
-			
-			reservationDAO.endTransaction();
-			// moved below
-//			session.remove("listTripBean");
-//			session.remove("selectedSeats");
-//			session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
-	        String paymentToken = null;
-	        ReservationInfo reservationInfo = null;
-
-	        reservationInfo = (ReservationInfo) session.get(
-	                ReservationInfo.class.getName());
-	        try {
-	            paymentToken = paymentLogic.setPaypalExpressCheckout(
-	                    reservationInfo, servletRequest.getContextPath());
-	        } catch (CommonException e) {
-	            errorProcessing(e);
-	            return ERROR;
-	        }
-	        redirectUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token="
-	                + paymentToken;
-	        session.put(CommonConstant.SESSION_KEY_PAYMENT_TOKEN, paymentToken);
-            session.put(CommonConstant.SESSION_KEY_RESERVATION_ID, reservationId);
-            session.remove("listTripBean");
-            session.remove("selectedSeats");
-            session.remove("User_tmp");
-			
-			return SUCCESS;
-		} else{
-			//send selectedSeat and  double 
-			request.put("backFrom","bookingPay");
-			request.put("doubleSeat", seatsDouble);//List<String>
-			//session.remove("listTripBean");
-			return "double"; 
-		}		
+			session.put("seatsDouble", seatsDouble);
+			return "double";
+		}
 	}
 
 	public SeatPositionDAO getSeatPositionDAO() {
@@ -228,5 +236,5 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 	public void setSeatPositionDAO(SeatPositionDAO seatPositionDAO) {
 		this.seatPositionDAO = seatPositionDAO;
 	}
-	
+
 }
