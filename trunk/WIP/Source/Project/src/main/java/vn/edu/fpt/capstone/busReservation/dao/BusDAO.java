@@ -114,13 +114,13 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Object[]> getBusByTypeInRoute(int routeId, int busTypeId) {
+	public List<Object[]> getBusByTypeInRoute(int routeId, int busTypeId, String status) {
 		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id "
 				+ "FROM bus b LEFT JOIN (SELECT t1.* FROM bus_status t1 "
 				+ "JOIN (SELECT Max(id) id, MAX(to_date) to_date FROM bus_status WHERE status = 'active' GROUP BY bus_id ) t2 "
 				+ "ON t1.id = t2.id AND t1.to_date = t2.to_date) bs ON b.id = bs.bus_id "
 				+ "WHERE (b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId) "
-				+ "AND b.bus_type_id = :busTypeId AND b.status = :busStatus" 
+				+ "AND b.bus_type_id = :busTypeId AND b.status = :busStatus " 
 				+ "GROUP BY b.id";
 
 		Session session = sessionFactory.getCurrentSession();
@@ -130,7 +130,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 			Query query = session.createSQLQuery(stringQuery);
 			query.setParameter("routeId", routeId);
 			query.setParameter("busTypeId", busTypeId);
-			query.setString("busStatus", "active");
+			query.setParameter("busStatus", status);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
@@ -139,7 +139,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Object[]> getBusByTypeNotInRoute(int busTypeId) {
+	public List<Object[]> getBusByTypeNotInRoute(int busTypeId, String status) {
 		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id "
 				+ "FROM bus b LEFT JOIN (SELECT t1.* FROM bus_status t1 "
 				+ "JOIN (SELECT Max(id) id, MAX(to_date) to_date FROM bus_status WHERE status = 'active' GROUP BY bus_id ) t2 "
@@ -154,7 +154,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 			// must have to start any transaction
 			Query query = session.createSQLQuery(stringQuery);
 			query.setParameter("busTypeId", busTypeId);
-			query.setString("busStatus", "active");
+			query.setParameter("busStatus", status);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);

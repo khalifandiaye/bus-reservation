@@ -29,7 +29,7 @@ public class BusDetailAction extends ActionSupport {
 
 	@Action(value = "getBusInRoute", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
-		List<Object[]> bir = busDAO.getBusByTypeInRoute(routeId, type);
+		List<Object[]> bir = busDAO.getBusByTypeInRoute(routeId, type, "active");
 		for (Object[] objects : bir) {
 			BusInfo busInfo = new BusInfo();
 			busInfo.setId((Integer) objects[0]);
@@ -37,7 +37,7 @@ public class BusDetailAction extends ActionSupport {
 			busInRouteBeans.add(busInfo);
 		}
 		
-		List<Object[]> bnir = busDAO.getBusByTypeNotInRoute(type);
+		List<Object[]> bnir = busDAO.getBusByTypeNotInRoute(type, "active");
 		for (Object[] objects : bnir) {
 			BusInfo busInfo = new BusInfo();
 			busInfo.setId((Integer) objects[0]);
