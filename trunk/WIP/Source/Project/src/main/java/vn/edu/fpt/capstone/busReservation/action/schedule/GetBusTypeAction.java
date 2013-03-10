@@ -9,7 +9,7 @@ import org.apache.struts2.convention.annotation.Result;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.BusTypeDAO;
-import vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean;
+import vn.edu.fpt.capstone.busReservation.displayModel.BusTypeInfo;
 
 @ParentPackage("jsonPackage")
 public class GetBusTypeAction extends BaseAction {
@@ -18,18 +18,17 @@ public class GetBusTypeAction extends BaseAction {
 
 	private int routeId;
 	private BusTypeDAO busTypeDAO;
-	private List<BusTypeBean> busTypeBeans = new ArrayList<BusTypeBean>();
+	private List<BusTypeInfo> busTypeInfos = new ArrayList<BusTypeInfo>();
 	
 	@Action(value = "/busTypes", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
 		// type of bus which has defined price
 		List<Object[]> busTypeObjects = busTypeDAO.getBusTypesInRoute(routeId);
 		for (Object[] objects : busTypeObjects) {
-			BusTypeBean busTypeBean = new BusTypeBean();
-			busTypeBean.setId((Integer) objects[0]);
-			busTypeBean.setName((String) objects[1]);
-			busTypeBean.setNumberOfSeats((Integer) objects[2]);
-			getBusTypeBeans().add(busTypeBean);
+		   BusTypeInfo busTypeInfo = new BusTypeInfo();
+		   busTypeInfo.setId((Integer) objects[0]);
+		   busTypeInfo.setType((String) objects[1]);
+		   busTypeInfos.add(busTypeInfo);
 		}
 		return SUCCESS;
 	}
@@ -42,7 +41,12 @@ public class GetBusTypeAction extends BaseAction {
 		this.busTypeDAO = busTypeDAO;
 	}
 
-	private List<BusTypeBean> getBusTypeBeans() {
-		return busTypeBeans;
-	}
+   public List<BusTypeInfo> getBusTypeInfos() {
+      return busTypeInfos;
+   }
+
+   public void setBusTypeInfos(List<BusTypeInfo> busTypeInfos) {
+      this.busTypeInfos = busTypeInfos;
+   }
+
 }
