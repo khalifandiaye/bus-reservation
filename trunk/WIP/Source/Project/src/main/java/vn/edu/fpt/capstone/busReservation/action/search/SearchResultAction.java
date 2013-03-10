@@ -5,17 +5,23 @@ package vn.edu.fpt.capstone.busReservation.action.search;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
+import vn.edu.fpt.capstone.busReservation.displayModel.SearchParamsInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import org.apache.struts2.interceptor.SessionAware;
 /**
  * @author Monkey
  *
  */
-public class SearchResultAction extends ActionSupport {
+public class SearchResultAction extends BaseAction implements SessionAware {
     private static final long serialVersionUID = 51L;
     //=======================Input Parameter=====================
     private String ticketType;
@@ -109,6 +115,17 @@ public class SearchResultAction extends ActionSupport {
 		return arrCity;
 	}
 	public String execute() throws Exception {
+		
+		if(session != null && session.containsKey("searchAnother")){
+			SearchParamsInfo searchParam = (SearchParamsInfo)session.get("searchAnother");
+			this.departureDate = searchParam.getDepartureDate();
+			this.departureCity = searchParam.getDepartureCity();
+			this.arrivalCity = searchParam.getArrivalCity();
+			this.passengerNo = searchParam.getPassengerNo();
+			this.busType = searchParam.getBusType();
+			session.remove("searchAnother");
+		}
+		
 		SimpleDateFormat fromFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 		SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 		String deptDate = toFormat.format(fromFormat.parse(departureDate));

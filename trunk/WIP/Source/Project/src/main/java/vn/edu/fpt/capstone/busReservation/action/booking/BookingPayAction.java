@@ -3,9 +3,11 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.booking;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
@@ -21,6 +23,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
+import vn.edu.fpt.capstone.busReservation.displayModel.SearchParamsInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
@@ -119,7 +122,10 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 						 * "namespace", "/pay", "actionName", "pay01010" }),
 						 */
 	@Result(name = "double", type = "redirectAction", params = { "namespace",
-			"/booking", "actionName", "booking" }) })
+			"/booking", "actionName", "booking" }),
+	@Result(name = "full", type = "redirectAction", params = { "namespace",
+			"/search", "actionName", "search-result"})
+	})
 	public String execute() {
 		List<TripBean> list = (List<TripBean>) session.get("listTripBean");
 		String reservationId = null;
@@ -219,11 +225,23 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 			int numBusSeat = list.get(0).getBusStatus().getBus().getBusType().getNumberOfSeats();
 			int numSelectSeat = listSelectedSeat.size();
 			if((numBusSeat - soldSeat.size()) < numSelectSeat){
+
+				SimpleDateFormat fromFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+				
+				SearchParamsInfo searchParams = new SearchParamsInfo();
+				searchParams.setDepartureCity(list.get(0).getRouteDetails().getSegment().getStartAt().getCity().getId());
+				searchParams.setArrivalCity(list.get(list.size()-1).getRouteDetails().getSegment().getEndAt().getCity().getId());
+				searchParams.setDepartureDate(fromFormat.format(list.get(0).getDepartureTime()));
+				searchParams.setReturnDate(fromFormat.format(list.get(0).getArrivalTime()));
+				searchParams.setBusType(list.get(0).getBusStatus().getBus().getBusType().getId());
+				searchParams.setPassengerNo(numSelectSeat);
+				
+				session.put("searchAnother", searchParams);
+				
 				session.remove("listTripBean");
 				session.remove("selectedSeats");
 				return "full";
 			}
-			
 			session.put("seatsDouble", seatsDouble);
 			return "double";
 		}
