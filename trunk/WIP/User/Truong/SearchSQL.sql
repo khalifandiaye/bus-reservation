@@ -30,13 +30,16 @@ FROM
 			 		 dcty.name    AS city_name,                               			
 					 dsta.address AS station_address
 			  FROM   route_details drdt
-				INNER JOIN route   drou ON drou.id = drdt.route_id
-				INNER JOIN segment dseg ON dseg.id = drdt.segment_id        			
-				INNER JOIN station dsta ON dsta.id = dseg.departure_station_id			   
-				INNER JOIN city    dcty ON dcty.id = dsta.city_id             			     
+				INNER JOIN route    drou ON drou.id = drdt.route_id
+				INNER JOIN segment  dseg ON dseg.id = drdt.segment_id        			
+				INNER JOIN station  dsta ON dsta.id = dseg.departure_station_id			   
+				INNER JOIN location dcty ON dcty.id = dsta.location_id             			     
 			 WHERE  dcty.id = DEPT_CITY) ddtl
 		   ON dtrp.route_details_id = ddtl.route_details_id
-		 WHERE DATE(dtrp.departure_time) = DATE(DEPT_DATE)) dept
+		 WHERE DATE(dtrp.departure_time) >= SUBDATE(DATE(DEPT_DATE), INTERVAL 3 DAY)
+		   AND DATE(dtrp.departure_time) <= ADDDATE(DATE(DEPT_DATE), INTERVAL 3 DAY)
+			-- DATE(dtrp.departure_time) = DATE(DEPT_DATE)
+		   AND DATE(dtrp.departure_time) >= ADDDATE(NOW(), INTERVAL 30 MINUTE)) dept
 	INNER JOIN	 
 	-- arrival trip information
         (SELECT atrp.bus_status_id,
@@ -51,9 +54,9 @@ FROM
 					asta.name    AS station_name,                               			
 					asta.address AS station_address			   
 			 FROM   route_details ardt                                       			    
-			   INNER JOIN segment aseg ON ardt.segment_id = aseg.id          			
-			   INNER JOIN station asta ON asta.id = aseg.arrival_station_id			   
-			   INNER JOIN city    acty ON acty.id = asta.city_id             			     
+			   INNER JOIN segment  aseg ON ardt.segment_id = aseg.id          			
+			   INNER JOIN station  asta ON asta.id = aseg.arrival_station_id			   
+			   INNER JOIN location acty ON acty.id = asta.location_id             			     
 			 WHERE  acty.id = ARRV_CITY) adtl
 		   ON atrp.route_details_id = adtl.route_details_id) arrv
     ON dept.bus_status_id = arrv.bus_status_id
@@ -68,8 +71,8 @@ FROM
 	  ON frdt.segment_id = trff.segment_id 
         AND trff.bus_type_id = BUS_TYPE
 	INNER JOIN remained_seats rmst
-	  ON rmst.start_city_id = DEPT_CITY AND 
-		 rmst.end_city_id = ARRV_CITY AND 
+	  ON rmst.start_location_id = DEPT_CITY AND 
+		 rmst.end_location_id = ARRV_CITY AND 
 		 rmst.bus_status_id = dept.bus_status_id
 WHERE   -- departure date is in range of valid fare dates
         trff.valid_from IN (SELECT MAX(ttrf.valid_from) 
