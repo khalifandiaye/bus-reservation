@@ -237,15 +237,15 @@ public class ReservationLogic extends BaseLogic {
             lockPoint.clear();
             lockPoint.setTime(bean.getTicket1().getDepartureDate());
             // if ticket 1 is active, and past departed time => DEPARTED
-            if (stsActive.equals(bean.getTicket1().getId().getStatus())
+            if ((stsActive.equals(bean.getTicket1().getId().getStatus())
                     || stsTktPending.equals(bean.getTicket1().getId()
-                            .getStatus()) && now > lockPoint.getTimeInMillis()) {
+                            .getStatus())) && now > lockPoint.getTimeInMillis()) {
                 bean.getTicket1().getId().setStatus(stsTktDeparted);
             }
             // if ticket 1 is active, and past lock time => PENDING
             lockPoint.add(Calendar.DATE, -lockInterval);
-            if (stsPaid.equals(bean.getId().getStatus())
-                    && (stsActive.equals(bean.getTicket1().getId().getStatus()))
+            if ((stsPaid.equals(bean.getId().getStatus())
+                    && (stsActive.equals(bean.getTicket1().getId().getStatus())))
                     && now > lockPoint.getTimeInMillis()) {
                 bean.getTicket1().getId().setStatus(stsTktPending);
             }
@@ -260,9 +260,9 @@ public class ReservationLogic extends BaseLogic {
                 }
                 // if ticket 2 is active, and past lock time => PENDING
                 lockPoint.add(Calendar.DATE, -lockInterval);
-                if (stsPaid.equals(bean.getId().getStatus())
+                if ((stsPaid.equals(bean.getId().getStatus())
                         && (stsActive.equals(bean.getTicket2().getId()
-                                .getStatus()))
+                                .getStatus())))
                         && now > lockPoint.getTimeInMillis()) {
                     bean.getTicket2().getId().setStatus(stsTktPending);
                 }
@@ -397,6 +397,7 @@ public class ReservationLogic extends BaseLogic {
                 }
             }
         }
+        info.setStatus(bean.getId().getStatus());
         // info.setStatus(updateStatus(bean.getId(), bean.getStartTrip()
         // .getDepartureTime(), timeOutInterval, lockInterval));
         return info;
