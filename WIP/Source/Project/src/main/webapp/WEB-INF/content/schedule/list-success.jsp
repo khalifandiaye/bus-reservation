@@ -68,6 +68,10 @@
 					getAvailBus();
 					getArrivalTime();
 		      });
+				
+				$('#tripDialogRoutes').change(function(){
+					getBusTypesInRoute();
+				});
 								
 				function getAvailBus() {
 					var selectedRouteId = $("#tripDialogRoutes").val();
@@ -78,18 +82,27 @@
 						$.ajax({
 		    				  url: "availBus.html?departureTime=" + departureTime + "&busType=" + selectedBusType + "&routeId=" + selectedRouteId,
 		    				}).done(function(data) {
-		    					// cleare bus selection
 		    					$('#tripDialogBusPlate').empty();
-		    					
-		    					// process over response data
-		    					// add new avaible bus plateNumber
 		    					$.each(data.busInfos, function() {
 		    						$('#tripDialogBusPlate').append('<option value="'+this.id+'">'+this.plateNumber+'</option>');
 		    					});
-		    					/* $("#tripDialogArrivalTime").val(data.arrivalTime); */
 		    				});
 					}
 				};
+				
+				function getBusTypesInRoute() {
+					var selectedRouteId = $("#tripDialogRoutes").val();
+		         if (selectedRouteId != '-1') {
+		            $.ajax({
+		                 url: "busTypes.html?&routeId=" + selectedRouteId,
+		                }).done(function(data) {
+		                 $('#tripDialogBusType').empty();
+		                 $.each(data.busTypeInfos, function() {
+		                 $('#tripDialogBusType').append('<option value="'+this.id+'">'+this.type+'</option>');
+		                });
+		              });
+		         }
+				}
 				
 				function getArrivalTime() {
 					var selectedRouteId = $("#tripDialogRoutes").val();
@@ -103,12 +116,20 @@
 		         }
 				}
 				
-				function getCurrentReservation(){
-					var selectedRouteId = $("#tripDialogRoutes").val();
-				}
-				
 				$('#addNewSchedule').bind('click', function(event) {
+					var selectedRouteId = $("#tripDialogRoutes").val();
+		         var departureTime = $("#tripDialogDepartureTime").val();
+		         var selectedBusType = $("#tripDialogBusType").val();
+		         var busPlate = $('#tripDialogBusPlate').val();
 					var form = $('#addNewTripForm');
+					
+					if (selectedRouteId == -1 || departureTime == '' || !selectedBusType
+							|| selectedBusType == -1 || !busPlate
+							|| busPlate == '') {
+						alert('please field all field');
+						return;
+					}
+					
 					event.preventDefault();
 					$.ajax({
 					      type: "POST",
@@ -202,9 +223,9 @@
 						readonly>
 				</div>
 				<label for="tripDialogBusType">Bus Type: </label>
-				<s:select id="tripDialogBusType" headerKey="-1"
-					headerValue="--- Select Bus Type ---" list="busTypeBeans"
-					name="busTypeBeans" listKey="id" listValue="name" />
+					<select id="tripDialogBusType" name="busTypeBeans">
+					 <option value="-1">Select Bus Type</option>
+					</select>
 				<div id="trip-plate-number">
 					<label for="routeSelect">Bus Plate Number</label> <select
 						id='tripDialogBusPlate' name='tripDialogBusPlate'></select>
@@ -213,8 +234,7 @@
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-				<button id="addNewSchedule" class="btn btn-primary">Save
-					changes</button>
+				<input type="button" id="addNewSchedule" class="btn btn-primary" value='Save changes'/>
 			</div>
 		</form>
 	</div>
