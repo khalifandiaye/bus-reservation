@@ -65,14 +65,11 @@
 				});
 				
 				$('#tripDialogRoutes').change(function() {
+					getBusTypesInRoute();
 					getAvailBus();
 					getArrivalTime();
 		      });
 				
-				$('#tripDialogRoutes').change(function(){
-					getBusTypesInRoute();
-				});
-								
 				function getAvailBus() {
 					var selectedRouteId = $("#tripDialogRoutes").val();
 					var departureTime = $("#tripDialogDepartureTime").val();
