@@ -85,9 +85,7 @@
             minuteStep : 10
          });
 		
-		$("#add").bind(
-			'click',
-			function() {
+		$("#add").bind('click', function() {
 				if (giCount == 10) {
 					alert("maximun record added!");
 					return;
@@ -114,15 +112,15 @@
 									
 				if (stationEndAt.trim() == '' || stationEndAtKey == -1) {
 			        return;
-			    }
+			   }
 									
 				if (duration.trim() == '') {
 			        return;
-			    }
+			   }
 									
 				if (price.trim() == '') {
 			        return;
-			    }
+			   }
 									
 				$('#segmentTable').dataTable().fnAddData(
 						[ startAt + ' - ' + stationStartAt,

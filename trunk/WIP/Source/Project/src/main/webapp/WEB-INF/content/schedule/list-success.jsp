@@ -33,7 +33,14 @@
 				var oTable;
 				oTable = $('#scheduleTable').dataTable();
 
-				$('#BusStatusInsertBtn').click(function() {
+				$('#busStatusInsertBtn').click(function() {
+					$('#tripDialogRoutes').val(-1);
+					$('#tripDialogDepartureTime').val('');
+					$('#tripDialogArrivalTime').val('');
+					$('#tripDialogBusType').empty();
+               $('#tripDialogBusType').append('<option value="-1">Select Bus Type</option>');
+               $('#tripDialogBusPlate').empty();
+					
 					$('#CreateScheduleDialog').modal();
 					$('#tripEditDialogLabel').html("Add New Schedule");
 					$("#tripDialogDepartureTimeDiv").datetimepicker({
@@ -153,7 +160,7 @@
 	<div id="page">
 		<div class="post" style="margin: 0px auto; width: 95%;">
 			<div style="height: 45px; margin-left: 1%;">
-				<input id="BusStatusInsertBtn" type="button" class="btn btn-success"
+				<input id="busStatusInsertBtn" type="button" class="btn btn-success"
 					value="Add New Schedule" />
 			</div>
 			<table id="scheduleTable" align="center">
