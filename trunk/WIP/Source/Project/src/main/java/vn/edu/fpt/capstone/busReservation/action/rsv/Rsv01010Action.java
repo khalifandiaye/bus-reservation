@@ -64,7 +64,7 @@ public class Rsv01010Action extends BaseAction {
         Object user = null;
         forTest();
         if (session != null
-                || session.containsKey(CommonConstant.SESSION_KEY_USER)) {
+                && session.containsKey(CommonConstant.SESSION_KEY_USER)) {
             user = session.get(CommonConstant.SESSION_KEY_USER);
             if (User.class.isAssignableFrom(user.getClass())) {
                 username = ((User) user).getUsername();
