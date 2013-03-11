@@ -222,5 +222,6 @@ $(function(){
 		$("#selectedSeat").val("");
 		
 	    $("#seatToPayment").val(getSelectedSeatString());
+	    
 	});
 });
