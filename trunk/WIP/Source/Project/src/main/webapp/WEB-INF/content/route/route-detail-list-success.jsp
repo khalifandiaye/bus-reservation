@@ -215,15 +215,18 @@
 				<s:if test="%{busTypeBeans.size()!=0}">
 					<table>
 						<tr>
-							<s:select id="busType" list="busTypeBeans" name="busTypeBeans"
-								listKey="id" listValue="name" />
-							<input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price" />
+						   <td><s:select id="busType" list="busTypeBeans" name="busTypeBeans"
+                        listKey="id" listValue="name" /></td>
+							<td>
+							  <input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price" 
+							     style="height: 30px; margin-top: -13px;"/>
+							</td>
 						</tr>
 						<tr>
 							<td><input class="btn btn-primary" type="button"
-								id="viewPrice" value="View Price" /></td>
-							<td><input class="btn btn-primary" id="assignBus"
-								type="button" value="Assign Bus to Route" /></td>
+								id="viewPrice" value="View Price" />
+							<input class="btn btn-primary" id="assignBus"
+                        type="button" value="Assign Bus to Route" /></td>
 						</tr>
 					</table>
 				</s:if>

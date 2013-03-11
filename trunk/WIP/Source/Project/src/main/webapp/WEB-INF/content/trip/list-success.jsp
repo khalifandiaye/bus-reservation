@@ -62,8 +62,8 @@
 						<s:iterator value="tripBeans" status="tripBeansStatus">
 							<tr id="trip_<s:property value='id'/>">
 								<td><s:property value="routeDetails.segment.startAt.city.name" /> - <s:property value="routeDetails.segment.endAt.city.name" /></td>
-								<td><s:property value="departureTime" /></td>
-								<td><s:property value="arrivalTime" /></td>
+								<td><s:date name="departureTime" format="dd/MM/yyyy hh:mm:ss" /></td>
+								<td><s:date name="arrivalTime" format="dd/MM/yyyy hh:mm:ss" /></td>
 							</tr>
 						</s:iterator>
 					</tbody>

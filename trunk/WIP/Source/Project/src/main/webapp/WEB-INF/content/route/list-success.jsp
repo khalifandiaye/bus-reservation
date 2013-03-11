@@ -159,6 +159,8 @@
             $("#startAt").val(endAtKey);
             $("#startAt").prop("disabled", true);
             $("#stationStartAt").prop("disabled", true);
+            $("#stationEndAt").empty();
+            $("#duration").val('');
             getStation('startAt', 'stationStartAt');
                            
             $("#endAt option[value=" + endAtKey + "]").hide();

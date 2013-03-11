@@ -13,32 +13,65 @@
 <script src="<%=request.getContextPath()%>/js/index.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
-function deleteBus(id) {
-    $('#busId').val(id);
-    $("#deleteBusDialog").modal();
-  };
+   function deleteBus(id) {
+      $('#busId').val(id);
+      $("#deleteBusDialog").modal();
+   };
 
 	$(document).ready(function() {
-		var oTable = $('#busTable').dataTable();
+		var busTable = $('#busTable').dataTable({bSort : false});
+		var addBusTable = $('#addBusTable').dataTable({bSort : false});
 
 		$('#addBus').bind().bind('click', function(event) {
-			var url = $('#contextPath').val() + "/bus/add.html";
-			window.location = url;
+			  $('#plateNumber').val('');
+			  $('#busType').val(-1);
+			  $("#addBusDialog").modal();
 		});
 
 		$('#busDeleteDialogOk').click(function() {
-            var busId = $('#busId').val();
+			   var busId = $('#busId').val();
             $.ajax({
-                       url: "deleteBus.html?busId=" + busId,
-                     }).done(function(data) {
-                        alert(data.message);
-                        var url = $('#contextPath').val() + "/bus/list.html";
-                        window.location = url;
-                     });
-         });
+            	url: "deleteBus.html?busId=" + busId,
+            }).done(function(data) {
+            	alert(data.message);
+               var url = $('#contextPath').val() + "/bus/list.html";
+               window.location = url;
+            });
+      });
+		
+		$('#busAddDialogOk').click(function(){
+			   var plateNumber = $('#plateNumber').val();
+			   var busType = $('#busType').val();
+			   if (plateNumber.trim() == '' || busType == -1) {
+				   return;
+			   }
+            $.ajax({
+               url: "saveBus.html?plateNumber=" + plateNumber + "&busTypeBeans=" + busType,
+            }).done(function(data) {
+               alert(data.message);
+               var url = $('#contextPath').val() + "/bus/list.html";
+               window.location = url;
+            });
+		});
 	});
-	
 </script>
+<style type="text/css">
+.dataTables_filter {
+	display: none;
+}
+
+.dataTables_length {
+	display: none;
+}
+
+.dataTables_paginate {
+	display: none;
+}
+
+.dataTables_info {
+	display: none;
+}
+</style>
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
@@ -93,6 +126,45 @@ function deleteBus(id) {
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 			<button id="busDeleteDialogOk" class="btn btn-danger">Delete</button>
+		</div>
+	</div>
+
+	<!-- Modal Add Dialog -->
+	<div id="addBusDialog" class="modal hide fade" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"
+				aria-hidden="true">×</button>
+			<h3 id="busAddDialogLabel">Add New Bus</h3>
+		</div>
+		<div class="modal-body">
+			<form action="save-bus.html" method="post">
+				<table id="addBusTable">
+					<thead>
+						<tr>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+							  Plate Number : <input type="text" id="plateNumber"
+								name="plateNumber" value="">
+							</td>
+							<td>
+							  Select Bus Type : <s:select id="busType" headerKey="-1"
+									headerValue="--- Select Bus Type ---" list="busTypeBeans"
+									name="busTypeBeans" listKey="id" listValue="name" />
+						   </td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button id="busAddDialogOk" class="btn btn-primary" >Save</button>
 		</div>
 	</div>
 	<input id="busId" value="" type="hidden" />
