@@ -24,82 +24,95 @@
 <script
 	src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-						accounting.settings = {
-							currency : {
-								symbol : " VNĐ", // default currency symbol is '$'
-								format : "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
-								decimal : ",", // decimal point separator
-								thousand : ".", // thousands separator
-								precision : 0
-							// decimal places
-							},
-							number : {
-								precision : 0, // default precision on numbers is 0
-								thousand : ",",
-								decimal : "."
-							}
-						};
+   function validate(evt) {
+	  var theEvent = evt || window.event;
+	  var key = theEvent.keyCode || theEvent.which;
+	  key = String.fromCharCode( key );
+	  var regex = /[0-9]/;
+	  if( !regex.test(key) ) {
+	    theEvent.returnValue = false;
+	    if(theEvent.preventDefault) theEvent.preventDefault();
+	  }
+	}
 
-						oTable = $('#segmentTable').dataTable({
-							"bSort" : false
-						});
+	$(document).ready(function() {
+		$.each($("#segmentTable input"),function() {
+			$("#"+this.id+"").keypress(function(event) {
+				validate(event);
+			});
+      });
+		
+		
+		   accounting.settings = {
+				   currency : {
+					   symbol : " VNĐ", // default currency symbol is '$'
+					   format : "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
+                  decimal : ",", // decimal point separator
+                  thousand : ".", // thousands separator
+                  precision : 0 // decimal places
+					},
+					number : {
+						precision : 0, // default precision on numbers is 0
+						thousand : ",",
+						decimal : "."
+					}
+			};
 
-						$("#validDateDiv").datetimepicker({
-							format : "yyyy/mm/dd - hh:ii",
-							autoclose : true,
-							todayBtn : true,
-							startDate : new Date(),
-							minuteStep : 10
-						});
+			oTable = $('#segmentTable').dataTable({"bSort" : false});
+
+			$("#validDateDiv").datetimepicker({
+				   format : "yyyy/mm/dd - hh:ii",
+				   autoclose : true,
+				   todayBtn : true,
+				   startDate : new Date(),
+				   minuteStep : 10
+			});
 						
-						$("#returnRoute").click(function(){
-							var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId=" + $("#routeId").val();
-					      window.location = url;
-						});
+			$("#returnRoute").click(function(){
+				   var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId=" + $("#routeId").val();
+					window.location = url;
+			});
 
-						$("#save").bind('click', function() {
-											var info = {};
-											var tariffs = [];
-
-											$.each($("#segmentTable input"),
-															function() {
-																var tariff = {};
-																tariff['segmentId'] = this.id;
-																tariff['fare'] = this.value;
-																tariffs
-																		.push(tariff);
-															});
-											info['routeId'] = $('#routeId').val();
-											info['validDate'] = $('#validDate')
-													.val();
-											info['tariffs'] = tariffs;
-											info['busTypeId'] = $('#busType')
-													.val();
-
-											$
-													.ajax({
-														type : "POST",
-														url : 'updateTariff.html',
-														contentType : "application/x-www-form-urlencoded; charset=utf-8",
-														data : {
-															data : JSON
-																	.stringify(info)
-														},
-														success : function(
-																response) {
-															alert(response);
-															var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId=" + $('#routeId').val();
-													      window.location = url;
-														},
-														error : function() {
-															alert("Save new route failed!");
-														}
-													});
-										});
+			$("#save").bind('click', function() {
+					var info = {};
+					var tariffs = [];
+					var isValid = true;
+		         
+					$.each($("#segmentTable input"),function() {
+							var tariff = {};
+							tariff['segmentId'] = this.id;
+							tariff['fare'] = this.value;
+							if ($.trim(this.value) == '') {
+								isValid = false;
+					      }
+							tariffs.push(tariff);
 					});
+					
+					
+					if (isValid) {
+						info['routeId'] = $('#routeId').val();
+						info['validDate'] = $('#validDate').val();
+						info['tariffs'] = tariffs;
+						info['busTypeId'] = $('#busType').val();
+						
+						$.ajax({
+							type : "POST",
+							url : 'updateTariff.html',
+							contentType : "application/x-www-form-urlencoded; charset=utf-8",
+							data : {data : JSON.stringify(info)},
+							success : function(response) {
+								alert(response);
+								var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId=" + $('#routeId').val();
+								window.location = url;
+							},
+							error : function() {
+								alert("Save new route failed!");
+								window.location = url;
+							}
+						});
+					}
+				});
+	});
 </script>
 <style type="text/css">
 .dataTables_filter {
@@ -123,6 +136,7 @@
 	<jsp:include page="../common/header.jsp" />
 	<jsp:include page="../common/menu.jsp" />
 	<div id="page">
+	<form id='form'>
 	<input type="hidden" value='<s:property value="routeId"/>' id='routeId'/>
 		<div class="post" style="margin: 0px auto; width: 95%;">
 			<table>
@@ -156,7 +170,8 @@
 						<tr>
 							<td><s:property value="startAt.name" /></td>
 							<td><s:property value="endAt.name" /></td>
-							<td><input id="<s:property value='id'/>" type="text" value="" maxlength="7"/> .000 VNĐ</td>
+							<td><input id="<s:property value='id'/>" 
+							name="<s:property value='id'/>" type="text" value="" maxlength="7"/> .000 VNĐ</td>
 						</tr>
 					</s:iterator>
 				</tbody>
@@ -166,6 +181,7 @@
 				<input class="btn btn-danger" type="button" id="returnRoute" value="Cancel" />
 			</div>
 		</div>
+		</form>
 	</div>
 	<jsp:include page="../common/footer.jsp" />
 </body>

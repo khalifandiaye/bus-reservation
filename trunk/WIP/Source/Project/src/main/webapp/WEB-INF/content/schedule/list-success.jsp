@@ -57,13 +57,11 @@
 				
 				$('#tripDeleteDialogOk').click(function() {
 					var busStatusId = $('#busStatusId').val();
-					$.ajax({
-	                       url: "deleteSchedule.html?busStatusId=" + busStatusId,
-	                     }).done(function(data) {
-	                        alert(data.message);
-	                        var url = $('#contextPath').val() + "/schedule/list.html";
-	                        window.location = url;
-	                     });
+					$.ajax({url: "deleteSchedule.html?busStatusId=" + busStatusId,}).done(function(data) {
+						   alert(data.message);
+						   var url = $('#contextPath').val() + "/schedule/list.html";
+						   window.location = url;
+					});
 				});
 				
 				$('#tripDialogBusType').change(function() {
@@ -120,6 +118,14 @@
 		         }
 				}
 				
+				$('#cancelAdd').bind('click', function(){
+					$("#tripDialogRoutes").val(-1);
+		         $("#tripDialogDepartureTime").val('');
+		         $("#tripDialogArrivalTime").val('');
+		         $("#tripDialogBusType").empty();
+		         $('#tripDialogBusPlate').val('');
+				});
+				
 				$('#addNewSchedule').bind('click', function(event) {
 					var selectedRouteId = $("#tripDialogRoutes").val();
 		         var departureTime = $("#tripDialogDepartureTime").val();
@@ -130,7 +136,6 @@
 					if (selectedRouteId == -1 || departureTime == '' || !selectedBusType
 							|| selectedBusType == -1 || !busPlate
 							|| busPlate == '') {
-						alert('please field all field');
 						return;
 					}
 					
@@ -237,7 +242,7 @@
 				<div id="tripDialogStatus"></div>
 			</div>
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button class="btn" id="cancelAdd" data-dismiss="modal" aria-hidden="true">Cancel</button>
 				<input type="button" id="addNewSchedule" class="btn btn-primary" value='Save changes'/>
 			</div>
 		</form>
