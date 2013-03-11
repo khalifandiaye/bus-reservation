@@ -50,11 +50,7 @@
       
 	   var routeTable = $('#routeTable').dataTable({" bSort" : false });
 	   var segmentTable = $('#segmentTable').dataTable({ "bSort" : false });
-      
-	     var segmentTable = $('#segmentTable').dataTable({
-	         "bSort" : false
-	      });
-	   
+      	   
       $('#addRoute').bind('click', function(event) {
     	   giCount = 0;
     	   segmentTable.dataTable().fnClearTable();
@@ -167,6 +163,8 @@
                            
             $("#endAt option[value=" + endAtKey + "]").hide();
             $("#endAt").val(-1);
+            $("#duration").val('');
+            $('#stationEndAt').empty();
 
             var segment = {};
             segment['startAt'] = startAtKey;
@@ -183,7 +181,6 @@
                   info['validDate'] = $('#validDate').val();
                                  
                   if (giCount == 0) {
-                     alert('Please add segment!');
                      return;
                   }
                   
@@ -195,9 +192,9 @@
                         data : JSON.stringify(info)
                      },
                      success : function(response) {
-                        alert("Save Success!");
-                        var url = $('#contextPath').val() + "/route/list.html";
-                        window.location = url;
+                    	   $('#addRouteDialog').modal('hide');
+                        $("#saveSuccessDialogLabeMessage").html(response);
+                        $("#saveSuccess").modal();
                      },
                      error: function(){
                         alert("Save new route failed!");
@@ -311,8 +308,28 @@
 			<button id="routeDeleteDialogOk" class="btn btn-danger">Delete</button>
 		</div>
 	</div>
+	
+	<!-- Modal Save success Dialog -->
+   <div id="saveSuccess" class="modal hide fade" tabindex="-1"
+      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true">×</button>
+         <h3 id="saveSuccessDialogLabel">Message</h3>
+      </div>
+      <div class="modal-body">
+         <p id="saveSuccessDialogLabeMessage"></p>
+      </div>
+      <div class="modal-footer">
+         <button class="btn" id="saveSuccessDialogOk" data-dismiss="modal"
+            aria-hidden="true">Ok</button>
+      </div>
+   </div>
+	
 	<input id="routeId" value="" type="hidden" />
 	<jsp:include page="../common/footer.jsp" />
 </body>
+
+
 
 </html>

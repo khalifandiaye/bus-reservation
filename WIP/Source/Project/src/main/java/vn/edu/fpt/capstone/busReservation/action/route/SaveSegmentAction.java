@@ -45,7 +45,7 @@ public class SaveSegmentAction extends BaseAction {
    private RouteDAO routeDAO;
    private RouteDetailsDAO routeDetailsDAO;
 
-   private String message = "Save Success!";
+   private String message = "New Route saved successfully!";
 
    @Action(value = "saveSegment", results = { @Result(type = "json", name = SUCCESS, params = {
          "root", "message" }) })
