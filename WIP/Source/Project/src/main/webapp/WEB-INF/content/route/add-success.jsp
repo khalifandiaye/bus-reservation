@@ -136,6 +136,7 @@
 									
 				$("#endAt option[value=" + endAtKey + "]").hide();
 				$("#endAt").val(-1);
+				$('#stationEndAt').empty();
 
 				var segment = {};
 				segment['startAt'] = startAtKey;

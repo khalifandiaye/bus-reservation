@@ -184,8 +184,8 @@
 					<s:iterator value="busStatusBeans">
 						<tr id="busStatus_<s:property value='id'/>">
 							<td><s:property value="bus.plateNumber" /></td>
-							<td><s:property value="fromDate" /></td>
-							<td><s:property value="toDate" /></td>
+							<td><s:date name="fromDate" format="dd/MM/yyyy hh:mm:ss" /></td>
+							<td><s:date name="toDate" format="dd/MM/yyyy hh:mm:ss" /></td>
 							<td><s:property value="status" /></td>
 							<td><s:property value="endStation.city.name" /></td>
 							<td style="width: 6%"><input class="btn btn-primary"
