@@ -148,6 +148,7 @@
 						style="margin-top: 15px; margin-right: 30px;">Tiếp Tục</button>
 				</div>
 			</form>
+			<s:hidden id="message" name="message"></s:hidden>
 			<s:hidden id="selectedSeat" name="selectedSeat"></s:hidden>
 			<s:hidden id="passengerNo" name="passengerNo"></s:hidden>
 		</div>

@@ -224,8 +224,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 			List<String> soldSeat = seatPositionDAO.getSoldSeats(list);
 			int numBusSeat = list.get(0).getBusStatus().getBus().getBusType().getNumberOfSeats();
 			int numSelectSeat = listSelectedSeat.size();
-			if((numBusSeat - soldSeat.size()) < numSelectSeat){
-
+			if((numBusSeat - soldSeat.size()) == 0){
 				SimpleDateFormat fromFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 				
 				SearchParamsInfo searchParams = new SearchParamsInfo();
@@ -237,10 +236,17 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 				searchParams.setPassengerNo(numSelectSeat);
 				
 				session.put("searchAnother", searchParams);
+				session.put("message", "Chuyến bạn vừa chọn đã hết ghế vui lòng chọn chuyến khác.");
 				
 				session.remove("listTripBean");
 				session.remove("selectedSeats");
 				return "full";
+			}
+			if((numBusSeat - soldSeat.size()) > 0 && (numBusSeat - soldSeat.size()) < numSelectSeat)
+			{
+				session.put("message", "Chuyến bạn vừa chọn không đủ số ghế vui lòng đặt ít hơn hoặc chọn chuyến khác.");
+			}else{
+				session.put("message", "Ghế bạn chọn đã có người đặt vui lòng chọn ghế khác.");
 			}
 			session.put("seatsDouble", seatsDouble);
 			return "double";

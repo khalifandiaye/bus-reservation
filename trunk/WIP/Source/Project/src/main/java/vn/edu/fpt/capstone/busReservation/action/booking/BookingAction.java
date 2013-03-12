@@ -59,7 +59,16 @@ public class BookingAction extends BaseAction implements SessionAware {
 	private String selectedSeat;
 	private SeatPositionDAO seatPositionDAO;
 	private String busType;
+	private String message;
 	
+	
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+
 	/**
 	 * @param busType the busType to set
 	 */
@@ -245,6 +254,9 @@ public class BookingAction extends BaseAction implements SessionAware {
 			}
 			
 			this.selectedSeat = nwSelectedSeat;
+			this.message = (String)session.get("message");
+			
+			session.remove("message");
 			session.remove("seatsDouble");
 		}
 		
