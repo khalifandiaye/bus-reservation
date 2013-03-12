@@ -3,6 +3,7 @@ package vn.edu.fpt.capstone.busReservation.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -72,4 +73,27 @@ public class DateUtils {
                 - timeZone.getOffset(milisec));
         return result;
     }
+    
+	/**
+	 * Add days in string format
+	 * 
+	 * @param inputDate
+	 * 			The date that needs to add
+	 * @param amount
+	 *  		The amount of days to be added
+	 * @param pattern
+	 * 			The pattern describing date format (ex: dd-MM-yyyy, yyyy/MM/dd,...)
+	 * @param locale
+	 * 			The locale whose date format symbol should be used
+	 * @return
+	 * 			The day that has been added in string (formatted in input pattern)
+	 */
+	public static String addDay(String inputDate, int amount, String pattern, Locale locale) 
+			throws ParseException {
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat formatter = new SimpleDateFormat(pattern, locale);
+		cal.setTime(formatter.parse(inputDate));
+		cal.add(Calendar.DAY_OF_MONTH, amount);
+		return formatter.format(cal.getTime());
+	}
 }
