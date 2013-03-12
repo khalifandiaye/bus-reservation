@@ -79,7 +79,8 @@ public class SegmentDAO extends GenericDAO<Integer, SegmentBean> {
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
 		}
-
 		return result;
 	}
+	
+	
 }
