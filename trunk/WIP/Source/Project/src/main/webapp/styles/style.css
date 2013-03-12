@@ -223,3 +223,8 @@ label.success{
 .carousel-control {
 	top: 50%;
 }
+.dropdown-menu {
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+}
