@@ -28,6 +28,9 @@ function initSelectedSeat(){
 			seatClicked($('.seat-img[data-seat="'+arraySelectedSeat[i]+'"]'));
 			}
 	}
+	if($("#message").val() != null && $("#message").val() != ""){
+		showPopup($("#message").val());
+	}
 }
 
 function seatAvailable(seatImage){

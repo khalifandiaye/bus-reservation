@@ -34,9 +34,17 @@ public class SearchResultAction extends BaseAction implements SessionAware {
     private List<SearchResultInfo> searchResult;
     private String deptCity;
     private String arrCity;
+    private String message;
     //=======================Data Access Object==================
     private TripDAO tripDAO;
         
+    
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
 	/**
 	 * @param tripDAO the tripDAO to set
 	 */
@@ -123,6 +131,9 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 			this.arrivalCity = searchParam.getArrivalCity();
 			this.passengerNo = searchParam.getPassengerNo();
 			this.busType = searchParam.getBusType();
+			this.message = (String)session.get("message");
+			
+			session.remove("message");
 			session.remove("searchAnother");
 		}
 		

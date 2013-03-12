@@ -40,28 +40,39 @@
 		return true;		
 	}
 	
+	function showPopup(message){
+		if($(".notify-message").html().trim()!=""){
+			$(".notify-message").empty();
+		}
+		$(".notify-message").append('<div class="alert fade in"><button type="button" class="close" data-dismiss="alert">×</button>'+message+'</div>');
+	}
+	
 	$(function(){
 		$('.trip-details').bind('click',(function() {
-		var busStatus = $(this).parent("td").next().next().find('#out_status').val();
-		var departTime = $(this).parent("td").next().next().find('#out_deptTime').val();
-		var arriveTime = $(this).parent("td").next().next().find('#out_arrTime').val();
-		//console.log(departTime);
-		$.ajax({
-	        type : "GET",
-	        url : $('#contextPath').val() + "/search/getTripDetails.html",
-	        data : {
-	        	busStatus : busStatus,
-	        	departTime : departTime,
-	        	arriveTime : arriveTime
-	        },
-	        success : function(data) {
-	        	console.log(data.tripList);
-	        	//$.each(data.tripList, function(k, v) {
-	        	//$('#trips-list tbody').append();
-		  }
-	    });	 
+			var busStatus = $(this).parent("td").next().next().find('#out_status').val();
+			var departTime = $(this).parent("td").next().next().find('#out_deptTime').val();
+			var arriveTime = $(this).parent("td").next().next().find('#out_arrTime').val();
+			//console.log(departTime);
+			$.ajax({
+		        type : "GET",
+		        url : $('#contextPath').val() + "/search/getTripDetails.html",
+		        data : {
+		        	busStatus : busStatus,
+		        	departTime : departTime,
+		        	arriveTime : arriveTime
+		        },
+		        success : function(data) {
+		        	console.log(data.tripList);
+		        	//$.each(data.tripList, function(k, v) {
+		        	//$('#trips-list tbody').append();
+			  }
+		    });	 
+		}));
 		
-	}))});
+		if($("#message").val() != null && $("#message").val() != ""){
+			showPopup($("#message").val());
+		}
+	});
 	
 	</script>
 </head>
