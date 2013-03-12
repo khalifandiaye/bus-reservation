@@ -123,28 +123,7 @@
             	$('#addRouteDialog').modal('hide');
 	            $("#saveSuccessDialogLabeMessage").text('Maximum record added!');
 	            $("#saveSuccess").modal();
-	            $("#saveSuccessDialogOk").bind('click',function() {
-            	   info['segments'] = segments;
-            	   info['validDate'] = $('#validDate').val();
-            	                	                  
-            	   $.ajax({
-            		   type : "POST",
-            		   url : 'saveSegment.html',
-            		   contentType : "application/x-www-form-urlencoded; charset=utf-8",
-            		   data : {data : JSON.stringify(info)},
-            	      success : function(response) {
-            	    	   $('#saveSuccess').modal('hide');
-            	    	   $("#saveSuccessDialogLabeMessage").html(response);
-            	    	   $("#saveSuccess").modal();
-            	    	   return;
-            	    	},
-           	    	   error: function(){
-           	    		   $('#saveSuccess').modal('hide');
-                        $("#saveSuccessDialogLabeMessage").html(response);
-                        $("#saveSuccess").text("Save new route failed!");
-           	         }
-            	   });
-	            });
+	            return;
             }
 
             var startAtKey = $("#startAt").val();
@@ -353,10 +332,6 @@
       </div>
    </div>
 	
-	<input id="routeId" value="" type="hidden" />
-	<jsp:include page="../common/footer.jsp" />
-</body>
-
    <!-- Modal Save success Dialog layer2-->
    <div id="saveSuccessL2" class="modal hide fade" tabindex="-1"
       role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
