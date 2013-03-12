@@ -96,6 +96,11 @@
 		</div>
 	</section>
 	<!-- End small nav -->
+	<!-- Start notify message -->
+	<section>
+	<div class="notify-message"></div>
+	</section>
+	<!-- End notify message -->
 	<section class="body">
 	<div class="container">
 		<div class="well"> 
@@ -220,6 +225,7 @@
 						</form>
 			</s:else>
 		</div>
+		<s:hidden id="message" name="message"></s:hidden>
 	</div>
 	</section>
 
