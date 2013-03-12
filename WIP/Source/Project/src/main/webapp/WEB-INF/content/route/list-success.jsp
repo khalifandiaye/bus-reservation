@@ -119,9 +119,32 @@
          });
       
       $("#add").bind('click', function() {
-            if (giCount == 10) {
-               alert("maximun record added!");
-               return;
+            if (giCount == 1) {
+            	$('#addRouteDialog').modal('hide');
+	            $("#saveSuccessDialogLabeMessage").text('Maximum record added!');
+	            $("#saveSuccess").modal();
+	            $("#saveSuccessDialogOk").bind('click',function() {
+            	   info['segments'] = segments;
+            	   info['validDate'] = $('#validDate').val();
+            	                	                  
+            	   $.ajax({
+            		   type : "POST",
+            		   url : 'saveSegment.html',
+            		   contentType : "application/x-www-form-urlencoded; charset=utf-8",
+            		   data : {data : JSON.stringify(info)},
+            	      success : function(response) {
+            	    	   $('#saveSuccess').modal('hide');
+            	    	   $("#saveSuccessDialogLabeMessage").html(response);
+            	    	   $("#saveSuccess").modal();
+            	    	   return;
+            	    	},
+           	    	   error: function(){
+           	    		   $('#saveSuccess').modal('hide');
+                        $("#saveSuccessDialogLabeMessage").html(response);
+                        $("#saveSuccess").text("Save new route failed!");
+           	         }
+            	   });
+	            });
             }
 
             var startAtKey = $("#startAt").val();
@@ -179,29 +202,31 @@
 
      $("#routeAddDialogOk").bind('click', 
     		 function() {
-                  info['segments'] = segments;
-                  info['validDate'] = $('#validDate').val();
-                                 
-                  if (giCount == 0) {
-                     return;
-                  }
-                  
-                  $.ajax({
-                     type : "POST",
-                     url : 'saveSegment.html',
-                     contentType : "application/x-www-form-urlencoded; charset=utf-8",
-                     data : {
-                        data : JSON.stringify(info)
-                     },
-                     success : function(response) {
-                    	   $('#addRouteDialog').modal('hide');
-                        $("#saveSuccessDialogLabeMessage").html(response);
-                        $("#saveSuccess").modal();
-                     },
-                     error: function(){
-                        alert("Save new route failed!");
-                     }
-                  });
+            info['segments'] = segments;
+            info['validDate'] = $('#validDate').val();
+                           
+            if (giCount == 0) {
+               return;
+            }
+            
+            $.ajax({
+               type : "POST",
+               url : 'saveSegment.html',
+               contentType : "application/x-www-form-urlencoded; charset=utf-8",
+               data : {
+                  data : JSON.stringify(info)
+               },
+               success : function(response) {
+              	   $('#addRouteDialog').modal('hide');
+                  $("#saveSuccessDialogLabeMessage").html(response);
+                  $("#saveSuccess").modal();
+               },
+               error: function(){
+              	 $('#saveSuccess').modal('hide');
+                $("#saveSuccessDialogLabeMessage").html(response);
+                $("#saveSuccess").text("Save new route failed!");
+               }
+            });
          });
    });
 
@@ -332,6 +357,26 @@
 	<jsp:include page="../common/footer.jsp" />
 </body>
 
+   <!-- Modal Save success Dialog layer2-->
+   <div id="saveSuccessL2" class="modal hide fade" tabindex="-1"
+      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true">×</button>
+         <h3 id="saveSuccessDialogLabel">Message</h3>
+      </div>
+      <div class="modal-body">
+         <p id="saveSuccessDialogLabeMessage"></p>
+      </div>
+      <div class="modal-footer">
+         <button class="btn" id="saveSuccessDialogOk" data-dismiss="modal"
+            aria-hidden="true">Ok</button>
+      </div>
+   </div>
+   
+   <input id="routeId" value="" type="hidden" />
+   <jsp:include page="../common/footer.jsp" />
+</body>
 
 
 </html>
