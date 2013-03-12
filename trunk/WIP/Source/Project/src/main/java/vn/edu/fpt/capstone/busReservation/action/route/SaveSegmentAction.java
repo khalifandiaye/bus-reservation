@@ -30,163 +30,131 @@ import vn.edu.fpt.capstone.busReservation.util.DateUtils;
 @ParentPackage("jsonPackage")
 public class SaveSegmentAction extends BaseAction {
 
-   /**
+	/**
 	 * 
 	 */
-   private static final long serialVersionUID = -6013335986990979597L;
+	private static final long serialVersionUID = -6013335986990979597L;
 
-   private String data;
+	private String data;
 
-   private static ObjectMapper mapper = new ObjectMapper();
+	private static ObjectMapper mapper = new ObjectMapper();
 
-   // Declare dao object
-   private StationDAO stationDAO;
-   private SegmentDAO segmentDAO;
-   private RouteDAO routeDAO;
-   private RouteDetailsDAO routeDetailsDAO;
+	// Declare dao object
+	private StationDAO stationDAO;
+	private SegmentDAO segmentDAO;
+	private RouteDAO routeDAO;
+	private RouteDetailsDAO routeDetailsDAO;
 
-   private String message = "New Route saved successfully!";
+	private String message = "New Route saved successfully!";
 
-   @Action(value = "saveSegment", results = { @Result(type = "json", name = SUCCESS, params = {
-         "root", "message" }) })
-   public String execute() throws JsonParseException, JsonMappingException,
-         IOException, ParseException {
-      SegmentAddInfo segmentAddInfos = mapper.readValue(data,
-            new TypeReference<SegmentAddInfo>() {
-            });
-      List<SegmentInfo> segmentInfosFoward = segmentAddInfos.getSegments();
+	@Action(value = "saveSegment", results = { @Result(type = "json", name = SUCCESS, params = {
+			"root", "message" }) })
+	public String execute() throws JsonParseException, JsonMappingException,
+			IOException, ParseException {
+		SegmentAddInfo segmentAddInfos = mapper.readValue(data,
+				new TypeReference<SegmentAddInfo>() {
+				});
+		List<SegmentInfo> segmentInfosFoward = segmentAddInfos.getSegments();
 
-      if (!segmentInfosFoward.isEmpty()) {
-         insertSegment(segmentInfosFoward, segmentAddInfos, false);
+		if (!segmentInfosFoward.isEmpty()) {
+			insertSegment(segmentInfosFoward, segmentAddInfos, false);
 
-         Collections.reverse(segmentInfosFoward);
-         insertSegment(segmentInfosFoward, segmentAddInfos, true);
-      }
-      return SUCCESS;
-   }
+			Collections.reverse(segmentInfosFoward);
+			insertSegment(segmentInfosFoward, segmentAddInfos, true);
+		}
+		return SUCCESS;
+	}
 
-   private void insertSegment(List<SegmentInfo> segmentInfos,
-         SegmentAddInfo segmentAddInfos, boolean isReturnRoute)
-         throws ParseException {
-      String routeName = "";
-      List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
+	private void insertSegment(List<SegmentInfo> segmentInfos,
+			SegmentAddInfo segmentAddInfos, boolean isReturnRoute)
+			throws ParseException {
+		String routeName = "";
+		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
 
-		//
-		// for (int i = 0; i < segmentInfos.size(); i++) {
-		// StationBean startStation = new StationBean();
-		// StationBean endStation = new StationBean();
-		//
-		// List<SegmentBean> duplicatedSegments = segmentDAO
-		// .getDupicatedSegment(startStation, endStation);
-		// SegmentBean segmentBean = new SegmentBean();
-		// if (duplicatedSegments.size() > 0) {
-		// String stravelTime = segmentInfos.get(i).getDuration();
-		// String[] travelTime = stravelTime.split(":");
-		// long dtravelTime = DateUtils.getTime(
-		// Integer.parseInt(travelTime[0]),
-		// Integer.parseInt(travelTime[1]), 0);
-		//
-		// if (!isReturnRoute) {
-		// startStation = stationDAO.getById(segmentInfos.get(i)
-		// .getStationStartAt());
-		// endStation = stationDAO.getById(segmentInfos.get(i)
-		// .getStationEndAt());
-		// } else {
-		// endStation = stationDAO.getById(segmentInfos.get(i)
-		// .getStationStartAt());
-		// startStation = stationDAO.getById(segmentInfos.get(i)
-		// .getStationEndAt());
-		// }
-		//
-		// if (i == 0) {
-		// routeName += startStation.getCity().getName();
-		// }
-		// if (i == segmentInfos.size() - 1) {
-		// routeName += " - " + endStation.getCity().getName();
-		// }
-		//
-		// segmentBean.setStartAt(startStation);
-		// segmentBean.setEndAt(endStation);
-		// segmentBean.setTravelTime(dtravelTime);
-		// segmentBean.setStatus("active");
-		// segmentDAO.insert(segmentBean);
-		// } else {
-		// segmentBean = duplicatedSegments.get(0);
-		// }
-		// segmentBeans.add(segmentBean);
-		// }
-      
-      for (int i = 0; i < segmentInfos.size(); i++) {
-         SegmentBean segmentBean = new SegmentBean();
-         String stravelTime = segmentInfos.get(i).getDuration();
-         String[] travelTime = stravelTime.split(":");
-         long dtravelTime = DateUtils.getTime(Integer.parseInt(travelTime[0]),
-               Integer.parseInt(travelTime[1]), 0);
+		for (int i = 0; i < segmentInfos.size(); i++) {
+			// Check if segment exist
+			StationBean startStation = new StationBean();
+			StationBean endStation = new StationBean();
+			List<SegmentBean> duplicatedSegmentBeans = segmentDAO
+					.getDupicatedSegment(startStation, endStation);
 
-         StationBean startStation = new StationBean();
-         StationBean endStation = new StationBean();
-         
-         if (!isReturnRoute) {
-            startStation = stationDAO.getById(segmentInfos.get(i).getStationStartAt());
-            endStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
-         } else {
-            endStation = stationDAO.getById(segmentInfos.get(i).getStationStartAt());
-            startStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
-         }
-         
-         if (i == 0) {
-            routeName += startStation.getCity().getName();
-         }
-         if (i == segmentInfos.size() - 1) {
-            routeName += " - " + endStation.getCity().getName();
-         }
-         
-         segmentBean.setStartAt(startStation);
-         segmentBean.setEndAt(endStation);
-         segmentBean.setTravelTime(dtravelTime);
-         segmentBean.setStatus("active");
-         segmentDAO.insert(segmentBean);
-         segmentBeans.add(segmentBean);
-      }
+			// add new segment
+			if (duplicatedSegmentBeans.size() != 0) {
+				SegmentBean segmentBean = new SegmentBean();
+				String stravelTime = segmentInfos.get(i).getDuration();
+				String[] travelTime = stravelTime.split(":");
+				long dtravelTime = DateUtils.getTime(
+						Integer.parseInt(travelTime[0]),
+						Integer.parseInt(travelTime[1]), 0);
 
-      RouteBean routeBeanReturn = new RouteBean();
-      routeBeanReturn.setName(routeName);
-      routeBeanReturn.setStatus("active");
-      routeDAO.insert(routeBeanReturn);
+				if (!isReturnRoute) {
+					startStation = stationDAO.getById(segmentInfos.get(i)
+							.getStationStartAt());
+					endStation = stationDAO.getById(segmentInfos.get(i)
+							.getStationEndAt());
+				} else {
+					endStation = stationDAO.getById(segmentInfos.get(i)
+							.getStationStartAt());
+					startStation = stationDAO.getById(segmentInfos.get(i)
+							.getStationEndAt());
+				}
 
-      for (SegmentBean segmentBean : segmentBeans) {
-         RouteDetailsBean routeDetailsBean = new RouteDetailsBean();
-         routeDetailsBean.setSegment(segmentBean);
-         routeDetailsBean.setRoute(routeBeanReturn);
-         routeDetailsDAO.insert(routeDetailsBean);
-      }
-   }
+				if (i == 0) {
+					routeName += startStation.getCity().getName();
+				}
+				if (i == segmentInfos.size() - 1) {
+					routeName += " - " + endStation.getCity().getName();
+				}
 
-   public String getData() {
-      return data;
-   }
+				segmentBean.setStartAt(startStation);
+				segmentBean.setEndAt(endStation);
+				segmentBean.setTravelTime(dtravelTime);
+				segmentBean.setStatus("active");
+				segmentDAO.insert(segmentBean);
+				segmentBeans.add(segmentBean);
+			} else {
+				segmentBeans.add(duplicatedSegmentBeans.get(0));
+			}
+		}
 
-   public void setData(String data) {
-      this.data = data;
-   }
+		RouteBean routeBeanReturn = new RouteBean();
+		routeBeanReturn.setName(routeName);
+		routeBeanReturn.setStatus("active");
+		routeDAO.insert(routeBeanReturn);
 
-   public void setStationDAO(StationDAO stationDAO) {
-      this.stationDAO = stationDAO;
-   }
+		for (SegmentBean segmentBean : segmentBeans) {
+			RouteDetailsBean routeDetailsBean = new RouteDetailsBean();
+			routeDetailsBean.setSegment(segmentBean);
+			routeDetailsBean.setRoute(routeBeanReturn);
+			routeDetailsDAO.insert(routeDetailsBean);
+		}
+	}
 
-   public void setSegmentDAO(SegmentDAO segmentDAO) {
-      this.segmentDAO = segmentDAO;
-   }
+	public String getData() {
+		return data;
+	}
 
-   public void setRouteDAO(RouteDAO routeDAO) {
-      this.routeDAO = routeDAO;
-   }
+	public void setData(String data) {
+		this.data = data;
+	}
 
-   public void setRouteDetailsDAO(RouteDetailsDAO routeDetailsDAO) {
-      this.routeDetailsDAO = routeDetailsDAO;
-   }
+	public void setStationDAO(StationDAO stationDAO) {
+		this.stationDAO = stationDAO;
+	}
 
-   public String getMessage() {
-      return message;
-   }
+	public void setSegmentDAO(SegmentDAO segmentDAO) {
+		this.segmentDAO = segmentDAO;
+	}
+
+	public void setRouteDAO(RouteDAO routeDAO) {
+		this.routeDAO = routeDAO;
+	}
+
+	public void setRouteDetailsDAO(RouteDetailsDAO routeDetailsDAO) {
+		this.routeDetailsDAO = routeDetailsDAO;
+	}
+
+	public String getMessage() {
+		return message;
+	}
 }
