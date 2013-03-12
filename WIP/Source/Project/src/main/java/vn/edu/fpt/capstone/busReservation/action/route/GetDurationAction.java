@@ -1,6 +1,5 @@
 package vn.edu.fpt.capstone.busReservation.action.route;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -9,19 +8,13 @@ import org.apache.struts2.convention.annotation.Result;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.SegmentDAO;
-import vn.edu.fpt.capstone.busReservation.dao.StationDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
-import vn.edu.fpt.capstone.busReservation.displayModel.StationInfo;
 
 @ParentPackage("jsonPackage")
 public class GetDurationAction extends BaseAction {
 
 	private static final long serialVersionUID = 5439903464802687338L;
-
-	private List<StationBean> stationBeans = new ArrayList<StationBean>();
-	private List<StationInfo> stationInfos = new ArrayList<StationInfo>();
-
 	private StationBean startStation;
 	private StationBean endStation;
 	private String travelTime = "";
