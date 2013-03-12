@@ -29,6 +29,14 @@
                     <li><a href="#">CHÍNH SÁCH GIÁ</a></li>
                     <li><a href="#">VỀ CHÚNG TÔI</a></li>
                     <li id="tab_reservationList"><a href="<%=request.getContextPath()%>/rsv/rsv01010.html">VÉ CỦA TÔI</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">QUẢN LÝ <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                          <li><a href="<%=request.getContextPath()%>/bus/list.html">XE BUS</a></li>
+                          <li><a href="<%=request.getContextPath()%>/route/list.html">TUYẾN ĐƯỜNG</a></li>
+                          <li><a href="<%=request.getContextPath()%>/schedule/list.html">LỊCH XE CHẠY</a></li>
+                        </ul>
+                      </li>
                 </ul> 
             </div>
         </div> 
