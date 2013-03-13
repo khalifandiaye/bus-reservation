@@ -11,7 +11,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 
 /**
  * @author Yoshimi
