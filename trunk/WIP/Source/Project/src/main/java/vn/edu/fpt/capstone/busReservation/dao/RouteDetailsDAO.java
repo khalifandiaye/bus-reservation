@@ -7,6 +7,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 
@@ -26,6 +27,23 @@ public class RouteDetailsDAO extends GenericDAO<Integer, RouteDetailsBean>{
 			// must have to start any transaction
 			Query query = session.createQuery(hql);
 			query.setParameter("routeId", routeId);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<RouteBean> getAllRoutesBySegmentId(int segmentId) {
+		String hql = "select sir.segment from RouteDetailsBean sir where sir.segment.id = :segmentId";
+		Session session = sessionFactory.getCurrentSession();
+		List<RouteBean> result = new ArrayList<RouteBean>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameter("segmentId", segmentId);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);

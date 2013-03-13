@@ -10,6 +10,7 @@ import org.apache.struts2.convention.annotation.Result;
 import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
+import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
@@ -34,6 +35,8 @@ public class SaveAction extends ActionSupport{
 	private RouteDAO routeDAO;
 	private TripDAO tripDAO;
 	private BusStatusDAO busStatusDAO;
+	private SystemSettingDAO systemSettingDAO;
+
 
 	@Action(value = "save", results = { @Result(type = "json", name = SUCCESS, params = {
             "root", "message" }) })
@@ -46,6 +49,7 @@ public class SaveAction extends ActionSupport{
 			List<RouteDetailsBean> routeDetailsList = routeDAO.getById(routeBeans).getRouteDetails();
 			for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
 				traTime += DateUtils.getAbsoluteMiliseconds(routeDetailsBean.getSegment().getTravelTime());
+				traTime += systemSettingDAO.getStationWaitTime();
 			}
 			Date toDate = new Date(fromDate.getTime() + traTime);
 			
@@ -83,6 +87,9 @@ public class SaveAction extends ActionSupport{
 		return SUCCESS;
 	}
 
+	public void setSystemSettingDAO(SystemSettingDAO systemSettingDAO) {
+		this.systemSettingDAO = systemSettingDAO;
+	}
 	public void setBusDAO(BusDAO busDAO) {
 		this.busDAO = busDAO;
 	}

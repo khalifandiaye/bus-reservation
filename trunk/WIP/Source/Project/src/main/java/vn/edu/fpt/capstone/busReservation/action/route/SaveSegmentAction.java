@@ -79,7 +79,7 @@ public class SaveSegmentAction extends BaseAction {
 					.getDuplicatedSegment(segmentInfos.get(i).getStartAt(), segmentInfos.get(i).getEndAt());
 
 			// add new segment
-			if (duplicatedSegmentBeans.size() != 0) {
+			if (duplicatedSegmentBeans.size() == 0) {
 				SegmentBean segmentBean = new SegmentBean();
 				String stravelTime = segmentInfos.get(i).getDuration();
 				String[] travelTime = stravelTime.split(":");

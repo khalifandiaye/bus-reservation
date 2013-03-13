@@ -92,10 +92,12 @@
          $.ajax({
         	   url: "deleteRoute.html?routeId=" + routeId,
          }).done(function(data) {
-        	   alert(data.message);
-        	   var url = $('#contextPath').val() + "/route/list.html";
-        	   window.location = url;
+        	   $('#deleteRouteDialog').modal('hide');
+        	   $("#saveSuccessDialogLabeMessage").text(data.message);
+            $("#saveSuccess").modal();
         	});
+         
+         
       });
 	   
       $('#return').bind('click', function() {
@@ -228,6 +230,10 @@
                }
             });
          });
+     $('#saveSuccessDialogOk').click(function() {
+            var url = $('#contextPath').val() + "/route/list.html";
+            window.location = url;
+      });
    });
 
    var info = {};
@@ -335,6 +341,7 @@
 			<button id="routeDeleteDialogOk" class="btn btn-danger">Delete</button>
 		</div>
 	</div>
+
 	
 	<!-- Modal Save success Dialog -->
    <div id="saveSuccess" class="modal hide fade" tabindex="-1"
