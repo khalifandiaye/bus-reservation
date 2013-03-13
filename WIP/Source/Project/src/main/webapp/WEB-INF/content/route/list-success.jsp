@@ -119,11 +119,9 @@
          });
       
       $("#add").bind('click', function() {
-            if (giCount == 1) {
-            	$('#addRouteDialog').modal('hide');
-	            $("#saveSuccessDialogLabeMessage").text('Maximum record added!');
-	            $("#saveSuccess").modal();
-	            return;
+    	      if (giCount == 6) {
+	              $("#errorMessage").text("Maximum segment added!");
+	              $("#add").disable();
             }
 
             var startAtKey = $("#startAt").val();
@@ -332,25 +330,29 @@
       </div>
    </div>
 	
-   <!-- Modal Save success Dialog layer2-->
-   <div id="saveSuccessL2" class="modal hide fade" tabindex="-1"
-      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-header">
-         <button type="button" class="close" data-dismiss="modal"
-            aria-hidden="true">×</button>
-         <h3 id="saveSuccessDialogLabel">Message</h3>
-      </div>
-      <div class="modal-body">
-         <p id="saveSuccessDialogLabeMessage"></p>
-      </div>
-      <div class="modal-footer">
-         <button class="btn" id="saveSuccessDialogOk" data-dismiss="modal"
-            aria-hidden="true">Ok</button>
-      </div>
+<!-- Modal PreUpdateTariffCheck -->
+<div id="preUpdateTariff" class="modal hide fade" tabindex="-1"
+   role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal"
+         aria-hidden="true">×</button>
+      <h3 id="preUpdateTariffDialogLabel">Message</h3>
    </div>
-   
-   <input id="routeId" value="" type="hidden" />
-   <jsp:include page="../common/footer.jsp" />
+   <div class="modal-body">
+      <p> The folowing route(s) may have been changed when you update the this Tariff: </p>
+      <p id="preUpdateTariffDialogLabeMessage"></p>
+      <p> Do you want to continue? </p>
+   </div>
+   <div class="modal-footer">
+      <button class="btn" id="preUpdateTariffDialogCancel" data-dismiss="modal"
+         aria-hidden="true">Cancel</button>
+      <button class="btn" id="preUpdateTariffDialogOk" data-dismiss="modal"
+         aria-hidden="true">Ok</button>
+   </div>
+</div>
+
+<input id="routeId" value="" type="hidden" />
+<jsp:include page="../common/footer.jsp" />
 </body>
 
 
