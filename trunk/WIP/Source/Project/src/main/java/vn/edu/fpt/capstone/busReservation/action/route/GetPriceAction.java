@@ -14,15 +14,14 @@ import vn.edu.fpt.capstone.busReservation.dao.TariffDAO;
 @ParentPackage("jsonPackage")
 public class GetPriceAction extends BaseAction {
 
-	private static final long serialVersionUID = 5439903464802687338L;
-
-	private int segmentId;
+   private static final long serialVersionUID = 1L;
+   private int segmentId;
 	private int busTypeId;
 
 	private TariffDAO tariffDAO;
 	private Double currentFare;
 
-	@Action(value = "getStation", results = { @Result(type = "json", name = SUCCESS) })
+	@Action(value = "getPrice", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
 		Date validDate = Calendar.getInstance().getTime();
 		List<Double> currentFares = tariffDAO.getCurrentFares(segmentId,

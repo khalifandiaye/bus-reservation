@@ -42,9 +42,26 @@
                 if (el == 'startAt') {
                   $("#stationStartAt").val($("#stationEndAt").val());
                 }
+                getDuration();
             });
        }
    };
+   
+   function getDuration() {
+	   var startStationAt = $("#stationStartAt").val();
+	   var endStationAt = $("#stationEndAt").val();
+	   if (startStationAt && endStationAt && startStationAt != -1 && endStationAt != -1) {
+		   $.ajax({
+			      type : "GET",
+			      url: "getSegmentDuration.html?startStation=" + startStationAt + "&endStation=" + endStationAt,
+	            contentType : "application/x-www-form-urlencoded; charset=utf-8",
+			   }).done(
+				   function(data) {
+			        	 $("#duration").val(data.travelTime);
+			      }
+			);
+		} 
+   }
    
    $(document).ready(function() {
       
