@@ -76,7 +76,7 @@ public class SaveSegmentAction extends BaseAction {
 			StationBean startStation = new StationBean();
 			StationBean endStation = new StationBean();
 			List<SegmentBean> duplicatedSegmentBeans = segmentDAO
-					.getDupicatedSegment(startStation, endStation);
+					.getDuplicatedSegment(segmentInfos.get(i).getStartAt(), segmentInfos.get(i).getEndAt());
 
 			// add new segment
 			if (duplicatedSegmentBeans.size() != 0) {

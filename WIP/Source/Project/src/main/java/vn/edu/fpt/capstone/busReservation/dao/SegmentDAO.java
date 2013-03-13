@@ -64,10 +64,9 @@ public class SegmentDAO extends GenericDAO<Integer, SegmentBean> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<SegmentBean> getDupicatedSegment(StationBean startStation,
-			StationBean endStation) {
-		String hql = "select sb from SegmentBean sb where sb.startAt = :startStation "
-				+ "and sb.endAt = :endStation ";
+	public List<SegmentBean> getDuplicatedSegment(int startStation, int endStation) {
+		String hql = "select sb from SegmentBean sb where sb.startAt.id = :startStation "
+				+ "and sb.endAt.id = :endStation ";
 		Session session = sessionFactory.getCurrentSession();
 		List<SegmentBean> result = new ArrayList<SegmentBean>();
 		try {

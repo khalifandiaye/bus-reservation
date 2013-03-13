@@ -36,4 +36,5 @@
 	<package name="booking" extends="transactionalPackage"></package>
 	<package name="user" extends="transactionalPackage"></package>
 	<package name="search"  extends="transactionalPackage"></package>
+	<package name="route"  extends="transactionalPackage"></package>
 </struts>
