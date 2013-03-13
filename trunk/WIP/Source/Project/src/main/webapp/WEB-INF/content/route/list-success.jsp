@@ -57,7 +57,12 @@
 	            contentType : "application/x-www-form-urlencoded; charset=utf-8",
 			   }).done(
 				   function(data) {
-			        	 $("#duration").val(data.travelTime);
+					   if (data.travelTime != '') {
+						   $("#duration").val(data.travelTime);
+						   $("#duration").prop("disabled", true);
+					   } else {
+						   $("#duration").prop("disabled", false);
+					   }
 			      }
 			);
 		} 
@@ -184,6 +189,7 @@
             $("#endAt").val(-1);
             $("#duration").val('');
             $('#stationEndAt').empty();
+            $("#duration").prop("disabled", false);
 
             var segment = {};
             segment['startAt'] = startAtKey;
