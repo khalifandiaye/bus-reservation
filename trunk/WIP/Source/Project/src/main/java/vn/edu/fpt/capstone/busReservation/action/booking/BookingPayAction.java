@@ -236,7 +236,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 				searchParams.setPassengerNo(numSelectSeat);
 				
 				session.put("searchAnother", searchParams);
-				session.put("message", "Chuyến bạn vừa chọn đã hết ghế vui lòng chọn chuyến khác.");
+				session.put("message", getText("msg_booking003"));
 				
 				session.remove("listTripBean");
 				session.remove("selectedSeats");
@@ -244,9 +244,9 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 			}
 			if((numBusSeat - soldSeat.size()) > 0 && (numBusSeat - soldSeat.size()) < numSelectSeat)
 			{
-				session.put("message", "Chuyến bạn vừa chọn không đủ số ghế vui lòng đặt ít hơn hoặc chọn chuyến khác.");
+				session.put("message", getText("msg_booking001"));
 			}else{
-				session.put("message", "Ghế bạn chọn đã có người đặt vui lòng chọn ghế khác.");
+				session.put("message", getText("msg_booking002"));
 			}
 			session.put("seatsDouble", seatsDouble);
 			return "double";
