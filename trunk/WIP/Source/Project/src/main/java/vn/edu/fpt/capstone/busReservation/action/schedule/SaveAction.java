@@ -35,7 +35,6 @@ public class SaveAction extends ActionSupport{
 	private RouteDAO routeDAO;
 	private TripDAO tripDAO;
 	private BusStatusDAO busStatusDAO;
-	private SystemSettingDAO systemSettingDAO;
 
 
 	@Action(value = "save", results = { @Result(type = "json", name = SUCCESS, params = {
@@ -49,7 +48,7 @@ public class SaveAction extends ActionSupport{
 			List<RouteDetailsBean> routeDetailsList = routeDAO.getById(routeBeans).getRouteDetails();
 			for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
 				traTime += DateUtils.getAbsoluteMiliseconds(routeDetailsBean.getSegment().getTravelTime());
-				traTime += systemSettingDAO.getStationWaitTime();
+				
 			}
 			Date toDate = new Date(fromDate.getTime() + traTime);
 			
