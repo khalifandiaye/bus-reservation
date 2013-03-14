@@ -98,19 +98,16 @@ public class UpdateTariffAction extends BaseAction {
 			List<Object[]> tariffBeansRevert = tariffDAO.getExistTariff(
 					segmentBeanRevert.getId(), busTypeBean.getId(), validDate);
 			
-			if (tariffBeans.size() != 0) {
-				//if fare changed then update the current tariff
-				if (tariffBeans.get(0)[0] != null && 
+			if (tariffBeans.size() != 0 && tariffBeans.get(0)[0] != null && 
 				      (((Double)tariffBeans.get(0)[3]).doubleValue() != tariffInfo.getFare().doubleValue())){
 				   TariffBean tariffBean = tariffDAO.getById((Integer)tariffBeans.get(0)[3]);
+				   TariffBean revertTariffBean = tariffDAO.getById((Integer)tariffBeansRevert.get(0)[3]);
 					//update current segment
 				   tariffBean.setFare(tariffInfo.getFare());
 					//update revert segment
-				   tariffBean.setFare(tariffInfo.getFare());
+				   revertTariffBean.setFare(tariffInfo.getFare());
 					tariffDAO.update(tariffBean);
-					tariffDAO.update(tariffBean);
-				}
-				
+					tariffDAO.update(revertTariffBean);
 			} else {
 				List<SegmentBean> segments = new ArrayList<SegmentBean>();
 				if (!isRevertRoute) {
