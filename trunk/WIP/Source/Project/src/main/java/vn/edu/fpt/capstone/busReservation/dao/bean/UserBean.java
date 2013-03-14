@@ -3,6 +3,7 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao.bean;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 /**
@@ -10,6 +11,58 @@ import java.util.List;
  *
  */
 public class UserBean extends AbstractBean<Integer> {
+    public static class UserStatus {
+        private final String value;
+        /**
+         * The account is has not been activated
+         */
+        public static final UserStatus NEW = new UserStatus(
+                "new");
+        /**
+         * The account is active
+         */
+        public static final UserStatus ACTIVE = new UserStatus(
+                "active");
+        /**
+         * The account has been deactivated
+         */
+        public static final UserStatus INACTIVE = new UserStatus(
+                "inactive");
+        /**
+         * The account is denied from using the service
+         */
+        public static final UserStatus BANNED = new UserStatus(
+                "banned");
+
+        private UserStatus(String value) {
+            this.value = value;
+        }
+
+        public static final UserStatus fromValue(final String value) {
+            if (value == null) {
+                return null;
+            } else if (NEW.value.equalsIgnoreCase(value)) {
+                return NEW;
+            } else if (ACTIVE.value.equalsIgnoreCase(value)) {
+                return ACTIVE;
+            } else if (INACTIVE.value.equalsIgnoreCase(value)) {
+                return INACTIVE;
+            } else if (BANNED.value.equalsIgnoreCase(value)) {
+                return BANNED;
+            } else {
+                throw new InvalidParameterException("Can not instantiate new "
+                        + UserStatus.class.getName()
+                        + " from the value \"" + value + "\"");
+            }
+        }
+
+        /**
+         * @return the value
+         */
+        public String getValue() {
+            return value;
+        }
+    }
 	/**
 	 * 
 	 */
@@ -23,7 +76,7 @@ public class UserBean extends AbstractBean<Integer> {
 	private String mobileNumber;
 	private String email;
 	private String civilId;
-	private String status;
+	private UserStatus status;
 	private List<ReservationBean> reservations;
 	/**
 	 * @return the username
@@ -137,13 +190,13 @@ public class UserBean extends AbstractBean<Integer> {
 	 * @return the status
 	 */
 	public String getStatus() {
-	    return status;
+	    return status == null ? null : status.value;
 	}
 	/**
 	 * @param status the status to set
 	 */
 	public void setStatus(String status) {
-	    this.status = status;
+	    this.status = UserStatus.fromValue(status);
 	}
     /**
      * @return the reservations

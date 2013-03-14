@@ -89,4 +89,48 @@ public class UserDAO extends GenericDAO<Integer, UserBean> {
 		}
 		return result != null && result.size() > 0 ? result.get(0) : null;
 	}
+
+    @SuppressWarnings("unchecked")
+    public UserBean getByUsername(String username) {
+        List<UserBean> result = null;
+        Query query = null;
+        String queryString = null;
+        Session session = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            queryString = "SELECT user FROM UserBean AS user WHERE user.username = :username";
+            query = session.createQuery(queryString);
+            query.setString("username", username);
+            result = query.list();
+            // commit transaction
+            // session.getTransaction().commit();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+        return result != null && result.size() > 0 ? result.get(0) : null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public UserBean getByEmail(String email) {
+        List<UserBean> result = null;
+        Query query = null;
+        String queryString = null;
+        Session session = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            queryString = "SELECT user FROM UserBean AS user WHERE user.email = :email";
+            query = session.createQuery(queryString);
+            query.setString("email", email);
+            result = query.list();
+            // commit transaction
+            // session.getTransaction().commit();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+        return result != null && result.size() > 0 ? result.get(0) : null;
+    }
 }
