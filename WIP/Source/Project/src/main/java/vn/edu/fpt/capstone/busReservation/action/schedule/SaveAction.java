@@ -85,10 +85,6 @@ public class SaveAction extends ActionSupport{
 		message = "Add schedule Success!";
 		return SUCCESS;
 	}
-
-	public void setSystemSettingDAO(SystemSettingDAO systemSettingDAO) {
-		this.systemSettingDAO = systemSettingDAO;
-	}
 	public void setBusDAO(BusDAO busDAO) {
 		this.busDAO = busDAO;
 	}
