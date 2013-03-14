@@ -73,14 +73,14 @@ public class TariffDAO extends GenericDAO<Integer, TariffBean> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<TariffBean> getExistTariff(int segmentId, int busTypeId,
+	public List<Object[]> getExistTariff(int segmentId, int busTypeId,
 			Date validDate) {
-		List<TariffBean> result = null;
+		List<Object[]> result = new ArrayList<Object[]>();
 		// get the current session
 		Session session = sessionFactory.getCurrentSession();
 		try {
 			// perform database access (query, insert, update, etc) here
-			String queryString = "SELECT tr.id, tr.segment_id, MAX(tr.valid_from) FROM ("
+			String queryString = "SELECT tr.id, tr.segment_id, MAX(tr.valid_from), tr.fare FROM ("
 					+ "SELECT * FROM bus_reservation.tariff "
 					+ "WHERE segment_id = :segmentId AND bus_type_id = :busTypeId AND valid_from = :validDate) as tr";
 			Query query = session.createSQLQuery(queryString);
