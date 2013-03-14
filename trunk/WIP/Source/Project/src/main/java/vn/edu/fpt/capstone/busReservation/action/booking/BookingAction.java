@@ -3,37 +3,18 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.booking;
 
-import java.lang.ProcessBuilder.Redirect;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
 import org.apache.struts2.interceptor.SessionAware;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.SeatPositionDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
-import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
-import vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SeatInfo;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
-import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
-
-import com.opensymphony.xwork2.ActionChainResult;
-import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * @author NoName
