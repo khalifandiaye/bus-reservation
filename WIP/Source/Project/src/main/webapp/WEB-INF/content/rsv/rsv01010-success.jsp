@@ -11,7 +11,6 @@
 <title>Test page</title>
 <jsp:include page="../common/xheader.jsp" />
 <link rel="stylesheet" href="<%=request.getContextPath()%>/styles/trip/jquery.dataTables.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/styles/bootstrap.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/styles/pay.css">
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>

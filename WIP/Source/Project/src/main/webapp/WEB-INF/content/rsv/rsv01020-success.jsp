@@ -12,6 +12,7 @@
 <jsp:include page="../common/xheader.jsp" />
 <link href="<%=request.getContextPath()%>/styles/booking.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/styles/pay.css" rel="stylesheet">
+<script src="<%=request.getContextPath()%>/js/rsv/rsv01020.js"></script>
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
@@ -25,7 +26,7 @@
 						<span><s:property value="reservationInfo.bookerName" /></span>
 					</div>
 					<div class="item">
-					<s:if test="%{reservation.code != null && reservation.code != ''}">
+					<s:if test="%{reservationInfo.code != null && reservationInfo.code != ''}">
 						<label><s:text name="reservation.code" /></label>
 						<span><s:property value="reservationInfo.code"/></span>
 					</s:if>
@@ -83,14 +84,14 @@
 						<span class="vnd"><s:property value="%{reservationInfo.basePrice + ' đồng'}" /></span>
 						<span class="usd"><s:property value="%{'($' + reservationInfo.basePriceInUSD + ')'}" /></span>
 					</div>
-					<s:if test="%{reservation.transactionFee != null && reservation.transactionFee != ''}">
+					<s:if test="%{reservationInfo.transactionFee != null && reservationInfo.transactionFee != ''}">
 						<div class="item">
 							<label><s:text name="resevation.transactionFee" /></label>
 							<span class="vnd"><s:property value="%{reservationInfo.transactionFee + ' đồng'}" /></span>
 							<span class="usd"><s:property value="%{'($' + reservationInfo.transactionFeeInUSD + ')'}" /></span>
 						</div>
 					</s:if>
-					<s:if test="%{reservation.totalAmount != null && reservation.totalAmount != ''}">
+					<s:if test="%{reservationInfo.totalAmount != null && reservationInfo.totalAmount != ''}">
 						<div class="item">
 							<label><s:text name="reservation.totalAmount" /></label>
 							<span class="vnd"><s:property value="%{reservationInfo.totalAmount + ' đồng'}" /></span>

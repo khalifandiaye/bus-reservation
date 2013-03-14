@@ -74,7 +74,7 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
                     + "     INNER JOIN tkt.trips trps"
                     + "     INNER JOIN trps.routeDetails.segment.startAt stas"
                     + "     INNER JOIN tkt.trips trpe"
-                    + "     INNER JOIN trpe.routeDetails.segment.startAt stae"
+                    + "     INNER JOIN trpe.routeDetails.segment.endAt stae"
                     + "     INNER JOIN tkt.reservation rsv"
                     + " WHERE rsv.booker.username = :username"
                     + " AND rsv.status != :rsvStatusMoved"

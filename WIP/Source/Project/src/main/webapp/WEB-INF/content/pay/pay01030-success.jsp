@@ -109,7 +109,7 @@
 						<span class="vnd"><s:property value="%{reservationInfo.totalAmount + ' đồng'}" /></span>
 						<span class="usd"><s:property value="%{'($' + reservationInfo.totalAmountInUSD + ')'}" /></span>
 					</div>
-					<s:if test="%{reservation.refundedAmount != null && reservation.refundedAmount != ''}">
+					<s:if test="%{reservationInfo.refundedAmount != null && reservationInfo.refundedAmount != ''}">
 						<div class="item">
 							<label><s:text name="reservation.refundedAmount" /></label>
 							<span class="vnd"><s:property value="%{reservationInfo.refundedAmount + ' đồng'}" /></span>

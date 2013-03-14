@@ -221,7 +221,7 @@ public class ReservationLogic extends BaseLogic {
         String stsTktDeparted = null;
         now = System.currentTimeMillis();
         timeOutPoint = Calendar.getInstance();
-        timeOutPoint.add(Calendar.MINUTE, timeOutInterval);
+        timeOutPoint.add(Calendar.MINUTE, -timeOutInterval);
         lockPoint = Calendar.getInstance();
         stsUnpaid = ReservationStatus.UNPAID.getValue();
         stsPaid = ReservationStatus.PAID.getValue();
@@ -230,22 +230,23 @@ public class ReservationLogic extends BaseLogic {
         stsTktPending = TicketStatus.PENDING.getValue();
         stsTktDeparted = TicketStatus.DEPARTED.getValue();
         if (stsUnpaid.equals(bean.getId().getStatus())
-                && now > timeOutPoint.getTimeInMillis()) {
+                && bean.getId().getBookTime().getTime() < timeOutPoint
+                        .getTimeInMillis()) {
             bean.getId().setStatus(ReservationStatus.DELETED.getValue());
         } else if (stsPaid.equals(bean.getId().getStatus())
                 || stsRsvPending.equals(bean.getId().getStatus())) {
             lockPoint.clear();
             lockPoint.setTime(bean.getTicket1().getDepartureDate());
             // if ticket 1 is active, and past departed time => DEPARTED
-            if ((stsActive.equals(bean.getTicket1().getId().getStatus())
-                    || stsTktPending.equals(bean.getTicket1().getId()
-                            .getStatus())) && now > lockPoint.getTimeInMillis()) {
+            if ((stsActive.equals(bean.getTicket1().getId().getStatus()) || stsTktPending
+                    .equals(bean.getTicket1().getId().getStatus()))
+                    && now > lockPoint.getTimeInMillis()) {
                 bean.getTicket1().getId().setStatus(stsTktDeparted);
             }
             // if ticket 1 is active, and past lock time => PENDING
             lockPoint.add(Calendar.DATE, -lockInterval);
-            if ((stsPaid.equals(bean.getId().getStatus())
-                    && (stsActive.equals(bean.getTicket1().getId().getStatus())))
+            if ((stsPaid.equals(bean.getId().getStatus()) && (stsActive
+                    .equals(bean.getTicket1().getId().getStatus())))
                     && now > lockPoint.getTimeInMillis()) {
                 bean.getTicket1().getId().setStatus(stsTktPending);
             }
@@ -260,9 +261,8 @@ public class ReservationLogic extends BaseLogic {
                 }
                 // if ticket 2 is active, and past lock time => PENDING
                 lockPoint.add(Calendar.DATE, -lockInterval);
-                if ((stsPaid.equals(bean.getId().getStatus())
-                        && (stsActive.equals(bean.getTicket2().getId()
-                                .getStatus())))
+                if ((stsPaid.equals(bean.getId().getStatus()) && (stsActive
+                        .equals(bean.getTicket2().getId().getStatus())))
                         && now > lockPoint.getTimeInMillis()) {
                     bean.getTicket2().getId().setStatus(stsTktPending);
                 }
