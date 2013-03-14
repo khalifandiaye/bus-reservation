@@ -1,52 +1,69 @@
 package vn.edu.fpt.capstone.busReservation.action.route;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.TariffDAO;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
+import vn.edu.fpt.capstone.busReservation.displayModel.SegmentAddInfo;
+import vn.edu.fpt.capstone.busReservation.displayModel.SegmentInfo;
+import vn.edu.fpt.capstone.busReservation.displayModel.TariffInfo;
 
 @ParentPackage("jsonPackage")
 public class GetPriceAction extends BaseAction {
 
    private static final long serialVersionUID = 1L;
-   private int segmentId;
-	private int busTypeId;
+   
+   private String data;
+   private static ObjectMapper mapper = new ObjectMapper();
+   private List<TariffInfo> tariffInfos = new ArrayList<TariffInfo>();
 
-	private TariffDAO tariffDAO;
-	private Double currentFare;
+   private TariffDAO tariffDAO;
 
-	@Action(value = "getPrice", results = { @Result(type = "json", name = SUCCESS) })
-	public String execute() {
-		Date validDate = Calendar.getInstance().getTime();
-		List<Double> currentFares = tariffDAO.getCurrentFares(segmentId,
-				busTypeId, validDate);
-		if (currentFares.size() != 0) {
-			currentFare = currentFares.get(0);
-		} else {
-			currentFare = (double) 0;
-		}
-		return SUCCESS;
-	}
+   @Action(value = "getPrice", results = { @Result(type = "json", name = SUCCESS ) })
+   public String execute() throws JsonParseException, JsonMappingException,IOException, ParseException {
+      SegmentAddInfo segmentAddInfos = mapper.readValue(data, new TypeReference<SegmentAddInfo>() {});
+      List<SegmentInfo> segmentInfos = segmentAddInfos.getSegments();
+      for (SegmentInfo segmentInfo : segmentInfos) {
+         List<TariffBean> resultList = tariffDAO.getPrice(segmentInfo.getId(), segmentAddInfos.getBusType());
+         if (!resultList.isEmpty()) {
+            TariffBean tariffBean = resultList.get(0);
+            TariffInfo tariffInfo = new TariffInfo();
+            tariffInfo.setId(tariffBean.getSegment().getId()); 
+            tariffInfo.setStartAt(tariffBean.getSegment().getStartAt().getCity().getName());
+            tariffInfo.setEndAt(tariffBean.getSegment().getEndAt().getCity().getName());
+            tariffInfo.setFare(tariffBean.getFare());
+            tariffInfos.add(tariffInfo);
+         }
+      }
+      return SUCCESS;
+   }
 
-	public void setBusTypeId(int busTypeId) {
-		this.busTypeId = busTypeId;
-	}
+   public void setData(String data) {
+      this.data = data;
+   }
 
-	public void setSegmentId(int segmentId) {
-		this.segmentId = segmentId;
-	}
+   public void setTariffDAO(TariffDAO tariffDAO) {
+      this.tariffDAO = tariffDAO;
+   }
 
-	public void setTariffDAO(TariffDAO tariffDAO) {
-		this.tariffDAO = tariffDAO;
-	}
+   public List<TariffInfo> getTariffInfos() {
+      return tariffInfos;
+   }
 
-	public Double getCurrentFare() {
-		return currentFare;
-	}
+   public void setTariffInfos(List<TariffInfo> tariffInfos) {
+      this.tariffInfos = tariffInfos;
+   }
+
 }
