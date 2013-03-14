@@ -209,7 +209,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 				errorProcessing(e);
 				return ERROR;
 			}
-			redirectUrl = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token="
+			redirectUrl = "https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token="
 					+ paymentToken;
 			session.put(CommonConstant.SESSION_KEY_PAYMENT_TOKEN, paymentToken);
 			session.put(CommonConstant.SESSION_KEY_RESERVATION_ID,
