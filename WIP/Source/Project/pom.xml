@@ -14,6 +14,10 @@
 			<id>jboss</id>
 			<url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
 		</repository>
+		<repository>
+			<id>Java.Net</id>
+			<url>http://download.java.net/maven/2/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -149,6 +153,22 @@
 			<artifactId>merchantsdk</artifactId>
 			<version>2.1.96</version>
 		</dependency>
+
+		<!-- Mail related -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.6</version>
+		</dependency>
+
+		<!-- Recaptcha -->
+		<dependency>
+			<groupId>net.tanesha.recaptcha4j</groupId>
+			<artifactId>recaptcha4j</artifactId>
+			<version>0.0.7</version>
+		</dependency>
+
+		<!-- Jackson -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>

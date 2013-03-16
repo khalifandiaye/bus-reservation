@@ -19,7 +19,6 @@ public class TripBean extends AbstractBean<Integer> {
 	private RouteDetailsBean routeDetails;
 	private Date departureTime;
 	private Date arrivalTime;
-	private String status;
 	private List<TicketBean> tickets;
 	/**
 	 * @return the busStatus
@@ -68,18 +67,6 @@ public class TripBean extends AbstractBean<Integer> {
 	 */
 	public void setArrivalTime(Date arrivalTime) {
 		this.arrivalTime = arrivalTime;
-	}
-	/**
-	 * @return the status
-	 */
-	public String getStatus() {
-		return status;
-	}
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(String status) {
-		this.status = status;
 	}
     /**
      * @return the tickets

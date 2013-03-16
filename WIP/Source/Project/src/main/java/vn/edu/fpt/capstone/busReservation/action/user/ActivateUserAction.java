@@ -3,15 +3,10 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.user;
 
-import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.Result;
-
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
-import vn.edu.fpt.capstone.busReservation.displayModel.RegisterModel;
 import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.UserLogic;
-import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 /**
@@ -37,15 +32,14 @@ public class ActivateUserAction extends BaseAction {
     }
 
     // ==========================Action Input==========================
-    private String id;
+    private String username;
     private String code;
 
     /**
-     * @param id
-     *            the id to set
+     * @param username the username to set
      */
-    public void setId(String id) {
-        this.id = id;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**
@@ -59,7 +53,7 @@ public class ActivateUserAction extends BaseAction {
     public String execute() {
         User user = null;
         try {
-            user = userLogic.activateUser(Integer.parseInt(id), code);
+            user = userLogic.activateUser(username, code);
             session.put(CommonConstant.SESSION_KEY_USER, user);
         } catch (CommonException e) {
             errorProcessing(e);
@@ -70,10 +64,6 @@ public class ActivateUserAction extends BaseAction {
 
     @Override
     public void validate() {
-        if (CheckUtils.isNullOrBlank(id) || CheckUtils.isNullOrBlank(code)
-                || !CheckUtils.isPositiveInteger(id)) {
-            addActionError("msgerrau004");
-        }
     }
 
 }

@@ -206,3 +206,39 @@ input.pay {
 .reservation-details .payment-info .item span.rate {
 	width: 60px;
 }
+
+.user-details .item {
+	height: auto;
+	width: 60%;
+	clear: both;
+	margin: 6px;
+}
+
+.user-details .item label {
+	font-weight: bold;
+	font-size: 14px;
+	cursor: default;
+	display: inline-block;
+	width: 176px;
+}
+
+.user-details .item .errorMessage {
+	list-style-type: none;
+	color: red;
+	display: inline-block;
+}
+
+.user-details .item noscript+ul.errorMessage {
+	margin-left: 0px;
+}
+
+.user-details .well {
+	padding: 5px;
+}
+
+.user-details .section {
+	overflow: hidden;
+	border-bottom: 1px solid gray;
+	margin: 7px;
+	padding: 10px;
+}

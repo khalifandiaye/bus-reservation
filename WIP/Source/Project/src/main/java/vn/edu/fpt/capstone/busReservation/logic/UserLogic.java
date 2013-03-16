@@ -3,11 +3,29 @@
  */
 package vn.edu.fpt.capstone.busReservation.logic;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Properties;
 
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+import net.tanesha.recaptcha.ReCaptchaImpl;
+import net.tanesha.recaptcha.ReCaptchaResponse;
+
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import vn.edu.fpt.capstone.busReservation.dao.MailTemplateDAO;
+import vn.edu.fpt.capstone.busReservation.dao.RoleDAO;
 import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
+import vn.edu.fpt.capstone.busReservation.dao.bean.MailTemplateBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean.UserStatus;
 import vn.edu.fpt.capstone.busReservation.displayModel.RegisterModel;
@@ -15,28 +33,66 @@ import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
 import vn.edu.fpt.capstone.busReservation.util.CryptUtils;
+import vn.edu.fpt.capstone.busReservation.util.MiscUtils;
 
 /**
  * @author Yoshimi
- *
+ * 
  */
 public class UserLogic extends BaseLogic {
+    private final class MailPasswordAuthenticator extends Authenticator {
+        private final String username;
+        private final String password;
+
+        public MailPasswordAuthenticator(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
+
+        @Override
+        protected PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication(username, password);
+        }
+    }
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
     private UserDAO userDAO;
+    private MailTemplateDAO mailTemplateDAO;
+    private RoleDAO roleDAO;
+
     /**
-     * @param userDAO the userDAO to set
+     * @param userDAO
+     *            the userDAO to set
      */
     @Autowired
     public void setUserDAO(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
-    
-    public void registerUser(RegisterModel model) throws CommonException {
-        //TODO implement it
+
+    /**
+     * @param mailTemplateDAO
+     *            the mailTemplateDAO to set
+     */
+    @Autowired
+    public void setMailTemplateDAO(MailTemplateDAO mailTemplateDAO) {
+        this.mailTemplateDAO = mailTemplateDAO;
+    }
+
+    /**
+     * @param roleDAO
+     *            the roleDAO to set
+     */
+    @Autowired
+    public void setRoleDAO(RoleDAO roleDAO) {
+        this.roleDAO = roleDAO;
+    }
+
+    public void registerUser(RegisterModel model, String contextPath)
+            throws CommonException {
+        // TODO implement it
         UserBean bean = null;
         bean = new UserBean();
         bean.setUsername(model.getUsername());
@@ -64,17 +120,111 @@ public class UserLogic extends BaseLogic {
         if (!CheckUtils.isNullOrBlank(model.getCivilId())) {
             bean.setCivilId(model.getCivilId());
         }
+        bean.setRole(roleDAO.getById(1));
         bean.setStatus(UserStatus.NEW.getValue());
         userDAO.insert(bean);
+        sendConfirmationMail(bean.getUsername(), bean.getFirstName(),
+                bean.getLastName(), bean.getEmail(), contextPath);
     }
-    
-    public User activateUser(int userId, String code) throws CommonException {
+
+    public User activateUser(String username, String code)
+            throws CommonException {
         User user = null;
         return user;
     }
 
     public boolean isUsernameExists(String username) {
         return userDAO.getByUsername(username) != null;
+    }
+
+    private void sendConfirmationMail(String username, String firstName,
+            String lastName, String email, String contextPath)
+            throws CommonException {
+        Properties globalProps = null;
+        Properties props = null;
+        String templateName = null;
+        MailTemplateBean mailTemplateBean = null;
+        StringBuilder subject = null;
+        StringBuilder content = null;
+        StringBuilder url = null;
+        Session session = null;
+        Message message = null;
+        // build subject and content
+        globalProps = new Properties();
+        try {
+            globalProps.load(getClass().getResourceAsStream(
+                    "/global.properties"));
+        } catch (IOException e) {
+            throw new CommonException(e);
+        }
+        templateName = (String) globalProps.get("mail.template.regConfirm");
+        mailTemplateBean = mailTemplateDAO.getByName(templateName);
+        subject = new StringBuilder(mailTemplateBean.getSubject());
+        content = new StringBuilder(mailTemplateBean.getText());
+        MiscUtils.replace(subject, ":companyName",
+                globalProps.getProperty("company.fullname"));
+        url = new StringBuilder();
+        url.append("https://");
+        url.append("localhost:8443");
+        url.append(contextPath);
+        try {
+            url.append("/user/activate-user?username="
+                    + username
+                    + "&code="
+                    + CryptUtils.encrypt2String(firstName + "/" + lastName
+                            + "/" + email));
+        } catch (NoSuchAlgorithmException e1) {
+            throw new CommonException(e1);
+        }
+        MiscUtils.replace(content, ":url", url.toString());
+        try {
+            mailTemplateDAO.endTransaction();
+        } catch (HibernateException e) {
+            throw new CommonException(e.getMessage(), e);
+        }
+        // prepare mail object
+        props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        session = Session.getInstance(
+                props,
+                new MailPasswordAuthenticator(globalProps
+                        .getProperty("mail.auth.username"), globalProps
+                        .getProperty("mail.auth.password")));
+        try {
+            message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(globalProps
+                    .getProperty("mail.info.from")));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(email));
+            message.setSubject(subject.toString());
+            message.setText(content.toString());
+
+            Transport.send(message);
+        } catch (MessagingException e) {
+            throw new CommonException(e);
+        }
+    }
+
+    public boolean confirmCaptcha(String challenge, String response,
+            String remoteip) throws CommonException {
+        Properties globalProps = null;
+        ReCaptchaImpl reCaptcha = null;
+        ReCaptchaResponse reCaptchaResponse = null;
+        globalProps = new Properties();
+        try {
+            globalProps.load(getClass().getResourceAsStream(
+                    "/global.properties"));
+        } catch (IOException e) {
+            throw new CommonException(e);
+        }
+        reCaptcha = new ReCaptchaImpl();
+        reCaptcha.setPrivateKey(globalProps.getProperty("captcha.privateKey"));
+        reCaptchaResponse = reCaptcha
+                .checkAnswer(remoteip, challenge, response);
+        return reCaptchaResponse.isValid();
     }
 
 }
