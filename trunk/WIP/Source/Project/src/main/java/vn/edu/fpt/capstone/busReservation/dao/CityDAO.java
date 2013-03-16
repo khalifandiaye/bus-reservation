@@ -29,11 +29,12 @@ public class CityDAO extends GenericDAO<Integer, CityBean> {
             // perform database access (query, insert, update, etc) here
             queryString = " SELECT distinct(trip.routeDetails.segment.startAt.city) "
                     + " FROM TripBean trip "
-                    + " WHERE trip.departureTime >= :time ";
+                    + " WHERE trip.departureTime >= :time "
+                    + "   AND trip.busStatus.status = :status ";
             Calendar now = Calendar.getInstance();
             now.add(Calendar.MINUTE, 30);
-            query = session.createQuery(queryString).setDate("time",
-                    now.getTime());
+            query = session.createQuery(queryString).setDate("time", now.getTime())
+            										.setString("status", "active");
             result = query.list();
             // commit transaction
             // session.getTransaction().commit();
@@ -61,12 +62,14 @@ public class CityDAO extends GenericDAO<Integer, CityBean> {
                     + " WHERE dtrp.routeDetails.segment.startAt.city.id = :id "
                     + "	  AND dtrp.busStatus = atrp.busStatus "
                     + "	  AND dtrp.departureTime <= atrp.departureTime "
-                    + "   AND dtrp.departureTime >= :time ";
+                    + "   AND dtrp.departureTime >= :time " 
+                    + "	  AND dtrp.busStatus.status = :status";
             Calendar now = Calendar.getInstance();
             now.add(Calendar.MINUTE, 30);
             query = session.createQuery(queryString)
                     .setInteger("id", departCityId)
-                    .setDate("time", now.getTime());
+                    .setDate("time", now.getTime())
+                    .setString("status", "active");
             result = query.list();
             // commit transaction
             // session.getTransaction().commit();
