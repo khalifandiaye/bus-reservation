@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- <!DOCTYPE beans PUBLIC  -->
-<!-- 	"-//SPRING//DTD BEAN//EN"  -->
-<!-- 	"http://www.springframework.org/dtd/spring-beans.dtd"> -->
+<!-- <!DOCTYPE beans PUBLIC -->
+<!-- "-//SPRING//DTD BEAN//EN" -->
+<!-- "http://www.springframework.org/dtd/spring-beans.dtd"> -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 		http://www.springframework.org/schema/context
@@ -31,21 +30,13 @@
 	</bean>
 	<bean id="paymentLogic" class="vn.edu.fpt.capstone.busReservation.logic.PaymentLogic"
 		scope="singleton">
-		<property name="reservationDAO" ref="reservationDAO" />
-		<property name="reservationInfoDAO" ref="reservationInfoDAO" />
-		<property name="paymentMethodDAO" ref="paymentMethodDAO" />
-		<property name="paymentDAO" ref="paymentDAO" />
-		<property name="systemSettingDAO" ref="systemSettingDAO" />
 	</bean>
 	<bean id="reservationLogic"
 		class="vn.edu.fpt.capstone.busReservation.logic.ReservationLogic"
 		scope="singleton">
-<!-- 		<property name="userDAO" ref="userDAO" /> -->
-<!-- 		<property name="reservationInfoDAO" ref="reservationInfoDAO" /> -->
-<!-- 		<property name="tariffViewDAO" ref="tariffViewDAO" /> -->
-<!-- 		<property name="tripDAO" ref="tripDAO" /> -->
-<!-- 		<property name="reservationDAO" ref="reservationDAO" /> -->
-<!-- 		<property name="systemSettingDAO" ref="systemSettingDAO" /> -->
+	</bean>
+	<bean id="userLogic" class="vn.edu.fpt.capstone.busReservation.logic.UserLogic"
+		scope="singleton">
 	</bean>
 	<!-- *****************define DAO here***************** -->
 	<bean id="helloWorldDAO"
@@ -95,6 +86,12 @@
 	<bean id="busDAO" class="vn.edu.fpt.capstone.busReservation.dao.BusDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
 		<constructor-arg value="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
+	</bean>
+
+	<bean id="roleDAO" class="vn.edu.fpt.capstone.busReservation.dao.RoleDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.RoleBean" />
 	</bean>
 
 	<bean id="userDAO" class="vn.edu.fpt.capstone.busReservation.dao.UserDAO">
@@ -158,6 +155,12 @@
 			value="vn.edu.fpt.capstone.busReservation.dao.bean.SystemSettingBean" />
 	</bean>
 
+	<bean id="mailTemplateDAO" class="vn.edu.fpt.capstone.busReservation.dao.MailTemplateDAO">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.MailTemplateBean" />
+	</bean>
+
 	<bean id="routeTerminalDAO" class="vn.edu.fpt.capstone.busReservation.dao.RouteTerminalDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
 		<constructor-arg
@@ -169,12 +172,12 @@
 		<constructor-arg
 			value="vn.edu.fpt.capstone.busReservation.dao.bean.BusFreeTimeBean" />
 	</bean>
-	
+
 	<bean id="segmentDAO" class="vn.edu.fpt.capstone.busReservation.dao.SegmentDAO">
-      <property name="sessionFactory" ref="sessionFactory" />
-      <constructor-arg
-         value="vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean" />
-   </bean>
+		<property name="sessionFactory" ref="sessionFactory" />
+		<constructor-arg
+			value="vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean" />
+	</bean>
 
 	<!-- <bean id="tripWithNumberOfRemainedSeatsInSubrouteDAO" class="vn.edu.fpt.capstone.busReservation.dao.TripWithNumberOfRemainedSeatsInSubrouteDAO"> -->
 	<!-- <property name="sessionFactory" ref="sessionFactory" /> -->

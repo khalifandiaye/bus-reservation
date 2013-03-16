@@ -5,12 +5,13 @@
 <script src="<%=request.getContextPath()%>/js/common/header.js" ></script>
 <div class="circle-back"> 
 <div class="top-nav">
-	<div class="top-menu" style="color: #ffffff">
+	<div class="top-menu clear-fix" style="color: #ffffff">
 		<div class="login pull-right">
-		<span id="errorMessage" style="padding-right: 20px;color: red;"></span>Tài khoản <s:textfield name="username" cssStyle="margin-top: 5px;height: 17px;width: 100px;"/> Mật khẩu <s:password name="password" cssStyle="height: 17px;width: 100px;margin-top: 5px;"/><a id="btn_login" class="btn btn-mini btn-primary" style="margin-top: -5px;margin-left: 8px;padding: 3px 8px;">Đăng Nhập</a>
-		</div> 
-		<div class="logout pull-right hidden" style="margin-top:9px;">
-		Xin chào <span id="name"></span><a id="btn_logout" class="btn btn-mini btn-danger" style="margin-top: -5px;margin-left: 8px;padding: 3px 8px; ">Đăng Xuất</a>
+		<span id="errorMessage"></span>Username <s:textfield name="username" /> Password <s:password name="password" /> <a id="btn_login" class="btn btn-mini" style="margin-top:5px;">Đăng Nhập</a>
+		<a id="btn_register" href="<%=request.getContextPath()%>/user/reg01010.html" class="btn btn-mini" style="margin-top:5px;"><s:text name="btn.register" /></a>
+		</div>
+		<div class="logout pull-right hidden">
+		Hello <span id="name"></span><a id="btn_logout" class="btn btn-mini" style="margin-top:5px;">Đăng Xuất</a>
 		</div>
 	</div>
 </div>

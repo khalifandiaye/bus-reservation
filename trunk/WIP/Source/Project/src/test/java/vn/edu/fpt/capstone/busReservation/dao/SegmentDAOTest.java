@@ -24,7 +24,6 @@ public class SegmentDAOTest extends DAOTest {
         segmentBean.setStartAt(stationDAO.getById(3));
         segmentBean.setEndAt(stationDAO.getById(8));
         segmentBean.setTravelTime(DateUtils.getTime(27, 0, 0));
-        segmentBean.setStatus("active");
         segmentDAO.insert(segmentBean);
     }
 }

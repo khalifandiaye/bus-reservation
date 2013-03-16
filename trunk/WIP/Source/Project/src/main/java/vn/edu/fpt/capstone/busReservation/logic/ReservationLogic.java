@@ -264,6 +264,9 @@ public class ReservationLogic extends BaseLogic {
                 if ((stsPaid.equals(bean.getId().getStatus()) && (stsActive
                         .equals(bean.getTicket2().getId().getStatus())))
                         && now > lockPoint.getTimeInMillis()) {
+                    bean.getTicket1().getId().setStatus(stsTktPending);
+                    bean.getTicket2().getId().setStatus(stsTktPending);
+                } else if (stsTktPending.equals(bean.getTicket1().getId().getStatus())) {
                     bean.getTicket2().getId().setStatus(stsTktPending);
                 }
             }

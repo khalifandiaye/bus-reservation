@@ -1,3 +1,19 @@
 .hidden {
 	display: none;
 }
+
+.btn {
+	vertical-align: text-bottom;
+}
+
+.top-nav {
+	height: auto;
+}
+
+.clear-fix {
+	overflow: hidden;
+}
+
+.login,.logout {
+	margin-top: 10px;
+}

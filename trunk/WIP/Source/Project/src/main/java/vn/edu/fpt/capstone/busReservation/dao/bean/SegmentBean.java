@@ -17,7 +17,6 @@ public class SegmentBean extends AbstractBean<Integer> {
 	private StationBean startAt;
 	private StationBean endAt;
 	private Long travelTime;
-	private String status;
 	private List<TariffBean> tariffs;
 	private List<RouteDetailsBean> routeDetails;
 	/**
@@ -55,18 +54,6 @@ public class SegmentBean extends AbstractBean<Integer> {
 	 */
 	public void setTravelTime(Long travelTime) {
 		this.travelTime = travelTime;
-	}
-	/**
-	 * @return the status
-	 */
-	public String getStatus() {
-		return status;
-	}
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(String status) {
-		this.status = status;
 	}
 	/**
 	 * @return the tariffs
