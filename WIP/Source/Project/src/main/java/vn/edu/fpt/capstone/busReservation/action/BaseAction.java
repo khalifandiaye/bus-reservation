@@ -15,14 +15,16 @@ import org.hibernate.SessionFactory;
 
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.Preparable;
 
 /**
  * @author Yoshimi
  * 
  */
 public class BaseAction extends ActionSupport implements SessionAware,
-        RequestAware, ServletRequestAware {
+        RequestAware, ServletRequestAware, Preparable {
 
     /**
      * 
@@ -118,6 +120,10 @@ public class BaseAction extends ActionSupport implements SessionAware,
             LOG.error("Could not rollback transaction after exception!",
                     rbEx);
         }
+    }
+
+    @Override
+    public void prepare() throws Exception {
     }
 
 }
