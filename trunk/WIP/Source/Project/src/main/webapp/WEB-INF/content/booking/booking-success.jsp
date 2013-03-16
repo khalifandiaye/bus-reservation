@@ -141,11 +141,12 @@
 						class="seat-number-selected"></span> ghế được chọn
 				</div>
 				<s:hidden id="seatToPayment" name="seatToPayment"></s:hidden>
-				<div style="overflow: hidden; width: 100%;">
-					<button id="booking-submit" class="btn btn-large pull-right btn-primary" 
-						style="margin-top: 15px; margin-right: 30px;">Tiếp Tục</button>
-				</div>
 			</form>
+			<div style="overflow: hidden; width: 100%;">
+				<a style="margin-top: 15px; margin-right: 30px;" class="btn btn-large pull-left" href="#" onclick="history.go(-1);return false;">Quay lại</a>
+				<button id="booking-submit" class="btn btn-large pull-right btn-primary" 
+					style="margin-top: 15px; margin-right: 30px;">Tiếp Tục</button>  
+			</div>
 			<s:hidden id="message" name="message"></s:hidden>
 			<s:hidden id="selectedSeat" name="selectedSeat"></s:hidden>
 			<s:hidden id="passengerNo" name="passengerNo"></s:hidden>

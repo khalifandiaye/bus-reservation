@@ -97,7 +97,7 @@
 			</form>
 			<div style="width:50%;float:right;">
 				<div class="reservationInfo">
-					<h4><s:text name="reservation_info" /> </h4>
+					<h4>Thông tin vé xe</h4>
 					<s:iterator value="reservationInfo.tickets">
 						<table class="table table-bordered" style="background: #fff;width: 90%"> 
 							<tr>
