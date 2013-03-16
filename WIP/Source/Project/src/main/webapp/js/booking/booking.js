@@ -216,15 +216,17 @@ $(function(){
 	initSelectedSeat();
 	
 	$("#booking-submit").bind("click",function(){
-		var date = new Date();
-		var minutes = 15;
-		date.setTime(date.getTime() + (minutes * 60 * 1000));
+		if(SeatsToAllocate - SeatsNotAllocatedCount == 0){
+			showPopup("Bạn phải chọn ít nhất 1 ghế để tiếp tục.");
+			return;
+		}
 		
-		$.cookie('selectedSeat', getSelectedSeatString(), { expires: date });
+		$.cookie('selectedSeat', getSelectedSeatString(), { expires: 1 });
 		
 		$("#selectedSeat").val("");
 		
 	    $("#seatToPayment").val(getSelectedSeatString());
 	    
+	    $("form.booking").submit(); 
 	});
 });

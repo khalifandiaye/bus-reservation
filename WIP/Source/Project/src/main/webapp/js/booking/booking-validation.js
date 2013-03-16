@@ -29,9 +29,9 @@ $().ready(function() {
 				maxlength: "Họ tối đa chỉ được 30 kí tự."
 			},
 			inputMobile: {
-				minlength: "Số điện thoại phải tối thiểu 10 số.",
-				maxlength: "Số điện thoại chỉ tối đa được 11 số.",
-				digits: "Số điện thoại chỉ được có số."
+				minlength: "Số điện thoại không hợp lệ.",
+				maxlength: "Số điện thoại không hợp lệ.",
+				digits: "Số điện thoại không hợp lệ."
 			},
 			inputEmail: {
 				required: "Vui lòng nhập địa chỉ email",
