@@ -88,8 +88,14 @@
 	overflow: hidden;
 }
 .seatCheckedName{
-	padding-top: 3px;
+	padding-top: 3px; 
 	padding-left: 20px;
 	width: 50px;
 	float: left;
+}
+.form-horizontal .control-label { 
+	width: 80px;
+}
+.form-horizontal .controls {
+	margin-left: 95px;
 }

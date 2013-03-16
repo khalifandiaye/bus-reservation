@@ -43,7 +43,8 @@
 	<!-- Start Boooking bus seat -->
 	<setion class="booking-bus-seat">
 	<div class="well">
-		<s:if test="seatMap.size == 1">
+		<div style="font-size:21px;line-height: 41px;margin: 0 0px 10px 0px;">Vui lòng chọn ghế </div>
+		<s:if test="seatMap.size == 1"> 
 			<div class="seat-map ">
 				<div class="seat-map-wrapper">
 					<div class="seat-map-inner" style="">
@@ -139,12 +140,9 @@
 					Bạn đã chọn <span class="seat-number">0</span> trên tổng số <span
 						class="seat-number-selected"></span> ghế được chọn
 				</div>
-
-
 				<s:hidden id="seatToPayment" name="seatToPayment"></s:hidden>
-
 				<div style="overflow: hidden; width: 100%;">
-					<button id="booking-submit" class="btn btn-large pull-right"
+					<button id="booking-submit" class="btn btn-large pull-right btn-primary" 
 						style="margin-top: 15px; margin-right: 30px;">Tiếp Tục</button>
 				</div>
 			</form>
