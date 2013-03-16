@@ -1,25 +1,11 @@
 TODO
-	[db] add payment.transaction_id <- refund
-	[db] add payment.type <- refund
-	[db] add payment_method{id, name, ratio, addition} <- calculate additional fee
-	[db] add reservation{booker_first_name, booker_last_name, phone, email} <- detached reservation from customer
-	[db] modify reservation.customer_id NULLABLE <- detached reservation from customer
-	[db] add station.address
-	[db] add city {id, name}
-	[db] remove employee
-	[db] modify customer > user
-	[db] modify segment.start_at -> segment.departure_station_id
-	[db] modify segment.end_at -> segment.arrival_station_id
-	[db] add role{id, name}
-	[db] modify user.role -> user.role_id
-	[db] add bus_status.end_station_id
-	[db] add bus{route1_id, route2_id}
-	[db] remove trip.employee_id
-	[db] modify tariff.route_details_id -> tariff.segment_id
-	[db?] system_settings {name, value}
-	[dm] check inverse
-	[do] list all javascript functions
+	[DB] add payment.currency, payment_method.currency
+	[DB?] system_settings {name, value}
+	[DC] list all javascript functions
+	[RQ] send mail after payment, cancel
+	[RQ] check spell
 NOTE
-	db: database
-	dm: database mapping
-	do: document
+	DB: database
+	DM: database mapping
+	DC: document
+	RQ: requirement specification
