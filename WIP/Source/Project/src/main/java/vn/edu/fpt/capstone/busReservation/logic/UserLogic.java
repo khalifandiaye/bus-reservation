@@ -4,6 +4,7 @@
 package vn.edu.fpt.capstone.busReservation.logic;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 
@@ -15,6 +16,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
 
 import net.tanesha.recaptcha.ReCaptchaImpl;
 import net.tanesha.recaptcha.ReCaptchaResponse;
@@ -163,6 +165,9 @@ public class UserLogic extends BaseLogic {
         content = new StringBuilder(mailTemplateBean.getText());
         MiscUtils.replace(subject, ":companyName",
                 globalProps.getProperty("company.fullname"));
+        MiscUtils.replace(content, ":username", username);
+        MiscUtils.replace(content, ":fullName", lastName + " " + firstName);
+        MiscUtils.replace(content, ":email", email);
         url = new StringBuilder();
         url.append("https://");
         url.append("localhost:8443");
@@ -199,8 +204,12 @@ public class UserLogic extends BaseLogic {
                     .getProperty("mail.info.from")));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(email));
-            message.setSubject(subject.toString());
-            message.setText(content.toString());
+            try {
+                message.setSubject(MimeUtility.encodeText(subject.toString(), "utf-8", "Q"));
+            } catch (UnsupportedEncodingException e) {
+                throw new CommonException(e);
+            }
+            message.setContent(content.toString(), "text/html;charset=utf-8");
 
             Transport.send(message);
         } catch (MessagingException e) {

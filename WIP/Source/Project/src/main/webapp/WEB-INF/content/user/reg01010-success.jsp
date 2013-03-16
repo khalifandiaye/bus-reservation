@@ -79,9 +79,9 @@
 							</s:fielderror>
 						</div>
 						<div class="item">
-						<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LdUXN4SAAAAAJ_2mUQs7XRzrIwyBvfg3SM0ng7c"></script>
+						<script type="text/javascript" src="https://www.google.com/recaptcha/api/challenge?k=6LdUXN4SAAAAAJ_2mUQs7XRzrIwyBvfg3SM0ng7c"></script>
 						<noscript>
-						   <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LdUXN4SAAAAAJ_2mUQs7XRzrIwyBvfg3SM0ng7c"
+						   <iframe src="https://www.google.com/recaptcha/api/noscript?k=6LdUXN4SAAAAAJ_2mUQs7XRzrIwyBvfg3SM0ng7c"
 						       height="300" width="500" frameborder="0"></iframe><br>
 						   <textarea name="recaptcha_challenge_field" rows="3" cols="40">
 						   </textarea>

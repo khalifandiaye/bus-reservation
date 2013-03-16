@@ -18,8 +18,10 @@ public class MiscUtils implements Serializable {
     
     public static void replace(StringBuilder stringBuilder, String str, String replaceWith) {
         int index = 0;
-        index = stringBuilder.indexOf(str);
-        stringBuilder.replace(index, index + str.length(), replaceWith);
+        while (stringBuilder.indexOf(str) >= 0) {
+            index = stringBuilder.indexOf(str);
+            stringBuilder.replace(index, index + str.length(), replaceWith);
+        }
     }
 
 }
