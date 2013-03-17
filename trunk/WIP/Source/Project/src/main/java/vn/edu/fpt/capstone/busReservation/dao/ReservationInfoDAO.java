@@ -98,7 +98,7 @@ public class ReservationInfoDAO extends
     }
 
     @SuppressWarnings("unchecked")
-    public ReservationInfoBean getByCode(String code) {
+    public ReservationInfoBean getByCode(String code, String email) {
         List<ReservationInfoBean> result = null;
         Session session = null;
         Query query = null;
@@ -107,9 +107,10 @@ public class ReservationInfoDAO extends
         session = sessionFactory.getCurrentSession();
         try {
             // perform database access (query, insert, update, etc) here
-            queryString = "SELECT res FROM ReservationInfoBean AS res WHERE res.id.code = ?";
+            queryString = "SELECT res FROM ReservationInfoBean AS res WHERE res.id.code = :code AND res.id.email = :email";
             query = session.createQuery(queryString);
-            query.setString(0, code);
+            query.setString("code", code);
+            query.setString("email", email);
             result = query.list();
         } catch (HibernateException e) {
             exceptionHandling(e, session);

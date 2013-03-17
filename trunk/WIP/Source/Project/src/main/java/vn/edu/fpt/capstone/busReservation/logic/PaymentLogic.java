@@ -18,6 +18,7 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.hibernate.HibernateException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.SAXException;
 
 import urn.ebay.api.PayPalAPI.DoExpressCheckoutPaymentReq;
@@ -93,6 +94,7 @@ public class PaymentLogic extends BaseLogic {
      * @param reservationDAO
      *            the reservationDAO to set
      */
+    @Autowired
     public void setReservationDAO(ReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
     }
@@ -101,6 +103,7 @@ public class PaymentLogic extends BaseLogic {
      * @param reservationInfoDAO
      *            the reservationInfoDAO to set
      */
+    @Autowired
     public void setReservationInfoDAO(ReservationInfoDAO reservationInfoDAO) {
         this.reservationInfoDAO = reservationInfoDAO;
     }
@@ -109,6 +112,7 @@ public class PaymentLogic extends BaseLogic {
      * @param paymentMethodDAO
      *            the paymentMethodDAO to set
      */
+    @Autowired
     public void setPaymentMethodDAO(PaymentMethodDAO paymentMethodDAO) {
         this.paymentMethodDAO = paymentMethodDAO;
     }
@@ -117,6 +121,7 @@ public class PaymentLogic extends BaseLogic {
      * @param paymentDAO
      *            the paymentDAO to set
      */
+    @Autowired
     public void setPaymentDAO(PaymentDAO paymentDAO) {
         this.paymentDAO = paymentDAO;
     }
@@ -125,6 +130,7 @@ public class PaymentLogic extends BaseLogic {
      * @param systemSettingDAO
      *            the systemSettingDAO to set
      */
+    @Autowired
     public void setSystemSettingDAO(SystemSettingDAO systemSettingDAO) {
         this.systemSettingDAO = systemSettingDAO;
     }

@@ -83,12 +83,15 @@ $(document).ready(function(){
             },
             beforeSend : function() {
                 // display confirm modal
-                $('#cancelModal').modal();
                 $('.modal-body').addClass("loading");
+                $("#cancelConfirmMessage").html('');
+                $("#cancelConfirmMessage").removeClass("error");
                 $("#btnCancel").attr("disabled", "disabled");
+                $('#cancelModal').modal();
             },
             success : function(data) {
                 if (data.errorMessage) {
+                    $("#cancelConfirmMessage").addClass("error");
                     $("#cancelConfirmMessage").html(data.errorMessage);
                 } else {
                     $("#cancelConfirmMessage").html(data.cancelConfirmMessage);
@@ -96,6 +99,7 @@ $(document).ready(function(){
                 }
             },
             error : function() {
+                $("#cancelConfirmMessage").addClass("error");
                 $("#cancelConfirmMessage").html("ERROR");
             },
             complete : function() {
@@ -125,6 +129,7 @@ $(document).ready(function(){
             },
             success : function(data) {
                 if (data.errorMessage) {
+                    $("#cancelConfirmMessage").addClass("error");
                     $("#cancelConfirmMessage").html(data.errorMessage);
                     $("#btnCancel").removeAttr("disabled");
                 } else {
@@ -133,9 +138,13 @@ $(document).ready(function(){
                     $('#cancelModal').on('hidden.reload', function() {
                         location.reload();
                     });
+                    $('#btnNo').addClass("hidden");
+                    $('#btnCancel').addClass("hidden");
+                    $('#btnClose').removeClass("hidden");
                 }
             },
             error : function() {
+                $("#cancelConfirmMessage").addClass("error");
                 $("#cancelConfirmMessage").html("ERROR");
                 $("#btnCancel").removeAttr("disabled");
             },

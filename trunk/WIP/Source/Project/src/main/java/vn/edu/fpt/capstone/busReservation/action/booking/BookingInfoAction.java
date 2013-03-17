@@ -1,13 +1,11 @@
 package vn.edu.fpt.capstone.busReservation.action.booking;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentMethodBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
-import vn.edu.fpt.capstone.busReservation.displayModel.SeatInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;

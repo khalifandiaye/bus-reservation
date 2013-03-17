@@ -5,19 +5,29 @@
 <script src="<%=request.getContextPath()%>/js/common/header.js" ></script>
 <div class="circle-back"> 
 <div class="top-nav">
-	<div class="top-menu clear-fix" style="color: #ffffff;height: 52px;">  
+	<div class="top-menu clear-fix">
 		<div class="login pull-right">
-			<span style="float:left">   
-				<span id="errorMessage" style="padding-right: 20px;color: red;"></span>
-				Tài khoản <s:textfield name="username" cssStyle="margin-top: 5px;height: 17px;width: 100px;"/> 
-				Mật khẩu <s:password name="password" cssStyle="height: 17px;width: 100px;margin-top: 5px;"/>
-			</span> 
-			<a id="btn_login" class="btn btn-mini btn-primary" style="margin-top: 5px;margin-left: 8px;padding: 3px 8px;">Đăng Nhập</a> 
-			<a id="btn_register" href="<%=request.getContextPath()%>/user/reg01010.html" class="btn btn-mini btn-success" style="margin-top: 5px;margin-left: 8px;padding: 3px 8px;">Đăng Kí</a>
+			<div class="item">
+				<span id="errorMessage" class="error" ></span>
+			</div>
+			<div class="item">
+				<s:text name="label.username" /> <s:textfield name="username"/>
+			</div>
+			<div class="item">
+				<s:text name="label.password" /> <s:password name="password"/>
+			</div>
+			<div class="item">
+				<a id="btn_login" class="btn btn-mini btn-primary">Đăng Nhập</a> 
+				<a id="btn_register" href="<%=request.getContextPath()%>/user/reg01010.html" class="btn btn-mini btn-success">Đăng Kí</a>
+			</div>
 		</div> 
 		<div class="logout pull-right hidden"> 
-		<span style="margin-top: 9px;float: left;">Hello <span id="name"></span></span> 
-		<a id="btn_logout" class="btn btn-mini btn-danger" style="margin-top: 5px;margin-left: 8px;padding: 3px 8px;">Đăng Xuất</a>
+		<div class="item">
+		<span><s:text name="message.hello" /></span>
+		</div> 
+		<div class="item">
+		<a id="btn_logout" class="btn btn-mini btn-danger">Đăng Xuất</a>
+		</div> 
 		</div>
 	</div>
 </div> 

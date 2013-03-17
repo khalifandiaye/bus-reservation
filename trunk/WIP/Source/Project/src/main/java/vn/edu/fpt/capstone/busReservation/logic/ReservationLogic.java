@@ -318,12 +318,18 @@ public class ReservationLogic extends BaseLogic {
     }
 
     public ReservationInfo loadReservationInfoByCode(
-            final String reservationCode, boolean convertToUSD)
+            final String reservationCode, String email, boolean convertToUSD)
             throws CommonException {
         ReservationInfo info = null;
         ReservationInfoBean bean = null;
-        bean = reservationInfoDAO.getByCode(reservationCode);
-        info = loadReservationInfo(bean, convertToUSD);
+        bean = reservationInfoDAO.getByCode(reservationCode, email);
+        if (bean != null && bean.getId().getBooker() == null) {
+            info = loadReservationInfo(bean, convertToUSD);
+        } else if (bean == null){
+            throw new CommonException("msgerrrs005");
+        } else {
+            throw new CommonException("msgerrrs006");
+        }
         return info;
     }
 
@@ -461,6 +467,7 @@ public class ReservationLogic extends BaseLogic {
         String[] seats = null;
         tickets = new ArrayList<ReservationInfo.Ticket>();
         info.setTickets(tickets);
+        quantity += ticketBeans.get(0).getSeatPositions().size();
         for (TicketBean bean : ticketBeans) {
             ticket = info.new Ticket();
             tickets.add(ticket);
@@ -480,7 +487,6 @@ public class ReservationLogic extends BaseLogic {
                     .getEndAt().getName());
             ticket.setBusType(trip.getBusStatus().getBus().getBusType()
                     .getName());
-            quantity += bean.getSeatPositions().size();
             seats = new String[bean.getSeatPositions().size()];
             ticket.setSeats(seats);
             index = 0;

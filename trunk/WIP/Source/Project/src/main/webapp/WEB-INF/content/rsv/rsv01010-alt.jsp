@@ -15,9 +15,12 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
-	<div class="reservation-details">
+	<div class="search-reservation">
 		<form method="post" action="<%=request.getContextPath()%>/rsv/rsv01021.html">
 			<div class="container">
+				<div class="well error">
+					<s:actionerror/>
+				</div>
 				<div class="well">
 					<div class="item">
 						<label><s:text name="reservation.code" /></label><s:textfield name="reservationCode" />
@@ -25,7 +28,9 @@
 					<div class="item">
 						<label><s:text name="reservation.email" /></label><s:textfield name="email" />
 					</div>
-					<s:submit id="pay02010" cssClass="btn btn-large" key="btn.viewDetails"/>
+					<div class="item">
+						<s:submit id="pay02010" cssClass="btn btn-primary" key="btn.viewDetails"/>
+					</div>
 				</div>
 			</div>
 		</form>

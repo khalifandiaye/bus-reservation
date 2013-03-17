@@ -8,12 +8,31 @@
 
 .top-nav {
 	height: auto;
+	color: #ffffff;
 }
 
 .clear-fix {
 	overflow: hidden;
 }
 
-.login,.logout {
-	margin-top: 10px;
+.login .item,.logout .item {
+	margin: 5px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.login .item input,.logout .item input {
+	width: 100px;
+	height: 17px;
+	margin: 0px;
+}
+
+.login .item a,.logout .item a {
+	padding: 3px 8px;
+	vertical-align: bottom;
+	margin: 0px 3px;
+}
+
+.error {
+	color: red;
 }
