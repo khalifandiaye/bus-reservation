@@ -10,7 +10,6 @@ import org.apache.struts2.convention.annotation.Result;
 import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
-import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
@@ -75,7 +74,6 @@ public class SaveAction extends ActionSupport{
 				traDate += DateUtils.getAbsoluteMiliseconds(routeDetailsBean.getSegment().getTravelTime());
 				travelDate = new Date(traDate);
 				trip.setArrivalTime(travelDate);
-				trip.setStatus("active");
 				trip.setRouteDetails(routeDetailsBean);
 				tripDAO.insert(trip);
 			}
@@ -85,6 +83,7 @@ public class SaveAction extends ActionSupport{
 		message = "Add schedule Success!";
 		return SUCCESS;
 	}
+	
 	public void setBusDAO(BusDAO busDAO) {
 		this.busDAO = busDAO;
 	}
