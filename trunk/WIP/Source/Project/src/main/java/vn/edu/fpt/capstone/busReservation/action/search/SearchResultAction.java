@@ -9,9 +9,12 @@ import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.displayModel.SearchParamsInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo;
+import vn.edu.fpt.capstone.busReservation.util.DateUtils;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -32,6 +35,14 @@ public class SearchResultAction extends BaseAction implements SessionAware {
     private int busType;
     //=======================Output Parameter====================
     private List<SearchResultInfo> searchResult;
+    HashMap<String,List<SearchResultInfo>> searchResultMap;
+    ArrayList<SearchResultInfo> resultNo1;
+    ArrayList<SearchResultInfo> resultNo2;
+    ArrayList<SearchResultInfo> resultNo3;
+    ArrayList<SearchResultInfo> resultNo4;
+    ArrayList<SearchResultInfo> resultNo5;
+    ArrayList<SearchResultInfo> resultNo6;
+    ArrayList<SearchResultInfo> resultNo7;
     private String deptCity;
     private String arrCity;
     private String message;
@@ -51,6 +62,56 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 	public void setTripDAO(TripDAO tripDAO) {
 		this.tripDAO = tripDAO;
 	}
+	
+	/**
+	 * @return the resultNo1
+	 */
+	public ArrayList<SearchResultInfo> getResultNo1() {
+		return resultNo1;
+	}
+
+	/**
+	 * @return the resultNo2
+	 */
+	public ArrayList<SearchResultInfo> getResultNo2() {
+		return resultNo2;
+	}
+
+	/**
+	 * @return the resultNo3
+	 */
+	public ArrayList<SearchResultInfo> getResultNo3() {
+		return resultNo3;
+	}
+
+	/**
+	 * @return the resultNo4
+	 */
+	public ArrayList<SearchResultInfo> getResultNo4() {
+		return resultNo4;
+	}
+
+	/**
+	 * @return the resultNo5
+	 */
+	public ArrayList<SearchResultInfo> getResultNo5() {
+		return resultNo5;
+	}
+
+	/**
+	 * @return the resultNo6
+	 */
+	public ArrayList<SearchResultInfo> getResultNo6() {
+		return resultNo6;
+	}
+
+	/**
+	 * @return the resultNo7
+	 */
+	public ArrayList<SearchResultInfo> getResultNo7() {
+		return resultNo7;
+	}
+
 	/**
 	 * @return the searchResult
 	 */
@@ -122,6 +183,10 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 	public String getArrCity() {
 		return arrCity;
 	}
+	
+	/**
+	 * Execute action
+	 */
 	public String execute() throws Exception {
 		
 		if(session != null && session.containsKey("searchAnother")){
@@ -147,7 +212,74 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 		} else {
 			deptCity = searchResult.get(0).getDepartureCity();
 			arrCity = searchResult.get(0).getArrivalCity();
+			searchResultMap = filterByDate(searchResult);
+			filterResultByDate(searchResult);
 		}
 		return SUCCESS;		
 	}
+	
+	private HashMap<String,List<SearchResultInfo>> filterByDate(List<SearchResultInfo> searchResult) throws Exception{
+		HashMap<String,List<SearchResultInfo>> resultMap = new HashMap<String,List<SearchResultInfo>>();
+		ArrayList<SearchResultInfo> resultInf = new ArrayList<SearchResultInfo>();
+		SimpleDateFormat fromFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+		String myDate = fromFormat.format(searchResult.get(0).getDepartureTime());
+		String compareDate;
+		for(int i = 0; i < searchResult.size(); i++){
+			compareDate = fromFormat.format(searchResult.get(i).getDepartureTime());
+			if(!myDate.equals(compareDate)){
+				resultMap.put(myDate, resultInf);
+				resultInf.clear();
+				myDate = fromFormat.format(searchResult.get(i).getDepartureTime());
+			} else {
+				resultInf.add(searchResult.get(i));
+			}
+		}
+		resultMap.put(myDate, resultInf);
+		return resultMap;
+	}
+	
+	/**
+	 * Filter result by date (7 days) to 7 different lists
+	 * @param searchResult
+	 * 			List of search result
+	 * @throws Exception
+	 */
+	private void filterResultByDate(List<SearchResultInfo> searchResult) throws Exception{
+		resultNo1 = new ArrayList<SearchResultInfo>();
+		resultNo2 = new ArrayList<SearchResultInfo>();
+		resultNo3 = new ArrayList<SearchResultInfo>();
+		resultNo4 = new ArrayList<SearchResultInfo>();
+		resultNo5 = new ArrayList<SearchResultInfo>();
+		resultNo6 = new ArrayList<SearchResultInfo>();
+		resultNo7 = new ArrayList<SearchResultInfo>();
+		String compareDate;
+		SimpleDateFormat fromFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+		
+		HashMap<Integer,String> dateList = new HashMap<Integer,String>() ;
+		for(int i=-3; i <= 3; i++){
+			compareDate = DateUtils.addDay(departureDate, i, "dd-MM-yyyy", Locale.US);
+			dateList.put(i, compareDate);
+		}
+		for(int i = 0; i < searchResult.size(); i++){
+			compareDate = fromFormat.format(searchResult.get(i).getDepartureTime());
+			if(dateList.get(-3).equals(compareDate)){
+				resultNo1.add(searchResult.get(i));
+			} else if(dateList.get(-2).equals(compareDate)){
+				resultNo2.add(searchResult.get(i));
+			} else if(dateList.get(-1).equals(compareDate)){
+				resultNo3.add(searchResult.get(i));
+			} else if(dateList.get(0).equals(compareDate)){
+				resultNo4.add(searchResult.get(i));
+			} else if(dateList.get(1).equals(compareDate)){
+				resultNo5.add(searchResult.get(i));
+			} else if(dateList.get(2).equals(compareDate)){
+				resultNo6.add(searchResult.get(i));
+			} else if(dateList.get(3).equals(compareDate)){
+				resultNo7.add(searchResult.get(i));
+			}
+		}
+		
+	}
+	
+
 }

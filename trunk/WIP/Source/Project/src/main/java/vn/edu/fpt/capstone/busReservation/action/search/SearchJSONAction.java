@@ -31,17 +31,17 @@ public class SearchJSONAction extends BaseAction {
 
     //======INPUT====
     private String deptCity;
-    private String busStatus;
+/*    private String busStatus;
     private String departTime;
-    private String arriveTime;
+    private String arriveTime;*/
     
     //======OUPUT====
     private HashMap<Integer, String> cityList;
-    private ArrayList tripList;
+/*    private ArrayList tripList;*/
     
     //======DAO======
     private CityDAO cityDAO;
-    private TripDAO tripDAO;
+/*    private TripDAO tripDAO;*/
     
     /**
 	 * @return the arrCityList
@@ -50,26 +50,26 @@ public class SearchJSONAction extends BaseAction {
 		return cityList;
 	}
 	
-	/**
+/*	*//**
 	 * @return the tripList
-	 */
+	 *//*
 	public ArrayList getTripList() {
 		return tripList;
 	}
-
+*/
 	/**
 	 * @param cityDAO the cityDAO to set
 	 */
 	public void setCityDAO(CityDAO cityDAO) {
 		this.cityDAO = cityDAO;
 	}
-	
-	/**
+/*	
+	*//**
 	 * @param tripDAO the tripDAO to set
-	 */
+	 *//*
 	public void setTripDAO(TripDAO tripDAO) {
 		this.tripDAO = tripDAO;
-	}
+	}*/
 	/**
 	 * @param deptCity the deptCity to set
 	 */
@@ -77,26 +77,27 @@ public class SearchJSONAction extends BaseAction {
 		this.deptCity = deptCity;
 	}
     
-    /**
+/*    *//**
 	 * @param busStatus the busStatus to set
-	 */
+	 *//*
 	public void setBusStatus(String busStatus) {
 		this.busStatus = busStatus;
 	}
-	/**
+	*//**
 	 * @param departTime the departTime to set
-	 */
+	 *//*
 	public void setDepartTime(String departTime) {
 		this.departTime = departTime;
 	}
-	/**
+	*//**
 	 * @param arriveTime the arriveTime to set
-	 */
+	 *//*
 	public void setArriveTime(String arriveTime) {
 		this.arriveTime = arriveTime;
-	}
+	}*/
 	
-	@Action(value = "/getArriveCity", results = { @Result(type = "json", name = SUCCESS) })
+	@Action(value = "/getArriveCity", results = { @Result(type = "json", name = SUCCESS, params = {
+            "excludeProperties", "tripList" }) })
     public String getArriveCity(){
     	List<CityBean> arrCityList = null;
     	this.cityList = new HashMap<Integer,String>();
@@ -119,7 +120,7 @@ public class SearchJSONAction extends BaseAction {
     	}
     	return SUCCESS;	
     }*/
-    @Action(value = "/getTripDetails", results = { @Result(type = "json", name = SUCCESS) })
+/*    @Action(value = "/getTripDetails", results = { @Result(type = "json", name = SUCCESS) })
     public String getTripDetails(){
     	int status = Integer.parseInt(busStatus);
     	List<TripBean> returnTrip = null;
@@ -137,5 +138,5 @@ public class SearchJSONAction extends BaseAction {
 			tripList.add(tripMap);
 		}
 		return SUCCESS;
-    }
+    }*/
 }

@@ -9,29 +9,39 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Bus travel</title>
-<jsp:include page="common/xheader.jsp" />
 <link rel="stylesheet"
-	href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
-
+	href="<%=request.getContextPath()%>/styles/jquery-ui.css" />
+<jsp:include page="common/xheader.jsp" />
 <script src="<%=request.getContextPath()%>/js/index.js"></script>
-<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+<script src="<%=request.getContextPath()%>/js/jquery-ui.js"></script>
 <script src="<%=request.getContextPath()%>/js/search-common.js"></script>
+<script src="<%=request.getContextPath()%>/js/jquery.ui.datepicker-vi.js"></script>
 <script type="text/javascript">
 	var d = new Date();
 	var now = d.toMyString();
 
+/*     $(':radio[value="oneway"]').on('click', function() {
+  	 	$("#input-return").hide(500);
+  	});
+  
+  	$(':radio[value="roundtrip"]').on('click', function() {
+  		$("#input-return").show(500);
+  	}); */
+  
 	$(function() {
 		$('#dp1').datepicker({
 			dateFormat : 'dd-mm-yy',
 			minDate : 0,
-			maxDate : '+3M'
+			maxDate : '+3M',
+			regional : 'vi'
 		});
 		$('#dp1').val(now);
 
 		$('#dp2').datepicker({
 			dateFormat : 'dd-mm-yy',
 			minDate : 0,
-			maxDate : '+3M'
+			maxDate : '+3M',
+			regional : 'vi'
 		});
 		$('#dp2').val(now);
 	});
@@ -54,9 +64,13 @@
 		});
 	}
 
-	function showArrive() {
-		$("#input-return").slideToggle(500);
-	}
+ 	function showArrive() {
+ 		$("#input-return").show(500);
+ 	}
+ 	
+ 	function hideArrive(){
+ 		$("#input-return").hide(500);
+ 	}
 </script>
 </head>
 <body>
@@ -74,10 +88,10 @@
 					<div class="radio-ticket-type">
 						<label class="radio"> <input type="radio"
 							name="ticketType" id="rdoOneway" value="oneway"
-							onclick="showArrive()" checked> Vé một chiều
+							checked onclick="hideArrive()"> Vé một chiều
 						</label> <label class="radio"> <input type="radio"
 							name="ticketType" id="rdoRoundtrip" value="roundtrip"
-							onclick="showArrive()"> Vé khứ hồi
+							onclick="showArrive()">Vé khứ hồi
 						</label>
 					</div>
 				</div>
