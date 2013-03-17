@@ -75,8 +75,16 @@ public class SaveSegmentAction extends BaseAction {
 			// Check if segment exist
 			StationBean startStation = new StationBean();
 			StationBean endStation = new StationBean();
-			List<SegmentBean> duplicatedSegmentBeans = segmentDAO
-					.getDuplicatedSegment(segmentInfos.get(i).getStartAt(), segmentInfos.get(i).getEndAt());
+			List<SegmentBean> duplicatedSegmentBeans = new ArrayList<SegmentBean>();
+			if (!isReturnRoute) {
+				duplicatedSegmentBeans = segmentDAO
+						.getDuplicatedSegment(segmentInfos.get(i).getStartAt(),
+								segmentInfos.get(i).getEndAt());
+			} else {
+				duplicatedSegmentBeans = segmentDAO
+						.getDuplicatedSegment(segmentInfos.get(i).getEndAt(),
+								segmentInfos.get(i).getStartAt());
+			}
 
 			// add new segment
 			if (duplicatedSegmentBeans.size() == 0) {
@@ -109,7 +117,6 @@ public class SaveSegmentAction extends BaseAction {
 				segmentBean.setStartAt(startStation);
 				segmentBean.setEndAt(endStation);
 				segmentBean.setTravelTime(dtravelTime);
-				segmentBean.setStatus("active");
 				segmentDAO.insert(segmentBean);
 				segmentBeans.add(segmentBean);
 			} else {
