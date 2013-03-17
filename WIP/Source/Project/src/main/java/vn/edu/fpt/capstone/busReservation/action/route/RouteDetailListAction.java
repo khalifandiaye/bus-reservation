@@ -21,12 +21,14 @@ public class RouteDetailListAction extends ActionSupport {
 	private BusTypeDAO busTypeDAO;
 	
 	private List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
-	private List<SegmentInfo> segmentInfos = new ArrayList<SegmentInfo>();
+   private List<SegmentInfo> segmentInfos = new ArrayList<SegmentInfo>();
 	private List<BusTypeBean> busTypeBeans = new ArrayList<BusTypeBean>();
+	private List<BusTypeBean> busTypes = new ArrayList<BusTypeBean>();
 	private int routeId;
 	
 	public String execute() {
 		segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
+		busTypes = busTypeDAO.getAll();
 		for (SegmentBean segmentBean : segmentBeans) {
 			SegmentInfo segmentInfo = new SegmentInfo();
 			String name = segmentBean.getStartAt().getCity().getName() + " - " 
@@ -89,5 +91,21 @@ public class RouteDetailListAction extends ActionSupport {
 
    public void setRouteName(String routeName) {
       this.routeName = routeName;
+   }
+   
+   public List<SegmentBean> getSegmentBeans() {
+      return segmentBeans;
+   }
+
+   public void setSegmentBeans(List<SegmentBean> segmentBeans) {
+      this.segmentBeans = segmentBeans;
+   }
+
+   public List<BusTypeBean> getBusTypes() {
+      return busTypes;
+   }
+
+   public void setBusTypes(List<BusTypeBean> busTypes) {
+      this.busTypes = busTypes;
    }
 }
