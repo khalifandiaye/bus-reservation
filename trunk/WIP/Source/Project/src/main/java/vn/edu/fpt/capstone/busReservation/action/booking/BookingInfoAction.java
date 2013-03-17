@@ -100,7 +100,9 @@ public class BookingInfoAction extends BaseAction {
 
     @SuppressWarnings("unchecked")
     public String execute() {
-    	
+    	if(seatToPayment == null){
+    		return ERROR;
+    	}
     	User user;
 		if(!(session.get(CommonConstant.SESSION_KEY_USER) == null) || !(session.get("User_tmp") == null)){
 			if(!(session.get("User_tmp") == null)){

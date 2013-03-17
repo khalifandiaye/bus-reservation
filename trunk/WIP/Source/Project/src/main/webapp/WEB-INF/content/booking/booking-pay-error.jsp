@@ -14,7 +14,9 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
-	<h2>Temp error pay</h2>
+	<div class="well" style="min-height: 150px;">  
+		<h3 style="line-height: 150px; text-align: center;">Có lỗi đã xảy ra vui lòng thực hiện lại việc chọn ghế.</h3>
+	</div>
 	<s:actionerror />
 	<jsp:include page="../common/footer.jsp" />
 </body>

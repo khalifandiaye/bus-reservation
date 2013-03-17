@@ -15,7 +15,7 @@
 <body>
 	<jsp:include page="../common/header.jsp" />
 	<div class="well" style="min-height: 150px;">  
-		<h3 style="line-height: 150px; text-align: center;">Có lỗi đã xảy ra vui lòng thực hiện lại việc chọn vé xe.</h3>
+		<h3 style="line-height: 150px; text-align: center;">Có lỗi đã xảy ra vui lòng thực hiện lại việc chọn xe.</h3>
 	</div>
 	<s:actionerror />
 	<jsp:include page="../common/footer.jsp" />
