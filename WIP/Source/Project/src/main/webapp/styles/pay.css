@@ -64,10 +64,8 @@ input.pay {
 }
 
 .loading {
-	background: rgba( 255, 255, 255, .8 ) 
-                url('../images/loading.gif') 
-                50% 50% 
-                no-repeat;
+	background: rgba(255, 255, 255, .8) url('../images/loading.gif') 50% 50%
+		no-repeat;
 }
 
 .reservation-details label {
@@ -137,8 +135,7 @@ input.pay {
 	text-align: center;
 }
 
-.reservation-details .ticket-list td.small {
-	/* padding-right: 3px; */
+.reservation-details .ticket-list td.small { /* padding-right: 3px; */
 	border-right-style: dashed;
 	border-right-color: #c0c0c0;
 	/* width: 30px; */
@@ -152,7 +149,8 @@ input.pay {
 	border-bottom: none;
 }
 
-.reservation-details .ticket-list tr:nth-child(odd) td:not([rowspan='2']) {
+.reservation-details .ticket-list tr:nth-child(odd) td:not ([rowspan='2']
+	) {
 	border-bottom-style: dashed;
 }
 
@@ -241,4 +239,20 @@ input.pay {
 	border-bottom: 1px solid gray;
 	margin: 7px;
 	padding: 10px;
+}
+
+.info {
+	margin: 0px auto;
+	font-size: large;
+	padding: 15px 30px;
+	border: 1px solid;
+}
+
+.click-able {
+	cursor: pointer;
+}
+
+.success {
+	background-color: rgb(84, 250, 217);
+	border-color: rgb(24, 85, 80);
 }

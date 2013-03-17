@@ -117,7 +117,7 @@ public class LoginAction extends BaseAction {
                 && session.containsKey(CommonConstant.SESSION_KEY_USER)) {
             user = session.get(CommonConstant.SESSION_KEY_USER);
             if (User.class.isAssignableFrom(user.getClass())) {
-                name = ((User) user).getLastName() + ""
+                name = ((User) user).getLastName() + " "
                         + ((User) user).getFirstName();
                 roleId = ((User) user).getRoleId();
                 success = true;

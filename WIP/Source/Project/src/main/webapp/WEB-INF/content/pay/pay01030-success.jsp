@@ -36,7 +36,8 @@
 	<div class="reservation-details">
 		<div class="container">
 			<div class="well">
-				<h3><s:text name="reservationInfo" /></h3>
+				<div class="success info"><s:text name="message.reservationComplete" /></div>
+				<h3><s:text name="reservationInfo" /> <img id="btnPrint" class="click-able" src="<%=request.getContextPath()%>/images/print.png" alt="<s:text name="label.print" />" /><img id="btnPrintPDF" class="click-able" src="<%=request.getContextPath()%>/images/print-pdf.png" alt="<s:text name="label.print-pdf" />" /></h3>
 				<div class="general-info">
 					<div class="item">
 						<label><s:text name="reservation.booker" /></label>

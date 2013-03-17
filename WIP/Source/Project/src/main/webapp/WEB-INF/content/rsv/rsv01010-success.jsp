@@ -77,7 +77,8 @@
 			<p id="cancelConfirmMessage"></p>
 		</div>
 		<div class="modal-footer">
-			<button class="btn close-model-btn"><s:text name="button.no" /></button>
+			<button id="btnClose" class="btn close-model-btn btn-primary hidden"><s:text name="button.close" /></button>
+			<button id="btnNo" class="btn close-model-btn"><s:text name="button.no" /></button>
 			<button id="btnCancel" class="btn btn-primary"><s:text name="button.yes" /></button>
 		</div>
 	</div>
