@@ -127,6 +127,9 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 			"/search", "actionName", "search-result"})
 	})
 	public String execute() {
+		if(session == null || !session.containsKey("listTripBean")){
+			return ERROR;
+		}
 		List<TripBean> list = (List<TripBean>) session.get("listTripBean");
 		String reservationId = null;
 
