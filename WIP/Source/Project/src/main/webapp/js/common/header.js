@@ -2,7 +2,7 @@ $(document).ready(function(){
      function checkUser() {
         $.ajax({
             type : "POST",
-            url : $('contextPath').val() + "/user/checkUser.html",
+            url : $('#contextPath').val() + "/user/checkUser.html",
             success : function(data) {
                 if (data.success) {
                     $("div.login").addClass('hidden');
@@ -42,7 +42,7 @@ $(document).ready(function(){
 	$('#btn_login').on('click.auth', function(e) {
         $.ajax({
             type : "POST",
-            url : $('contextPath').val() + "/user/login.html",
+            url : $('#contextPath').val() + "/user/login.html",
             data : {
                 username : $('input[name="username"]').val(),
                 password : $('input[name="password"]').val()
@@ -67,7 +67,7 @@ $(document).ready(function(){
     $('#btn_logout').on('click.auth', function(e) {
         $.ajax({
             type : "POST",
-            url : $('contextPath').val() + "/user/logOut.html",
+            url : $('#contextPath').val() + "/user/logOut.html",
             success : function(data) {
                 if (data.success) {
                     $("div.logout").addClass('hidden');
