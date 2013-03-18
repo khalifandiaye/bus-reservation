@@ -8,8 +8,6 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
-import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
-import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.UserLogic;
@@ -27,13 +25,6 @@ public class LoginAction extends BaseAction {
 	 * 
 	 */
     private static final long serialVersionUID = 1L;
-
-    // ===========================DAO Object===========================
-    private UserDAO userDAO;
-
-    public void setUserDAO(UserDAO userDAO) {
-        this.userDAO = userDAO;
-    }
 
     // ==========================Logic Object==========================
     private UserLogic userLogic;
@@ -86,7 +77,6 @@ public class LoginAction extends BaseAction {
     @Action(value = "/login", results = { @Result(type = "json", name = SUCCESS) })
     public String login() {
         String[] params = null;
-        UserBean userBean = null;
         User user = null;
         success = false;
         if (CheckUtils.isNullOrBlank(username)) {

@@ -49,6 +49,7 @@ $(document).ready(function(){
             },
             success : function(data) {
                 if (data.success) {
+                    $("#errorMessage").html('');
                     $("div.login").addClass('hidden');
                     $("div.logout").removeClass('hidden');
                     $("span#name").html(data.name);
@@ -70,6 +71,7 @@ $(document).ready(function(){
             url : $('#contextPath').val() + "/user/logOut.html",
             success : function(data) {
                 if (data.success) {
+                    $("#errorMessage").html('');
                     $("div.logout").addClass('hidden');
                     $("div.login").removeClass('hidden');
                     $("span#name").html('');

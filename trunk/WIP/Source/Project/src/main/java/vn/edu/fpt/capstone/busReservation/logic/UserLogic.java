@@ -203,7 +203,7 @@ public class UserLogic extends BaseLogic {
         url.append("localhost:8443");
         url.append(contextPath);
         try {
-            url.append("/user/activate-user?username="
+            url.append("/user/activate-user.html?username="
                     + username
                     + "&code="
                     + CryptUtils.encrypt2String(firstName + "/" + lastName
