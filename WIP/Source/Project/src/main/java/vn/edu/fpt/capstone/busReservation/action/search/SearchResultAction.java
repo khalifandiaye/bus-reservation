@@ -7,6 +7,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
+import vn.edu.fpt.capstone.busReservation.dao.CityDAO;
 import vn.edu.fpt.capstone.busReservation.displayModel.SearchParamsInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo;
 import vn.edu.fpt.capstone.busReservation.util.DateUtils;
@@ -46,10 +47,18 @@ public class SearchResultAction extends BaseAction implements SessionAware {
     private String deptCity;
     private String arrCity;
     private String message;
+    private String searchMessage;
     //=======================Data Access Object==================
     private TripDAO tripDAO;
-        
+    private CityDAO cityDAO;
     
+    
+	/**
+	 * @return the searchMessage
+	 */
+	public String getSearchMessage() {
+		return searchMessage;
+	}
 	/**
 	 * @return the message
 	 */
@@ -61,6 +70,13 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 	 */
 	public void setTripDAO(TripDAO tripDAO) {
 		this.tripDAO = tripDAO;
+	}
+	
+	/**
+	 * @param cityDAO the cityDAO to set
+	 */
+	public void setCityDAO(CityDAO cityDAO) {
+		this.cityDAO = cityDAO;
 	}
 	
 	/**
@@ -206,15 +222,17 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 		SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 		String deptDate = toFormat.format(fromFormat.parse(departureDate));
 		searchResult = tripDAO.searchAvailableTrips(departureCity, arrivalCity, deptDate, passengerNo, busType);
-		if(searchResult.size() == 0){
-			deptCity = "";
-			arrCity = "";
-		} else {
-			deptCity = searchResult.get(0).getDepartureCity();
-			arrCity = searchResult.get(0).getArrivalCity();
-			searchResultMap = filterByDate(searchResult);
+		if(searchResult.size() != 0){
+			//searchResultMap = filterByDate(searchResult);
 			filterResultByDate(searchResult);
+			searchMessage = "";
+		} else {
+			searchMessage = "null";
 		}
+		deptCity = cityDAO.getById(this.departureCity).getName();
+		arrCity = cityDAO.getById(this.arrivalCity).getName();
+		//String fromDate = DateUtils.addDay(departureDate, -3, "dd-MM-yyyy", Locale.US);
+		//String toDate = DateUtils.addDay(departureDate, 3, "dd-MM-yyyy", Locale.US);
 		return SUCCESS;		
 	}
 	
