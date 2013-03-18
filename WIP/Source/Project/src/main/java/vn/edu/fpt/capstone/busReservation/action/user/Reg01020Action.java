@@ -25,7 +25,7 @@ public class Reg01020Action extends BaseAction implements ModelDriven<RegisterMo
      */
     private static final long serialVersionUID = 1L;
 
-    // ===========================DAO Object===========================
+    // ==========================Logic Object==========================
     private UserLogic userLogic;
 
     /**

@@ -29,7 +29,9 @@ public class UserDAOTest extends DAOTest {
         UserDAO userDAO = (UserDAO) getBean("userDAO");
         List<UserBean> beans = userDAO.getAll();
         for (UserBean userBean : beans) {
-            userBean.setPassword(CryptUtils.encrypt2String(userBean.getPassword()));
+            if (userBean.getId() != 4) {
+                userBean.setPassword(CryptUtils.encrypt2String(userBean.getPassword()));
+            }
         }
         userDAO.update(beans);
     }

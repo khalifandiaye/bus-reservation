@@ -11,6 +11,8 @@ import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.User;
+import vn.edu.fpt.capstone.busReservation.exception.CommonException;
+import vn.edu.fpt.capstone.busReservation.logic.UserLogic;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
@@ -31,6 +33,17 @@ public class LoginAction extends BaseAction {
 
     public void setUserDAO(UserDAO userDAO) {
         this.userDAO = userDAO;
+    }
+
+    // ==========================Logic Object==========================
+    private UserLogic userLogic;
+
+    /**
+     * @param userLogic
+     *            the userLogic to set
+     */
+    public void setUserLogic(UserLogic userLogic) {
+        this.userLogic = userLogic;
     }
 
     // ==========================Action Input==========================
@@ -85,6 +98,13 @@ public class LoginAction extends BaseAction {
             params[0] = "password";
             errorMessage = getText("msgerrcm001", params);
         } else {
+            try {
+                user = userLogic.loginUser(username, password);
+            } catch (CommonException e) {
+                errorProcessing(e);
+                errorMessage = getActionErrors().iterator().next();
+                return SUCCESS;
+            }
             userBean = userDAO.checkLogin(username, password);
             if (userBean != null) {
                 user = new User();
@@ -100,9 +120,7 @@ public class LoginAction extends BaseAction {
                 roleId = user.getRoleId();
                 success = true;
             } else {
-                params = new String[1];
-                params[0] = "password";
-                errorMessage = getText("msgerrau001", params);
+                errorMessage = getText("msgerrau001");
             }
         }
         return SUCCESS;

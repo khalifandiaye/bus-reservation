@@ -132,6 +132,36 @@ public class UserLogic extends BaseLogic {
     public User activateUser(String username, String code)
             throws CommonException {
         User user = null;
+        UserBean userBean = null;
+        if (CheckUtils.isNullOrBlank(username)
+                || CheckUtils.isNullOrBlank(code)) {
+            throw new CommonException("msgerrau006");
+        }
+        userBean = userDAO.getByUsername(username);
+        try {
+            if (userBean != null
+                    && code.equals(CryptUtils.encrypt2String(userBean
+                            .getFirstName()
+                            + "/"
+                            + userBean.getLastName()
+                            + "/" + userBean.getEmail()))
+                    && UserStatus.NEW.getValue().equals(userBean.getStatus())) {
+                userBean.setStatus(UserStatus.ACTIVE.getValue());
+                userDAO.update(userBean);
+                user = new User();
+                user.setUserId(userBean.getId());
+                user.setUsername(userBean.getUsername());
+                user.setFirstName(userBean.getFirstName());
+                user.setLastName(userBean.getLastName());
+                user.setEmail(userBean.getEmail());
+                user.setMobilePhone(userBean.getMobileNumber());
+                user.setRoleId(userBean.getRole().getId());
+            } else {
+                throw new CommonException("msgerrau006");
+            }
+        } catch (NoSuchAlgorithmException e) {
+            throw new CommonException(e);
+        }
         return user;
     }
 
@@ -205,7 +235,8 @@ public class UserLogic extends BaseLogic {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(email));
             try {
-                message.setSubject(MimeUtility.encodeText(subject.toString(), "utf-8", "Q"));
+                message.setSubject(MimeUtility.encodeText(subject.toString(),
+                        "utf-8", "Q"));
             } catch (UnsupportedEncodingException e) {
                 throw new CommonException(e);
             }
@@ -234,6 +265,35 @@ public class UserLogic extends BaseLogic {
         reCaptchaResponse = reCaptcha
                 .checkAnswer(remoteip, challenge, response);
         return reCaptchaResponse.isValid();
+    }
+
+    public User loginUser(String username, String password)
+            throws CommonException {
+        User user = null;
+        UserBean userBean = null;
+        try {
+            userBean = userDAO.checkLogin(username,
+                    CryptUtils.encrypt2String(password));
+        } catch (NoSuchAlgorithmException e) {
+            throw new CommonException(e);
+        }
+        if (userBean != null
+                && UserStatus.ACTIVE.getValue().equals(userBean.getStatus())) {
+            user = new User();
+            user.setUserId(userBean.getId());
+            user.setUsername(userBean.getUsername());
+            user.setRoleId(userBean.getRole().getId());
+            user.setFirstName(userBean.getFirstName());
+            user.setLastName(userBean.getLastName());
+            user.setEmail(userBean.getEmail());
+            user.setMobilePhone(userBean.getMobileNumber());
+        } else if (userBean != null
+                && UserStatus.NEW.getValue().equals(userBean.getStatus())) {
+            throw new CommonException("msgerrau007");
+        } else {
+            throw new CommonException("msgerrau001");
+        }
+        return user;
     }
 
 }
