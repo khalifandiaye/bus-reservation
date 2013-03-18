@@ -17,12 +17,15 @@ public class PreUpdateTariffAction extends BaseAction {
 	private static final long serialVersionUID = 5439903464802687338L;
 	private RouteDetailsDAO routeDetailsDAO;
 
-	private List<SegmentBean> segmentBeans;
+	private int routeId;
+
 	private String message;
 
 	@Action(value = "getPreUpdateTariffAction", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
 		//get route each segment
+		List<SegmentBean> segmentBeans;
+		segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
 		message = "";
 		for (SegmentBean segmentBean : segmentBeans){
 			List<RouteBean> routeBeans = routeDetailsDAO.getAllRoutesBySegmentId(segmentBean.getId());
@@ -36,10 +39,10 @@ public class PreUpdateTariffAction extends BaseAction {
 
 	public void setRouteDetailsDAO(RouteDetailsDAO routeDetailsDAO) {
 		this.routeDetailsDAO = routeDetailsDAO;
-	}
-
-	public void setSegmentBeans(List<SegmentBean> segmentBeans) {
-		this.segmentBeans = segmentBeans;
+	}	
+	
+	public void setRouteId(int routeId) {
+		this.routeId = routeId;
 	}
 
 	public String getMessage() {
