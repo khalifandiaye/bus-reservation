@@ -138,6 +138,12 @@
 										});
 
 						$("#addBusPrice").click(function() {
+							$.each($("#editSegmentTable input"),
+                                  function() {
+                                     $(this).val('');
+                                  });
+							$('#busTypes').val('-1');
+							$('#validDateDiv').datetimepicker('setDate', (new Date()));
 							$("#editPriceDialog").modal();
 						});
 
@@ -529,7 +535,9 @@
 						<td style="width: 65%">Valid date :
 							<div id="validDateDiv" class="input-append date form_datetime"
 								data-date="">
-								<input id="validDate" size="16" type="text" value="" readonly name="validDate">
+								<input id="validDate" size="16" type="text" value=""
+                  readonly name="tripDialogDepartureTime"><span
+                  class="add-on"><i class="icon-calendar"></i></span>
 							</div>
 						</td>
 						<td>Select bus type :
