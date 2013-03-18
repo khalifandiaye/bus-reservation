@@ -36,12 +36,12 @@
 	function setParam() {
 		var outRadio = $('form input[name="out_journey"]:checked');
 		$('input[name="outBusStatus"]').val(
-				$(outRadio).siblings('#out_status').val());
+				$(outRadio).siblings('.out_status').val());
 		$('input[name="outDepartTime"]').val(
-				$(outRadio).siblings('#out_deptTime').val());
+				$(outRadio).siblings('.out_deptTime').val());
 		$('input[name="outArriveTime"]').val(
-				$(outRadio).siblings('#out_arrTime').val());
-		$('input[name="outFare"]').val($(outRadio).siblings('#out_fare').val());
+				$(outRadio).siblings('.out_arrTime').val());
+		$('input[name="outFare"]').val($(outRadio).siblings('.out_fare').val());
 		return true;
 	}
 
@@ -58,11 +58,11 @@
 				'click',
 				(function() {
 					var busStatus = $(this).parent("td").next().next().find(
-							'#out_status').val();
+							'.out_status').val();
 					var departTime = $(this).parent("td").next().next().find(
-							'#out_deptTime').val();
+							'.out_deptTime').val();
 					var arriveTime = $(this).parent("td").next().next().find(
-							'#out_arrTime').val();
+							'.out_arrTime').val();
 					//console.log(departTime);
 					$.ajax({
 						type : "GET",
@@ -83,6 +83,7 @@
 		if($("#message").val() != null && $("#message").val() != ""){
 			showPopup($("#message").val());
 		}
+		
 	});
 </script>
 </head>
@@ -115,112 +116,59 @@
 	<div class="container">
 		<div class="well">
 			<!-- Start contents -->
-			<s:set name="deptCity" value="deptCity" />
-			<s:set name="arrCity" value="arrCity" />
 			<s:set name="pssgrNo" value="passengerNo" />
-			<s:if test="%{#deptCity==''}">
-				<legend><s:text name="message.cannotFindJourney"/></legend>
-				<div>Không có chuyến đi nào phù hợp với điều kiện của quý
-					khách. Xin vui lòng thử lại.</div>
-			</s:if>
-			<s:else>
-				<legend><s:text name="message.pleaseChooseJourney"/></legend>
-				<div id="page">
-					<div class="post">
-						<form action="../booking/booking.html">
-							<div align="center">
-
-								<table border="0" cellspacing="2" cellpadding="5"
-									class="bookingPages"
-									summary="A selection of travel times for your outward journey will follow. Please select the journey you would like to book.">
-									<tbody>
-										<tr>
-											<td rowspan="2" colspan="2" class="textstyle1"
-												valign="middle">
-												<h4>Chuyến đi&nbsp;</h4>
-											</td>
-											<td colspan="3" class="textstyle1">Từ:&nbsp;<strong><s:property
-														value="#deptCity" /></strong>&nbsp;
-											</td>
-										</tr>
-										<tr>
-											<td colspan="3" class="textstyle1">Đến:&nbsp;<strong><s:property
-														value="#arrCity" /></strong>&nbsp;
-											</td>
-										</tr>
-										<s:iterator></s:iterator>
-										<tr>
-											<td></td>
-											<td colspan="3" class="textstyle1" align="middle"
-												valign="middle">Ngày:&nbsp;<strong>${departureDate}</strong></td>
-											<td></td>
-										</tr>
-										<tr style="background: #CCCCCC">
-											<th id="outward_departs">Ngày giờ đi</th>
-											<th id="outward_arrive">Ngày giờ đến</th>
-											<th id="outward_details">Xem chi tiết</th>
-											<th id="outward_funfares">Giá vé</th>
-											<th id="outward_select" align="left" class="bookingHeader">Chọn</th>
-										</tr>
-										<s:iterator value="searchResult" status="srStatus" var="sr">
-											<s:if test="#srStatus.even == true">
-												<tr style="background: #CCCCCC" class="tripDetails">
-											</s:if>
-											<s:else>
-												<tr class="tripDetails">
-											</s:else>
-											<td align="center"><s:date name="departureTime"
-													format="dd-MM-yyyy" />&nbsp;<br> <s:date
-													name="departureTime" format="HH:mm" /></td>
-											<td align="center"><s:date name="arrivalTime"
-													format="dd-MM-yyyy" />&nbsp;<br> <s:date
-													name="arrivalTime" format="HH:mm" /></td>
-											<td align="center"><a href="#trip-details" role="button"
-												data-toggle="modal" class="trip-details">Chi tiết</a></td>
-											<td><s:text name="format.number">
-													<s:property value="fare" />
-												</s:text>&nbsp;VND&nbsp;</td>
-											<td align="center"><s:if test="#srStatus.first == true">
-													<input title="Chọn chuyến này" type="radio"
-														name="out_journey" id="out_journey" checked />
-												</s:if> <s:else>
-													<input title="Chọn chuyến này" type="radio"
-														name="out_journey" id="out_journey" />
-												</s:else> <input type="hidden" id="out_status"
-												value="${sr.busStatusId}" /> <input type="hidden"
-												id="out_deptTime" value="${sr.departureTime}" /> <input
-												type="hidden" id="out_arrTime" value="${sr.arrivalTime}" />
-												<input type="hidden" id="out_fare" value="${sr.fare}" /></td>
-											<!--  -->
-											</tr>
-										</s:iterator>
-										<tr>
-											<td colspan="2"></td>
-											<td colspan="3"><input type="submit"
-												onclick="setParam()" class="pull-right btn btn-small"
-												value="<s:text name="next"/>" /></td>
-										</tr>
-									</tbody>
-								</table>
-								<input type="hidden" id="passengerNo" value="${pssgrNo}"
-									name="passengerNo" /> <input type="hidden" name="outBusStatus" />
-								<input type="hidden" name="outDepartTime" /> <input
-									type="hidden" name="outArriveTime" /> <input type="hidden"
-									name="outFare" />
-							</div>
-						</form>
-			</s:else>
+			<s:set name="msgRtn" value="searchMessage"/>
 			<script type="text/javascript">
 				$(document).ready(function() {
-					if($('div.list-header.onward4').length!=0){
-						$('.onward4').addClass('focus-background');
-						//$('table.onward4')
+					if($('.list-header.onward4').size()!=0){
+						showResultDetails('onward4');
+					} else if($('.list-header.onward3').size()!=0){
+						showResultDetails('onward3');
+					} else if($('.list-header.onward5').size()!=0){
+						showResultDetails('onward5');
+					} else if($('.list-header.onward2').size()!=0){
+						showResultDetails('onward2');
+					} else if($('.list-header.onward6').size()!=0){
+						showResultDetails('onward6');
+					} else if($('.list-header.onward1').size()!=0){
+						showResultDetails('onward1');
+					} else if($('.list-header.onward7').size()!=0){
+						showResultDetails('onward7');
 					}
-				})
+					
+					$('.list-header').bind('click',(function() {
+						var className = $(this).attr('class').split(' ')[1];
+						showResultDetails(className);
+					}));
+					
+					$('#out_journey').bind(
+							'click', (function(){
+						
+					}));
+				});
+
+				function showResultDetails(headerName){
+					$('.search-rs-dtl').hide();	
+					$('.search-rs-dtl.' + headerName).show();
+					$('table.' + headerName + ' tr.tripDetails #out_journey')[0].checked = true;
+					$('.list-header').removeClass('header-current');
+					$('.list-header').addClass('header-default');
+					$('.list-header.' + headerName).removeClass('header-default');
+					$('.list-header.' + headerName).addClass('header-current');
+				}
+				
 			</script>
 			<div>
-			<legend><s:text name="message.pleaseChooseJourney"/></legend>
+			<form action="../booking/booking.html">
 			<div class="onward-info">
+				<legend>Chuyến đi</legend>
+				<div class="trip-details" style="display:block;width:100%">
+					<span class="blue-bus-ico"></span>
+					<span><h5>${deptCity}</h5>
+					 	<span class="arrow-right"></span><h5>${arrCity}</h5>
+					</span>
+				</div>
+				<br/>
 				<s:set name="result1" value="resultNo1" />
 				<s:set name="result2" value="resultNo2" />
 				<s:set name="result3" value="resultNo3" />
@@ -228,56 +176,58 @@
 				<s:set name="result5" value="resultNo5" />
 				<s:set name="result6" value="resultNo6" />
 				<s:set name="result7" value="resultNo7" />
-				<s:if test="%{#result4.size == 0 && (#result1.size != 0
-									|| #result2.size != 0 || #result3.size != 0
-									|| #result5.size != 0 || #result6.size != 0
-									|| #result7.size != 0)}">
-				<div>Hiện tại không có chuyến đi nào vào ngày <strong>${departureDate}</strong>. 
+				<s:if test="%{#result4.size == 0 && #msgRtn == ''}">
+				<div style="display:block; margin-left:10px; margin-bottom:15px;">Hiện tại không có chuyến đi nào vào ngày <strong>${departureDate}</strong>. 
 					 Dưới đây là những chuyến đi có ngày gần với ngày quý khách mong muốn.</div>
 					 <br/>
 					 </s:if>
-				<s:if test="%{#result4.size != 0}"></s:if>
+				<s:if test="%{#msgRtn != ''}">
+					<s:property value="msgRtn"/>. Xin quý khách vui lòng thử lại.
+				</s:if>	 
+				<s:if test="%{#result4.size != 0}">
+					<div style="display:block; margin-left:10px; margin-bottom:15px">Vui lòng chọn chuyến đi và nhấn <strong>"Tiếp tục"</strong></div>
+				</s:if>
 					<div class="result-header onward">
 						<s:if test="%{#result1.size != 0}">			
 							<span class="list-header onward1">
-								<s:date name="resultNo1[0].departureTime" format="dd-MM-yyyy" />
+								<s:date name="resultNo1[0].departureTime" format="dd-MM" />
 							</span>		
 						</s:if>	
 						<s:if test="%{#result2.size != 0}">
 							<span class="list-header onward2">
-								<s:date name="resultNo2[0].departureTime" format="dd-MM-yyyy" />
+								<s:date name="resultNo2[0].departureTime" format="dd-MM" />
 							</span>
 						</s:if>	
 						<s:if test="%{#result3.size != 0}">
 							<span class="list-header onward3">
-								<s:date name="resultNo3[0].departureTime" format="dd-MM-yyyy" />
+								<s:date name="resultNo3[0].departureTime" format="dd-MM" />
 							</span>	
 						</s:if>
 						<s:if test="%{#result4.size != 0}">
 							<span class="list-header onward4">
-								<s:date name="resultNo4[0].departureTime" format="dd-MM-yyyy"/>
+								<s:date name="resultNo4[0].departureTime" format="dd-MM"/>
 							</span>
 						</s:if>
 						<s:if test="%{#result5.size != 0}">
 							<span class="list-header onward5">
-								<s:date name="resultNo5[0].departureTime" format="dd-MM-yyyy" />
+								<s:date name="resultNo5[0].departureTime" format="dd-MM" />
 							</span>
 						</s:if>
 						<s:if test="%{#result6.size != 0}">	
 							<span class="list-header onward6">
-								<s:date name="resultNo6[0].departureTime" format="dd-MM-yyyy" />				
+								<s:date name="resultNo6[0].departureTime" format="dd-MM" />				
 							</span>
 						</s:if>
 						<s:if test="%{#result7.size != 0}">	
 							<span class="list-header onward7">
-								<s:date name="resultNo7[0].departureTime" format="dd-MM-yyyy" />							
+								<s:date name="resultNo7[0].departureTime" format="dd-MM" />							
 							</span>
 						</s:if>
 						</div>
 					<div class="result-table onward">
 						<s:if test="%{#result1.size != 0}">			
 							<div class="search-rs-dtl onward1">
-								<table class="onward1">
+								<table class="tbl-trip-list onward1">
 									<jsp:include page="../search/search-table-header.jsp" />
 									<s:iterator value="resultNo1" status="srStatus" var="sr">
 										<jsp:include page="../search/search-table-detail.jsp" />
@@ -287,7 +237,7 @@
 						</s:if>	
 						<s:if test="%{#result2.size != 0}">
 							<div class="search-rs-dtl onward2">
-								<table class="onward2">
+								<table class="tbl-trip-list onward2">
 									<jsp:include page="../search/search-table-header.jsp" />
 									<s:iterator value="resultNo2" status="srStatus" var="sr">
 										<jsp:include page="../search/search-table-detail.jsp" />
@@ -297,7 +247,7 @@
 						</s:if>	
 						<s:if test="%{#result3.size != 0}">
 							<div class="search-rs-dtl onward3">
-								<table class="onward3">
+								<table class="tbl-trip-list onward3">
 									<jsp:include page="../search/search-table-header.jsp" />
 									<s:iterator value="resultNo3" status="srStatus" var="sr">
 										<jsp:include page="../search/search-table-detail.jsp" />
@@ -307,7 +257,7 @@
 						</s:if>
 						<s:if test="%{#result4.size != 0}">
 							<div class="search-rs-dtl onward4">
-								<table class="onward4">
+								<table class="tbl-trip-list onward4">
 									<jsp:include page="../search/search-table-header.jsp" />
 									<s:iterator value="resultNo4" status="srStatus" var="sr">
 										<jsp:include page="../search/search-table-detail.jsp" />
@@ -317,7 +267,7 @@
 						</s:if>
 						<s:if test="%{#result5.size != 0}">
 							<div class="search-rs-dtl onward5">
-								<table class="onward5">
+								<table class="tbl-trip-list onward5">
 									<jsp:include page="../search/search-table-header.jsp" />
 									<s:iterator value="resultNo5" status="srStatus" var="sr">
 										<jsp:include page="../search/search-table-detail.jsp" />
@@ -327,7 +277,7 @@
 						</s:if>
 						<s:if test="%{#result6.size != 0}">	
 							<div class="search-rs-dtl onward6">
-								<table class="onward6">
+								<table class="tbl-trip-list onward6">
 									<jsp:include page="../search/search-table-header.jsp" />
 									<s:iterator value="resultNo6" status="srStatus" var="sr">
 										<jsp:include page="../search/search-table-detail.jsp" />
@@ -337,7 +287,7 @@
 						</s:if>
 						<s:if test="%{#result7.size != 0}">	
 							<div class="search-rs-dtl onward4">
-								<table class="onward7">
+								<table class="tbl-trip-list onward7">
 									<jsp:include page="../search/search-table-header.jsp" />
 									<s:iterator value="resultNo7" status="srStatus" var="sr">
 										<jsp:include page="../search/search-table-detail.jsp" />
@@ -346,7 +296,16 @@
 							</div>
 						</s:if>
 						</div>
+						<input type="submit"
+												onclick="setParam()" class="btn btn-large pull-right btn-primary"
+												style="margin-top: 15px; margin-right: 10px;" value="<s:text name="next"/>" />	
 			</div>
+			<input type="hidden" id="passengerNo" value="${passengerNo}"
+									name="passengerNo" /> <input type="hidden" name="outBusStatus" />
+								<input type="hidden" name="outDepartTime" /> <input
+									type="hidden" name="outArriveTime" /> <input type="hidden"
+									name="outFare" />				
+			</form>
 			</div>
 		</div>
 			<s:hidden id="message" name="message"></s:hidden>
