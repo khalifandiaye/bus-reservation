@@ -10,7 +10,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.MailTemplateBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
 
 /**
  * @author Yoshimi

@@ -1,7 +1,6 @@
 package vn.edu.fpt.capstone.busReservation.displayModel;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class SearchParamsInfo implements Serializable{
 	private static final long serialVersionUID = 52L;
