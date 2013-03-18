@@ -105,23 +105,10 @@ public class LoginAction extends BaseAction {
                 errorMessage = getActionErrors().iterator().next();
                 return SUCCESS;
             }
-            userBean = userDAO.checkLogin(username, password);
-            if (userBean != null) {
-                user = new User();
-                user.setUserId(userBean.getId());
-                user.setUsername(userBean.getUsername());
-                user.setRoleId(userBean.getRole().getId());
-                user.setFirstName(userBean.getFirstName());
-                user.setLastName(userBean.getLastName());
-                user.setEmail(userBean.getEmail());
-                user.setMobilePhone(userBean.getMobileNumber());
-                session.put(CommonConstant.SESSION_KEY_USER, user);
-                name = user.getLastName() + " " + user.getFirstName();
-                roleId = user.getRoleId();
-                success = true;
-            } else {
-                errorMessage = getText("msgerrau001");
-            }
+            session.put(CommonConstant.SESSION_KEY_USER, user);
+            name = user.getLastName() + " " + user.getFirstName();
+            roleId = user.getRoleId();
+            success = true;
         }
         return SUCCESS;
     }
