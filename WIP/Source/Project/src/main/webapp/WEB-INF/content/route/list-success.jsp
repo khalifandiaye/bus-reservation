@@ -341,7 +341,6 @@
 			<button id="routeDeleteDialogOk" class="btn btn-danger">Delete</button>
 		</div>
 	</div>
-
 	
 	<!-- Modal Save success Dialog -->
    <div id="saveSuccess" class="modal hide fade" tabindex="-1"
