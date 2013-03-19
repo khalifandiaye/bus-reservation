@@ -30,8 +30,7 @@
 	 
 	$(document).ready(
 			function() {
-				var oTable;
-				oTable = $('#scheduleTable').dataTable();
+				var oTable = $('#scheduleTable').dataTable();
 
 				$('#busStatusInsertBtn').click(function() {
 					$('#tripDialogRoutes').val(-1);

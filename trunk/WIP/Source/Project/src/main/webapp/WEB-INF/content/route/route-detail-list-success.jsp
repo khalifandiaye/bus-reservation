@@ -29,27 +29,188 @@
 				theEvent.preventDefault();
 		}
 	}
-	
-	function updateTarrif(info){
+
+	function updateTarrif(info) {
 		$.ajax({
-            type : "POST",
-            url : 'updateTariff.html',
-            contentType : "application/x-www-form-urlencoded; charset=utf-8",
-            data : { data : JSON.stringify(info) },
-            success : function(response) {
-                alert(response);
-                var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId="
-                                 + $('#routeId').val();
-                window.location = url;
-               },
-               error : function() {
-                     alert("Save new route failed!");
-               }
-           });
+			type : "POST",
+			url : 'updateTariff.html',
+			contentType : "application/x-www-form-urlencoded; charset=utf-8",
+			data : {
+				data : JSON.stringify(info)
+			},
+			success : function(response) {
+				alert(response);
+				var url = $('#contextPath').val()
+						+ "/route/route-detail-list.html?routeId="
+						+ $('#routeId').val();
+				window.location = url;
+			},
+			error : function() {
+				alert("Save new route failed!");
+			}
+		});
 	}
-	
-	$(document).ready(
-			function() {
+
+	$(document)
+			.ready(
+					function() {
+						var selectedRouteId = $("#routeId").val();
+						if (selectedRouteId != '-1') {
+							$
+									.ajax(
+											{
+												url : $('#contextPath').val()
+														+ "/schedule/busTypes.html?&routeId="
+														+ selectedRouteId,
+											})
+									.done(
+											function(data) {
+												$('#tripDialogBusType').empty();
+												$
+														.each(
+																data.busTypeInfos,
+																function() {
+																	$(
+																			'#tripDialogBusType')
+																			.append(
+																					'<option value="' + this.id + '">'
+																							+ this.type
+																							+ '</option>');
+																});
+											});
+						}
+						;
+
+						$('#busStatusInsertBtn').click(function() {
+							$('#tripDialogRoutes').val(-1);
+							$('#tripDialogDepartureTime').val('');
+							$('#tripDialogArrivalTime').val('');
+							$('#tripDialogBusPlate').empty();
+							$('#CreateScheduleDialog').modal();
+							$('#tripEditDialogLabel').html("Add New Schedule");
+							$("#tripDialogDepartureTimeDiv").datetimepicker({
+								format : "yyyy/mm/dd - hh:ii",
+								autoclose : true,
+								todayBtn : true,
+								startDate : new Date(),
+								minuteStep : 10
+							}).on('changeDate', function(ev) {
+								getAvailBus();
+								getArrivalTime();
+							});
+						});
+
+						function getAvailBus() {
+							var selectedRouteId = $("#routeId").val();
+							var departureTime = $("#tripDialogDepartureTime")
+									.val();
+							var selectedBusType = $("#tripDialogBusType").val();
+							if (selectedRouteId != '-1' && departureTime != ""
+									&& selectedBusType != '-1') {
+								$
+										.ajax(
+												{
+													url : $('#contextPath')
+															.val()
+															+ "/schedule/availBus.html?departureTime="
+															+ departureTime
+															+ "&busType="
+															+ selectedBusType
+															+ "&routeId="
+															+ selectedRouteId,
+												})
+										.done(
+												function(data) {
+													$('#tripDialogBusPlate')
+															.empty();
+													$
+															.each(
+																	data.busInfos,
+																	function() {
+																		$(
+																				'#tripDialogBusPlate')
+																				.append(
+																						'<option value="' + this.id + '">'
+																								+ this.plateNumber
+																								+ '</option>');
+																	});
+												});
+							}
+						}
+						;
+
+						function getArrivalTime() {
+							var selectedRouteId = $("#routeId").val();
+							var departureTime = $("#tripDialogDepartureTime")
+									.val();
+							if (selectedRouteId != '-1' && departureTime != "") {
+								$
+										.ajax(
+												{
+													url : $('#contextPath')
+															.val()
+															+ "/schedule/getArrivalTime.html?departureTime="
+															+ departureTime
+															+ "&routeId="
+															+ selectedRouteId,
+												})
+										.done(
+												function(data) {
+													$("#tripDialogArrivalTime")
+															.val(
+																	data.arrivalTime);
+												});
+							}
+						}
+
+						$('#cancelAdd').bind('click', function() {
+							$("#tripDialogRoutes").val(-1);
+							$("#tripDialogDepartureTime").val('');
+							$("#tripDialogArrivalTime").val('');
+							$('#tripDialogBusPlate').val('');
+						});
+
+						$('#addNewSchedule').bind(
+								'click',
+								function(event) {
+									var selectedRouteId = $("#routeId").val();
+									var departureTime = $(
+											"#tripDialogDepartureTime").val();
+									var selectedBusType = $(
+											"#tripDialogBusType").val();
+									var busPlate = $('#tripDialogBusPlate')
+											.val();
+									var form = $('#addNewTripForm');
+
+									if (selectedRouteId == -1
+											|| departureTime == ''
+											|| !selectedBusType
+											|| selectedBusType == -1
+											|| !busPlate || busPlate == '') {
+										return;
+									}
+
+									event.preventDefault();
+									$.ajax({
+										type : "POST",
+										url : $('#contextPath').val()
+												+ "/schedule/"
+												+ form.attr('action'),
+										data : form.serialize(),
+										success : function(response) {
+											alert(response);
+										}
+									});
+								});
+
+						$('#saveSuccessDialogOk').bind(
+								'click',
+								function() {
+									var url = $('#contextPath').val()
+											+ "/schedule/list.html";
+									window.location = url;
+								});
+
 						accounting.settings = {
 							currency : {
 								symbol : " VNĐ", // default currency symbol is '$'
@@ -78,9 +239,10 @@
 							"bSort" : false
 						});
 
-						var editSegmentTable = $('#editSegmentTable').dataTable({
-							"bSort" : false
-						});
+						var editSegmentTable = $('#editSegmentTable')
+								.dataTable({
+									"bSort" : false
+								});
 
 						$.each($("#editSegmentTable input"), function() {
 							$("#" + this.id + "").keypress(function(event) {
@@ -96,36 +258,51 @@
 							minuteStep : 10
 						});
 
-						$("#editPriceSave").bind('click', function() {
-							   var info = {};
-								var tariffs = [];
-								$.each($("#editSegmentTable input"), function() {
-							      var tariff = {};
-									tariff['segmentId'] = this.id;
-									tariff['fare'] = this.value;
-									tariffs.push(tariff);
-								});
-								info['routeId'] = $('#routeId').val();
-								info['validDate'] = $('#validDate').val();
-								info['tariffs'] = tariffs;
-								info['busTypeId'] = $('#busTypes').val();
-								$.ajax({
-									   type : "GET",
-										url : 'getPreUpdateTariffAction.html?routeId=' +  $("#routeId").val(),
-										contentType : "application/x-www-form-urlencoded; charset=utf-8",
-										success : function(response) {
-											if (response.message.trim() != '') {
-												var result = confirm(response.message);
-												if (result==true) {
-													updateTarrif(info);
-												}
-											}
-										},
-										error : function() {
-												   alert("Save new route failed!");
-										}
-								})
-					   });
+						$("#editPriceSave")
+								.bind(
+										'click',
+										function() {
+											var info = {};
+											var tariffs = [];
+											$
+													.each(
+															$("#editSegmentTable input"),
+															function() {
+																var tariff = {};
+																tariff['segmentId'] = this.id;
+																tariff['fare'] = this.value;
+																tariffs
+																		.push(tariff);
+															});
+											info['routeId'] = $('#routeId')
+													.val();
+											info['validDate'] = $('#validDate')
+													.val();
+											info['tariffs'] = tariffs;
+											info['busTypeId'] = $('#busTypes')
+													.val();
+											$
+													.ajax({
+														type : "GET",
+														url : 'getPreUpdateTariffAction.html?routeId='
+																+ $("#routeId")
+																		.val(),
+														contentType : "application/x-www-form-urlencoded; charset=utf-8",
+														success : function(
+																response) {
+															if (response.message
+																	.trim() != '') {
+																var result = confirm(response.message);
+																if (result == true) {
+																	updateTarrif(info);
+																}
+															}
+														},
+														error : function() {
+															alert("Save new route failed!");
+														}
+													})
+										});
 
 						$("#addBusPrice").click(
 								function() {
@@ -264,7 +441,8 @@
 															});
 										});
 
-						$("#busDetailSave").click(
+						$("#busDetailSave")
+								.click(
 										function() {
 											var routeId = $("#routeId").val();
 											var busInfos = [];
@@ -420,6 +598,9 @@
                </table>
             </s:if>
          </div>
+         <div style="height: 45px; margin-left: 1%;">
+            <input id="busStatusInsertBtn" type="button" class="btn btn-success" value="Add New Schedule" />
+         </div>
          <h3>
             <s:property value="routeName" />
          </h3>
@@ -545,6 +726,46 @@
          <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
          <button id="editPriceSave" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Save</button>
       </div>
+   </div>
+   <!-- Modal -->
+   <div id="CreateScheduleDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+      <form id="addNewTripForm" action="save.html" method="POST">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="tripEditDialogLabel"></h3>
+         </div>
+         <div class="modal-body">
+            <%-- <div id="trip-route">
+               <label id="trip-route-label" for="routeSelect">Select Route</label>
+               <s:select id="tripDialogRoutes" headerKey="-1"
+                  headerValue="--- Select Route ---" list="routeBeans"
+                  name="routeBeans" listKey="id" listValue="name" />
+            </div> --%>
+            <label for="tripDialogDepartureTimeDiv">From Date: </label>
+            <div id="tripDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
+               <input id="tripDialogDepartureTime" size="16" type="text" value="" readonly
+                  name="tripDialogDepartureTime"> <span class="add-on"><i class="icon-remove"></i></span> <span
+                  class="add-on"><i class="icon-calendar"></i></span>
+            </div>
+            <label for="tripDialogArrivalTimeDiv">To Date: </label>
+            <div id="tripDialogArrivalTimeDiv" class="input-append date form_datetime" data-date="">
+               <input id="tripDialogArrivalTime" size="16" type="text" value="" readonly>
+            </div>
+            <label for="tripDialogBusType">Bus Type: </label> <select id="tripDialogBusType" name="busTypeBeans">
+               <option value="-1">Select Bus Type</option>
+            </select>
+            <div id="trip-plate-number">
+               <label for="routeSelect">Bus Plate Number</label> <select id='tripDialogBusPlate'
+                  name='tripDialogBusPlate'></select>
+            </div>
+            <div id="tripDialogStatus"></div>
+         </div>
+         <div class="modal-footer">
+            <button class="btn" id="cancelAdd" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <input type="button" id="addNewSchedule" class="btn btn-primary" value='Save changes' />
+         </div>
+      </form>
    </div>
    <jsp:include page="../common/footer.jsp" />
 </body>
