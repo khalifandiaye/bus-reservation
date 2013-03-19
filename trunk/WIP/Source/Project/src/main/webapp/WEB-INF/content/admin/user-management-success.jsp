@@ -36,7 +36,7 @@
 					<th>Tài khoản</th>
 					<th>Họ Tên</th>
 					<th>Chức vụ</th>
-					<th>Status</th>
+					<th>Trạng thái</th>
 					<th>Chi tiết</th>
 					<th>Xóa</th>
 				</tr>

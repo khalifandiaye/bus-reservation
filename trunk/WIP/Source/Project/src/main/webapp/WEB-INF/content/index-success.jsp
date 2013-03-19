@@ -146,8 +146,8 @@
 					<img src="<%=request.getContextPath()%>/img/image1.jpg" />
 				</div>
 				<div class="item">
-					<img src="<%=request.getContextPath()%>/img/image2.png" />
-				</div>
+					<img src="<%=request.getContextPath()%>/img/image2.jpg" />
+				</div> 
 				<div class="item">
 					<img src="<%=request.getContextPath()%>/img/image3.jpg" />
 				</div>
