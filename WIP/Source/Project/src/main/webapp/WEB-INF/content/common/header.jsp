@@ -36,12 +36,12 @@
 <input type="hidden" id="contextPath" value="<%=request.getContextPath()%>">
 <header class="header">
 		<div class="brand-wrapper">
-             <a class="brand" href="index.html">TRAVEL<span style="color:#555555">BUS</span></a>
+             <a class="brand" href="index.html">VINA<span style="color:#555555">BUS</span></a>
        	</div>
-       	<div class="bus-logo-left pull-right"><img src="<%=request.getContextPath()%>/img/bus-logo-left.png"></div>  
+       	<div class="bus-logo-left pull-right"><img src="<%=request.getContextPath()%>/img/bus-logo-left.png" style="width: 200px;margin-bottom: -90px;margin-top: -15px;"></div>  
         <div class="navbar">
             <div class="navbar-inner">
-                <ul class="nav pull-left">  
+                <ul class="nav pull-left">   
                     <li class="active"><a href="<%=request.getContextPath()%>/">TRANG CHỦ</a></li>
                     <li><a href="#">CHÍNH SÁCH GIÁ</a></li>
                     <li><a href="#">VỀ CHÚNG TÔI</a></li>
@@ -52,6 +52,7 @@
                           <li><a href="<%=request.getContextPath()%>/bus/list.html">XE BUS</a></li>
                           <li><a href="<%=request.getContextPath()%>/route/list.html">TUYẾN ĐƯỜNG</a></li>
                           <li><a href="<%=request.getContextPath()%>/schedule/list.html">LỊCH XE CHẠY</a></li>
+                          <li><a href="<%=request.getContextPath()%>/admin/user-management.html">THÀNH VIÊN</a></li>
                         </ul>
                       </li>
                 </ul> 
