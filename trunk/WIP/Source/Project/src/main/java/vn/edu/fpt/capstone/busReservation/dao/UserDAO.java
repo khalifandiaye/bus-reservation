@@ -133,4 +133,29 @@ public class UserDAO extends GenericDAO<Integer, UserBean> {
         }
         return result != null && result.size() > 0 ? result.get(0) : null;
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<UserBean> getAllActiveUser() {
+        List<UserBean> result = null;
+        Query query = null;
+        String queryString = null;
+        Session session = null;
+        String[] role = {"Customer","Operator"};
+        String[] status = {"new","active","inactive"};
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            queryString = "SELECT user FROM UserBean AS user INNER JOIN user.role AS rol WHERE rol.name IN (:role) AND user.status IN (:status)";
+            query = session.createQuery(queryString); 
+            query.setParameterList("role", role);
+            query.setParameterList("status", status);
+            result = query.list();
+            // commit transaction
+            // session.getTransaction().commit();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+        return result != null && result.size() > 0 ? result : null;
+    }
 }
