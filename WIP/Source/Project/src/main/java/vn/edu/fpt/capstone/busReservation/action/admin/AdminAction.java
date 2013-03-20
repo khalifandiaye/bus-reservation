@@ -282,7 +282,11 @@ public class AdminAction extends ActionSupport {
 		int roleID = 1;
 		try {
         	UserBean userBean = userDAO.getByUsername(inputUsername);
-        	
+        	if(userBean == null){
+        		errorMessage = "That user is not exist.";
+    			resultJSON = false;
+    			return SUCCESS;
+        	}
         	userBean.setEmail(inputEmail);
         	userBean.setFirstName(inputFirstname);
         	userBean.setLastName(inputLastname);
@@ -310,4 +314,26 @@ public class AdminAction extends ActionSupport {
 		}
 		return SUCCESS;
 	}
+	
+	@Action(value = "/resetPassword", results = { @Result(type = "json", name = SUCCESS) })
+	public String resetPassword(){
+		resultJSON = false;
+		errorMessage = "Can not reset password.";
+		
+		try {
+        	UserBean userBean = userDAO.getByUsername(inputUsername);
+        	if(userBean == null){
+        		errorMessage = "That user is not exist.";
+    			resultJSON = false;
+    			return SUCCESS;
+        	}
+        	userBean.setPassword(CryptUtils.encrypt2String(inputPassword));
+			errorMessage = "Reset password successful";
+			resultJSON = true;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return SUCCESS;
+	}
+	
 }

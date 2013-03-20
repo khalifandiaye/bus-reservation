@@ -146,6 +146,158 @@ if ( $.fn.DataTable.TableTools ) {
 }
 
 $(function(){
+	$("#modalAddUser form").validate({
+		rules: {
+			inputUsername: {
+				required: true,
+				maxlength: 10,
+				minlength: 6,
+			},
+			inputPassword: {
+				required: true,
+				maxlength: 10,
+				minlength:6,
+			},
+			inputRePassword: {
+				equalTo: "#modalAddUser form #inputPassword",
+				required: true,
+				maxlength: 10,
+				minlength:6,
+			},
+			inputFirstname: {
+				required: true,
+				maxlength: 30,
+			},
+			inputLastname: {
+				required: true,
+				maxlength: 30,
+			},
+			inputMobilephone: {
+				minlength: 10,
+				maxlength: 11,
+				digits: true
+			},
+			inputEmail: {
+				required: true,
+				email: true
+			}
+		},
+		messages: {
+			inputUsername: {
+				required: "Vui lòng nhập tên tài khoản.",
+				minlength: "Tên tài khoản tối thiểu 6 kí tự.",
+				maxlength: "Tên tài khoản tối đa 10 kí tự.",
+			},
+			inputPassword: {
+				required: "Vui lòng nhập lại mật khẩu.",
+				maxlength: "Mật khẩu tối đa 10 kí tự.",
+				minlength: "Mật khẩu tối thiểu 6 kí tự",
+			},
+			inputRePassword: {
+				equalTo: "Vui lòng nhập đúng mật khẩu ở trên.",
+				required: "Vui lòng nhập lại mật khẩu.",
+				maxlength: "Mật khẩu tối đa 10 kí tự.",
+				minlength: "Mật khẩu tối thiểu 6 kí tự",
+			},
+			inputFirstname: {
+				required: "Vui lòng nhập tên.",
+				maxlength: "Tên tối đa chỉ được 30 kí tự."
+			},
+			inputLastname: {
+				required: "Vui lòng nhập họ.",
+				maxlength: "Họ tối đa chỉ được 30 kí tự."
+			},
+			inputMobilephone: {
+				minlength: "Số điện thoại không hợp lệ.",
+				maxlength: "Số điện thoại không hợp lệ.",
+				digits: "Số điện thoại không hợp lệ."
+			},
+			inputEmail: {
+				required: "Vui lòng nhập địa chỉ email",
+				email: "Vui lòng nhập địa chỉ email chính xác."
+			}
+		}
+	});
+	
+	$("#modalEditUser form").validate({
+		rules: {
+			inputFirstname: {
+				required: true,
+				maxlength: 30,
+			},
+			inputLastname: {
+				required: true,
+				maxlength: 30,
+			},
+			inputMobilephone: {
+				minlength: 10,
+				maxlength: 11,
+				digits: true
+			},
+			inputEmail: {
+				required: true,
+				email: true
+			}
+		},
+		messages: {
+			inputFirstname: {
+				required: "Vui lòng nhập tên.",
+				maxlength: "Tên tối đa chỉ được 30 kí tự."
+			},
+			inputLastname: {
+				required: "Vui lòng nhập họ.",
+				maxlength: "Họ tối đa chỉ được 30 kí tự."
+			},
+			inputMobilephone: {
+				minlength: "Số điện thoại không hợp lệ.",
+				maxlength: "Số điện thoại không hợp lệ.",
+				digits: "Số điện thoại không hợp lệ."
+			},
+			inputEmail: {
+				required: "Vui lòng nhập địa chỉ email",
+				email: "Vui lòng nhập địa chỉ email chính xác."
+			}
+		}
+	});
+	
+	$("#modalResetPassword form").validate({
+		rules: {
+			inputUsername: {
+				required: true,
+				maxlength: 10,
+				minlength: 6,
+			},
+			inputPassword: {
+				required: true,
+				maxlength: 10,
+				minlength:6,
+			},
+			inputRePassword: {
+				equalTo: "#modalResetPassword form #inputPassword",
+				required: true,
+				maxlength: 10,
+				minlength:6,
+			}
+		},
+		messages: {
+			inputUsername: {
+				required: "Vui lòng nhập tên tài khoản.",
+				minlength: "Tên tài khoản tối thiểu 6 kí tự.",
+				maxlength: "Tên tài khoản tối đa 10 kí tự.",
+			},
+			inputPassword: {
+				required: "Vui lòng nhập lại mật khẩu.",
+				maxlength: "Mật khẩu tối đa 10 kí tự.",
+				minlength: "Mật khẩu tối thiểu 6 kí tự",
+			},
+			inputRePassword: {
+				equalTo: "Vui lòng nhập đúng mật khẩu ở trên.",
+				required: "Vui lòng nhập lại mật khẩu.",
+				maxlength: "Mật khẩu tối đa 10 kí tự.",
+				minlength: "Mật khẩu tối thiểu 6 kí tự",
+			}
+		}
+	});
 	
 	$("#userList").dataTable({
 		"sDom": "<'row'<'span6 pull-left'l><'span5 pull-right'f>r>t<'row'<'span6'i><'span6'p>>",
@@ -156,6 +308,9 @@ $(function(){
 	});
 	
 	$("#addUserButton").bind("click",function(){
+		if(!$("#modalAddUser form").valid()){
+			return;
+		}
 		$.ajax({ 
             type : "POST",
             url : $('#contextPath').val() + "/admin/addUser.html",
@@ -171,11 +326,11 @@ $(function(){
             },
             success : function(data) {
                 if (data.resultJSON) {
-                    alert("Add new user successful.");
+                    alert(data.errorMessage);
                     location = location;
                     return;
                 } else {
-                	alert("Why me god?");
+                	alert(data.errorMessage);
                 }
             },
             error : function() {
@@ -196,9 +351,10 @@ $(function(){
 	            },
 	            success : function(data) {
 	                if (data.resultJSON) {
+	                	alert(data.errorMessage);
 	                	location = location;
 	                } else {
-	                	alert("Why me god?");
+	                	alert(data.errorMessage);
 	                }
 	            },
 	            error : function() {
@@ -231,7 +387,7 @@ $(function(){
                 	$('#modalEditUser').modal('show');
                     return;
                 } else {
-                	alert("Why me god?");
+                	alert(data.errorMessage);
                 }
             },
             error : function() {
@@ -241,6 +397,9 @@ $(function(){
 	});
 	
 	$("#editUserButton").bind("click",function(){
+		if(!$("#modalEditUser form").valid()){
+			return;
+		}
 		$.ajax({ 
             type : "POST",
             url : $('#contextPath').val() + "/admin/updateUser.html",
@@ -255,11 +414,37 @@ $(function(){
             },
             success : function(data) {
                 if (data.resultJSON) {
-                    alert("Edit user successful.");
+                    alert(data.errorMessage);
                     location = location;
                     return;
                 } else {
-                	alert("Why me god?");
+                	alert(data.errorMessage);
+                }
+            },
+            error : function() {
+            	alert("Why me god? error cmnr");
+            }
+        });
+	});
+	
+	$("#resetPasswordButton").bind("click",function(){
+		if(!$("#modalResetPassword form").valid()){
+			return;
+		}
+		$.ajax({ 
+            type : "POST",
+            url : $('#contextPath').val() + "/admin/resetPassword.html",
+            data : {
+            	inputUsername : $('#modalResetPassword input[name="inputUsername"]').val(),
+            	inputPassword : $('#modalResetPassword input[name="inputPassword"]').val(),
+            },
+            success : function(data) {
+                if (data.resultJSON) {
+                    alert(data.errorMessage);
+                    location = location;
+                    return;
+                } else {
+                	alert(data.errorMessage);
                 }
             },
             error : function() {
