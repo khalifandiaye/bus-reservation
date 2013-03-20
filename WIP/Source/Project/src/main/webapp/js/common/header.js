@@ -7,20 +7,13 @@ $(document).ready(function(){
             crossDomain: true,
             success : function(data) {
                 if (data.success) {
-                    $("div.login").addClass('hidden');
-                    $("div.logout").removeClass('hidden');
-                    $("#tab_reservationList").removeClass('hidden');
-                    $("span#name").html(data.name);
+                    loginDisplay(data);
                 } else {
-                    $("div.logout").addClass('hidden');
-                    $("div.login").removeClass('hidden');
-                    $("span#name").html('');
+                    logoutDisplay();
                 }
             },
             error : function() {
-                $("div.logout").addClass('hidden');
-                $("div.login").removeClass('hidden');
-                $("span#name").html('');
+                logoutDisplay();
             }
         });
         // run it every 5 minutes
@@ -28,15 +21,25 @@ $(document).ready(function(){
     };
     
     function loginDisplay(data) {
+        $("#loginErrorMessage").html('');
         $("div.login").addClass('hidden');
         $("div.logout").removeClass('hidden');
         $("span#name").html(data.name);
+        if (2 == data.roleId) {
+            $(".operator").removeClass('hidden');
+        } else if (3 == data.roleId) {
+            $(".operator").removeClass('hidden');
+            $(".admin").removeClass('hidden');
+        }
     }
     
     function logoutDisplay() {
+        $("#loginErrorMessage").html('');
         $("div.logout").addClass('hidden');
         $("div.login").removeClass('hidden');
         $("span#name").html('');
+        $(".operator").addClass('hidden');
+        $(".admin").addClass('hidden');
     }
     
     checkUser();
@@ -53,16 +56,13 @@ $(document).ready(function(){
             },
             success : function(data) {
                 if (data.success) {
-                    $("#errorMessage").html('');
-                    $("div.login").addClass('hidden');
-                    $("div.logout").removeClass('hidden');
-                    $("span#name").html(data.name);
+                    loginDisplay(data);
                 } else {
-                    $("#errorMessage").html(data.errorMessage);
+                    $("#loginErrorMessage").html(data.loginErrorMessage);
                 }
             },
             error : function(jqXHR, textStatus, errorThrown) {
-                $("#errorMessage").html("ERROR");
+                $("#loginErrorMessage").html("ERROR");
                 if (console) {
                     console.log(jqXHR);
                     console.log(textStatus);
@@ -82,17 +82,14 @@ $(document).ready(function(){
             crossDomain: true,
             success : function(data) {
                 if (data.success) {
-                    $("#errorMessage").html('');
-                    $("div.logout").addClass('hidden');
-                    $("div.login").removeClass('hidden');
-                    $("span#name").html('');
+                    logoutDisplay();
                 } else {
                     // do nothing
                 }
             },
             error : function() {
                 //TODO handle error
-                $("#errorMessage").html("ERROR");
+                $("#loginErrorMessage").html("ERROR");
             }
         });
         // disable default behavior (event will still bubble up)

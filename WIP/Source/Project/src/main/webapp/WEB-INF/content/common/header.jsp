@@ -9,7 +9,7 @@
 		<div class="top-menu clear-fix">
 			<div class="login pull-right">
 				<div class="item">
-					<span id="errorMessage" class="error"></span>
+					<span id="loginErrorMessage" class="error"></span>
 				</div>
 				<div class="item">
 					<s:text name="label.username" />
@@ -27,6 +27,9 @@
 				</div>
 			</div>
 			<div class="logout pull-right hidden">
+				<div class="item">
+					<span id="loginErrorMessage" class="error"></span>
+				</div>
 				<div class="item">
 					<span><s:text name="message.hello" /></span>
 				</div>
@@ -59,17 +62,17 @@
 						<li id="tab_reservationList"><a
 							href="<%=request.getContextPath()%>/rsv/rsv01010.html">VÉ CỦA
 								TÔI</a></li>
-						<li class="dropdown"><a href="#" class="dropdown-toggle"
+						<li class="dropdown operator admin hidden"><a href="#" class="dropdown-toggle"
 							data-toggle="dropdown">QUẢN LÝ <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="<%=request.getContextPath()%>/bus/list.html">XE
+								<li class="operator hidden"><a href="<%=request.getContextPath()%>/bus/list.html">XE
 										BUS</a></li>
-								<li><a href="<%=request.getContextPath()%>/route/list.html">TUYẾN
+								<li class="operator hidden"><a href="<%=request.getContextPath()%>/route/list.html">TUYẾN
 										ĐƯỜNG</a></li>
-								<li><a
+								<li class="operator hidden"><a
 									href="<%=request.getContextPath()%>/schedule/list.html">LỊCH
 										XE CHẠY</a></li>
-								<li><a
+								<li class="admin hidden"><a
 									href="<%=request.getContextPath()%>/admin/user-management.html">THÀNH
 										VIÊN</a></li>
 							</ul></li>
