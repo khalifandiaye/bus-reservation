@@ -20,7 +20,7 @@
 		<default-interceptor-ref name="dbStack" />
 		<global-results>
 			<result name="unauthorized" type="httpheader">
-				<param name="error">401</param>
+				<param name="error">403</param>
 				<param name="errorMessage">Unauthorized Access</param>
 			</result>
 		</global-results>
@@ -40,7 +40,7 @@
 		<default-interceptor-ref name="dbStack" />
 		<global-results>
 			<result name="unauthorized" type="httpheader">
-				<param name="error">401</param>
+				<param name="error">403</param>
 				<param name="errorMessage">Unauthorized Access</param>
 			</result>
 		</global-results>
