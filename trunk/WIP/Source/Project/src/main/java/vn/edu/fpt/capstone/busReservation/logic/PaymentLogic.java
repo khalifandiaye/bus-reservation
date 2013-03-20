@@ -1022,6 +1022,8 @@ public class PaymentLogic extends BaseLogic {
         content = new StringBuilder(mailTemplateBean.getText());
         MailUtils.replace(subject, ":companyName:",
                 globalProps.getProperty("company.fullName"));
+        MailUtils.replace(content, ":companyName:",
+                globalProps.getProperty("company.fullName"));
         MailUtils.replace(content, ":siteName:",
                 globalProps.getProperty("company.siteName"));
         MailUtils.replace(content, ":fullName:", ticketInfos.get(0).getId()
@@ -1029,6 +1031,12 @@ public class PaymentLogic extends BaseLogic {
                 + " "
                 + ticketInfos.get(0).getId().getReservation()
                         .getBookerFirstName());
+        MailUtils.replace(content, ":reservationCode:", ticketInfos.get(0)
+                .getId().getReservation().getCode());
+        MailUtils.replace(content, ":bookTime:", DateUtils.date2String(
+                ticketInfos.get(0).getId().getReservation().getBookTime(),
+                "dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
+                CommonConstant.DEFAULT_TIME_ZONE));
         MailUtils.replaceLoop(content, "loopTicket", ticketInfos.size());
         seatNumbers = new StringBuilder();
         for (TicketInfoBean bean : ticketInfos) {
@@ -1111,7 +1119,8 @@ public class PaymentLogic extends BaseLogic {
         // prepare mail object
         props = new Properties();
         props.put("mail.smtp.auth", globalProps.get("mail.smtp.auth"));
-        props.put("mail.smtp.starttls.enable", globalProps.get("mail.smtp.starttls.enable"));
+        props.put("mail.smtp.starttls.enable",
+                globalProps.get("mail.smtp.starttls.enable"));
         props.put("mail.smtp.host", globalProps.get("mail.smtp.host"));
         props.put("mail.smtp.port", globalProps.get("mail.smtp.port"));
         session = Session.getInstance(

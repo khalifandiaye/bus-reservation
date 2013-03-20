@@ -73,12 +73,6 @@
 							</s:fielderror>
 						</div>
 						<div class="item">
-							<label><s:text name="label.civilId" /></label><s:textfield name="model.civilId" />
-							<s:fielderror>
-								<s:param>model.civilId</s:param>
-							</s:fielderror>
-						</div>
-						<div class="item">
 						<script type="text/javascript" src="https://www.google.com/recaptcha/api/challenge?k=6LdUXN4SAAAAAJ_2mUQs7XRzrIwyBvfg3SM0ng7c"></script>
 						<noscript>
 						   <iframe src="https://www.google.com/recaptcha/api/noscript?k=6LdUXN4SAAAAAJ_2mUQs7XRzrIwyBvfg3SM0ng7c"
