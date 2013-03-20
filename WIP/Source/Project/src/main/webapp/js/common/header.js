@@ -22,6 +22,7 @@ $(document).ready(function(){
     
     function loginDisplay(data) {
         $("#loginErrorMessage").html('');
+        $("#logoutErrorMessage").html('');
         $("div.login").addClass('hidden');
         $("div.logout").removeClass('hidden');
         $("span#name").html(data.name);
@@ -35,6 +36,7 @@ $(document).ready(function(){
     
     function logoutDisplay() {
         $("#loginErrorMessage").html('');
+        $("#logoutErrorMessage").html('');
         $("div.logout").addClass('hidden');
         $("div.login").removeClass('hidden');
         $("span#name").html('');
@@ -58,7 +60,7 @@ $(document).ready(function(){
                 if (data.success) {
                     loginDisplay(data);
                 } else {
-                    $("#loginErrorMessage").html(data.loginErrorMessage);
+                    $("#loginErrorMessage").html(data.errorMessage);
                 }
             },
             error : function(jqXHR, textStatus, errorThrown) {
@@ -89,7 +91,7 @@ $(document).ready(function(){
             },
             error : function() {
                 //TODO handle error
-                $("#loginErrorMessage").html("ERROR");
+                $("#logoutErrorMessage").html("ERROR");
             }
         });
         // disable default behavior (event will still bubble up)

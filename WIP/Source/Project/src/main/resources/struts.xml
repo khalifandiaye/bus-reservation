@@ -21,7 +21,7 @@
 		<global-results>
 			<result name="unauthorized" type="httpheader">
 				<param name="error">403</param>
-				<param name="errorMessage">Unauthorized Access</param>
+				<param name="errorMessage">You are not allowed to access this page</param>
 			</result>
 		</global-results>
 	</package>
@@ -41,7 +41,7 @@
 		<global-results>
 			<result name="unauthorized" type="httpheader">
 				<param name="error">403</param>
-				<param name="errorMessage">Unauthorized Access</param>
+				<param name="errorMessage">You are not allowed to access this page</param>
 			</result>
 		</global-results>
 	</package>
