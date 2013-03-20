@@ -9,23 +9,41 @@
 		<interceptors>
 			<interceptor name="hibernateSessionInterceptor"
 				class="vn.edu.fpt.capstone.busReservation.util.HibernateSessionInterceptor" />
+			<interceptor name="authorizationInterceptor"
+				class="vn.edu.fpt.capstone.busReservation.util.AuthorizationInterceptor"></interceptor>
 			<interceptor-stack name="dbStack">
+				<interceptor-ref name="authorizationInterceptor" />
 				<interceptor-ref name="hibernateSessionInterceptor" />
 				<interceptor-ref name="defaultStack" />
 			</interceptor-stack>
 		</interceptors>
 		<default-interceptor-ref name="dbStack" />
+		<global-results>
+			<result name="unauthorized" type="httpheader">
+				<param name="error">401</param>
+				<param name="errorMessage">Unauthorized Access</param>
+			</result>
+		</global-results>
 	</package>
 	<package name="jsonPackage" extends="json-default">
 		<interceptors>
 			<interceptor name="hibernateSessionInterceptor"
 				class="vn.edu.fpt.capstone.busReservation.util.HibernateSessionInterceptor" />
+			<interceptor name="authorizationInterceptor"
+				class="vn.edu.fpt.capstone.busReservation.util.AuthorizationInterceptor"></interceptor>
 			<interceptor-stack name="dbStack">
+				<interceptor-ref name="authorizationInterceptor" />
 				<interceptor-ref name="hibernateSessionInterceptor" />
 				<interceptor-ref name="defaultStack" />
 			</interceptor-stack>
 		</interceptors>
 		<default-interceptor-ref name="dbStack" />
+		<global-results>
+			<result name="unauthorized" type="httpheader">
+				<param name="error">401</param>
+				<param name="errorMessage">Unauthorized Access</param>
+			</result>
+		</global-results>
 	</package>
 	<package name="basePackage" extends="struts-default">
 		<default-interceptor-ref name="defaultStack" />
@@ -35,6 +53,6 @@
 	<package name="schedule" extends="transactionalPackage"></package>
 	<package name="booking" extends="transactionalPackage"></package>
 	<package name="user" extends="transactionalPackage"></package>
-	<package name="search"  extends="transactionalPackage"></package>
-	<package name="route"  extends="transactionalPackage"></package>
+	<package name="search" extends="transactionalPackage"></package>
+	<package name="route" extends="transactionalPackage"></package>
 </struts>
