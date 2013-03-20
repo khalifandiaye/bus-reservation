@@ -28,7 +28,7 @@
 			</div>
 			<div class="logout pull-right hidden">
 				<div class="item">
-					<span id="loginErrorMessage" class="error"></span>
+					<span id="logoutErrorMessage" class="error"></span>
 				</div>
 				<div class="item">
 					<span><s:text name="message.hello" /></span>
