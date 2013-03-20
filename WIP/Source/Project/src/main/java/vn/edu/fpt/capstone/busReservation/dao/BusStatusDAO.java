@@ -12,6 +12,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 
 /**
  * @author Yoshimi
@@ -42,6 +43,36 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 			Query query = session.createQuery(hql);
 			query.setParameter("status", "active");
 			query.setParameter("busStatus", "initiation");
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+
+	/**
+	 * Common database exception handling 
+	 * Get all scheduled trip from (toDate)
+	 * to future that has status is maintain or ontrip
+	 * 
+	 * @param e
+	 *            the occurred exception
+	 * @throws HibernateException
+	 *             the occurred exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<BusStatusBean> getAllScheduledTrip(Date fromDate) {
+		String hql = "SELECT bs FROM BusStatusBean bs WHERE bs.status = :status "
+				+ "AND bs.busStatus != :busStatus " 
+				+ "AND bs.fromDate >= :fromDate";
+		Session session = sessionFactory.getCurrentSession();
+		List<BusStatusBean> result = new ArrayList<BusStatusBean>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameter("status", "active");
+			query.setParameter("busStatus", "initiation");
+			query.setParameter("fromDate", "fromDate");
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
@@ -92,6 +123,58 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 			query.setParameter("date", date);
 			query.setParameter("status", "active");
 			query.setParameter("busStatus", "initiation");
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+
+	/**
+	 * Common database exception handling Get all max date to maintain
+	 * 
+	 * @param e
+	 *            the occurred exception
+	 * @throws HibernateException
+	 *             the occurred exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Date> getMaintainFromDate(int busId) {
+		String hql = "SELECT MAX(bs.toDate) FROM BusStatusBean bs WHERE bs.status = :status "
+				+ "AND bs.bus.id = :busId";
+		Session session = sessionFactory.getCurrentSession();
+		List<Date> result = new ArrayList<Date>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameter("status", "active");
+			query.setParameter("busId", busId);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+
+	/**
+	 * Common database exception handling Get current station by toDate
+	 * 
+	 * @param e
+	 *            the occurred exception
+	 * @throws HibernateException
+	 *             the occurred exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<StationBean> getCurrentStation(Date toDate) {
+		String hql = "SELECT bs.endStation FROM BusStatusBean bs WHERE bs.status = :status "
+				+ "AND bs.toDate = :toDate";
+		Session session = sessionFactory.getCurrentSession();
+		List<StationBean> result = new ArrayList<StationBean>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameter("status", "active");
+			query.setParameter("toDate", toDate);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);

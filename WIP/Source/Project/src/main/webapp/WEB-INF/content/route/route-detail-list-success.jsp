@@ -51,481 +51,331 @@
 		});
 	}
 
-	$(document)
-			.ready(
-					function() {
-						var selectedRouteId = $("#routeId").val();
-						if (selectedRouteId != '-1') {
-							$
-									.ajax(
-											{
-												url : $('#contextPath').val()
-														+ "/schedule/busTypes.html?&routeId="
-														+ selectedRouteId,
-											})
-									.done(
-											function(data) {
-												$('#tripDialogBusType').empty();
-												$
-														.each(
-																data.busTypeInfos,
-																function() {
-																	$(
-																			'#tripDialogBusType')
-																			.append(
-																					'<option value="' + this.id + '">'
-																							+ this.type
-																							+ '</option>');
-																});
-											});
-						}
-						;
+	$(document).ready(function() {
+		var selectedRouteId = $("#routeId").val();
+		if (selectedRouteId != '-1') 
+		{$.ajax({url : $('#contextPath').val()
+			+ "/schedule/busTypes.html?&routeId="
+			+ selectedRouteId,}).done(
+			function(data) {$('#tripDialogBusType').empty();
+				$.each(data.busTypeInfos,function() {
+					   $('#tripDialogBusType').append('<option value="' + this.id + '">'
+							+ this.type
+							+ '</option>');
+				});
+			});
+		};
 
-						$('#busStatusInsertBtn').click(function() {
-							$('#tripDialogRoutes').val(-1);
-							$('#tripDialogDepartureTime').val('');
-							$('#tripDialogArrivalTime').val('');
-							$('#tripDialogBusPlate').empty();
-							$('#CreateScheduleDialog').modal();
-							$('#tripEditDialogLabel').html("Add New Schedule");
-							$("#tripDialogDepartureTimeDiv").datetimepicker({
-								format : "yyyy/mm/dd - hh:ii",
-								autoclose : true,
-								todayBtn : true,
-								startDate : new Date(),
-								minuteStep : 10
-							}).on('changeDate', function(ev) {
-								getAvailBus();
-								getArrivalTime();
-							});
+		$('#busStatusInsertBtn').click(function() {
+			$('#tripDialogRoutes').val(-1);
+			$('#tripDialogDepartureTime').val('');
+			$('#tripDialogArrivalTime').val('');
+			$('#tripDialogBusPlate').empty();
+			$('#CreateScheduleDialog').modal();
+			$('#tripEditDialogLabel').html("Add New Schedule");
+			$("#tripDialogDepartureTimeDiv").datetimepicker({
+				format : "yyyy/mm/dd - hh:ii",
+				autoclose : true,
+				todayBtn : true,
+				startDate : new Date(),
+				minuteStep : 10
+			}).on('changeDate', function(ev) {
+				getAvailBus();
+				getArrivalTime();
+			});
+		});
+
+		function getAvailBus() {
+			var selectedRouteId = $("#routeId").val();
+			var departureTime = $("#tripDialogDepartureTime").val();
+			var selectedBusType = $("#tripDialogBusType").val();
+			if (selectedRouteId != '-1' && departureTime != ""
+					&& selectedBusType != '-1') {$.ajax({
+						url : $('#contextPath')
+								.val()
+								+ "/schedule/availBus.html?departureTime="
+								+ departureTime
+								+ "&busType="
+								+ selectedBusType
+								+ "&routeId="
+								+ selectedRouteId,
+					}).done(function(data) {
+						$('#tripDialogBusPlate').empty();
+						$.each(data.busInfos,function() {$(
+							'#tripDialogBusPlate')
+							.append('<option value="' + this.id + '">'+ this.plateNumber+ '</option>');
 						});
-
-						function getAvailBus() {
-							var selectedRouteId = $("#routeId").val();
-							var departureTime = $("#tripDialogDepartureTime")
-									.val();
-							var selectedBusType = $("#tripDialogBusType").val();
-							if (selectedRouteId != '-1' && departureTime != ""
-									&& selectedBusType != '-1') {
-								$
-										.ajax(
-												{
-													url : $('#contextPath')
-															.val()
-															+ "/schedule/availBus.html?departureTime="
-															+ departureTime
-															+ "&busType="
-															+ selectedBusType
-															+ "&routeId="
-															+ selectedRouteId,
-												})
-										.done(
-												function(data) {
-													$('#tripDialogBusPlate')
-															.empty();
-													$
-															.each(
-																	data.busInfos,
-																	function() {
-																		$(
-																				'#tripDialogBusPlate')
-																				.append(
-																						'<option value="' + this.id + '">'
-																								+ this.plateNumber
-																								+ '</option>');
-																	});
-												});
-							}
-						}
-						;
-
-						function getArrivalTime() {
-							var selectedRouteId = $("#routeId").val();
-							var departureTime = $("#tripDialogDepartureTime")
-									.val();
-							if (selectedRouteId != '-1' && departureTime != "") {
-								$
-										.ajax(
-												{
-													url : $('#contextPath')
-															.val()
-															+ "/schedule/getArrivalTime.html?departureTime="
-															+ departureTime
-															+ "&routeId="
-															+ selectedRouteId,
-												})
-										.done(
-												function(data) {
-													$("#tripDialogArrivalTime")
-															.val(
-																	data.arrivalTime);
-												});
-							}
-						}
-
-						$('#cancelAdd').bind('click', function() {
-							$("#tripDialogRoutes").val(-1);
-							$("#tripDialogDepartureTime").val('');
-							$("#tripDialogArrivalTime").val('');
-							$('#tripDialogBusPlate').val('');
-						});
-
-						$('#addNewSchedule').bind(
-								'click',
-								function(event) {
-									var selectedRouteId = $("#routeId").val();
-									var departureTime = $(
-											"#tripDialogDepartureTime").val();
-									var selectedBusType = $(
-											"#tripDialogBusType").val();
-									var busPlate = $('#tripDialogBusPlate')
-											.val();
-									var form = $('#addNewTripForm');
-
-									if (selectedRouteId == -1
-											|| departureTime == ''
-											|| !selectedBusType
-											|| selectedBusType == -1
-											|| !busPlate || busPlate == '') {
-										return;
-									}
-
-									event.preventDefault();
-									$.ajax({
-										type : "POST",
-										url : $('#contextPath').val()
-												+ "/schedule/"
-												+ form.attr('action'),
-										data : form.serialize(),
-										success : function(response) {
-											alert(response);
-										}
-									});
-								});
-
-						$('#saveSuccessDialogOk').bind(
-								'click',
-								function() {
-									var url = $('#contextPath').val()
-											+ "/schedule/list.html";
-									window.location = url;
-								});
-
-						accounting.settings = {
-							currency : {
-								symbol : " VNĐ", // default currency symbol is '$'
-								format : "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
-								decimal : ",", // decimal point separator
-								thousand : ".", // thousands separator
-								precision : 0
-							// decimal places
-							},
-							number : {
-								precision : 0, // default precision on numbers is 0
-								thousand : ",",
-								decimal : "."
-							}
-						};
-
-						var segmentTable = $('#segmentTable').dataTable({
-							"bSort" : false
-						});
-
-						var priceTable = $('#priceTable').dataTable({
-							"bSort" : false
-						});
-
-						var busDetailTable = $('#busDetailTable').dataTable({
-							"bSort" : false
-						});
-
-						var editSegmentTable = $('#editSegmentTable')
-								.dataTable({
-									"bSort" : false
-								});
-
-						$.each($("#editSegmentTable input"), function() {
-							$("#" + this.id + "").keypress(function(event) {
-								validate(event);
-							});
-						});
-
-						$("#validDateDiv").datetimepicker({
-							format : "yyyy/mm/dd - hh:ii",
-							autoclose : true,
-							todayBtn : true,
-							startDate : new Date(),
-							minuteStep : 10
-						});
-
-						$("#editPriceSave")
-								.bind(
-										'click',
-										function() {
-											var info = {};
-											var tariffs = [];
-											$
-													.each(
-															$("#editSegmentTable input"),
-															function() {
-																var tariff = {};
-																tariff['segmentId'] = this.id;
-																tariff['fare'] = this.value;
-																tariffs
-																		.push(tariff);
-															});
-											info['routeId'] = $('#routeId')
-													.val();
-											info['validDate'] = $('#validDate')
-													.val();
-											info['tariffs'] = tariffs;
-											info['busTypeId'] = $('#busTypes')
-													.val();
-											$
-													.ajax({
-														type : "GET",
-														url : 'getPreUpdateTariffAction.html?routeId='
-																+ $("#routeId")
-																		.val(),
-														contentType : "application/x-www-form-urlencoded; charset=utf-8",
-														success : function(
-																response) {
-															if (response.message
-																	.trim() != '') {
-																var result = confirm(response.message);
-																if (result == true) {
-																	updateTarrif(info);
-																}
-															}
-														},
-														error : function() {
-															alert("Save new route failed!");
-														}
-													})
-										});
-
-						$("#addBusPrice").click(
-								function() {
-									$.each($("#editSegmentTable input"),
-											function() {
-												$(this).val('');
-											});
-									$('#busTypes').val('-1');
-									$('#validDateDiv').datetimepicker(
-											'setDate', (new Date()));
-									$("#editPriceDialog").modal();
-								});
-
-						$("#assignBus")
-								.click(
-										function() {
-											var routeId = $("#routeId").val();
-											var busType = $("#busType").val();
-											$
-													.ajax({
-														type : "GET",
-														url : 'getBusInRoute.html?routeId='
-																+ routeId
-																+ '&type='
-																+ busType,
-														contentType : "application/x-www-form-urlencoded; charset=utf-8",
-														success : function(
-																response) {
-															var busInRoute = response.busInRouteBeans;
-															var busNotInRoute = response.busNotInRouteBeans;
-
-															$('#busDetailTable')
-																	.dataTable()
-																	.fnClearTable();
-															$
-																	.each(
-																			busInRoute,
-																			function() {
-																				busDetailTable
-																						.dataTable()
-																						.fnAddData(
-																								[
-																										this.id,
-																										this.plateNumber,
-																										'<button type="button" data-id="'+ this.id +'" class="btn btn-danger">Delete</button>' ]);
-																				$(
-																						"#busDetailTable tr button[data-id="
-																								+ this.id
-																								+ "]")
-																						.click(
-																								function() {
-																									var td = this.parentNode;
-																									var tr = td.parentNode;
-																									var aPos = busDetailTable
-																											.dataTable()
-																											.fnGetPosition(
-																													td);
-																									var data = busDetailTable
-																											.fnGetData(tr);
-																									$(
-																											'#busDetailbusPlate')
-																											.append(
-																													'<option value="'+ data[0] +'">'
-																															+ data[1]
-																															+ '</option>');
-																									busDetailTable
-																											.dataTable()
-																											.fnDeleteRow(
-																													aPos[0]);
-																								});
-																			});
-
-															$(
-																	'#busDetailbusPlate')
-																	.empty();
-															$
-																	.each(
-																			busNotInRoute,
-																			function() {
-																				$(
-																						'#busDetailbusPlate')
-																						.append(
-																								'<option value="'+ this.id +'">'
-																										+ this.plateNumber
-																										+ '</option>');
-																			});
-															$(
-																	"#busDetailDialog")
-																	.modal();
-														}
-													});
-										});
-
-						$("#busDetailAdd")
-								.click(
-										function() {
-											var busId = $("#busDetailbusPlate")
-													.val();
-											var plateNumber = $(
-													"#busDetailbusPlate option:selected")
-													.text();
-											busDetailTable
-													.dataTable()
-													.fnAddData(
-															[
-																	busId,
-																	plateNumber,
-																	'<button type="button" data-id="'+ busId +'" class="btn btn-danger">Delete</button>' ]);
-											$(
-													"#busDetailbusPlate option[value="
-															+ busId + "]")
-													.remove();
-											$(
-													"#busDetailTable tr button[data-id="
-															+ busId + "]")
-													.click(
-															function() {
-																var td = this.parentNode;
-																var tr = td.parentNode;
-																var aPos = busDetailTable
-																		.dataTable()
-																		.fnGetPosition(
-																				td);
-																var data = busDetailTable
-																		.fnGetData(tr);
-																$(
-																		'#busDetailbusPlate')
-																		.append(
-																				'<option value="'+ data[0] +'">'
-																						+ data[1]
-																						+ '</option>');
-																busDetailTable
-																		.dataTable()
-																		.fnDeleteRow(
-																				aPos[0]);
-															});
-										});
-
-						$("#busDetailSave")
-								.click(
-										function() {
-											var routeId = $("#routeId").val();
-											var busInfos = [];
-											var unSelectBusInfos = [];
-											$
-													.each(
-															$("#busDetailTable tr.odd,#busDetailTable .even"),
-															function() {
-																var bus = {};
-																if ($(
-																		this.cells[0])
-																		.html() != 'No data available in table') {
-																	bus['id'] = $(
-																			this.cells[0])
-																			.html();
-																	bus['plateNumber'] = $(
-																			this.cells[1])
-																			.html();
-																	busInfos
-																			.push(bus);
-																}
-															});
-
-											$
-													.each(
-															$("#busDetailbusPlate option"),
-															function() {
-																var unSelectBus = {};
-																unSelectBus['id'] = this.value;
-																unSelectBus['plateNumber'] = "0";
-																unSelectBusInfos
-																		.push(unSelectBus);
-															});
-
-											var busDetailInfo = {};
-											busDetailInfo['routeId'] = routeId;
-											busDetailInfo['bus'] = busInfos;
-											busDetailInfo['unSelectBus'] = unSelectBusInfos;
-
-											$
-													.ajax({
-														type : "POST",
-														url : 'saveBusDetail.html',
-														contentType : "application/x-www-form-urlencoded; charset=utf-8",
-														data : {
-															data : JSON
-																	.stringify(busDetailInfo)
-														},
-														success : function(
-																response) {
-															alert(response);
-														}
-													});
-										});
-
-						$('#viewPrice').click(function() {
-							$("#priceDialog").modal();
-						});
-
-						$('#return').bind(
-								'click',
-								function() {
-									var url = $('#contextPath').val()
-											+ "/route/list.html";
-									window.location = url;
-								});
-
-						$('tr[data-segment-id]').each(function() {
-							var id = this.dataset.segmentId;
-							var segment = {};
-							segment['id'] = id;
-							segments.push(segment);
-						});
-
-						$('#busType').bind('change', function() {
-							$('#priceTable').dataTable().fnClearTable();
-							var busType = $('#busType').val();
-							getPrice(busType, segments);
-						});
-
-						var busType = $('#busType').val();
-						getPrice(busType, segments);
 					});
+			}
+		};
+
+		function getArrivalTime() {
+			var selectedRouteId = $("#routeId").val();
+			var departureTime = $("#tripDialogDepartureTime").val();
+			if (selectedRouteId != '-1' && departureTime != "") {$.ajax(
+				{
+					url : $('#contextPath')
+							.val()
+							+ "/schedule/getArrivalTime.html?departureTime="
+							+ departureTime
+							+ "&routeId="
+							+ selectedRouteId,
+				}).done(function(data) {
+					$("#tripDialogArrivalTime").val(data.arrivalTime);
+				});
+			}
+		}
+
+		$('#cancelAdd').bind('click', function() {
+			$("#tripDialogRoutes").val(-1);
+			$("#tripDialogDepartureTime").val('');
+			$("#tripDialogArrivalTime").val('');
+			$('#tripDialogBusPlate').val('');
+		});
+
+		$('#addNewSchedule').bind('click',
+			function(event) {
+				var selectedRouteId = $("#routeId").val();
+				var departureTime = $("#tripDialogDepartureTime").val();
+				var selectedBusType = $("#tripDialogBusType").val();
+				var busPlate = $('#tripDialogBusPlate').val();
+				var form = $('#addNewTripForm');
+
+				if (selectedRouteId == -1
+						|| departureTime == ''
+						|| !selectedBusType
+						|| selectedBusType == -1
+						|| !busPlate || busPlate == '') {
+					return;
+				}
+
+				event.preventDefault();
+				$.ajax({
+					type : "POST",
+					url : $('#contextPath').val()
+							+ "/schedule/"
+							+ form.attr('action'),
+					data : form.serialize(),
+					success : function(response) {
+						alert(response);
+					}
+				});
+			});
+
+		$('#saveSuccessDialogOk').bind('click',function() {
+			var url = $('#contextPath').val()
+					+ "/schedule/list.html";
+			window.location = url;
+		});
+
+		accounting.settings = {
+			currency : {
+				symbol : ".000 VNĐ", // default currency symbol is '$'
+				format : "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
+				decimal : ",", // decimal point separator
+				thousand : ".", // thousands separator
+				precision : 0
+			// decimal places
+			},
+			number : {
+				precision : 0, // default precision on numbers is 0
+				thousand : ",",
+				decimal : "."
+			}
+		};
+
+		var segmentTable = $('#segmentTable').dataTable({
+			"bSort" : false
+		});
+
+		var priceTable = $('#priceTable').dataTable({
+			"bSort" : false
+		});
+
+		var busDetailTable = $('#busDetailTable').dataTable({
+			"bSort" : false
+		});
+
+		var editSegmentTable = $('#editSegmentTable').dataTable({
+			"bSort" : false
+		});
+
+		$.each($("#editSegmentTable input"), function() {
+			$("#" + this.id + "").keypress(function(event) {
+				validate(event);
+			});
+		});
+
+		$("#validDateDiv").datetimepicker({
+			format : "yyyy/mm/dd - hh:ii",
+			autoclose : true,
+			todayBtn : true,
+			startDate : new Date(),
+			minuteStep : 10
+		});
+
+		$("#editPriceSave").bind('click',function() {
+			var info = {};
+			var tariffs = [];
+			$.each($("#editSegmentTable input"),
+			function() {
+				var tariff = {};
+				tariff['segmentId'] = this.id;
+				tariff['fare'] = this.value;
+				tariffs
+						.push(tariff);
+			});
+			info['routeId'] = $('#routeId').val();
+			info['validDate'] = $('#validDate').val();
+			info['tariffs'] = tariffs;
+			info['busTypeId'] = $('#busTypes').val();
+			$.ajax({
+				type : "GET",
+				url : 'getPreUpdateTariffAction.html?routeId=' + $("#routeId").val(),
+				contentType : "application/x-www-form-urlencoded; charset=utf-8",
+				success : function(response) {
+					if (response.message.trim() != '') {
+						var result = confirm(response.message);
+						if (result == true) {
+							updateTarrif(info);
+						}
+					}
+				},
+				error : function() {
+					alert("Save new route failed!");
+				}
+			})
+		});
+
+		$("#addBusPrice").click(function() {
+			$.each($("#editSegmentTable input"),
+			function() {$(this).val('');});
+			$('#busTypes').val('-1');
+			$('#validDateDiv').datetimepicker('setDate', (new Date()));
+			$("#editPriceDialog").modal();
+		});
+
+		$("#assignBus").click(function() {
+			var routeId = $("#routeId").val();
+			var busType = $("#busType").val();
+			$.ajax({
+				type : "GET",
+				url : 'getBusInRoute.html?routeId='+ routeId+ '&type='+ busType,contentType : "application/x-www-form-urlencoded; charset=utf-8",
+				success : function(response) {
+					var busInRoute = response.busInRouteBeans;
+					var busNotInRoute = response.busNotInRouteBeans;
+					$('#busDetailTable').dataTable().fnClearTable();
+					$.each(busInRoute,
+						function() {busDetailTable.dataTable().fnAddData([
+							this.id,
+							this.plateNumber,
+							'<button type="button" data-id="'+ this.id +'" class="btn btn-danger">Delete</button>' ]);
+							$("#busDetailTable tr button[data-id="+ this.id+ "]").click(
+								function() {
+									var td = this.parentNode;
+									var tr = td.parentNode;
+									var aPos = busDetailTable.dataTable().fnGetPosition(td);
+									var data = busDetailTable.fnGetData(tr);
+									$('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
+									busDetailTable.dataTable().fnDeleteRow(aPos[0]);
+								});
+						});
+
+					$('#busDetailbusPlate').empty();
+					$.each(busNotInRoute,function() {$('#busDetailbusPlate').append(
+						'<option value="'+ this.id +'">'+ this.plateNumber + '</option>');
+					});
+					$("#busDetailDialog").modal();
+				}
+			});
+		});
+
+		$("#busDetailAdd").click(
+			function() {
+				var busId = $("#busDetailbusPlate").val();
+				var plateNumber = $("#busDetailbusPlate option:selected").text();
+				busDetailTable.dataTable().fnAddData([
+					busId,plateNumber,
+					'<button type="button" data-id="'+ busId +'" class="btn btn-danger">Delete</button>' ]);
+				$("#busDetailbusPlate option[value="+ busId + "]").remove();
+				$("#busDetailTable tr button[data-id="+ busId + "]").click(
+				function() {
+					var td = this.parentNode;
+					var tr = td.parentNode;
+					var aPos = busDetailTable.dataTable().fnGetPosition(td);
+					var data = busDetailTable.fnGetData(tr);
+					$('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
+					busDetailTable.dataTable().fnDeleteRow(aPos[0]);
+				});
+			});
+
+		$("#busDetailSave").click(
+			function() {
+				var routeId = $("#routeId").val();
+				var busInfos = [];
+				var unSelectBusInfos = [];
+				$.each($("#busDetailTable tr.odd,#busDetailTable .even"),
+					function() {
+						var bus = {};
+						if ($(this.cells[0]).html() != 'No data available in table') {
+							bus['id'] = $(this.cells[0]).html();
+							bus['plateNumber'] = $(this.cells[1]).html();
+							busInfos.push(bus);
+						}
+					});
+
+				$.each($("#busDetailbusPlate option"),
+					function() {
+						var unSelectBus = {};
+						unSelectBus['id'] = this.value;
+						unSelectBus['plateNumber'] = "0";
+						unSelectBusInfos.push(unSelectBus);
+					});
+
+				var busDetailInfo = {};
+				busDetailInfo['routeId'] = routeId;
+				busDetailInfo['bus'] = busInfos;
+				busDetailInfo['unSelectBus'] = unSelectBusInfos;
+
+				$.ajax({
+					type : "POST",
+					url : 'saveBusDetail.html',
+					contentType : "application/x-www-form-urlencoded; charset=utf-8",
+					data : {data : JSON.stringify(busDetailInfo)
+					},
+					success : function(response) {
+						alert(response);
+					}
+				});
+			});
+
+		$('#viewPrice').click(function() {
+			$("#priceDialog").modal();
+		});
+
+		$('#return').bind('click',
+			function() {
+				var url = $('#contextPath').val()
+						+ "/route/list.html";
+				window.location = url;
+			});
+
+		$('tr[data-segment-id]').each(function() {
+			var id = this.dataset.segmentId;
+			var segment = {};
+			segment['id'] = id;
+			segments.push(segment);
+		});
+
+		$('#busType').bind('change', function() {
+			$('#priceTable').dataTable().fnClearTable();
+			var busType = $('#busType').val();
+			getPrice(busType, segments);
+		});
+
+		var busType = $('#busType').val();
+		getPrice(busType, segments);
+	});
 
 	function getPrice(busType, segments) {
 		var info = {};
@@ -535,18 +385,14 @@
 			type : "POST",
 			url : 'getPrice.html',
 			contentType : "application/x-www-form-urlencoded; charset=utf-8",
-			data : {
-				data : JSON.stringify(info)
-			},
+			data : {data : JSON.stringify(info)},
 			success : function(response) {
 				var data = response.tariffInfos;
 				for ( var i = 0; i < data.length; i++) {
 					element = data[i];
-					$('#priceTable').dataTable().fnAddData(
-							[ element.startAt + ' - ' + element.endAt,
-									accounting.formatMoney(element.fare) ]);
-				}
-				;
+					$('#priceTable').dataTable().fnAddData([ element.startAt + ' - ' + element.endAt,
+						accounting.formatMoney(element.fare) ]);
+				};
 			}
 		});
 	};
@@ -727,7 +573,7 @@
          <button id="editPriceSave" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Save</button>
       </div>
    </div>
-   <!-- Modal -->
+   <!-- Modal add new schedule-->
    <div id="CreateScheduleDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true">
       <form id="addNewTripForm" action="save.html" method="POST">
