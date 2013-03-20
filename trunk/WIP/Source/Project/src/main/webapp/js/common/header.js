@@ -3,6 +3,8 @@ $(document).ready(function(){
         $.ajax({
             type : "POST",
             url : $('#contextPath').val() + "/user/checkUser.html",
+            dataType: 'jsonp',
+            crossDomain: true,
             success : function(data) {
                 if (data.success) {
                     $("div.login").addClass('hidden');
@@ -43,6 +45,8 @@ $(document).ready(function(){
         $.ajax({
             type : "POST",
             url : $('#contextPath').val() + "/user/login.html",
+            dataType: 'jsonp',
+            crossDomain: true,
             data : {
                 username : $('input[name="username"]').val(),
                 password : $('input[name="password"]').val()
@@ -57,8 +61,13 @@ $(document).ready(function(){
                     $("#errorMessage").html(data.errorMessage);
                 }
             },
-            error : function() {
+            error : function(jqXHR, textStatus, errorThrown) {
                 $("#errorMessage").html("ERROR");
+                if (console) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
             }
         });
         // disable default behavior (event will still bubble up)
@@ -69,6 +78,8 @@ $(document).ready(function(){
         $.ajax({
             type : "POST",
             url : $('#contextPath').val() + "/user/logOut.html",
+            dataType: 'jsonp',
+            crossDomain: true,
             success : function(data) {
                 if (data.success) {
                     $("#errorMessage").html('');

@@ -8,10 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 
-import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -34,28 +32,16 @@ import vn.edu.fpt.capstone.busReservation.displayModel.RegisterModel;
 import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.CryptUtils;
-import vn.edu.fpt.capstone.busReservation.util.MiscUtils;
+import vn.edu.fpt.capstone.busReservation.util.MailUtils;
+import vn.edu.fpt.capstone.busReservation.util.MailUtils.MailPasswordAuthenticator;
 
 /**
  * @author Yoshimi
  * 
  */
 public class UserLogic extends BaseLogic {
-    private final class MailPasswordAuthenticator extends Authenticator {
-        private final String username;
-        private final String password;
-
-        public MailPasswordAuthenticator(String username, String password) {
-            this.username = username;
-            this.password = password;
-        }
-
-        @Override
-        protected PasswordAuthentication getPasswordAuthentication() {
-            return new PasswordAuthentication(username, password);
-        }
-    }
 
     /**
      * 
@@ -193,25 +179,30 @@ public class UserLogic extends BaseLogic {
         mailTemplateBean = mailTemplateDAO.getByName(templateName);
         subject = new StringBuilder(mailTemplateBean.getSubject());
         content = new StringBuilder(mailTemplateBean.getText());
-        MiscUtils.replace(subject, ":companyName",
-                globalProps.getProperty("company.fullname"));
-        MiscUtils.replace(content, ":username", username);
-        MiscUtils.replace(content, ":fullName", lastName + " " + firstName);
-        MiscUtils.replace(content, ":email", email);
+        MailUtils.replace(subject, ":companyName:",
+                globalProps.getProperty("company.fullName"));
+        MailUtils.replace(content, ":siteName:",
+                globalProps.getProperty("company.siteName"));
+        MailUtils.replace(content, ":username:", username);
+        MailUtils.replace(content, ":fullName:", lastName + " " + firstName);
+        MailUtils.replace(content, ":email:", email);
         url = new StringBuilder();
-        url.append("https://");
-        url.append("localhost:8443");
+        url.append(CommonConstant.URL_HTTPS);
         url.append(contextPath);
+        MailUtils.replace(content, ":siteurl:", url.toString() + "/");
         try {
-            url.append("/user/activate-user.html?username="
-                    + username
-                    + "&code="
-                    + CryptUtils.encrypt2String(firstName + "/" + lastName
-                            + "/" + email));
+            MailUtils.replace(
+                    content,
+                    ":url:",
+                    url.toString()
+                            + "/user/activate-user.html?username="
+                            + username
+                            + "&code="
+                            + CryptUtils.encrypt2String(firstName + "/"
+                                    + lastName + "/" + email));
         } catch (NoSuchAlgorithmException e1) {
             throw new CommonException(e1);
         }
-        MiscUtils.replace(content, ":url", url.toString());
         try {
             mailTemplateDAO.endTransaction();
         } catch (HibernateException e) {
@@ -219,10 +210,10 @@ public class UserLogic extends BaseLogic {
         }
         // prepare mail object
         props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", globalProps.get("mail.smtp.auth"));
+        props.put("mail.smtp.starttls.enable", globalProps.get("mail.smtp.starttls.enable"));
+        props.put("mail.smtp.host", globalProps.get("mail.smtp.host"));
+        props.put("mail.smtp.port", globalProps.get("mail.smtp.port"));
         session = Session.getInstance(
                 props,
                 new MailPasswordAuthenticator(globalProps
