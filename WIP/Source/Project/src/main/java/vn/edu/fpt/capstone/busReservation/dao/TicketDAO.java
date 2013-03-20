@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean.TicketStatus;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SimpleReservationInfo;
 
 /**
@@ -20,39 +21,6 @@ import vn.edu.fpt.capstone.busReservation.displayModel.SimpleReservationInfo;
  * 
  */
 public class TicketDAO extends GenericDAO<Integer, TicketBean> {
-
-    // private static final ResultTransformer TICKET_INFO_TRANSFORMER = new
-    // ResultTransformer() {
-    //
-    // /**
-    // *
-    // */
-    // private static final long serialVersionUID = 1L;
-    //
-    // @Override
-    // public Object transformTuple(Object[] tuple, String[] aliases) {
-    // TicketInfoBean info = new TicketInfoBean();
-    // int size = aliases.length;
-    // for (int i = 0; i < size; i++) {
-    // if ("ticket".equalsIgnoreCase(aliases[i])) {
-    // info.setId((TicketBean) tuple[i]);
-    // } else if ("startTrip".equalsIgnoreCase(aliases[i])) {
-    // info.setStartTrip((TripBean) tuple[i]);
-    // } else if ("endTrip".equalsIgnoreCase(aliases[i])) {
-    // info.setEndTrip((TripBean) tuple[i]);
-    // } else if ("ticketPrice".equalsIgnoreCase(aliases[i])) {
-    // info.setTicketPrice((Double) tuple[i]);
-    // }
-    // }
-    // return info;
-    // }
-    //
-    // @SuppressWarnings("rawtypes")
-    // @Override
-    // public List transformList(List collection) {
-    // return collection;
-    // }
-    // };
 
     public TicketDAO(Class<TicketBean> clazz) {
         super(clazz);
@@ -131,6 +99,57 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
                     ReservationStatus.MOVED.getValue());
             query.setString("ticketStatusMoved", TicketStatus.MOVED.getValue());
             // query.setResultTransformer(TICKET_INFO_TRANSFORMER);
+            result = query.list();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+        // return result, if needed
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<TicketInfoBean> getTicketInfo(int reservationId) {
+        List<TicketInfoBean> result = null;
+        Query query = null;
+        String queryString = null;
+        Session session = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            queryString = "SELECT new vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean(tkt, trps, trpe, SUM(tar.fare))"
+                    + " FROM TicketBean tkt"
+                    + " INNER JOIN tkt.trips trps"
+                    + " INNER JOIN tkt.trips trpe"
+                    + " INNER JOIN tkt.trips trp"
+                    + " INNER JOIN trp.routeDetails.segment.tariff tar"
+                    + " INNER JOIN tkt.reservation rsv"
+                    + " WHERE rsv.id = :reservationId"
+                    + "     AND rsv.STATUS != :rsvStatusMoved"
+                    + "     AND tkt.STATUS != :ticketStatusMoved"
+                    + "     AND trps.departureTime = ("
+                    + "         SELECT MIN(trp1.departureTime)"
+                    + "         FROM TicketBean tkt1"
+                    + "         INNER JOIN tkt1.trips trp1"
+                    + "         WHERE tkt1 = tkt)"
+                    + "     AND trpe.departureTime = ("
+                    + "         SELECT MAX(trp2.departureTime)"
+                    + "         FROM TicketBean tkt2"
+                    + "         INNER JOIN tkt2.trips trp2"
+                    + "         WHERE tkt2 = tkt)"
+                    + "     AND tar.busType = trp.busStatus.bus.busType"
+                    + "     AND tar.validFrom = ("
+                    + "         SELECT MAX(tar.validFrom)"
+                    + "         FROM TariffBean tar1"
+                    + "         WHERE tar1.segment = trp.routeDetails.segment"
+                    + "             AND tar1.busType = trp.busStatus.bus.busType"
+                    + "             AND tar1.validFrom <= rsv.bookTime)"
+                    + " GROUP BY tkt,trps,trpe";
+            query = session.createQuery(queryString);
+            query.setInteger("reservationId", reservationId);
+            query.setString("rsvStatusMoved",
+                    ReservationStatus.MOVED.getValue());
+            query.setString("ticketStatusMoved", TicketStatus.MOVED.getValue());
             result = query.list();
         } catch (HibernateException e) {
             exceptionHandling(e, session);

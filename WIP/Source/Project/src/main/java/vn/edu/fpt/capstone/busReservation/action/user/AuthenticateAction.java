@@ -19,7 +19,7 @@ import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
  * 
  */
 @ParentPackage("jsonPackage")
-public class LoginAction extends BaseAction {
+public class AuthenticateAction extends BaseAction {
 
     /**
 	 * 
@@ -74,7 +74,8 @@ public class LoginAction extends BaseAction {
         return errorMessage;
     }
 
-    @Action(value = "/login", results = { @Result(type = "json", name = SUCCESS) })
+    @Action(value = "/login", results = { @Result(type = "json", name = SUCCESS, params = {
+            "callbackParameter", "callback" }) })
     public String login() {
         String[] params = null;
         User user = null;
@@ -104,7 +105,8 @@ public class LoginAction extends BaseAction {
     }
 
     @Action(value = "/checkUser", results = { @Result(type = "json", name = SUCCESS, params = {
-            "excludeProperties", "errorMessage" }) })
+            "excludeProperties", "errorMessage", "callbackParameter",
+            "callback" }) })
     public String checkUser() {
         Object user = null;
         success = false;
@@ -125,7 +127,8 @@ public class LoginAction extends BaseAction {
     }
 
     @Action(value = "/logOut", results = { @Result(type = "json", name = SUCCESS, params = {
-            "excludeProperties", "name, roleId, errorMessage" }) })
+            "excludeProperties", "name, roleId, errorMessage",
+            "callbackParameter", "callback" }) })
     public String logOut() {
         success = false;
         if (session != null

@@ -186,6 +186,7 @@ public class PayJSONAction extends BaseAction {
             refundDetails = paymentLogic.doPaypalRefund(Integer.parseInt(reservationId));
             paymentLogic.savePayment(reservationId, refundDetails, 0, PaymentType.REFUND);
             cancelConfirmMessage = getText("message.cancelSuccess");
+            paymentLogic.sendCancelReservationMail(Integer.parseInt(reservationId), servletRequest.getContextPath());
         } catch (CommonException e) {
             errorMessage = getText(e.getMessageId(), e.getParameters());
             return SUCCESS;

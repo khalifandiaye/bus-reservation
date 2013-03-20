@@ -68,4 +68,14 @@ public interface CommonConstant {
      * GMT
      */
     public final static TimeZone UTC_TIME_ZONE = TimeZone.getTimeZone("GMT");
+    /**
+     * http prefix
+     */
+    //TODO remove localhost:8080 when deploy on real server
+    public final static String URL_HTTP = "http://localhost:8080";
+    /**
+     * https prefix
+     */
+    //TODO remove localhost:8443 when deploy on real server
+    public final static String URL_HTTPS = "https://localhost:8443";
 }
