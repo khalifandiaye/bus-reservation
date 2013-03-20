@@ -1,6 +1,8 @@
 package vn.edu.fpt.capstone.busReservation.action.schedule;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
@@ -29,7 +31,8 @@ public class ListAction extends ActionSupport {
 
 	public String execute() {
 		busTypeBeans = busTypeDAO.getAll();
-		busStatusBeans = busStatusDAO.getAllTrip();
+		Date fromDate = Calendar.getInstance().getTime();
+		busStatusBeans = busStatusDAO.getAllScheduledTrip(fromDate);
 		routeBeans = routeDAO.getAllActiveRoute();
 		return SUCCESS;
 	}

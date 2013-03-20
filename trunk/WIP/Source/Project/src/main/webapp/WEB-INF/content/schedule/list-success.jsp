@@ -170,6 +170,7 @@
 			<table id="scheduleTable" align="center">
 				<thead>
 					<tr>
+					   <th>Route Name</th>
 						<th>Bus Number</th>
 						<th>From Date</th>
 						<th>To Date</th>
@@ -182,6 +183,7 @@
 				<tbody>
 					<s:iterator value="busStatusBeans">
 						<tr id="busStatus_<s:property value='id'/>">
+						   <td><s:property value="trips[0].routeDetails.route.name" /></td>
 							<td><s:property value="bus.plateNumber" /></td>
 							<td><s:date name="fromDate" format="dd/MM/yyyy hh:mm:ss" /></td>
 							<td><s:date name="toDate" format="dd/MM/yyyy hh:mm:ss" /></td>

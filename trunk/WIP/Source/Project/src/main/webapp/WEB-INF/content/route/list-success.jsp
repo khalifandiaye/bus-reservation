@@ -234,6 +234,12 @@
             var url = $('#contextPath').val() + "/route/list.html";
             window.location = url;
       });
+     
+     $('#routeAddDialogCancel').click(function() {
+    	 info = {};
+    	 segments = [];
+    	 giCount = 0;
+   });
    });
 
    var info = {};
@@ -321,7 +327,7 @@
       </div>
       </div>
       <div class="modal-footer">
-         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+         <button class="btn" data-dismiss="modal" id="routeAddDialogCancel" aria-hidden="true">Cancel</button>
          <button class="btn btn-primary" type="button" id="routeAddDialogOk">Save</button>
       </div>
    </div>

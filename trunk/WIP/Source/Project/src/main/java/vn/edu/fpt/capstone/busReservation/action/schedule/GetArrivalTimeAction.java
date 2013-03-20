@@ -62,8 +62,4 @@ public class GetArrivalTimeAction extends BaseAction {
 	public String getArrivalTime() {
 		return arrivalTime;
 	}
-
-	public void setArrivalTime(String arrivalTime) {
-		this.arrivalTime = arrivalTime;
-	}
 }
