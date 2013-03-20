@@ -73,7 +73,8 @@ public class MailUtils implements Serializable {
                         || varStart == '_') {
                     to2 = sb.indexOf(":", from2 + 1);
                     sb.insert(to2, countString);
-                    to2 = to2 + countString.length();
+                    to2 += countString.length();
+                    to += countString.length();
                 } else {
                     to2 = from2;
                 }

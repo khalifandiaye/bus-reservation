@@ -51,6 +51,7 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
      *             the occurred exception
      */
     protected void exceptionHandling(HibernateException e, Session session) {
+        log.error("Database Access Error", e);
         try {
             if (session.getTransaction().isActive()) {
                 log.debug("Trying to rollback database transaction after exception");

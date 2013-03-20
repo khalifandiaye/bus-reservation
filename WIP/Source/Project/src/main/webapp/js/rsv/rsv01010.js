@@ -77,7 +77,7 @@ $(document).ready(function(){
         // send request to calculate refund amount
         $.ajax({
             type : "GET",
-            url : $('contextPath').val() + "/pay/calculateRefund.html",
+            url : $('#contextPath').val() + "/pay/calculateRefund.html",
             data : {
                 reservationId : id
             },
@@ -118,7 +118,7 @@ $(document).ready(function(){
         // send request to calculate refund amount
         $.ajax({
             type : "POST",
-            url : $('contextPath').val() + "/pay/cancelReservation.html",
+            url : $('#contextPath').val() + "/pay/cancelReservation.html",
             data : {
                 // get id from hidden input
                 reservationId : $('input[name="cancelReservationId"]').val()
