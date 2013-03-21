@@ -637,8 +637,9 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 		-moz-box-shadow: 0 0 7px #022a44 inset !important;
 		box-shadow: 0 0 7px #022a44 inset !important;
 }
-td.ui-datepicker-unselectable {
-	border-color: #ebebeb !important;
+td.ui-datepicker-unselectable .ui-state-default{
+		border-color: #ebebeb !important;
+		display: block; padding: 0 !important; width: 30px; height: 30px; border: 0 none !important;/*border: 1px solid #cdcdcd !important;*/ line-height: 30px; text-align: center; font-size: 12px; text-decoration: none; font-weight: bold !important;
 		background: #fcfcfc; /* Old browsers */
 		background: -moz-linear-gradient(top,  #fcfcfc 0%, #efefef 100%); /* FF3.6+ */
 		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fcfcfc), color-stop(100%,#efefef)); /* Chrome,Safari4+ */
@@ -647,6 +648,9 @@ td.ui-datepicker-unselectable {
 		background: -ms-linear-gradient(top,  #fcfcfc 0%,#efefef 100%); /* IE10+ */
 		background: linear-gradient(top,  #fcfcfc 0%,#efefef 100%); /* W3C */
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#efefef',GradientType=0 ); /* IE6-9 */
+		-webkit-box-shadow: 0 1px 0 rgba(255,255,255,0.35) inset;
+		-moz-box-shadow: 0 1px 0 rgba(255,255,255,0.35) inset;
+		box-shadow: 0 1px 0 rgba(255,255,255,0.35) inset;
 }
 .ui-datepicker .ui-datepicker-buttonpane { background-image: none; margin: .7em 0 0 0; padding:0 .2em; border-left: 0; border-right: 0; border-bottom: 0; }
 .ui-datepicker .ui-datepicker-buttonpane button { float: right; margin: .5em .2em .4em; cursor: pointer; padding: .2em .6em .3em .6em; width:auto; overflow:visible; }

@@ -33,10 +33,13 @@ public class SearchResultAction extends BaseAction implements SessionAware {
     private int arrivalCity;
     private int passengerNo;
     private String departureDate;
+    private String returnDate;
     private int busType;
     //=======================Output Parameter====================
     private List<SearchResultInfo> searchResult;
-    HashMap<String,List<SearchResultInfo>> searchResultMap;
+    //HashMap<String,List<SearchResultInfo>> searchResultMap;
+    
+    //Onward
     ArrayList<SearchResultInfo> resultNo1;
     ArrayList<SearchResultInfo> resultNo2;
     ArrayList<SearchResultInfo> resultNo3;
@@ -44,15 +47,33 @@ public class SearchResultAction extends BaseAction implements SessionAware {
     ArrayList<SearchResultInfo> resultNo5;
     ArrayList<SearchResultInfo> resultNo6;
     ArrayList<SearchResultInfo> resultNo7;
+    
+    //Return
+    ArrayList<SearchResultInfo> rtnResultNo1;
+    ArrayList<SearchResultInfo> rtnResultNo2;
+    ArrayList<SearchResultInfo> rtnResultNo3;
+    ArrayList<SearchResultInfo> rtnResultNo4;
+    ArrayList<SearchResultInfo> rtnResultNo5;
+    ArrayList<SearchResultInfo> rtnResultNo6;
+    ArrayList<SearchResultInfo> rtnResultNo7;
+    
+    //Commons
     private String deptCity;
     private String arrCity;
     private String message;
     private String searchMessage;
+    private String rtnExistResultFlag;
     //=======================Data Access Object==================
     private TripDAO tripDAO;
     private CityDAO cityDAO;
     
     
+	/**
+	 * @return the rtnExistResultFlag
+	 */
+	public String getRtnExistResultFlag() {
+		return rtnExistResultFlag;
+	}
 	/**
 	 * @return the searchMessage
 	 */
@@ -79,6 +100,61 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 		this.cityDAO = cityDAO;
 	}
 	
+	/**
+	 * @return the rtnResultNo1
+	 */
+	public ArrayList<SearchResultInfo> getRtnResultNo1() {
+		return rtnResultNo1;
+	}
+	/**
+	 * @return the rtnResultNo2
+	 */
+	public ArrayList<SearchResultInfo> getRtnResultNo2() {
+		return rtnResultNo2;
+	}
+	/**
+	 * @return the rtnResultNo3
+	 */
+	public ArrayList<SearchResultInfo> getRtnResultNo3() {
+		return rtnResultNo3;
+	}
+	/**
+	 * @return the rtnResultNo4
+	 */
+	public ArrayList<SearchResultInfo> getRtnResultNo4() {
+		return rtnResultNo4;
+	}
+	/**
+	 * @return the rtnResultNo5
+	 */
+	public ArrayList<SearchResultInfo> getRtnResultNo5() {
+		return rtnResultNo5;
+	}
+	/**
+	 * @return the rtnResultNo6
+	 */
+	public ArrayList<SearchResultInfo> getRtnResultNo6() {
+		return rtnResultNo6;
+	}
+	/**
+	 * @return the rtnResultNo7
+	 */
+	public ArrayList<SearchResultInfo> getRtnResultNo7() {
+		return rtnResultNo7;
+	}
+	/**
+	 * @param returnDate the returnDate to set
+	 */
+	public void setReturnDate(String returnDate) {
+		this.returnDate = returnDate;
+	}
+	
+	/**
+	 * @return the returnDate
+	 */
+	public String getReturnDate() {
+		return returnDate;
+	}
 	/**
 	 * @return the resultNo1
 	 */
@@ -133,6 +209,13 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 	 */
 	public List<SearchResultInfo> getSearchResult() {
 		return searchResult;
+	}
+	
+	/**
+	 * @return the ticketType
+	 */
+	public String getTicketType() {
+		return ticketType;
 	}
 	/**
 	 * @param ticketType the ticketType to set
@@ -218,17 +301,34 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 			session.remove("searchAnother");
 		}
 		
+		//Format date
 		SimpleDateFormat fromFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 		SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+		//Departure date for onward journey
 		String deptDate = toFormat.format(fromFormat.parse(departureDate));
 		searchResult = tripDAO.searchAvailableTrips(departureCity, arrivalCity, deptDate, passengerNo, busType);
 		if(searchResult.size() != 0){
 			//searchResultMap = filterByDate(searchResult);
 			filterResultByDate(searchResult);
-			searchMessage = "";
+			searchMessage = "exist";
 		} else {
-			searchMessage = "null";
+			searchMessage = "";
 		}
+		
+		//round-trip
+		if(CommonConstant.TICKET_ROUND_TRIP.equals(ticketType)){
+			//return journey
+			String retDate = toFormat.format(fromFormat.parse(returnDate));
+			searchResult = tripDAO.searchAvailableTrips(arrivalCity, departureCity, retDate, passengerNo, busType);
+			if(searchResult.size() != 0){
+				//searchResultMap = filterByDate(searchResult);
+				filterReturnResultByDate(searchResult);
+				rtnExistResultFlag = "exist";
+			} else {
+				rtnExistResultFlag = "";
+			}
+		}
+		
 		deptCity = cityDAO.getById(this.departureCity).getName();
 		arrCity = cityDAO.getById(this.arrivalCity).getName();
 		//String fromDate = DateUtils.addDay(departureDate, -3, "dd-MM-yyyy", Locale.US);
@@ -236,7 +336,7 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 		return SUCCESS;		
 	}
 	
-	private HashMap<String,List<SearchResultInfo>> filterByDate(List<SearchResultInfo> searchResult) throws Exception{
+/*	private HashMap<String,List<SearchResultInfo>> filterByDate(List<SearchResultInfo> searchResult) throws Exception{
 		HashMap<String,List<SearchResultInfo>> resultMap = new HashMap<String,List<SearchResultInfo>>();
 		ArrayList<SearchResultInfo> resultInf = new ArrayList<SearchResultInfo>();
 		SimpleDateFormat fromFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
@@ -254,10 +354,10 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 		}
 		resultMap.put(myDate, resultInf);
 		return resultMap;
-	}
+	}*/
 	
 	/**
-	 * Filter result by date (7 days) to 7 different lists
+	 * Filter result of onward journey by date (7 days) to 7 different lists
 	 * @param searchResult
 	 * 			List of search result
 	 * @throws Exception
@@ -299,5 +399,47 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 		
 	}
 	
+	/**
+	 * Filter result of return journey by date (7 days) to 7 different lists
+	 * @param searchResult
+	 * 			List of search result
+	 * @throws Exception
+	 */
+	private void filterReturnResultByDate(List<SearchResultInfo> searchResult) throws Exception{
+		rtnResultNo1 = new ArrayList<SearchResultInfo>();
+		rtnResultNo2 = new ArrayList<SearchResultInfo>();
+		rtnResultNo3 = new ArrayList<SearchResultInfo>();
+		rtnResultNo4 = new ArrayList<SearchResultInfo>();
+		rtnResultNo5 = new ArrayList<SearchResultInfo>();
+		rtnResultNo6 = new ArrayList<SearchResultInfo>();
+		rtnResultNo7 = new ArrayList<SearchResultInfo>();
+		String compareDate;
+		SimpleDateFormat fromFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+		
+		HashMap<Integer,String> dateList = new HashMap<Integer,String>() ;
+		for(int i=-3; i <= 3; i++){
+			compareDate = DateUtils.addDay(returnDate, i, "dd-MM-yyyy", Locale.US);
+			dateList.put(i, compareDate);
+		}
+		for(int i = 0; i < searchResult.size(); i++){
+			compareDate = fromFormat.format(searchResult.get(i).getDepartureTime());
+			if(dateList.get(-3).equals(compareDate)){
+				rtnResultNo1.add(searchResult.get(i));
+			} else if(dateList.get(-2).equals(compareDate)){
+				rtnResultNo2.add(searchResult.get(i));
+			} else if(dateList.get(-1).equals(compareDate)){
+				rtnResultNo3.add(searchResult.get(i));
+			} else if(dateList.get(0).equals(compareDate)){
+				rtnResultNo4.add(searchResult.get(i));
+			} else if(dateList.get(1).equals(compareDate)){
+				rtnResultNo5.add(searchResult.get(i));
+			} else if(dateList.get(2).equals(compareDate)){
+				rtnResultNo6.add(searchResult.get(i));
+			} else if(dateList.get(3).equals(compareDate)){
+				rtnResultNo7.add(searchResult.get(i));
+			}
+		}
+		
+	}
 
 }
