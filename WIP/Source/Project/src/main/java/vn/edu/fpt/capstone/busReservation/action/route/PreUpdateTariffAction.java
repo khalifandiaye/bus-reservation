@@ -23,15 +23,19 @@ public class PreUpdateTariffAction extends BaseAction {
 
 	@Action(value = "getPreUpdateTariffAction", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
-		//get route each segment
+		// get route each segment
 		List<SegmentBean> segmentBeans;
 		segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
 		message = "";
-		for (SegmentBean segmentBean : segmentBeans){
-			List<RouteBean> routeBeans = routeDetailsDAO.getAllRoutesBySegmentId(segmentBean.getId());
-			for (RouteBean routeBean : routeBeans){
-				message = routeBean.getName() + " (affected segment: " + segmentBean.getStartAt().getName() +  
-						" - " + segmentBean.getEndAt().getName() + " ) \n";
+		for (SegmentBean segmentBean : segmentBeans) {
+			List<RouteBean> routeBeans = routeDetailsDAO
+					.getAllRoutesBySegmentId(segmentBean.getId());
+			for (RouteBean routeBean : routeBeans) {
+				if (routeBean.getId() != routeId) {
+					message = routeBean.getName() + " (affected segment: "
+							+ segmentBean.getStartAt().getName() + " - "
+							+ segmentBean.getEndAt().getName() + " ) \n";
+				}
 			}
 		}
 		return SUCCESS;
@@ -39,8 +43,8 @@ public class PreUpdateTariffAction extends BaseAction {
 
 	public void setRouteDetailsDAO(RouteDetailsDAO routeDetailsDAO) {
 		this.routeDetailsDAO = routeDetailsDAO;
-	}	
-	
+	}
+
 	public void setRouteId(int routeId) {
 		this.routeId = routeId;
 	}
