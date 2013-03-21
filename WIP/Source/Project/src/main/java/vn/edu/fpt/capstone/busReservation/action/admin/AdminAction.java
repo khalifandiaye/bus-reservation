@@ -11,14 +11,9 @@ import vn.edu.fpt.capstone.busReservation.dao.RoleDAO;
 import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RoleBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
-import vn.edu.fpt.capstone.busReservation.exception.CommonException;
-import vn.edu.fpt.capstone.busReservation.logic.UserLogic;
-import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
-import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.CryptUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.paypal.ipn.IPNMessage;
 
 /**
  * @author NoName

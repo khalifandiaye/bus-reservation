@@ -21,7 +21,7 @@ public class RouteDetailListAction extends ActionSupport {
 	private BusTypeDAO busTypeDAO;
 	
 	private List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
-   private List<SegmentInfo> segmentInfos = new ArrayList<SegmentInfo>();
+	private List<SegmentInfo> segmentInfos = new ArrayList<SegmentInfo>();
 	private List<BusTypeBean> busTypeBeans = new ArrayList<BusTypeBean>();
 	private List<BusTypeBean> busTypes = new ArrayList<BusTypeBean>();
 	private int routeId;
