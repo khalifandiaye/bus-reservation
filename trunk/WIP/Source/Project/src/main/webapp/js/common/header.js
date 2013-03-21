@@ -97,4 +97,20 @@ $(document).ready(function(){
         // disable default behavior (event will still bubble up)
         e.preventDefault();
     });
+    
+    $('div.login').on('keypress.auth', function(e) {
+        var evt = (e) ? e : (window.event) ? window.event : null;
+        var keycode = (evt) ? (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which:0)) : null;
+        if (keycode && keycode == 13) {
+            $(this).find('#btn_login').trigger('click');
+        }
+    });
+    
+    $('div.logout').on('keypress.auth', function(e) {
+        var evt = (e) ? e : (window.event) ? window.event : null;
+        var keycode = (evt) ? (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which:0)) : null;
+        if (keycode && keycode == 13) {
+            $(this).find('#btn_logout').trigger('click');
+        }
+    });
 });
