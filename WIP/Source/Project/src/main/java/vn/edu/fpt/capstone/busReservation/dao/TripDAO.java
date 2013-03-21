@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -175,4 +176,29 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
       return result;
    }
 	
+	
+	@SuppressWarnings("unchecked")
+	public int getMinDuration(int deptCity,
+			int arrvCity) {
+		List<Integer> duration = null;
+		Session session = sessionFactory.getCurrentSession();
+		//String strQuery = "CALL search_trips(:deptCity, :arrvCity, :deptDate, :pssgrNo, :busType);";
+		try {
+			//startTransaction();
+			 Query query = session.createSQLQuery("select min(datediff(arrival_time,departure_time)) as date_diff " +
+			 										" from trip_start_end " +
+			 										" where start_location_id = :start and end_location_id = :end")
+			 										.addScalar("date_diff", Hibernate.INTEGER);
+			 duration = query.setInteger("start", deptCity)
+					 		 .setInteger("end", arrvCity).list();
+			 
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		
+		if(duration.size()>0) {
+			return duration.get(0);
+		}
+		return 0;
+	}
 }

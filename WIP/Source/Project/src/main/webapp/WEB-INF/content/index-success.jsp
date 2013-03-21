@@ -19,7 +19,9 @@
 <script type="text/javascript">
 	var d = new Date();
 	var now = d.toMyString();
-
+	d.setDate(d.getDate() + 1);
+	var next = d.toMyString();
+	var duration = 0;
 /*     $(':radio[value="oneway"]').on('click', function() {
   	 	$("#input-return").hide(500);
   	});
@@ -43,7 +45,13 @@
 			maxDate : '+3M',
 			regional : 'vi'
 		});
-		$('#dp2').val(now);
+		$('#dp2').val(next);
+			
+		$("#dp1").change(function() {
+		  	setMinDate();
+		});
+		
+		getDuration();
 	});
 
 	function findArriveCity() {
@@ -62,6 +70,29 @@
 				});
 			}
 		});
+		getDuration();
+	}
+	
+	function getDuration() {
+		$.ajax({
+			type : "GET",
+			url : $('#contextPath').val() + "/search/getTravelTime.html",
+			data : {
+				deptCity : $('#departureCity option:selected').val(),
+				arrCity : $('#arrivalCity option:selected').val()
+			},
+			success : function(data) {
+				duration = parseInt(data.duration);
+				setMinDate();
+			}
+		});
+	}
+	
+	function setMinDate(){
+		  	test = $("#dp1").datepicker('getDate');
+		    testm = new Date(test.getTime());
+		    testm.setDate(testm.getDate() + duration);
+		    $("#dp2").datepicker("option", "minDate", testm);
 	}
 
  	function showArrive() {
@@ -104,7 +135,7 @@
 					style="margin-bottom: 10px; border-bottom: 1px #fff dashed; padding-bottom: 5px;">
 					<label>Trạm kết thúc</label>
 					<s:select list="arrCity" listKey="id" listValue="name"
-						name="arrivalCity" />
+						name="arrivalCity" onchange="getDuration()"/>
 				</div>
 				<div class="controls controls-row" id="select-pas"
 					style="margin-bottom: 10px; border-bottom: 1px #fff dashed; padding-bottom: 5px;">
@@ -147,7 +178,7 @@
 				</div>
 				<div class="item">
 					<img src="<%=request.getContextPath()%>/img/image2.jpg" />
-				</div> 
+				</div>
 				<div class="item">
 					<img src="<%=request.getContextPath()%>/img/image3.jpg" />
 				</div>

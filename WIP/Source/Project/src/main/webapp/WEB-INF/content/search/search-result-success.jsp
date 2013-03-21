@@ -32,19 +32,6 @@
 	 var myString = JSON.stringify(obj);
 	 $("#tripData").val(myString);
 	 } */
-
-	function setParam() {
-		var outRadio = $('form input[name="out_journey"]:checked');
-		$('input[name="outBusStatus"]').val(
-				$(outRadio).siblings('.out_status').val());
-		$('input[name="outDepartTime"]').val(
-				$(outRadio).siblings('.out_deptTime').val());
-		$('input[name="outArriveTime"]').val(
-				$(outRadio).siblings('.out_arrTime').val());
-		$('input[name="outFare"]').val($(outRadio).siblings('.out_fare').val());
-		return true;
-	}
-
 	
 	function showPopup(message){
 		if($(".notify-message").html().trim()!=""){
@@ -54,15 +41,65 @@
 	}
 	
 	$(function() {
+		$("#confirm-submit").bind("click",function(){
+			var outRadio = $('form input[name="out_journey"]:checked');
+			var rtnRadio = $('form input[name="rtn_journey"]:checked');
+					
+			if(rtnRadio.size != 0) {
+				
+				var depart = $(rtnRadio).siblings('.rtn_deptTime').val();
+				var arrive = $(outRadio).siblings('.out_arrTime').val();
+				
+				if(depart <= arrive){
+					if($(".notify-message").html().trim()!=""){
+						$(".notify-message").empty();
+					}
+					$(".notify-message").append('<div class="alert fade in">'+
+							'<button type="button" class="close" data-dismiss="alert">×</button>'+
+							'Vui lòng chọn chuyến về có thời gian khởi hành sau khi chuyến đi kết thúc.'
+							+'</div>');
+					return;
+				}
+				
+				$('input[name="rtnBusStatus"]').val(
+						$(rtnRadio).siblings('.rtn_status').val());
+				$('input[name="rtnDepartTime"]').val(
+						$(rtnRadio).siblings('.rtn_deptTime').val());
+				$('input[name="rtnArriveTime"]').val(
+						$(rtnRadio).siblings('.rtn_arrTime').val());
+				$('input[name="rtnFare"]').val($(rtnRadio).siblings('.rtn_fare').val());
+			}
+			$('input[name="outBusStatus"]').val(
+					$(outRadio).siblings('.out_status').val());
+			$('input[name="outDepartTime"]').val(
+					$(outRadio).siblings('.out_deptTime').val());
+			$('input[name="outArriveTime"]').val(
+					$(outRadio).siblings('.out_arrTime').val());
+			$('input[name="outFare"]').val($(outRadio).siblings('.out_fare').val());
+			
+			$('form').submit(); 
+		});
+		
 		$('.trip-details').bind(
 				'click',
 				(function() {
+					var className = $(this).attr('class').split(' ')[1];
+					
+					if(className == 'onward') {
 					var busStatus = $(this).parent("td").next().next().find(
 							'.out_status').val();
 					var departTime = $(this).parent("td").next().next().find(
 							'.out_deptTime').val();
 					var arriveTime = $(this).parent("td").next().next().find(
 							'.out_arrTime').val();
+					} else {
+					var	busStatus = $(this).parent("td").next().next().find(
+						'.rtn_status').val();
+					var	departTime = $(this).parent("td").next().next().find(
+						'.rtn_deptTime').val();
+					var	arriveTime = $(this).parent("td").next().next().find(
+						'.rtn_arrTime').val();
+					}
 					//console.log(departTime);
 					$.ajax({
 						type : "GET",
@@ -75,8 +112,22 @@
 						},
 						success : function(data) {
 							console.log(data.tripList);
-							//$.each(data.tripList, function(k, v) {
-							//$('#trips-list tbody').append();
+							$('#trips-list tbody').empty();
+							$('#trips-list tbody').append('<tr class="row">' + 
+							'<th class="head">Giờ khởi hành</th>' +
+							'<th class="head">Giờ dừng nghỉ</th>' +
+							'<th class="head">Trạm khởi hành</th>' +
+							'<th class="head">Trạm dừng nghỉ</th>' +
+						'</tr>');
+							var loop = data.tripList;
+							for (var i = 0; i < loop.length; i++) {
+								$('#trips-list tbody').append('<tr class="row">'+
+										'<td class="cell">' + loop[i]['deptDate'] + '<br/>' + loop[i]['deptTime'] + '</td>' + 
+								        '<td class="cell">' + loop[i]['arrDate'] + '<br/>' + loop[i]['arrTime'] + '</td>' +
+										'<td class="cell">' + loop[i]['deptCity'] + '<br/>' + loop[i]['deptStat'] + '</td>' +
+										'<td class="cell">' + loop[i]['arrCity'] + '<br/>' + loop[i]['arrStat'] + '</td>' +
+										'</tr>');
+							}
 						}
 				});
 		}));
@@ -136,9 +187,31 @@
 						showResultDetails('onward7');
 					}
 					
+					if($('.list-header-rtn.return4').size()!=0){
+						showResultDetailsRtn('return4');
+					} else if($('.list-header-rtn.return3').size()!=0){
+						showResultDetailsRtn('return3');
+					} else if($('.list-header-rtn.return5').size()!=0){
+						showResultDetailsRtn('return5');
+					} else if($('.list-header-rtn.return2').size()!=0){
+						showResultDetailsRtn('return2');
+					} else if($('.list-header-rtn.return6').size()!=0){
+						showResultDetailsRtn('return6');
+					} else if($('.list-header-rtn.return1').size()!=0){
+						showResultDetailsRtn('return1');
+					} else if($('.list-header-rtn.return7').size()!=0){
+						showResultDetailsRtn('return7');
+					}
+					
 					$('.list-header').bind('click',(function() {
 						var className = $(this).attr('class').split(' ')[1];
 						showResultDetails(className);
+					}));
+					
+										
+					$('.list-header-rtn').bind('click',(function() {
+						var rtnClassName = $(this).attr('class').split(' ')[1];
+						showResultDetailsRtn(rtnClassName);
 					}));
 					
 					$('#out_journey').bind(
@@ -157,6 +230,15 @@
 					$('.list-header.' + headerName).addClass('header-current');
 				}
 				
+				function showResultDetailsRtn(headerName){
+					$('.search-rs-dtl-rtn').hide();	
+					$('.search-rs-dtl-rtn.' + headerName).show();
+					$('table.' + headerName + ' tr.tripDetails #rtn_journey')[0].checked = true;
+					$('.list-header-rtn').removeClass('header-current');
+					$('.list-header-rtn').addClass('header-default');
+					$('.list-header-rtn.' + headerName).removeClass('header-default');
+					$('.list-header-rtn.' + headerName).addClass('header-current');
+				}
 			</script>
 			<div>
 			<form action="../booking/booking.html">
@@ -176,13 +258,13 @@
 				<s:set name="result5" value="resultNo5" />
 				<s:set name="result6" value="resultNo6" />
 				<s:set name="result7" value="resultNo7" />
-				<s:if test="%{#result4.size == 0 && #msgRtn == ''}">
+				<s:if test="%{#result4.size == 0 && #msgRtn != ''}">
 				<div style="display:block; margin-left:10px; margin-bottom:15px;">Hiện tại không có chuyến đi nào vào ngày <strong>${departureDate}</strong>. 
 					 Dưới đây là những chuyến đi có ngày gần với ngày quý khách mong muốn.</div>
 					 <br/>
 					 </s:if>
-				<s:if test="%{#msgRtn != ''}">
-					<s:property value="msgRtn"/>. Xin quý khách vui lòng thử lại.
+				<s:if test="%{#msgRtn == ''}">
+					 Hiện tại chuyến đi từ <strong>${deptCity}</strong> đến <strong>${arrCity}</strong> vào ngày <strong>${departureDate}</strong> không có hoặc đã hết vé. Xin quý khách vui lòng thử tìm chuyến vào ngày khác.
 				</s:if>	 
 				<s:if test="%{#result4.size != 0}">
 					<div style="display:block; margin-left:10px; margin-bottom:15px">Vui lòng chọn chuyến đi và nhấn <strong>"Tiếp tục"</strong></div>
@@ -286,7 +368,7 @@
 							</div>
 						</s:if>
 						<s:if test="%{#result7.size != 0}">	
-							<div class="search-rs-dtl onward4">
+							<div class="search-rs-dtl onward7">
 								<table class="tbl-trip-list onward7">
 									<jsp:include page="../search/search-table-header.jsp" />
 									<s:iterator value="resultNo7" status="srStatus" var="sr">
@@ -296,16 +378,164 @@
 							</div>
 						</s:if>
 						</div>
-						<input type="submit"
-												onclick="setParam()" class="btn btn-large pull-right btn-primary"
-												style="margin-top: 15px; margin-right: 10px;" value="<s:text name="next"/>" />	
 			</div>
-			<input type="hidden" id="passengerNo" value="${passengerNo}"
-									name="passengerNo" /> <input type="hidden" name="outBusStatus" />
-								<input type="hidden" name="outDepartTime" /> <input
-									type="hidden" name="outArriveTime" /> <input type="hidden"
-									name="outFare" />				
+			<s:set name="ticketType" value="ticketType" />
+			<s:if test="%{#ticketType=='roundtrip'}">
+			<div class="return-info">
+				<legend>Chuyến về</legend>
+				<div class="trip-details" style="display:block;width:100%">
+					<span class="blue-bus-ico"></span>
+					<span><h5>${arrCity}</h5>
+					 	<span class="arrow-right"></span><h5>${deptCity}</h5>
+					</span>
+				</div>
+				<br/>
+				<s:set name="rtnResult1" value="rtnResultNo1" />
+				<s:set name="rtnResult2" value="rtnResultNo2" />
+				<s:set name="rtnResult3" value="rtnResultNo3" />
+				<s:set name="rtnResult4" value="rtnResultNo4" />
+				<s:set name="rtnResult5" value="rtnResultNo5" />
+				<s:set name="rtnResult6" value="rtnResultNo6" />
+				<s:set name="rtnResult7" value="rtnResultNo7" />
+				<s:set name="flgRtn" value="rtnExistResultFlag"/>
+				<s:if test="%{#rtnResult4.size == 0 && #flgRtn != ''}">
+				<div style="display:block; margin-left:10px; margin-bottom:15px;">Hiện tại không có chuyến đi nào vào ngày <strong>${returnDate}</strong>. 
+					 Dưới đây là những chuyến đi có ngày gần với ngày quý khách mong muốn.</div>
+					 <br/>
+					 </s:if>
+				<s:if test="%{#flgRtn == ''}">
+					 Hiện tại chuyến đi từ <strong>${arrCity}</strong> đến <strong>${deptCity}</strong> vào ngày <strong>${returnDate}</strong> không có hoặc đã hết vé. Xin quý khách vui lòng thử tìm chuyến vào ngày khác.
+				</s:if>	 
+				<s:if test="%{#rtnResult4.size != 0}">
+					<div style="display:block; margin-left:10px; margin-bottom:15px">Vui lòng chọn chuyến đi và nhấn <strong>"Tiếp tục"</strong></div>
+				</s:if>
+					<div class="result-header return">
+						<s:if test="%{#rtnResult1.size != 0}">			
+							<span class="list-header-rtn return1">
+								<s:date name="rtnResultNo1[0].departureTime" format="dd-MM" />
+							</span>		
+						</s:if>	
+						<s:if test="%{#rtnResult2.size != 0}">
+							<span class="list-header-rtn return2">
+								<s:date name="rtnResultNo2[0].departureTime" format="dd-MM" />
+							</span>
+						</s:if>	
+						<s:if test="%{#rtnResult3.size != 0}">
+							<span class="list-header-rtn return3">
+								<s:date name="rtnResultNo3[0].departureTime" format="dd-MM" />
+							</span>	
+						</s:if>
+						<s:if test="%{#rtnResult4.size != 0}">
+							<span class="list-header-rtn return4">
+								<s:date name="rtnResultNo4[0].departureTime" format="dd-MM"/>
+							</span>
+						</s:if>
+						<s:if test="%{#rtnResult5.size != 0}">
+							<span class="list-header-rtn return5">
+								<s:date name="rtnResultNo5[0].departureTime" format="dd-MM" />
+							</span>
+						</s:if>
+						<s:if test="%{#rtnResult6.size != 0}">	
+							<span class="list-header-rtn return6">
+								<s:date name="rtnResultNo6[0].departureTime" format="dd-MM" />				
+							</span>
+						</s:if>
+						<s:if test="%{#rtnResult7.size != 0}">	
+							<span class="list-header-rtn return7">
+								<s:date name="rtnResultNo7[0].departureTime" format="dd-MM" />							
+							</span>
+						</s:if>
+						</div>
+					<div class="result-table return">
+						<s:if test="%{#rtnResult1.size != 0}">			
+							<div class="search-rs-dtl-rtn return1">
+								<table class="tbl-trip-list return1">
+									<jsp:include page="../search/search-table-header.jsp" />
+									<s:iterator value="rtnResultNo1" status="srStatus" var="sr">
+										<jsp:include page="../search/search-table-detail-rtn.jsp" />
+									</s:iterator>
+								</table>	
+							</div>							
+						</s:if>	
+						<s:if test="%{#rtnResult2.size != 0}">
+							<div class="search-rs-dtl-rtn return2">
+								<table class="tbl-trip-list return2">
+									<jsp:include page="../search/search-table-header.jsp" />
+									<s:iterator value="rtnResultNo2" status="srStatus" var="sr">
+										<jsp:include page="../search/search-table-detail-rtn.jsp" />
+									</s:iterator>
+								</table>	
+							</div>
+						</s:if>	
+						<s:if test="%{#rtnResult3.size != 0}">
+							<div class="search-rs-dtl-rtn return3">
+								<table class="tbl-trip-list return3">
+									<jsp:include page="../search/search-table-header.jsp" />
+									<s:iterator value="rtnResultNo3" status="srStatus" var="sr">
+										<jsp:include page="../search/search-table-detail-rtn.jsp" />
+									</s:iterator>
+								</table>	
+							</div>
+						</s:if>
+						<s:if test="%{#rtnResult4.size != 0}">
+							<div class="search-rs-dtl-rtn return4">
+								<table class="tbl-trip-list return4">
+									<jsp:include page="../search/search-table-header.jsp" />
+									<s:iterator value="rtnResultNo4" status="srStatus" var="sr">
+										<jsp:include page="../search/search-table-detail-rtn.jsp" />
+									</s:iterator>
+								</table>	
+							</div>
+						</s:if>
+						<s:if test="%{#rtnResult5.size != 0}">
+							<div class="search-rs-dtl-rtn return5">
+								<table class="tbl-trip-list return5">
+									<jsp:include page="../search/search-table-header.jsp" />
+									<s:iterator value="rtnResultNo5" status="srStatus" var="sr">
+										<jsp:include page="../search/search-table-detail-rtn.jsp" />
+									</s:iterator>
+								</table>	
+							</div>
+						</s:if>
+						<s:if test="%{#rtnResult6.size != 0}">	
+							<div class="search-rs-dtl-rtn return6">
+								<table class="tbl-trip-list return6">
+									<jsp:include page="../search/search-table-header.jsp" />
+									<s:iterator value="rtnResultNo6" status="srStatus" var="sr">
+										<jsp:include page="../search/search-table-detail-rtn.jsp" />
+									</s:iterator>
+								</table>	
+							</div>
+						</s:if>
+						<s:if test="%{#rtnResult7.size != 0}">	
+							<div class="search-rs-dtl-rtn return7">
+								<table class="tbl-trip-list return7">
+									<jsp:include page="../search/search-table-header.jsp" />
+									<s:iterator value="rtnResultNo7" status="srStatus" var="sr">
+										<jsp:include page="../search/search-table-detail-rtn.jsp" />
+									</s:iterator>
+								</table>	
+							</div>
+						</s:if>
+						</div>
+			</div>
+			</s:if>
+			<input type="hidden" id="passengerNo" value="${passengerNo}" name="passengerNo" /> 
+			<input type="hidden" name="outBusStatus" />
+			<input type="hidden" name="outDepartTime" /> 
+			<input type="hidden" name="outArriveTime" /> 
+			<input type="hidden" name="outFare" />	
+			<input type="hidden" name="rtnBusStatus" />
+			<input type="hidden" name="rtnDepartTime" /> 
+			<input type="hidden" name="rtnArriveTime" /> 
+			<input type="hidden" name="rtnFare" />				
 			</form>
+				<div style="overflow: hidden; width: 100%;">
+					<button id="confirm-submit"
+							class="btn btn-large pull-right btn-primary"
+							style="margin-top: 15px; margin-right: 10px;" ><s:text name="next"/></button>
+					<a style="margin-top: 15px; margin-right: 30px;" class="btn btn-large pull-right" href="../index.html">Quay lại</a>
+				</div>	
 			</div>
 		</div>
 			<s:hidden id="message" name="message"></s:hidden>
@@ -321,18 +551,15 @@
 			<h3 id="myModalLabel">Chi tiết chuyến đi</h3>
 		</div>
 		<div class="modal-body">
-			<table border="0" cellspacing="0" cellpadding="0" id="trips-list">
-				<thead>
-					<tr>
-						<th>Giờ khởi hành</th>
-						<th>Giờ dừng nghỉ</th>
-						<th>Trạm khởi hành</th>
-						<th>Trạm dừng nghỉ</th>
-					</tr>
-				</thead>
-				<tbody>
-
-				</tbody>
+			<table border="0" cellspacing="0" cellpadding="0" id="trips-list" class="tbl-trip-list">
+ 			<tbody>
+				<!-- <tr class="row"> 
+					<th class="head">Giờ khởi hành</th>
+					<th class="head">Giờ dừng nghỉ</th>
+					<th class="head">Trạm khởi hành</th>
+					<th class="head">Trạm dừng nghỉ</th>
+				</tr> -->
+			</tbody>
 			</table>
 		</div>
 		<div class="modal-footer">

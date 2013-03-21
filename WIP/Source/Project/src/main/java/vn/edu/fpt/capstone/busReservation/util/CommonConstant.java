@@ -68,6 +68,17 @@ public interface CommonConstant {
      * GMT
      */
     public final static TimeZone UTC_TIME_ZONE = TimeZone.getTimeZone("GMT");
+    
+    /**
+     * Ticket type: One way
+     */
+    public final static String TICKET_ONE_WAY = "oneway";
+    
+    /**
+     * Ticket type: Round trip
+     */
+    public final static String TICKET_ROUND_TRIP = "roundtrip";
+    
     /**
      * http prefix
      */
