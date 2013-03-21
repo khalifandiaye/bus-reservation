@@ -67,6 +67,7 @@
 		};
 
 		$('#busStatusInsertBtn').click(function() {
+			$("#addNewSchedule").attr("disabled","disabled");
 			$('#tripDialogRoutes').val(-1);
 			$('#tripDialogDepartureTime').val('');
 			$('#tripDialogArrivalTime').val('');
@@ -106,7 +107,8 @@
 							.append('<option value="' + this.id + '">'+ this.plateNumber+ '</option>');
 						});
 					});
-			}
+			} 
+			checkButton();
 		};
 
 		function getArrivalTime() {
@@ -125,7 +127,33 @@
 				});
 			}
 		}
+		   
+		function checkButton(){
+            var departureTime = $("#tripDialogDepartureTime").val();
+            var busPlate = $('#tripDialogBusPlate').val();
+            var addNewSchedule = $("#addNewSchedule");
 
+            
+            if(departureTime != "" && busPlate != null && busPlate != ''){
+            	addNewSchedule.removeAttr("disabled"); 
+            }else{ 
+            	addNewSchedule.attr("disabled","disabled");
+            }
+		}
+		
+		$("#tripDialogDepartureTime").change(function(){
+			checkButton();
+		});
+		$("#tripDialogArrivalTime").change(function(){
+	         checkButton();
+	      });
+		$("#tripDialogBusType").change(function(){
+	         checkButton();
+	      });
+		$("#tripDialogBusPlate").change(function(){
+	         checkButton(); 
+      });
+		
 		$('#cancelAdd').bind('click', function() {
 			$("#tripDialogRoutes").val(-1);
 			$("#tripDialogDepartureTime").val('');
@@ -360,9 +388,9 @@
 				});
 			});
 
-		$('#viewPrice').click(function() {
-			$("#priceDialog").modal();
-		});
+// 		$('#viewPrice').click(function() {
+// 			$("#priceDialog").modal();
+// 		});
 
 		$('#return').bind('click',
 			function() {
@@ -379,12 +407,17 @@
 		});
 
 		$('#busType').bind('change', function() {
-			$('#priceTable').dataTable().fnClearTable();
 			var busType = $('#busType').val();
 			var date = $('#validDateSelect').val();
 			getPrice(busType, segments, date);
 		});
 
+	    $('#validDateSelect').bind('change', function() {
+	         var busType = $('#busType').val();
+	         var date = $('#validDateSelect').val();
+	         getPrice(busType, segments, date);
+	    });
+		
 		var busType = $('#busType').val();
 		getPrice(busType, segments, $('#validDateSelect').val());
 	});
@@ -403,8 +436,7 @@
 				var data = response.tariffInfos;
 				for ( var i = 0; i < data.length; i++) {
 					element = data[i];
-					$('#priceTable').dataTable().fnAddData([ element.startAt + ' - ' + element.endAt,
-						accounting.formatMoney(element.fare) ]);
+					$('#segmentTable').dataTable().fnUpdate(accounting.formatMoney(element.fare),i,2);
 				};
 			}
 		});
@@ -456,7 +488,7 @@
                <tr>
                   <td><input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price"
                         style="height: 30px" />
-                  <input class="btn btn-primary" type="button" id="viewPrice" value="View Price" style="height: 30px"/>
+<!--                   <input class="btn btn-primary" type="button" id="viewPrice" value="View Price" style="height: 30px"/> -->
                   <input class="btn btn-primary" id="assignBus" type="button" value="Assign Bus to Route" style="height: 30px"/>
                   <input id="busStatusInsertBtn" type="button" class="btn btn-success" value="Add New Schedule" style="height: 30px"/></td>
                </tr>
@@ -470,6 +502,7 @@
                <tr>
                   <th>Name</th>
                   <th>Travel Time</th>
+                  <th>Price</th>
                </tr>
             </thead>
             <tbody>
@@ -477,6 +510,7 @@
                   <tr id="segment_<s:property value='id'/>" data-segment-id="<s:property value='id'/>">
                      <td><s:property value="name" /></td>
                      <td><s:property value="duration" /></td>
+                     <td><s:property value="price" /></td>
                   </tr>
                </s:iterator>
             </tbody>
@@ -487,30 +521,31 @@
          </div>
       </div>
    </div>
-   <!-- Modal Show Route Details Price By BusType Dialog -->
-   <div id="priceDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-      aria-hidden="true">
-      <div class="modal-header">
-         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-         <h3 id="priceDialogLabel">Price</h3>
-      </div>
-      <div class="modal-body">
-         <table id="priceTable">
-            <thead>
-               <tr>
-                  <th>Name</th>
-                  <th>Fare</th>
-               </tr>
-            </thead>
-            <tbody>
-            </tbody>
-         </table>
-      </div>
-      <div class="modal-footer">
-         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-         <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Update</button>
-      </div>
+   <!-- Modal Show Fare Price By BusType Dialog -->
+<!--    <div id="priceDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" -->
+<!--       aria-hidden="true"> -->
+<!--       <div class="modal-header"> -->
+<!--          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
+<!--          <h3 id="priceDialogLabel">Price</h3> -->
+<!--       </div> -->
+<!--       <div class="modal-body"> -->
+<!--          <table id="priceTable"> -->
+<!--             <thead> -->
+<!--                <tr> -->
+<!--                   <th>Name</th> -->
+<!--                   <th>Fare</th> -->
+<!--                </tr> -->
+<!--             </thead> -->
+<!--             <tbody> -->
+<!--             </tbody> -->
+<!--          </table> -->
+<!--       </div> -->
+<!--       <div class="modal-footer"> -->
+<!--          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button> -->
+<!--          <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Update</button> -->
+<!--       </div> -->
    </div>
+   
    <!-- Modal Show Route Details Price By BusType Dialog -->
    <div id="busDetailDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true">
@@ -616,15 +651,15 @@
             <label for="tripDialogBusType">Bus Type: </label> <select id="tripDialogBusType" name="busTypeBeans">
                <option value="-1">Select Bus Type</option>
             </select>
-            <div id="trip-plate-number">
+            <div id="trip-plate-number"> 
                <label for="routeSelect">Bus Plate Number</label> <select id='tripDialogBusPlate'
                   name='tripDialogBusPlate'></select>
             </div>
             <div id="tripDialogStatus"></div>
          </div>
          <div class="modal-footer">
-            <button class="btn" id="cancelAdd" data-dismiss="modal" aria-hidden="true">Cancel</button>
-            <input type="button" id="addNewSchedule" class="btn btn-primary" value='Save changes' />
+            <button class="btn" id="cancelAdd" data-dismiss="modal" aria-hidden="true">Cancel</button> 
+            <input disabled="disabled" type="button" id="addNewSchedule" class="btn btn-primary" value='Save changes' />
          </div>
       </form>
    </div>
