@@ -167,6 +167,8 @@
 			<button id="busAddDialogOk" class="btn btn-primary" >Save</button>
 		</div>
 	</div>
+   
+   
 	<input id="busId" value="" type="hidden" />
 	<jsp:include page="../common/footer.jsp" />
 </body>

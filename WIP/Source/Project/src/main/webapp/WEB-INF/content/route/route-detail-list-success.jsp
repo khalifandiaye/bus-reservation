@@ -213,6 +213,15 @@
 			startDate : new Date(),
 			minuteStep : 10
 		});
+		
+		$("#validDateSelectDiv").datetimepicker({
+	      format : "yyyy/mm/dd - hh:ii",
+	      autoclose : true,
+	      todayBtn : true,
+	      startDate : new Date(),
+	      minuteStep : 10
+	   });
+		$('#validDateSelectDiv').datetimepicker("setDate", new Date() );
 
 		$("#editPriceSave").bind('click',function() {
 			var info = {};
@@ -222,8 +231,7 @@
 				var tariff = {};
 				tariff['segmentId'] = this.id;
 				tariff['fare'] = this.value;
-				tariffs
-						.push(tariff);
+				tariffs.push(tariff);
 			});
 			info['routeId'] = $('#routeId').val();
 			info['validDate'] = $('#validDate').val();
@@ -293,6 +301,9 @@
 		$("#busDetailAdd").click(
 			function() {
 				var busId = $("#busDetailbusPlate").val();
+				if (!busId || busId == '') {
+					return;
+				}
 				var plateNumber = $("#busDetailbusPlate option:selected").text();
 				busDetailTable.dataTable().fnAddData([
 					busId,plateNumber,
@@ -370,17 +381,19 @@
 		$('#busType').bind('change', function() {
 			$('#priceTable').dataTable().fnClearTable();
 			var busType = $('#busType').val();
-			getPrice(busType, segments);
+			var date = $('#validDateSelect').val();
+			getPrice(busType, segments, date);
 		});
 
 		var busType = $('#busType').val();
-		getPrice(busType, segments);
+		getPrice(busType, segments, $('#validDateSelect').val());
 	});
 
-	function getPrice(busType, segments) {
+	function getPrice(busType, segments, date) {
 		var info = {};
 		info['busType'] = busType;
 		info['segments'] = segments;
+		info['validDate'] = date;
 		$.ajax({
 			type : "POST",
 			url : 'getPrice.html',
@@ -429,23 +442,25 @@
       <div class="post" style="margin: 0px auto; width: 95%;">
          <div style="margin-left: 10px; margin-top: 10px;">
             <input type="hidden" id="routeId" value="<s:property value='routeId'/>" />
-            <s:if test="%{busTypeBeans.size()!=0}">
-               <table>
-                  <tr>
-                     <td><s:select id="busType" list="busTypeBeans" name="busTypeBeans" listKey="id"
+            <table>
+               <tr>
+                  <td><s:select id="busType" list="busTypeBeans" name="busTypeBeans" listKey="id"
                            listValue="name" /></td>
-                     <td><input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price"
-                        style="height: 30px; margin-top: -13px;" /></td>
-                  </tr>
-                  <tr>
-                     <td><input class="btn btn-primary" type="button" id="viewPrice" value="View Price" /> <input
-                        class="btn btn-primary" id="assignBus" type="button" value="Assign Bus to Route" /></td>
-                  </tr>
-               </table>
-            </s:if>
-         </div>
-         <div style="height: 45px; margin-left: 1%;">
-            <input id="busStatusInsertBtn" type="button" class="btn btn-success" value="Add New Schedule" />
+                  <td><div id="validDateSelectDiv" class="input-append date form_datetime" data-date="" style="margin-top: -8px;">
+                        <input id="validDateSelect" size="16" type="text" value="" readonly ><span
+                           class="add-on"><i class="icon-calendar"></i></span>
+                     </div></td>
+               </tr>
+            </table>
+            <table>
+               <tr>
+                  <td><input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price"
+                        style="height: 30px" />
+                  <input class="btn btn-primary" type="button" id="viewPrice" value="View Price" style="height: 30px"/>
+                  <input class="btn btn-primary" id="assignBus" type="button" value="Assign Bus to Route" style="height: 30px"/>
+                  <input id="busStatusInsertBtn" type="button" class="btn btn-success" value="Add New Schedule" style="height: 30px"/></td>
+               </tr>
+            </table>
          </div>
          <h3>
             <s:property value="routeName" />
@@ -504,7 +519,7 @@
          <h3 id="busDetailDialogLabel">List Bus In Route</h3>
       </div>
       <div class="modal-body">
-         Select bus : <select id='busDetailbusPlate' name='busDetailBusPlate'></select>
+         Select bus : <select id='busDetailbusPlate' name='busDetailBusPlate' style='margin-top: -6px;'></select>
          <button style="margin-top: -10px;" type="button" id="busDetailAdd" class="btn btn-primary">Add</button>
          <table id="busDetailTable">
             <thead>

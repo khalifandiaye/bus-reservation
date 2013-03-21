@@ -70,8 +70,8 @@
    
    $(document).ready(function() {
       
-	   var routeTable = $('#routeTable').dataTable({" bSort" : false });
-	   var segmentTable = $('#segmentTable').dataTable({ "bSort" : false });
+	   var routeTable = $('#routeTable').dataTable({ bSort : false });
+	   var segmentTable = $('#segmentTable').dataTable({ bSort : false });
       	   
       $('#addRoute').bind('click', function(event) {
     	   giCount = 0;
@@ -248,7 +248,6 @@
 </script>
 
 <style type="text/css">
-   .dataTables_filter { display: none; }
    .dataTables_length { display: none; }
    #addRouteDialog { width: 900px; margin-left: -440px; }
 </style>
