@@ -33,20 +33,20 @@ public class GetPriceAction extends BaseAction {
 
 	@Action(value = "getPrice", results = { @Result(type = "json", name = SUCCESS ) })
 	public String execute() throws JsonParseException, JsonMappingException,IOException, ParseException {
-		SegmentAddInfo segmentAddInfos = mapper.readValue(data, new TypeReference<SegmentAddInfo>() {});
-		List<SegmentInfo> segmentInfos = segmentAddInfos.getSegments();
-		for (SegmentInfo segmentInfo : segmentInfos) {
-			List<TariffBean> resultList = tariffDAO.getPrice(segmentInfo.getId(), segmentAddInfos.getBusType());
-			if (!resultList.isEmpty()) {
-				TariffBean tariffBean = resultList.get(0);
-				TariffInfo tariffInfo = new TariffInfo();
-            tariffInfo.setId(tariffBean.getSegment().getId()); 
-            tariffInfo.setStartAt(tariffBean.getSegment().getStartAt().getCity().getName());
-            tariffInfo.setEndAt(tariffBean.getSegment().getEndAt().getCity().getName());
-            tariffInfo.setFare(tariffBean.getFare());
-				tariffInfos.add(tariffInfo);
-			}
-		}
+//		SegmentAddInfo segmentAddInfos = mapper.readValue(data, new TypeReference<SegmentAddInfo>() {});
+//		List<SegmentInfo> segmentInfos = segmentAddInfos.getSegments();
+//		for (SegmentInfo segmentInfo : segmentInfos) {
+//			List<TariffBean> resultList = tariffDAO.getPrice(segmentInfo.getId(), segmentAddInfos.getBusType());
+//			if (!resultList.isEmpty()) {
+//				TariffBean tariffBean = resultList.get(0);
+//				TariffInfo tariffInfo = new TariffInfo();
+//            tariffInfo.setId(tariffBean.getSegment().getId()); 
+//            tariffInfo.setStartAt(tariffBean.getSegment().getStartAt().getCity().getName());
+//            tariffInfo.setEndAt(tariffBean.getSegment().getEndAt().getCity().getName());
+//            tariffInfo.setFare(tariffBean.getFare());
+//				tariffInfos.add(tariffInfo);
+//			}
+//		}
 		return SUCCESS;
 	}
 

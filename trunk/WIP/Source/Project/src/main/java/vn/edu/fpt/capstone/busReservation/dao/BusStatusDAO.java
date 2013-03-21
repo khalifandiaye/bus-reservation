@@ -72,7 +72,7 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 			Query query = session.createQuery(hql);
 			query.setParameter("status", "active");
 			query.setParameter("busStatus", "initiation");
-			query.setParameter("fromDate", "fromDate");
+			query.setParameter("fromDate", fromDate);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);

@@ -98,14 +98,16 @@ public class TariffDAO extends GenericDAO<Integer, TariffBean> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<TariffBean> getPrice(int segmentId, int busTypeId) {
+	public List<TariffBean> getPrice(int segmentId, int busTypeId, Date validDate) {
 		List<TariffBean> result = new ArrayList<TariffBean>();
 		Session session = sessionFactory.getCurrentSession();
 		try {
-			String queryString = "FROM TariffBean t WHERE t.segment.id = :segmentId AND t.busType.id = :busTypeId";
+			String queryString = "FROM TariffBean t WHERE t.segment.id = :segmentId AND t.busType.id = :busTypeId " +
+					"AND t.validFrom < :validDate order by t.validFrom desc";
 			Query query = session.createQuery(queryString);
 			query.setParameter("segmentId", segmentId);
 			query.setParameter("busTypeId", busTypeId);
+			query.setParameter("validDate", validDate);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
