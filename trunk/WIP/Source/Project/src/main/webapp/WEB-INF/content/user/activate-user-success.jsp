@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Payment Success</title>
+<title><s:text name="title.activateUser" /></title>
 <jsp:include page="../common/xheader.jsp" />
 <link href="<%=request.getContextPath()%>/styles/booking.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/styles/pay.css" rel="stylesheet">

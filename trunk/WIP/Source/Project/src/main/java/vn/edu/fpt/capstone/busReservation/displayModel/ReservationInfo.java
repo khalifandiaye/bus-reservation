@@ -5,10 +5,14 @@ package vn.edu.fpt.capstone.busReservation.displayModel;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
+
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
+import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
 /**
  * @author Yoshimi
- *
+ * 
  */
 public class ReservationInfo implements Serializable {
     /**
@@ -16,24 +20,31 @@ public class ReservationInfo implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     private int id;
-	private String code;
-	private String routeName;
-	private String bookerName;
-	private String phone;
-	private String email;
-	private List<Ticket> tickets;
-	private String quantity;
-	private String basePrice;
-	private String basePriceInUSD;
-	private String transactionFee;
-	private String transactionFeeInUSD;
-	private String totalAmount;
-	private String totalAmountInUSD;
-    private String refundedAmount;
-    private String refundedAmountInUSD;
-    private String refundRate;
-	private String status;
-    
+    private String code;
+    private String bookerName;
+    private String phone;
+    private String email;
+    private List<Ticket> tickets;
+    private Double basePrice;
+    private Double basePriceInUSD;
+    private Double transactionFee;
+    private Double transactionFeeInUSD;
+    private Double totalAmount;
+    private Double totalAmountInUSD;
+    private Double refundedAmount;
+    private Double refundedAmountInUSD;
+    private Integer refundRate;
+    private String status;
+    private Locale locale;
+
+    /**
+     * 
+     */
+    public ReservationInfo() {
+        super();
+        locale = CommonConstant.LOCALE_VN;
+    }
+
     /**
      * @return the id
      */
@@ -42,7 +53,8 @@ public class ReservationInfo implements Serializable {
     }
 
     /**
-     * @param id the id to set
+     * @param id
+     *            the id to set
      */
     public void setId(int id) {
         this.id = id;
@@ -56,26 +68,11 @@ public class ReservationInfo implements Serializable {
     }
 
     /**
-     * @param code the code to set
+     * @param code
+     *            the code to set
      */
     public void setCode(String code) {
         this.code = code;
-    }
-
-    /**
-     * @return the routeName
-     * @deprecated
-     */
-    public String getRouteName() {
-        return routeName;
-    }
-
-    /**
-     * @param routeName the routeName to set
-     * @deprecated
-     */
-    public void setRouteName(String routeName) {
-        this.routeName = routeName;
     }
 
     /**
@@ -86,7 +83,8 @@ public class ReservationInfo implements Serializable {
     }
 
     /**
-     * @param bookerName the bookerName to set
+     * @param bookerName
+     *            the bookerName to set
      */
     public void setBookerName(String bookerName) {
         this.bookerName = bookerName;
@@ -100,7 +98,8 @@ public class ReservationInfo implements Serializable {
     }
 
     /**
-     * @param phone the phone to set
+     * @param phone
+     *            the phone to set
      */
     public void setPhone(String phone) {
         this.phone = phone;
@@ -114,7 +113,8 @@ public class ReservationInfo implements Serializable {
     }
 
     /**
-     * @param email the email to set
+     * @param email
+     *            the email to set
      */
     public void setEmail(String email) {
         this.email = email;
@@ -128,37 +128,32 @@ public class ReservationInfo implements Serializable {
     }
 
     /**
-     * @param tickets the tickets to set
+     * @param tickets
+     *            the tickets to set
      */
     public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
     }
 
     /**
-     * @return the quantity
+     * @return the basePrice
      */
-    public String getQuantity() {
-        return quantity;
-    }
-
-    /**
-     * @param quantity the quantity to set
-     */
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public String getBasePrice() {
+        return FormatUtils.formatNumber(basePrice, 0, locale);
     }
 
     /**
      * @return the basePrice
      */
-    public String getBasePrice() {
+    public Double getBasePriceValue() {
         return basePrice;
     }
 
     /**
-     * @param basePrice the basePrice to set
+     * @param basePrice
+     *            the basePrice to set
      */
-    public void setBasePrice(String basePrice) {
+    public void setBasePrice(Double basePrice) {
         this.basePrice = basePrice;
     }
 
@@ -166,13 +161,21 @@ public class ReservationInfo implements Serializable {
      * @return the basePriceInUSD
      */
     public String getBasePriceInUSD() {
+        return FormatUtils.formatNumber(basePriceInUSD, 2, locale);
+    }
+
+    /**
+     * @return the basePriceInUSD
+     */
+    public Double getBasePriceInUSDValue() {
         return basePriceInUSD;
     }
 
     /**
-     * @param basePriceInUSD the basePriceInUSD to set
+     * @param basePriceInUSD
+     *            the basePriceInUSD to set
      */
-    public void setBasePriceInUSD(String basePriceInUSD) {
+    public void setBasePriceInUSD(Double basePriceInUSD) {
         this.basePriceInUSD = basePriceInUSD;
     }
 
@@ -180,13 +183,21 @@ public class ReservationInfo implements Serializable {
      * @return the transactionFee
      */
     public String getTransactionFee() {
+        return FormatUtils.formatNumber(transactionFee, 0, locale);
+    }
+
+    /**
+     * @return the transactionFee
+     */
+    public Double getTransactionFeeValue() {
         return transactionFee;
     }
 
     /**
-     * @param transactionFee the transactionFee to set
+     * @param transactionFee
+     *            the transactionFee to set
      */
-    public void setTransactionFee(String transactionFee) {
+    public void setTransactionFee(Double transactionFee) {
         this.transactionFee = transactionFee;
     }
 
@@ -194,13 +205,21 @@ public class ReservationInfo implements Serializable {
      * @return the transactionFeeInUSD
      */
     public String getTransactionFeeInUSD() {
+        return FormatUtils.formatNumber(transactionFeeInUSD, 2, locale);
+    }
+
+    /**
+     * @return the transactionFeeInUSD
+     */
+    public Double getTransactionFeeInUSDValue() {
         return transactionFeeInUSD;
     }
 
     /**
-     * @param transactionFeeInUSD the transactionFeeInUSD to set
+     * @param transactionFeeInUSD
+     *            the transactionFeeInUSD to set
      */
-    public void setTransactionFeeInUSD(String transactionFeeInUSD) {
+    public void setTransactionFeeInUSD(Double transactionFeeInUSD) {
         this.transactionFeeInUSD = transactionFeeInUSD;
     }
 
@@ -208,13 +227,14 @@ public class ReservationInfo implements Serializable {
      * @return the totalAmount
      */
     public String getTotalAmount() {
-        return totalAmount;
+        return FormatUtils.formatNumber(totalAmount, 0, locale);
     }
 
     /**
-     * @param totalAmount the totalAmount to set
+     * @param totalAmount
+     *            the totalAmount to set
      */
-    public void setTotalAmount(String totalAmount) {
+    public void setTotalAmount(Double totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -222,13 +242,21 @@ public class ReservationInfo implements Serializable {
      * @return the totalAmountInUSD
      */
     public String getTotalAmountInUSD() {
+        return FormatUtils.formatNumber(totalAmountInUSD, 2, locale);
+    }
+
+    /**
+     * @return the totalAmountInUSD
+     */
+    public Double getTotalAmountInUSDValue() {
         return totalAmountInUSD;
     }
 
     /**
-     * @param totalAmountInUSD the totalAmountInUSD to set
+     * @param totalAmountInUSD
+     *            the totalAmountInUSD to set
      */
-    public void setTotalAmountInUSD(String totalAmountInUSD) {
+    public void setTotalAmountInUSD(Double totalAmountInUSD) {
         this.totalAmountInUSD = totalAmountInUSD;
     }
 
@@ -236,13 +264,21 @@ public class ReservationInfo implements Serializable {
      * @return the refundedAmount
      */
     public String getRefundedAmount() {
+        return FormatUtils.formatNumber(refundedAmount, 0, locale);
+    }
+
+    /**
+     * @return the refundedAmount
+     */
+    public Double getRefundedAmountValue() {
         return refundedAmount;
     }
 
     /**
-     * @param refundedAmount the refundedAmount to set
+     * @param refundedAmount
+     *            the refundedAmount to set
      */
-    public void setRefundedAmount(String refundedAmount) {
+    public void setRefundedAmount(Double refundedAmount) {
         this.refundedAmount = refundedAmount;
     }
 
@@ -250,13 +286,21 @@ public class ReservationInfo implements Serializable {
      * @return the refundedAmountInUSD
      */
     public String getRefundedAmountInUSD() {
+        return FormatUtils.formatNumber(refundedAmountInUSD, 0, locale);
+    }
+
+    /**
+     * @return the refundedAmountInUSD
+     */
+    public Double getRefundedAmountInUSDValue() {
         return refundedAmountInUSD;
     }
 
     /**
-     * @param refundedAmountInUSD the refundedAmountInUSD to set
+     * @param refundedAmountInUSD
+     *            the refundedAmountInUSD to set
      */
-    public void setRefundedAmountInUSD(String refundedAmountInUSD) {
+    public void setRefundedAmountInUSD(Double refundedAmountInUSD) {
         this.refundedAmountInUSD = refundedAmountInUSD;
     }
 
@@ -264,13 +308,21 @@ public class ReservationInfo implements Serializable {
      * @return the refundRate
      */
     public String getRefundRate() {
+        return refundRate == null ? null : Integer.toString(refundRate);
+    }
+
+    /**
+     * @return the refundRate
+     */
+    public Integer getRefundRateValue() {
         return refundRate;
     }
 
     /**
-     * @param refundRate the refundRate to set
+     * @param refundRate
+     *            the refundRate to set
      */
-    public void setRefundRate(String refundRate) {
+    public void setRefundRate(Integer refundRate) {
         this.refundRate = refundRate;
     }
 
@@ -282,15 +334,31 @@ public class ReservationInfo implements Serializable {
     }
 
     /**
-     * @param status the status to set
+     * @param status
+     *            the status to set
      */
     public void setStatus(String status) {
         this.status = status;
     }
 
     /**
+     * @return the locale
+     */
+    public Locale getLocale() {
+        return locale;
+    }
+
+    /**
+     * @param locale
+     *            the locale to set
+     */
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
+    /**
      * @author Yoshimi
-     *
+     * 
      */
     public class Ticket implements Serializable, Comparable<Ticket> {
 
@@ -302,119 +370,239 @@ public class ReservationInfo implements Serializable {
         private Long departureDateInMilisec;
         private String departureDate;
         private String departureStation;
+        private String departureLocation;
         private String arrivalDate;
         private String arrivalStation;
+        private String arrivalLocation;
         private String busType;
         private String[] seats;
+        private Double ticketPrice;
+        private Double ticketPriceInUSD;
         private String status;
+        private boolean returnTrip;
+
         /**
          * @return the id
          */
         public int getId() {
             return id;
         }
+
         /**
-         * @param id the id to set
+         * @param id
+         *            the id to set
          */
         public void setId(int id) {
             this.id = id;
         }
+
         /**
          * @return the departureDateInMilisec
          */
         public Long getDepartureDateInMilisec() {
             return departureDateInMilisec;
         }
+
         /**
-         * @param departureDateInMilisec the departureDateInMilisec to set
+         * @param departureDateInMilisec
+         *            the departureDateInMilisec to set
          */
         public void setDepartureDateInMilisec(Long departureDateInMilisec) {
             this.departureDateInMilisec = departureDateInMilisec;
         }
+
         /**
          * @return the departureDate
          */
         public String getDepartureDate() {
             return departureDate;
         }
+
         /**
-         * @param departureDate the departureDate to set
+         * @param departureDate
+         *            the departureDate to set
          */
         public void setDepartureDate(String departureDate) {
             this.departureDate = departureDate;
         }
+
         /**
          * @return the departureStation
          */
         public String getDepartureStation() {
             return departureStation;
         }
+
         /**
-         * @param departureStation the departureStation to set
+         * @param departureStation
+         *            the departureStation to set
          */
         public void setDepartureStation(String departureStation) {
             this.departureStation = departureStation;
         }
+
+        /**
+         * @return the departureLocation
+         */
+        public String getDepartureLocation() {
+            return departureLocation;
+        }
+
+        /**
+         * @param departureLocation the departureLocation to set
+         */
+        public void setDepartureLocation(String departureLocation) {
+            this.departureLocation = departureLocation;
+        }
+
         /**
          * @return the arrivalDate
          */
         public String getArrivalDate() {
             return arrivalDate;
         }
+
         /**
-         * @param arrivalDate the arrivalDate to set
+         * @param arrivalDate
+         *            the arrivalDate to set
          */
         public void setArrivalDate(String arrivalDate) {
             this.arrivalDate = arrivalDate;
         }
+
         /**
          * @return the arrivalStation
          */
         public String getArrivalStation() {
             return arrivalStation;
         }
+
         /**
-         * @param arrivalStation the arrivalStation to set
+         * @param arrivalStation
+         *            the arrivalStation to set
          */
         public void setArrivalStation(String arrivalStation) {
             this.arrivalStation = arrivalStation;
         }
+
+        /**
+         * @return the arrivalLocation
+         */
+        public String getArrivalLocation() {
+            return arrivalLocation;
+        }
+
+        /**
+         * @param arrivalLocation the arrivalLocation to set
+         */
+        public void setArrivalLocation(String arrivalLocation) {
+            this.arrivalLocation = arrivalLocation;
+        }
+
         /**
          * @return the busType
          */
         public String getBusType() {
             return busType;
         }
+
         /**
-         * @param busType the busType to set
+         * @param busType
+         *            the busType to set
          */
         public void setBusType(String busType) {
             this.busType = busType;
         }
+
         /**
          * @return the seats
          */
         public String[] getSeats() {
             return seats;
         }
+
         /**
-         * @param seats the seats to set
+         * @param seats
+         *            the seats to set
          */
         public void setSeats(String[] seats) {
             this.seats = seats;
         }
+
+        /**
+         * @return the ticketPrice
+         */
+        public String getTicketPrice() {
+            return FormatUtils.formatNumber(ticketPrice, 0, locale);
+        }
+
+        /**
+         * @return the ticketPrice
+         */
+        public Double getTicketPriceValue() {
+            return ticketPrice;
+        }
+
+        /**
+         * @param ticketPrice
+         *            the ticketPrice to set
+         */
+        public void setTicketPrice(Double ticketPrice) {
+            this.ticketPrice = ticketPrice;
+        }
+
+        /**
+         * @return the ticketPriceInUSD
+         */
+        public String getTicketPriceInUSD() {
+            return FormatUtils.formatNumber(ticketPriceInUSD, 2, locale);
+        }
+
+        /**
+         * @return the ticketPriceInUSD
+         */
+        public Double getTicketPriceInUSDValue() {
+            return ticketPriceInUSD;
+        }
+
+        /**
+         * @param ticketPriceInUSD
+         *            the ticketPriceInUSD to set
+         */
+        public void setTicketPriceInUSD(Double ticketPriceInUSD) {
+            this.ticketPriceInUSD = ticketPriceInUSD;
+        }
+
         /**
          * @return the status
          */
         public String getStatus() {
             return status;
         }
+
         /**
-         * @param status the status to set
+         * @param status
+         *            the status to set
          */
         public void setStatus(String status) {
             this.status = status;
         }
+
+        /**
+         * @return the returnTrip
+         */
+        public boolean isReturnTrip() {
+            return returnTrip;
+        }
+
+        /**
+         * @param returnTrip
+         *            the returnTrip to set
+         */
+        public void setReturnTrip(boolean returnTrip) {
+            this.returnTrip = returnTrip;
+        }
+
         @Override
         public int compareTo(Ticket o) {
             int result = 0;
@@ -427,6 +615,6 @@ public class ReservationInfo implements Serializable {
             }
             return result;
         }
-        
+
     }
 }

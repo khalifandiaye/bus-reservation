@@ -70,8 +70,10 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SystemSettingBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean;
+import vn.edu.fpt.capstone.busReservation.displayModel.PaymentDetails;
 import vn.edu.fpt.capstone.busReservation.displayModel.RefundInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
+import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo.Ticket;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
@@ -252,8 +254,8 @@ public class PaymentLogic extends BaseLogic {
      * @throws HibernateException
      */
     public void updateReservationPaymentInfo(ReservationInfo info,
-            final int paymentMethodId) throws CommonException,
-            HibernateException {
+            String[] selectedSeats, final int paymentMethodId)
+            throws CommonException, HibernateException {
         BigDecimal fee = null;
         BigDecimal totalAmount = null;
         CurrencyConverter converter = null;
@@ -268,12 +270,15 @@ public class PaymentLogic extends BaseLogic {
             throw new CommonException(e);
         }
         paymentMethod = paymentMethodDAO.getById(paymentMethodId);
+        info.setBasePrice(info.getBasePriceValue() * selectedSeats.length
+                / info.getTickets().get(0).getSeats().length);
+        info.getTickets().get(0).setSeats(selectedSeats);
         try {
             fee = roundingVND(
-                    calculateFee(info.getBasePrice(), info.getQuantity(),
-                            paymentMethod), RoundingMode.CEILING);
+                    calculateFee(info.getBasePriceValue(), paymentMethod),
+                    RoundingMode.CEILING);
             totalAmount = roundingVND(
-                    calculateTotal(info.getBasePrice(), info.getQuantity(), fee),
+                    calculateTotal(info.getBasePriceValue(), fee),
                     RoundingMode.CEILING);
         } catch (IOException e) {
             // TODO handle error
@@ -282,21 +287,17 @@ public class PaymentLogic extends BaseLogic {
             // TODO handle error
             throw new CommonException(e);
         }
-        info.setTransactionFee(FormatUtils.formatNumber(fee, 0,
-                CommonConstant.LOCALE_VN));
-        info.setTransactionFeeInUSD(FormatUtils.formatNumber(
-                converter.convert(fee), 2, CommonConstant.LOCALE_VN));
-        info.setTotalAmount(FormatUtils.formatNumber(totalAmount, 0,
-                CommonConstant.LOCALE_VN));
-        info.setTotalAmountInUSD(FormatUtils.formatNumber(
-                converter.convert(totalAmount), 2, CommonConstant.LOCALE_VN));
+        info.setTransactionFee(fee.doubleValue());
+        info.setTransactionFeeInUSD(converter.convert(fee).doubleValue());
+        info.setTotalAmount(totalAmount.doubleValue());
+        info.setTotalAmountInUSD(converter.convert(totalAmount).doubleValue());
     }
 
     public RefundInfo calculateRefundAmount(int reservationId)
             throws CommonException {
         RefundInfo refundInfo = null;
-        ReservationInfoBean reservationInfo = null;
-        Double amount = null;
+        ReservationInfoBean reservation = null;
+        double amount = 0;
         List<SystemSettingBean> settings = null;
         int refundRate = 0;
         int[] rates = null;
@@ -306,9 +307,15 @@ public class PaymentLogic extends BaseLogic {
         Calendar timelimit = null;
         Date today = null;
         CurrencyConverter converter = null;
-        reservationInfo = reservationInfoDAO.getById(reservationId);
-        amount = reservationInfo.getPaidAmount();
-        if (amount != null && amount > 0) {
+        reservation = reservationInfoDAO.getById(reservationId);
+        if (reservation.getId().getPayments() != null
+                && reservation.getId().getPayments().size() > 0) {
+            for (PaymentBean payment : reservation.getId().getPayments()) {
+                amount += payment.getPayAmount();
+            }
+        }
+        amount *= 1000;
+        if (amount > 0) {
             settings = systemSettingDAO.getAllLike("refund%");
             if (settings == null || settings.size() % 2 != 0) {
                 throw new CommonException();
@@ -329,8 +336,8 @@ public class PaymentLogic extends BaseLogic {
             timelimit = Calendar.getInstance();
             today = new Date();
             for (int i = 0; i < settingCount; i++) {
-                timelimit.setTime(reservationInfo.getStartTrip()
-                        .getDepartureTime());
+                timelimit
+                        .setTime(reservation.getStartTrip().getDepartureTime());
                 timelimit.add(Calendar.DATE, -limits[i]);
                 if (today.before(timelimit.getTime())) {
                     refundRate = rates[i];
@@ -371,8 +378,9 @@ public class PaymentLogic extends BaseLogic {
      *         VND, and the transaction id
      * @throws CommonException
      */
-    public String[] doPaypalRefund(int reservationId) throws CommonException {
-        String[] result = null;
+    public PaymentDetails doPaypalRefund(int reservationId)
+            throws CommonException {
+        PaymentDetails result = null;
         PayPalAPIInterfaceServiceService service = null;
         PaymentBean payment = null;
         RefundTransactionResponseType response = null;
@@ -463,10 +471,12 @@ public class PaymentLogic extends BaseLogic {
             }
             if (response != null) {
                 if (response.getAck().toString().equalsIgnoreCase("SUCCESS")) {
-                    result = new String[3];
-                    result[0] = response.getGrossRefundAmount().getValue();
-                    result[1] = response.getFeeRefundAmount().getValue();
-                    result[2] = response.getRefundTransactionID();
+                    result = new PaymentDetails();
+                    result.setGrossAmount(response.getGrossRefundAmount()
+                            .getValue());
+                    result.setFeeAmount(response.getFeeRefundAmount()
+                            .getValue());
+                    result.setTransactionID(response.getRefundTransactionID());
                 } else {
                     for (ErrorType error : response.getErrors()) {
                         LOG.error("PAYPAL error: " + error.getErrorCode() + ":"
@@ -516,32 +526,23 @@ public class PaymentLogic extends BaseLogic {
         paymentDetails = new PaymentDetailsType();
         paymentDetails.setPaymentAction(PaymentActionCodeType.SALE);
         items = new ArrayList<PaymentDetailsItemType>();
-        item = new PaymentDetailsItemType();
-        item.setName("Ticket");
-        item.setQuantity(Integer.parseInt(reservationInfo.getQuantity()));
-        try {
-            item.setAmount(new BasicAmountType(CurrencyCodeType.USD,
-                    FormatUtils.deformatNumber(
-                            reservationInfo.getBasePriceInUSD(),
-                            CommonConstant.LOCALE_VN).toString()));
-        } catch (ParseException e) {
-            // TODO handle error
-            throw new CommonException(e);
+        for (Ticket ticket : reservationInfo.getTickets()) {
+            item = new PaymentDetailsItemType();
+            item.setName(ticket.getDepartureLocation() + " - "
+                    + ticket.getArrivalLocation() + " ticket");
+            item.setQuantity(ticket.getSeats().length);
+            item.setAmount(new BasicAmountType(CurrencyCodeType.USD, BigDecimal
+                    .valueOf(ticket.getTicketPriceInUSDValue())
+                    .setScale(2, RoundingMode.CEILING).toString()));
+            item.setItemCategory(ItemCategoryType.DIGITAL);
+            items.add(item);
         }
-        item.setItemCategory(ItemCategoryType.DIGITAL);
-        items.add(item);
         item = new PaymentDetailsItemType();
         item.setName("Fee");
         item.setQuantity(1);
-        try {
-            item.setAmount(new BasicAmountType(CurrencyCodeType.USD,
-                    FormatUtils.deformatNumber(
-                            reservationInfo.getTransactionFeeInUSD(),
-                            CommonConstant.LOCALE_VN).toString()));
-        } catch (ParseException e) {
-            // TODO handle error
-            throw new CommonException(e);
-        }
+        item.setAmount(new BasicAmountType(CurrencyCodeType.USD, BigDecimal
+                .valueOf(reservationInfo.getTransactionFeeInUSDValue())
+                .setScale(2, RoundingMode.CEILING).toString()));
         item.setItemCategory(ItemCategoryType.DIGITAL);
         items.add(item);
         paymentDetails.setPaymentDetailsItem(items);
@@ -550,14 +551,9 @@ public class PaymentLogic extends BaseLogic {
         // set total amount
         orderTotal = new BasicAmountType();
         orderTotal.setCurrencyID(CurrencyCodeType.USD);
-        try {
-            orderTotal.setValue(FormatUtils.deformatNumber(
-                    reservationInfo.getTotalAmountInUSD(),
-                    CommonConstant.LOCALE_VN).toString());
-        } catch (ParseException e) {
-            // TODO handle error
-            throw new CommonException(e);
-        }
+        orderTotal.setValue(BigDecimal
+                .valueOf(reservationInfo.getTotalAmountInUSDValue())
+                .setScale(2, RoundingMode.CEILING).toString());
         details.setOrderTotal(orderTotal);
         details.setPaymentAction(PaymentActionCodeType.SALE);
         // set details to request
@@ -707,7 +703,7 @@ public class PaymentLogic extends BaseLogic {
         return checkoutDetailsResponse;
     }
 
-    public String[] doPaypalExpressCheckoutPayment(
+    public PaymentDetails doPaypalExpressCheckoutPayment(
             GetExpressCheckoutDetailsResponseType checkoutDetailsResponse)
             throws CommonException {
         PayPalAPIInterfaceServiceService service = null;
@@ -715,7 +711,7 @@ public class PaymentLogic extends BaseLogic {
         DoExpressCheckoutPaymentRequestType doRequest = null;
         DoExpressCheckoutPaymentRequestDetailsType details = null;
         DoExpressCheckoutPaymentResponseType doResponse = null;
-        String[] result = null;
+        PaymentDetails result = null;
         details = new DoExpressCheckoutPaymentRequestDetailsType();
         details.setToken(checkoutDetailsResponse
                 .getGetExpressCheckoutDetailsResponseDetails().getToken());
@@ -796,26 +792,16 @@ public class PaymentLogic extends BaseLogic {
         }
         doResponse.getDoExpressCheckoutPaymentResponseDetails()
                 .getPaymentInfo().get(0).getTransactionID();
-        // get amount from paypal's response
-        // paidAmount = BigDecimal.ZERO;
-        // fee = BigDecimal.ZERO;
-        // for (PaymentDetailsItemType item : ) {
-        // if (item.getName().contains("Ticket")) {
-        // paidAmount = paidAmount.add(new BigDecimal(item.getAmount()
-        // .getValue()).multiply(BigDecimal.valueOf(item
-        // .getQuantity())));
-        // } else if (item.getName().contains("Fee")) {
-        // fee = fee.add(new BigDecimal(item.getAmount().getValue())
-        // .multiply(BigDecimal.valueOf(item.getQuantity())));
-        // }
-        // }
-        result = new String[3];
-        result[0] = doResponse.getDoExpressCheckoutPaymentResponseDetails()
-                .getPaymentInfo().get(0).getGrossAmount().getValue();
-        result[1] = doResponse.getDoExpressCheckoutPaymentResponseDetails()
-                .getPaymentInfo().get(0).getFeeAmount().getValue();
-        result[2] = doResponse.getDoExpressCheckoutPaymentResponseDetails()
-                .getPaymentInfo().get(0).getTransactionID();
+        result = new PaymentDetails();
+        result.setGrossAmount(doResponse
+                .getDoExpressCheckoutPaymentResponseDetails().getPaymentInfo()
+                .get(0).getGrossAmount().getValue());
+        result.setFeeAmount(doResponse
+                .getDoExpressCheckoutPaymentResponseDetails().getPaymentInfo()
+                .get(0).getFeeAmount().getValue());
+        result.setTransactionID(doResponse
+                .getDoExpressCheckoutPaymentResponseDetails().getPaymentInfo()
+                .get(0).getTransactionID());
         paymentDAO.startTransaction();
         return result;
     }
@@ -834,9 +820,9 @@ public class PaymentLogic extends BaseLogic {
      * @throws CommonException
      * @throws HibernateException
      */
-    public String savePayment(String reservationId, String[] paymentDetails,
-            int paymentMethodId, PaymentType paymentType)
-            throws CommonException, HibernateException {
+    public String savePayment(String reservationId,
+            PaymentDetails paymentDetails, int paymentMethodId,
+            PaymentType paymentType) throws CommonException, HibernateException {
         ReservationBean reservation = null;
         PaymentBean payment = null;
         int maxTry = CommonConstant.MAX_REGENERATE_CODE_TRY;
@@ -865,12 +851,16 @@ public class PaymentLogic extends BaseLogic {
             throw new CommonException(e);
         }
         payment.setPayAmount(roundingVND(
-                converter.convert(new BigDecimal(paymentDetails[0])),
-                RoundingMode.FLOOR).doubleValue());
+                converter.convert(new BigDecimal(paymentDetails
+                        .getGrossAmount())), RoundingMode.FLOOR).divide(
+                BigDecimal.valueOf(1000), 1, RoundingMode.CEILING)
+                .doubleValue());
         payment.setServiceFee(roundingVND(
-                converter.convert(new BigDecimal(paymentDetails[1])),
-                RoundingMode.FLOOR).doubleValue());
-        payment.setTransactionId(paymentDetails[2]);
+                converter
+                        .convert(new BigDecimal(paymentDetails.getFeeAmount())),
+                RoundingMode.FLOOR).divide(BigDecimal.valueOf(1000), 1,
+                RoundingMode.CEILING).doubleValue());
+        payment.setTransactionId(paymentDetails.getTransactionID());
         // Payment type
         payment.setType(paymentType.getValue());
         paymentDAO.insert(payment);
@@ -917,18 +907,16 @@ public class PaymentLogic extends BaseLogic {
         return reservationCode;
     }
 
-    private BigDecimal calculateTotal(final String basePrice,
-            final String quantity, final BigDecimal fee) throws ParseException {
+    private BigDecimal calculateTotal(final double basePrice,
+            final BigDecimal fee) throws ParseException {
         BigDecimal result = null;
-        result = FormatUtils
-                .deformatNumber(basePrice, CommonConstant.LOCALE_VN)
-                .multiply(new BigDecimal(quantity)).add(fee);
+        result = BigDecimal.valueOf(basePrice).add(fee);
         return result;
     }
 
-    private BigDecimal calculateFee(final String basePrice,
-            final String quantity, final PaymentMethodBean paymentMethod)
-            throws IOException, ParseException {
+    private BigDecimal calculateFee(final double basePrice,
+            final PaymentMethodBean paymentMethod) throws IOException,
+            ParseException {
         BigDecimal result = null;
         BigDecimal constantFee = null;
         BigDecimal feeRatio = null;
@@ -943,9 +931,7 @@ public class PaymentLogic extends BaseLogic {
                 .getAddition()));
         feeRatio = BigDecimal.valueOf(paymentMethod.getRatio());
         result = BigDecimal.ZERO
-                .add(FormatUtils.deformatNumber(basePrice,
-                        CommonConstant.LOCALE_VN).multiply(
-                        new BigDecimal(quantity)))
+                .add(BigDecimal.valueOf(basePrice))
                 .add(constantFee)
                 .divide(BigDecimal.ONE.subtract(feeRatio), 0,
                         RoundingMode.CEILING).multiply(feeRatio)
@@ -1013,7 +999,7 @@ public class PaymentLogic extends BaseLogic {
             globalProps.load(getClass().getResourceAsStream(
                     "/global.properties"));
         } catch (IOException e) {
-            throw new CommonException(e);
+            throw new CommonException("msgerrcm003", e);
         }
         templateName = (String) globalProps.get("mail.template.resCancel");
         ticketInfos = ticketDAO.getTicketInfo(reservationId);
@@ -1114,7 +1100,7 @@ public class PaymentLogic extends BaseLogic {
         try {
             mailTemplateDAO.endTransaction();
         } catch (HibernateException e) {
-            throw new CommonException(e.getMessage(), e);
+            throw new CommonException("msgerrcm003", e);
         }
         // prepare mail object
         props = new Properties();
@@ -1136,17 +1122,15 @@ public class PaymentLogic extends BaseLogic {
                     Message.RecipientType.TO,
                     InternetAddress.parse(ticketInfos.get(0).getId()
                             .getReservation().getEmail()));
-            try {
-                message.setSubject(MimeUtility.encodeText(subject.toString(),
-                        "utf-8", "Q"));
-            } catch (UnsupportedEncodingException e) {
-                throw new CommonException(e);
-            }
+            message.setSubject(MimeUtility.encodeText(subject.toString(),
+                    "utf-8", "Q"));
             message.setContent(content.toString(), "text/html;charset=utf-8");
 
             Transport.send(message);
         } catch (MessagingException e) {
-            throw new CommonException(e);
+            throw new CommonException("msgerrcm003", e);
+        } catch (UnsupportedEncodingException e) {
+            throw new CommonException("msgerrcm003", e);
         }
     }
 

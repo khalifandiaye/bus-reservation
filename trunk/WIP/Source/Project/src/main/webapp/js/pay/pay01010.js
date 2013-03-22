@@ -16,14 +16,18 @@ $(document).ready(function() {
                   selectedSeat : $.cookie('selectedSeat')
               },
               success : function(data) {
+                  $('#basePrice').html(
+                          data.reservationInfo.basePrice
+                          + " VND ($"
+                          + data.reservationInfo.basePriceInUSD + ")");
                   $("#transactionFee").html(
                           data.reservationInfo.transactionFee
-                          + " VND = $"
-                          + data.reservationInfo.transactionFeeInUSD);
+                          + " VND ($"
+                          + data.reservationInfo.transactionFeeInUSD + ")");
                   $("#totalAmount").html(
                           data.reservationInfo.totalAmount
-                          + " VND = $"
-                          + data.reservationInfo.totalAmountInUSD);
+                          + " VND ($"
+                          + data.reservationInfo.totalAmountInUSD + ")");
               }
           });
     };

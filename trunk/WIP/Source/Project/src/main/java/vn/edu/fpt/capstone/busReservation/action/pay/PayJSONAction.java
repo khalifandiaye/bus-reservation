@@ -10,6 +10,7 @@ import org.hibernate.HibernateException;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean.PaymentType;
+import vn.edu.fpt.capstone.busReservation.displayModel.PaymentDetails;
 import vn.edu.fpt.capstone.busReservation.displayModel.RefundInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
@@ -62,7 +63,8 @@ public class PayJSONAction extends BaseAction {
     }
 
     /**
-     * @param selectedSeat the selectedSeat to set
+     * @param selectedSeat
+     *            the selectedSeat to set
      */
     public void setSelectedSeat(String selectedSeat) {
         this.selectedSeat = selectedSeat;
@@ -101,10 +103,9 @@ public class PayJSONAction extends BaseAction {
             reservationInfo = (ReservationInfo) session
                     .get(ReservationInfo.class.getName());
             if (reservationInfo != null) {
-                reservationInfo.setQuantity(Integer.toString(selectedSeat.split(";").length));
                 try {
                     paymentLogic.updateReservationPaymentInfo(reservationInfo,
-                            paymentMethodId);
+                            selectedSeat.split(";"), paymentMethodId);
                 } catch (CommonException e) {
                     errorMessage = getText(e.getMessageId(), e.getParameters());
                     ;
@@ -170,7 +171,7 @@ public class PayJSONAction extends BaseAction {
     @Action(value = "/cancelReservation", results = { @Result(type = "json", name = SUCCESS, params = {
             "excludeProperties", "reservationInfo" }) })
     public String cancelReservation() {
-        String[] refundDetails = null;
+        PaymentDetails refundDetails = null;
         if (CheckUtils.isNullOrBlank(reservationId)) {
             // TODO handle error
             errorMessage = getText("msgerrcm000");
@@ -183,17 +184,28 @@ public class PayJSONAction extends BaseAction {
             return SUCCESS;
         }
         try {
-            refundDetails = paymentLogic.doPaypalRefund(Integer.parseInt(reservationId));
-            paymentLogic.savePayment(reservationId, refundDetails, 0, PaymentType.REFUND);
+            refundDetails = paymentLogic.doPaypalRefund(Integer
+                    .parseInt(reservationId));
+            paymentLogic.savePayment(reservationId, refundDetails, 0,
+                    PaymentType.REFUND);
             cancelConfirmMessage = getText("message.cancelSuccess");
-            paymentLogic.sendCancelReservationMail(Integer.parseInt(reservationId), servletRequest.getContextPath());
         } catch (CommonException e) {
-            errorMessage = getText(e.getMessageId(), e.getParameters());
+            errorProcessing(e);
+            errorMessage = getActionErrors().iterator().next();
             return SUCCESS;
         } catch (HibernateException e) {
             // TODO error processing
             genericDatabaseErrorProcess(e);
             return ERROR;
+        }
+        try {
+            paymentLogic.sendCancelReservationMail(
+                    Integer.parseInt(reservationId),
+                    servletRequest.getContextPath());
+        } catch (CommonException e) {
+            errorProcessing(e, false);
+            errorMessage = getActionErrors().iterator().next();
+            return SUCCESS;
         }
         return SUCCESS;
     }

@@ -45,4 +45,25 @@ public class TariffViewDAO extends GenericDAO<Integer, TariffViewBean> {
         return result == null || result.size() <= 0 ? null : result.get(0);
     }
 
+    @SuppressWarnings("unchecked")
+    public Double getTicketPrice(List<TripBean> trips) {
+        List<Double> result = null;
+        Query query = null;
+        String queryString = null;
+        Session session = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            queryString = "SELECT SUM(tar.fare) FROM TariffViewBean AS tar INNER JOIN tar.segment.routeDetails as rds INNER JOIN rds.trips AS trp INNER JOIN trp.busStatus.bus AS bus WHERE trp IN (:trips) AND tar.busType = bus.busType AND tar.validFrom <= trp.departureTime AND (tar.validTo > trp.departureTime OR tar.validTo = null)";
+            query = session.createQuery(queryString);
+            query.setParameterList("trips", trips);
+            result = query.list();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+        // return result, if needed
+        return result == null || result.size() <= 0 ? null : result.get(0);
+    }
+
 }

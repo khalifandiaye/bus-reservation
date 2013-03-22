@@ -8,12 +8,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Test page</title>
+<title><s:text name="title.rsv01010" /></title>
 <jsp:include page="../common/xheader.jsp" />
 <link rel="stylesheet" href="<%=request.getContextPath()%>/styles/trip/jquery.dataTables.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/styles/pay.css">
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
-<script src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/rsv/rsv01010.js"></script>
 </head>
 <body>

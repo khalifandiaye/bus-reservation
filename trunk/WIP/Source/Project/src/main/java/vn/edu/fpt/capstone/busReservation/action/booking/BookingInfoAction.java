@@ -41,46 +41,46 @@ public class BookingInfoAction extends BaseAction {
     private List<PaymentMethodBean> paymentMethods;
     private ReservationInfo reservationInfo;
     private String inputFirstName;
-	private String inputLastName;
-	private String inputMobile;
-	private String inputEmail;
-	private String seatToPayment;
-	
+    private String inputLastName;
+    private String inputMobile;
+    private String inputEmail;
+    private String seatToPayment;
 
-	/**
-	 * @param seatToPayment the seatToPayment to set
-	 */
-	public void setSeatToPayment(String seatToPayment) {
-		this.seatToPayment = seatToPayment;
-	}
+    /**
+     * @param seatToPayment
+     *            the seatToPayment to set
+     */
+    public void setSeatToPayment(String seatToPayment) {
+        this.seatToPayment = seatToPayment;
+    }
 
-	/**
-	 * @return the inputFirstName
-	 */
-	public String getInputFirstName() {
-		return inputFirstName;
-	}
+    /**
+     * @return the inputFirstName
+     */
+    public String getInputFirstName() {
+        return inputFirstName;
+    }
 
-	/**
-	 * @return the inputLastName
-	 */
-	public String getInputLastName() {
-		return inputLastName;
-	}
+    /**
+     * @return the inputLastName
+     */
+    public String getInputLastName() {
+        return inputLastName;
+    }
 
-	/**
-	 * @return the inputMobile
-	 */
-	public String getInputMobile() {
-		return inputMobile;
-	}
+    /**
+     * @return the inputMobile
+     */
+    public String getInputMobile() {
+        return inputMobile;
+    }
 
-	/**
-	 * @return the inputEmail
-	 */
-	public String getInputEmail() {
-		return inputEmail;
-	}
+    /**
+     * @return the inputEmail
+     */
+    public String getInputEmail() {
+        return inputEmail;
+    }
 
     /**
      * @return the paymentMethods
@@ -98,31 +98,34 @@ public class BookingInfoAction extends BaseAction {
 
     @SuppressWarnings("unchecked")
     public String execute() {
-    	if(seatToPayment == null){
-    		return ERROR;
-    	}
-    	User user;
-		if(!(session.get(CommonConstant.SESSION_KEY_USER) == null) || !(session.get("User_tmp") == null)){
-			if(!(session.get("User_tmp") == null)){
-				user = (User)session.get("User_tmp");
-			}else{
-				user = (User)session.get(CommonConstant.SESSION_KEY_USER);
-			}
-			this.inputFirstName = user.getFirstName();
-			this.inputLastName = user.getLastName();
-			this.inputEmail = user.getEmail();
-			this.inputMobile = user.getMobilePhone();
-		}
-    	
+        if (seatToPayment == null) {
+            return ERROR;
+        }
+        User user;
+        if (!(session.get(CommonConstant.SESSION_KEY_USER) == null)
+                || !(session.get("User_tmp") == null)) {
+            if (!(session.get("User_tmp") == null)) {
+                user = (User) session.get("User_tmp");
+            } else {
+                user = (User) session.get(CommonConstant.SESSION_KEY_USER);
+            }
+            this.inputFirstName = user.getFirstName();
+            this.inputLastName = user.getLastName();
+            this.inputEmail = user.getEmail();
+            this.inputMobile = user.getMobilePhone();
+        }
+
         List<TripBean> tripBeanList = null;
+        List<TripBean> returnTrips = null;
 
         paymentMethods = paymentLogic.getPaymentMethods();
         tripBeanList = (List<TripBean>) session.get("listTripBean");
+        returnTrips = (List<TripBean>) session.get("returnTrips");
         try {
             reservationInfo = reservationLogic.createReservationInfo(
-                    tripBeanList, seatToPayment.split(";").length);
+                    tripBeanList, returnTrips, seatToPayment.split(";").length);
             paymentLogic.updateReservationPaymentInfo(reservationInfo,
-                    paymentMethods.get(0).getId());
+                    seatToPayment.split(";"), paymentMethods.get(0).getId());
         } catch (CommonException e) {
             errorProcessing(e);
             return ERROR;

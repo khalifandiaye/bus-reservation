@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Payment Success</title>
+<title><s:text name="title.rsv01020" /></title>
 <jsp:include page="../common/xheader.jsp" />
 <link href="<%=request.getContextPath()%>/styles/booking.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/styles/pay.css" rel="stylesheet">
@@ -48,8 +48,8 @@
 						<span><s:text name="%{reservationInfo.status}" /></span>
 					</div>
 				</div>
-				<div class="ticket-list">
-					<table>
+				<div>
+					<table class="ticket-list">
 						<thead>
 							<tr>
 								<th><s:text name="index" /></th>
@@ -98,7 +98,7 @@
 							<span class="usd"><s:property value="%{'($' + reservationInfo.totalAmountInUSD + ')'}" /></span>
 						</div>
 					</s:if>
-					<s:if test="%{reservation.refundedAmount != null && reservation.refundedAmount != ''}">
+					<s:if test="%{reservationInfo.refundedAmount != null && reservationInfo.refundedAmount != ''}">
 						<div class="item">
 							<label><s:text name="reservation.refundedAmount" /></label>
 							<span class="vnd"><s:property value="%{reservationInfo.refundedAmount + ' đồng'}" /></span>

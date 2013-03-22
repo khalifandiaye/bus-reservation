@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Currency;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,6 +21,9 @@ import vn.edu.fpt.capstone.busReservation.dao.TicketDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ArrangedReservationBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean.PaymentType;
+import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
@@ -270,12 +271,18 @@ public class ReservationLogic extends BaseLogic {
     public ReservationInfo loadReservationInfo(final String reservationId,
             int userId) throws CommonException {
         ReservationInfo info = null;
-        ReservationInfoBean bean = null;
-        bean = reservationInfoDAO.loadById(Integer.parseInt(reservationId));
-        if (bean.getId().getBooker() == null
-                || userId == bean.getId().getBooker().getId()) {
-            info = loadReservationInfo(bean, true);
-        } else {
+        List<TicketBean> tickets = null;
+        tickets = ticketDAO.getTickets(Integer.parseInt(reservationId));
+        if (tickets != null && tickets.size() > 0) {
+            if (tickets.get(0).getReservation().getBooker() != null
+                    && userId != tickets.get(0).getReservation().getBooker()
+                            .getId()) {
+                // access violation
+                throw new CommonException("msgerrrs006");
+            }
+            info = loadReservationInfo(tickets, userId);
+        }
+        if (info == null) {
             throw new CommonException("msgerrrs004");
         }
         return info;
@@ -316,22 +323,17 @@ public class ReservationLogic extends BaseLogic {
         info.setId(bean.getId().getId());
         info.setCode(bean.getId().getCode());
         quantity = loadTickets(info, bean.getId().getTickets());
-        info.setQuantity(Integer.toString(quantity));
         // TODO first name last name order
         info.setBookerName(bean.getId().getBookerLastName() + " "
                 + bean.getId().getBookerFirstName());
         info.setPhone(bean.getId().getPhone());
         info.setEmail(bean.getId().getEmail());
-        info.setBasePrice(FormatUtils.formatNumber(bean.getTicketPrice(), 0,
-                CommonConstant.LOCALE_VN));
+        info.setBasePrice(bean.getTicketPrice());
         if (bean.getPaidAmount() != null) {
-            info.setTotalAmount(FormatUtils.formatNumber(bean.getPaidAmount(),
-                    0, CommonConstant.LOCALE_VN));
-            info.setTransactionFee(FormatUtils.formatNumber(
-                    bean.getPaidAmount() - quantity * bean.getTicketPrice(), 0,
-                    CommonConstant.LOCALE_VN));
-            info.setRefundedAmount(FormatUtils.formatNumber(
-                    bean.getRefundAmount(), 0, CommonConstant.LOCALE_VN));
+            info.setTotalAmount(bean.getPaidAmount());
+            info.setTransactionFee(bean.getPaidAmount() - quantity
+                    * bean.getTicketPrice());
+            info.setRefundedAmount(bean.getRefundAmount());
         }
         if (convertToUSD) {
             try {
@@ -345,34 +347,108 @@ public class ReservationLogic extends BaseLogic {
                 // TODO handle error
                 throw new CommonException(e);
             }
-            info.setBasePriceInUSD(FormatUtils.formatNumber(
-                    converter.convert(bean.getTicketPrice()), 2,
-                    CommonConstant.LOCALE_VN));
+            info.setBasePriceInUSD(converter.convert(bean.getTicketPrice()));
             if (bean.getPaidAmount() != null) {
-                info.setTotalAmountInUSD(FormatUtils.formatNumber(
-                        converter.convert(bean.getPaidAmount()), 2,
-                        CommonConstant.LOCALE_VN));
-                info.setTransactionFeeInUSD(FormatUtils.formatNumber(converter
-                        .convert(BigDecimal.valueOf(bean.getPaidAmount())
-                                .subtract(
-                                        BigDecimal.valueOf(quantity).multiply(
-                                                BigDecimal.valueOf(bean
-                                                        .getTicketPrice())))),
-                        2, CommonConstant.LOCALE_VN));
+                info.setTotalAmountInUSD(converter.convert(bean.getPaidAmount()));
+                info.setTransactionFeeInUSD(converter.convert(
+                        BigDecimal.valueOf(bean.getPaidAmount()).subtract(
+                                BigDecimal.valueOf(quantity).multiply(
+                                        BigDecimal.valueOf(bean
+                                                .getTicketPrice()))))
+                        .doubleValue());
                 if (bean.getRefundAmount() != null
                         && bean.getRefundAmount() > 0) {
-                    info.setRefundedAmountInUSD(FormatUtils.formatNumber(
-                            converter.convert(bean.getRefundAmount()), 2,
-                            CommonConstant.LOCALE_VN));
+                    info.setRefundedAmountInUSD(converter.convert(bean
+                            .getRefundAmount()));
                     refundRate = (int) (bean.getRefundAmount() * 100 / bean
                             .getPaidAmount());
-                    info.setRefundRate(Integer.toString(refundRate));
+                    info.setRefundRate(refundRate);
                 }
             }
         }
         info.setStatus(bean.getId().getStatus());
         // info.setStatus(updateStatus(bean.getId(), bean.getStartTrip()
         // .getDepartureTime(), timeOutInterval, lockInterval));
+        return info;
+    }
+
+    private ReservationInfo loadReservationInfo(List<TicketBean> tickets,
+            int userId) throws CommonException {
+        ReservationInfo info = null;
+        ReservationBean reservationBean = null;
+        CurrencyConverter converter = null;
+        double basePrice = 0;
+        double paidAmount = 0;
+        double fee = 0;
+        double refundedAmount = 0;
+        reservationBean = tickets.get(0).getReservation();
+        updateReservationStatus(reservationBean.getId());
+        info = new ReservationInfo();
+        info.setId(reservationBean.getId());
+        info.setCode(reservationBean.getCode());
+        info.setBookerName(reservationBean.getBookerLastName() + " "
+                + reservationBean.getBookerLastName());
+        info.setPhone(reservationBean.getPhone());
+        info.setEmail(reservationBean.getEmail());
+        info.setStatus(reservationBean.getStatus());
+        try {
+            converter = CurrencyConverter.getInstance(
+                    Currency.getInstance("VND"), Currency.getInstance("USD"));
+        } catch (InstantiationException e) {
+            LOG.error("Impossible error", e);
+            throw new CommonException(e);
+        } catch (IOException e) {
+            // TODO handle error
+            throw new CommonException(e);
+        }
+        info.setTickets(new ArrayList<ReservationInfo.Ticket>());
+        for (TicketBean ticket : tickets) {
+            basePrice += ReservationUtils.addTickets(
+                    info,
+                    ticket,
+                    (tickets.size() <= 1 || ticket
+                            .getTrips()
+                            .get(0)
+                            .getDepartureTime()
+                            .after(tickets
+                                    .get(tickets.size()
+                                            - tickets.indexOf(ticket) - 1)
+                                    .getTrips().get(0).getDepartureTime())),
+                    tariffViewDAO, converter);
+        }
+        Collections.sort(info.getTickets());
+        info.setBasePrice(basePrice);
+        info.setBasePriceInUSD(converter.convert(basePrice));
+        if (reservationBean.getPayments() != null
+                && reservationBean.getPayments().size() > 0) {
+            for (PaymentBean payment : reservationBean.getPayments()) {
+                if (PaymentType.PAY.getValue().equals(payment.getType())) {
+                    paidAmount += payment.getPayAmount();
+                    fee += payment.getServiceFee();
+                } else {
+                    refundedAmount += payment.getPayAmount();
+                }
+            }
+            paidAmount *= 1000;
+            fee *= 1000;
+            refundedAmount *= 1000;
+            info.setBasePrice(paidAmount - fee);
+            info.setBasePriceInUSD(converter.convert(paidAmount - fee)
+                    .doubleValue());
+            info.setTotalAmount(paidAmount);
+            info.setTotalAmountInUSD(converter.convert(paidAmount));
+            info.setTransactionFee(paidAmount - basePrice);
+            info.setTransactionFeeInUSD(converter.convert(fee));
+            if (refundedAmount > 0) {
+                info.setRefundedAmount(refundedAmount);
+                info.setRefundedAmountInUSD(converter.convert(paidAmount));
+                info.setRefundRate((int) (refundedAmount * 100 / paidAmount));
+            }
+        } else {
+            info.setBasePrice(basePrice);
+            info.setBasePriceInUSD(converter.convert(
+                    BigDecimal.valueOf(basePrice)).doubleValue());
+        }
         return info;
     }
 
@@ -418,45 +494,15 @@ public class ReservationLogic extends BaseLogic {
     }
 
     public ReservationInfo createReservationInfo(
-            final List<TripBean> tripBeanList, int quantity)
+            final List<TripBean> forwardTrips,
+            final List<TripBean> returnTrips, int quantity)
             throws CommonException {
         ReservationInfo info = null;
         CurrencyConverter converter = null;
-        TripBean[] startEndTrip = null;
-        Double ticketPrice = null;
-        Map<Integer, TripBean[]> startEndTripMap = null;
         List<Ticket> tickets = null;
-        Ticket ticket = null;
+        double basePrice = 0;
         info = new ReservationInfo();
         info.setId(0);
-        tripDAO.refresh(tripBeanList);
-        startEndTripMap = ReservationUtils.getStartEndTripsMap(tripBeanList);
-        tickets = new ArrayList<ReservationInfo.Ticket>();
-        info.setTickets(tickets);
-        for (Map.Entry<Integer, TripBean[]> entry : startEndTripMap.entrySet()) {
-            startEndTrip = entry.getValue();
-            ticket = info.new Ticket();
-            tickets.add(ticket);
-            ticket.setId(entry.getKey());
-            ticket.setDepartureDateInMilisec(startEndTrip[0].getDepartureTime()
-                    .getTime());
-            ticket.setDepartureDate(FormatUtils.formatDate(
-                    startEndTrip[0].getDepartureTime(),
-                    "EEEEE dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
-                    CommonConstant.DEFAULT_TIME_ZONE));
-            ticket.setArrivalDate(FormatUtils.formatDate(
-                    startEndTrip[1].getArrivalTime(),
-                    "EEEEE dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
-                    CommonConstant.DEFAULT_TIME_ZONE));
-            ticket.setDepartureStation(startEndTrip[0].getRouteDetails()
-                    .getSegment().getStartAt().getName());
-            ticket.setArrivalStation(startEndTrip[1].getRouteDetails()
-                    .getSegment().getEndAt().getName());
-            ticket.setBusType(entry.getValue()[0].getBusStatus().getBus()
-                    .getBusType().getName());
-        }
-        Collections.sort(info.getTickets());
-        info.setQuantity(Integer.toString(quantity));
         try {
             converter = CurrencyConverter.getInstance(
                     Currency.getInstance("VND"), Currency.getInstance("USD"));
@@ -467,12 +513,19 @@ public class ReservationLogic extends BaseLogic {
             // TODO handle error
             throw new CommonException(e);
         }
-        ticketPrice = tariffViewDAO.getTicketPrice(tripBeanList, new Date());
-        info.setBasePrice(FormatUtils.formatNumber(ticketPrice, 0,
-                CommonConstant.LOCALE_VN));
-        info.setBasePriceInUSD(FormatUtils.formatNumber(
-                converter.convert(BigDecimal.valueOf(ticketPrice)), 2,
-                CommonConstant.LOCALE_VN));
+        tickets = new ArrayList<ReservationInfo.Ticket>();
+        info.setTickets(tickets);
+        tripDAO.refresh(forwardTrips);
+        basePrice += ReservationUtils.addTickets(info, forwardTrips, quantity,
+                false, tariffViewDAO, converter);
+        if (returnTrips != null) {
+            tripDAO.refresh(returnTrips);
+            basePrice += ReservationUtils.addTickets(info, returnTrips,
+                    quantity, true, tariffViewDAO, converter);
+        }
+        Collections.sort(info.getTickets());
+        info.setBasePrice(basePrice);
+        info.setBasePriceInUSD(converter.convert(basePrice));
         return info;
     }
 }

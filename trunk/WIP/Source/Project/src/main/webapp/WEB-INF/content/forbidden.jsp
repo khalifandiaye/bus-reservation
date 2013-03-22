@@ -8,15 +8,20 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title><s:text name="title.pay01030-error" /></title>
-<jsp:include page="../common/xheader.jsp" />
+<title><s:text name="title.403" /></title>
+<jsp:include page="common/xheader.jsp" />
 <link href="<%=request.getContextPath()%>/styles/booking.css" rel="stylesheet">
 </head>
 <body>
-	<jsp:include page="../common/header.jsp" />
-	<h2>Temp error pay</h2>
-	<s:actionerror />
-	<jsp:include page="../common/footer.jsp" />
+	<jsp:include page="common/header.jsp" />
+	<div>
+		<div class="container">
+			<div class="well error">
+				<s:text name="message.403" />
+			</div>
+		</div>
+	</div>
+	<jsp:include page="common/footer.jsp" />
 </body>
 </html>
 	

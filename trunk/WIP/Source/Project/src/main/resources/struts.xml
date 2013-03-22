@@ -5,6 +5,7 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
+	<constant name="struts.convention.default.parent.package" value="transactionalPackage"/>
 	<package name="transactionalPackage" extends="struts-default">
 		<interceptors>
 			<interceptor name="hibernateSessionInterceptor"
@@ -19,10 +20,7 @@
 		</interceptors>
 		<default-interceptor-ref name="dbStack" />
 		<global-results>
-			<result name="unauthorized" type="httpheader">
-				<param name="error">403</param>
-				<param name="errorMessage">You are not allowed to access this page</param>
-			</result>
+			<result name="unauthorized">/WEB-INF/content/forbidden.jsp</result>
 		</global-results>
 	</package>
 	<package name="jsonPackage" extends="json-default">
@@ -38,12 +36,6 @@
 			</interceptor-stack>
 		</interceptors>
 		<default-interceptor-ref name="dbStack" />
-		<global-results>
-			<result name="unauthorized" type="httpheader">
-				<param name="error">403</param>
-				<param name="errorMessage">You are not allowed to access this page</param>
-			</result>
-		</global-results>
 	</package>
 	<package name="basePackage" extends="struts-default">
 		<default-interceptor-ref name="defaultStack" />
