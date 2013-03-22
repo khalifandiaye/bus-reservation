@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Payment Success</title>
+<title><s:text name="title.rsv01010-alt" /></title>
 <jsp:include page="../common/xheader.jsp" />
 <link href="<%=request.getContextPath()%>/styles/booking.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/styles/pay.css" rel="stylesheet">
@@ -18,9 +18,11 @@
 	<div class="search-reservation">
 		<form method="post" action="<%=request.getContextPath()%>/rsv/rsv01021.html">
 			<div class="container">
-				<div class="well error">
-					<s:actionerror/>
-				</div>
+				<s:if test="%{actionErros.size > 0}">
+					<div class="well error">
+						<s:actionerror/>
+					</div>
+				</s:if>
 				<div class="well">
 					<div class="item">
 						<label><s:text name="reservation.code" /></label><s:textfield name="reservationCode" />

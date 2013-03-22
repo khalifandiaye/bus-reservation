@@ -108,6 +108,66 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
     }
 
     @SuppressWarnings("unchecked")
+    public List<TicketBean> getTickets(int reservationId) {
+        List<TicketBean> result = null;
+        Query query = null;
+        String queryString = null;
+        Session session = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            queryString = "SELECT tkt" + " FROM TicketBean tkt"
+                    + " INNER JOIN tkt.reservation rsv"
+                    + " INNER JOIN tkt.trips trps"
+                    + " WHERE rsv.id = :reservationId"
+                    + "     AND rsv.status != :rsvStatusMoved"
+                    + "     AND tkt.status != :ticketStatusMoved"
+                    + " ORDER BY trps.departureTime";
+            query = session.createQuery(queryString);
+            query.setInteger("reservationId", reservationId);
+            query.setString("rsvStatusMoved",
+                    ReservationStatus.MOVED.getValue());
+            query.setString("ticketStatusMoved", TicketStatus.MOVED.getValue());
+            result = query.list();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+        // return result, if needed
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<TicketBean> getTicketsByCode(String reservationCode) {
+        List<TicketBean> result = null;
+        Query query = null;
+        String queryString = null;
+        Session session = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            queryString = "SELECT tkt" + " FROM TicketBean tkt"
+                    + " INNER JOIN tkt.reservation rsv"
+                    + " INNER JOIN tkt.trips trps"
+                    + " WHERE rsv.code = :reservationCode"
+                    + "     AND rsv.status != :rsvStatusMoved"
+                    + "     AND tkt.status != :ticketStatusMoved"
+                    + " ORDER BY trps.departureTime";
+            query = session.createQuery(queryString);
+            query.setString("reservationCode", reservationCode);
+            query.setString("rsvStatusMoved",
+                    ReservationStatus.MOVED.getValue());
+            query.setString("ticketStatusMoved", TicketStatus.MOVED.getValue());
+            result = query.list();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+        // return result, if needed
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
     public List<TicketInfoBean> getTicketInfo(int reservationId) {
         List<TicketInfoBean> result = null;
         Query query = null;
@@ -144,7 +204,8 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
                     + "         WHERE tar1.segment = trp.routeDetails.segment"
                     + "             AND tar1.busType = trp.busStatus.bus.busType"
                     + "             AND tar1.validFrom <= rsv.bookTime)"
-                    + " GROUP BY tkt,trps,trpe";
+                    + " GROUP BY tkt,trps,trps.busStatus,trps.departureTime,trpe"
+                    + " ORDER BY trps.departureTime";
             query = session.createQuery(queryString);
             query.setInteger("reservationId", reservationId);
             query.setString("rsvStatusMoved",

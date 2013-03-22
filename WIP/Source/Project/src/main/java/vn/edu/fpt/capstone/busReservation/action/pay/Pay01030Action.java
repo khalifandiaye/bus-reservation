@@ -3,12 +3,16 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.pay;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
+
 import org.hibernate.HibernateException;
 
 import urn.ebay.api.PayPalAPI.GetExpressCheckoutDetailsResponseType;
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean.PaymentType;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
+import vn.edu.fpt.capstone.busReservation.displayModel.PaymentDetails;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
@@ -16,6 +20,7 @@ import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.logic.ReservationLogic;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
+import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
 /**
  * @author Yoshimi
@@ -70,11 +75,11 @@ public class Pay01030Action extends BaseAction {
         GetExpressCheckoutDetailsResponseType checkoutDetailsResponse = null;
         String token = null;
         String reservationId = null;
-        String[] paymentDetails = null;
+        PaymentDetails paymentDetails = null;
         String status = null;
         int userId = 0;
         Object user = null;
-        
+
         if (session != null
                 && session.containsKey(CommonConstant.SESSION_KEY_USER)) {
             user = session.get(CommonConstant.SESSION_KEY_USER);
@@ -97,7 +102,8 @@ public class Pay01030Action extends BaseAction {
             commonSessionTimeoutError();
             return ERROR;
         }
-        status = reservationLogic.updateReservationStatus(Integer.parseInt(reservationId));
+        status = reservationLogic.updateReservationStatus(Integer
+                .parseInt(reservationId));
         if (ReservationStatus.DELETED.getValue().equals(status)) {
             // reservation time out
             String[] args = new String[1];
@@ -124,6 +130,10 @@ public class Pay01030Action extends BaseAction {
             return ERROR;
         }
         try {
+            reservationInfo = (ReservationInfo) session
+                    .get(ReservationInfo.class.getName());
+            paymentDetails.setFeeAmount(BigDecimal.valueOf(
+                    reservationInfo.getTransactionFeeInUSDValue()).toString());
             reservationCode = paymentLogic.savePayment(reservationId,
                     paymentDetails, 2, PaymentType.PAY);
             reservationInfo = reservationLogic.loadReservationInfo(
@@ -139,14 +149,6 @@ public class Pay01030Action extends BaseAction {
         session.remove(ReservationInfo.class.getName());
         session.remove(CommonConstant.SESSION_KEY_RESERVATION_ID);
         session.remove(CommonConstant.SESSION_KEY_PAYMENT_TOKEN);
-
-//        try {
-//            reservationInfo = reservationLogic.loadReservationInfo("677", true);
-//        } catch (CommonException e) {
-//            errorProcessing(e);
-//            return ERROR;
-//        }
-//        reservationCode = "AAAAAA";
 
         return SUCCESS;
     }

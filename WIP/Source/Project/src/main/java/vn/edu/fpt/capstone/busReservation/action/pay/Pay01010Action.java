@@ -134,7 +134,7 @@ public class Pay01010Action extends BaseAction {
             reservationInfo = reservationLogic
                     .loadReservationInfo(reservationId, userId);
             paymentLogic.updateReservationPaymentInfo(
-                    reservationInfo, paymentMethods.get(0).getId());
+                    reservationInfo, reservationInfo.getTickets().get(0).getSeats(), paymentMethods.get(0).getId());
         } catch (HibernateException e) {
             // TODO error processing
             genericDatabaseErrorProcess(e);

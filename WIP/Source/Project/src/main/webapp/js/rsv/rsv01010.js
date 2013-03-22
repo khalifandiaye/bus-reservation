@@ -128,12 +128,17 @@ $(document).ready(function(){
                 $("#btnCancel").attr("disabled", "disabled");
             },
             success : function(data) {
-                if (data.errorMessage) {
+                if (data.errorMessage && !data.cancelConfirmMessage) {
                     $("#cancelConfirmMessage").addClass("error");
                     $("#cancelConfirmMessage").html(data.errorMessage);
                     $("#btnCancel").removeAttr("disabled");
                 } else {
-                    $("#cancelConfirmMessage").html(data.cancelConfirmMessage);
+                    var htmlString = '';
+                    htmlString = data.cancelConfirmMessage;
+                    if (data.errorMessage) {
+                        htmlString += '<br/><span class="error">' + data.errorMessage + '</span>';
+                    }
+                    $("#cancelConfirmMessage").html(htmlString);
                     // display confirm modal
                     $('#cancelModal').on('hidden.reload', function() {
                         location.reload();

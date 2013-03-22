@@ -4,6 +4,8 @@
 package vn.edu.fpt.capstone.busReservation.util;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -12,10 +14,14 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import vn.edu.fpt.capstone.busReservation.dao.TariffViewDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
+import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
+import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo.Ticket;
+import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 
 /**
@@ -40,6 +46,26 @@ public abstract class ReservationUtils {
                         .getTime()
                         - o2.getTrips().get(0).getBusStatus().getFromDate()
                                 .getTime();
+            }
+            return result > Integer.MAX_VALUE ? Integer.MAX_VALUE
+                    : result < Integer.MIN_VALUE ? Integer.MIN_VALUE
+                            : (int) result;
+        }
+    };
+    public final static Comparator<TripBean> TRIP_COMPARATOR = new Comparator<TripBean>() {
+
+        @Override
+        public int compare(final TripBean o1, final TripBean o2) {
+            long result = 0;
+            if (o1 == null && o2 == null) {
+                result = 0;
+            } else if (o1 == null) {
+                result = -1;
+            } else if (o2 == null) {
+                result = 1;
+            } else {
+                result = o1.getDepartureTime().getTime()
+                        - o2.getDepartureTime().getTime();
             }
             return result > Integer.MAX_VALUE ? Integer.MAX_VALUE
                     : result < Integer.MIN_VALUE ? Integer.MIN_VALUE
@@ -122,45 +148,109 @@ public abstract class ReservationUtils {
         return result;
     }
 
-    // public static BigDecimal roundingVND(BigDecimal number) {
-    // return number.divide(BigDecimal.valueOf(500), 0, RoundingMode.CEILING)
-    // .multiply(BigDecimal.valueOf(500));
-    // }
-    //
-    // public static BigDecimal calculateTotal(final String basePrice,
-    // final String quantity, final BigDecimal fee) throws ParseException {
-    // BigDecimal result = null;
-    // result = FormatUtils
-    // .deformatNumber(basePrice, CommonConstant.LOCALE_VN)
-    // .multiply(new BigDecimal(quantity)).add(fee);
-    // return result;
-    // }
-    //
-    // public static BigDecimal calculateFee(final String basePrice,
-    // final String quantity, final PaymentMethodBean paymentMethod)
-    // throws IOException, ParseException {
-    // BigDecimal result = null;
-    // BigDecimal constantFee = null;
-    // BigDecimal feeRatio = null;
-    // CurrencyConverter converter = null;
-    // try {
-    // converter = CurrencyConverter.getInstance(
-    // Currency.getInstance("USD"), Currency.getInstance("VND"));
-    // } catch (InstantiationException e) {
-    // LOG.error("Impossible error", e);
-    // }
-    // constantFee = converter.convert(BigDecimal.valueOf(paymentMethod
-    // .getAddition()));
-    // feeRatio = BigDecimal.valueOf(paymentMethod.getRatio());
-    // result = BigDecimal.ZERO
-    // .add(FormatUtils.deformatNumber(basePrice,
-    // CommonConstant.LOCALE_VN).multiply(
-    // new BigDecimal(quantity)))
-    // .add(constantFee)
-    // .divide(BigDecimal.ONE.subtract(feeRatio), 0,
-    // RoundingMode.CEILING).multiply(feeRatio)
-    // .add(constantFee);
-    // return result;
-    // }
+    public static Map<Integer, List<TripBean>> splitTrips(
+            final List<TripBean> trips) {
+        Map<Integer, List<TripBean>> result = null;
+        int busStatusId = 0;
+        List<TripBean> tripList = null;
+        Collections.sort(trips, TRIP_COMPARATOR);
+        result = new HashMap<Integer, List<TripBean>>();
+        for (TripBean trip : trips) {
+            busStatusId = trip.getBusStatus().getId();
+            tripList = result.get(busStatusId);
+            if (tripList == null) {
+                tripList = new ArrayList<TripBean>();
+                result.put(busStatusId, tripList);
+            }
+            tripList.add(trip);
+        }
+        return result;
+    }
+
+    public static double addTickets(ReservationInfo info, List<TripBean> trips,
+            int quantity, boolean returnTrip, TariffViewDAO tariffViewDAO,
+            CurrencyConverter converter) throws CommonException {
+        Map<Integer, List<TripBean>> tripMap = null;
+        Ticket ticket = null;
+        double basePrice = 0;
+        if (trips != null && trips.size() > 0) {
+            tripMap = ReservationUtils.splitTrips(trips);
+            for (Map.Entry<Integer, List<TripBean>> entry : tripMap.entrySet()) {
+                ticket = createTicket(info, entry, quantity, returnTrip,
+                        tariffViewDAO, converter);
+                info.getTickets().add(ticket);
+                ticket.setSeats(new String[quantity]);
+                basePrice += quantity * ticket.getTicketPriceValue();
+            }
+        }
+        return basePrice;
+    }
+
+    private static Ticket createTicket(ReservationInfo info,
+            Map.Entry<Integer, List<TripBean>> entry, int quantity,
+            boolean returnTrip, TariffViewDAO tariffViewDAO,
+            CurrencyConverter converter) {
+        List<TripBean> subTripList = null;
+        Ticket ticket = null;
+        double ticketPrice = 0;
+        subTripList = entry.getValue();
+        ticket = info.new Ticket();
+        ticket.setId(entry.getKey());
+        ticket.setDepartureDateInMilisec(subTripList.get(0).getDepartureTime()
+                .getTime());
+        ticket.setDepartureDate(FormatUtils.formatDate(subTripList.get(0)
+                .getDepartureTime(), "EEEEE dd/MM/yyyy hh:mm aa",
+                CommonConstant.LOCALE_VN, CommonConstant.DEFAULT_TIME_ZONE));
+        ticket.setArrivalDate(FormatUtils.formatDate(
+                subTripList.get(subTripList.size() - 1).getArrivalTime(),
+                "EEEEE dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
+                CommonConstant.DEFAULT_TIME_ZONE));
+        ticket.setDepartureStation(subTripList.get(0).getRouteDetails()
+                .getSegment().getStartAt().getName());
+        ticket.setDepartureLocation(subTripList.get(0).getRouteDetails()
+                .getSegment().getStartAt().getCity().getName());
+        ticket.setArrivalStation(subTripList.get(subTripList.size() - 1)
+                .getRouteDetails().getSegment().getEndAt().getName());
+        ticket.setArrivalLocation(subTripList.get(subTripList.size() - 1)
+                .getRouteDetails().getSegment().getEndAt().getCity().getName());
+        ticket.setBusType(subTripList.get(0).getBusStatus().getBus()
+                .getBusType().getName());
+        ticketPrice = tariffViewDAO.getTicketPrice(subTripList);
+        ticketPrice *= 1000;
+        ticket.setTicketPrice(ticketPrice);
+        ticket.setTicketPriceInUSD(converter.convert(ticketPrice));
+        ticket.setReturnTrip(returnTrip);
+        return ticket;
+    }
+
+    public static double addTickets(ReservationInfo info,
+            TicketBean ticketBean, boolean returnTrip,
+            TariffViewDAO tariffViewDAO, CurrencyConverter converter)
+            throws CommonException {
+        Map<Integer, List<TripBean>> tripMap = null;
+        List<TripBean> trips = null;
+        Ticket ticket = null;
+        double basePrice = 0;
+        int quantity = 0;
+        int count = 0;
+        trips = ticketBean.getTrips();
+        if (trips != null && trips.size() > 0) {
+            tripMap = ReservationUtils.splitTrips(trips);
+            for (Map.Entry<Integer, List<TripBean>> entry : tripMap.entrySet()) {
+                quantity = ticketBean.getSeatPositions().size();
+                ticket = createTicket(info, entry, quantity, returnTrip,
+                        tariffViewDAO, converter);
+                info.getTickets().add(ticket);
+                ticket.setSeats(new String[quantity]);
+                count = 0;
+                for (SeatPositionBean seat : ticketBean.getSeatPositions()) {
+                    ticket.getSeats()[count++] = seat.getName();
+                }
+                ticket.setStatus(ticketBean.getStatus());
+                basePrice += quantity * ticket.getTicketPriceValue();
+            }
+        }
+        return basePrice;
+    }
 
 }

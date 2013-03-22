@@ -35,4 +35,18 @@
 
 .error {
 	color: red;
+	background-color: rgb(253, 194, 194);
+	font-weight: bold;
+}
+
+.error:empty {
+	display: none;
+}
+
+.error.well {
+	border-color: red !important;
+}
+
+.top-nav .error {
+	background-color: inherit;
 }

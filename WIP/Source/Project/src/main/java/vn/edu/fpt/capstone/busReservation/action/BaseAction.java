@@ -72,7 +72,6 @@ public class BaseAction extends ActionSupport implements SessionAware,
     }
 
     /**
-     * Untested
      * 
      * @param e
      */
@@ -95,6 +94,30 @@ public class BaseAction extends ActionSupport implements SessionAware,
     }
 
     /**
+     * 
+     * @param e
+     */
+    protected void errorProcessing(CommonException e, boolean rollback) {
+        String[] parameters;
+        String[] paramKeys;
+        int length = 0;
+        if (rollback) {
+            rollback();
+        }
+        paramKeys = e.getParameters();
+        if (paramKeys != null && paramKeys.length > 0) {
+            length = paramKeys.length;
+            parameters = new String[length];
+            for (int i = 0; i < length; i++) {
+                parameters[i] = getText(paramKeys[i]);
+            }
+        } else {
+            parameters = new String[0];
+        }
+        addActionError(getText(e.getMessageId(), parameters));
+    }
+
+    /**
      * Untested
      * 
      * @param e
@@ -103,21 +126,18 @@ public class BaseAction extends ActionSupport implements SessionAware,
         rollback();
         addActionError(getText("msgerrss001"));
     }
-    
+
     private void rollback() {
         // Rollback only
         try {
-            if (sessionFactory.getCurrentSession().getTransaction()
-                    .isActive()) {
+            if (sessionFactory.getCurrentSession().getTransaction().isActive()) {
                 LOG.debug("Trying to rollback database transaction after exception");
-                sessionFactory.getCurrentSession().getTransaction()
-                        .rollback();
+                sessionFactory.getCurrentSession().getTransaction().rollback();
             } else {
                 LOG.debug("The database transaction is longer active");
             }
         } catch (Throwable rbEx) {
-            LOG.error("Could not rollback transaction after exception!",
-                    rbEx);
+            LOG.error("Could not rollback transaction after exception!", rbEx);
         }
     }
 

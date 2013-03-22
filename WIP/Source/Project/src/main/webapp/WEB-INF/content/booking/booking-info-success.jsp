@@ -127,7 +127,7 @@
 		<!-- 				</tr> -->
 						<tr>
 							<th style="text-align: left"><s:text name="resevation.ticketPrice" /></th>
-							<td style="text-align: right"><s:property value="reservationInfo.basePrice" /> VND
+							<td style="text-align: right" id="basePrice"><s:property value="reservationInfo.basePrice" /> VND
 								($<s:property value="reservationInfo.basePriceInUSD" />)</td>
 						</tr>
 						<tr>
