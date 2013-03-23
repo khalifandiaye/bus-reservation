@@ -40,8 +40,7 @@
 			},
 			success : function(response) {
 				alert(response);
-				var url = $('#contextPath').val()
-						+ "/route/route-detail-list.html?routeId="
+				var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId="
 						+ $('#routeId').val();
 				window.location = url;
 			},
@@ -83,7 +82,10 @@
 			}).on('changeDate', function(ev) {
 				getAvailBus();
 				getArrivalTime();
+				checkButton();
 			});
+			
+			$("#tripDialogDepartureTimeDiv").datetimepicker("setDate", new Date());
 		});
 
 		function getAvailBus() {
@@ -92,12 +94,8 @@
 			var selectedBusType = $("#tripDialogBusType").val();
 			if (selectedRouteId != '-1' && departureTime != ""
 					&& selectedBusType != '-1') {$.ajax({
-						url : $('#contextPath')
-								.val()
-								+ "/schedule/availBus.html?departureTime="
-								+ departureTime
-								+ "&busType="
-								+ selectedBusType
+						url : $('#contextPath').val()	+ "/schedule/availBus.html?departureTime="
+								+ departureTime + "&busType=" + selectedBusType
 								+ "&routeId="
 								+ selectedRouteId,
 					}).done(function(data) {
@@ -133,25 +131,19 @@
             var busPlate = $('#tripDialogBusPlate').val();
             var addNewSchedule = $("#addNewSchedule");
 
-            
             if(departureTime != "" && busPlate != null && busPlate != ''){
             	addNewSchedule.removeAttr("disabled"); 
-            }else{ 
+            } else { 
             	addNewSchedule.attr("disabled","disabled");
             }
 		}
 		
-		$("#tripDialogDepartureTime").change(function(){
-			checkButton();
-		});
-		$("#tripDialogArrivalTime").change(function(){
-	         checkButton();
-	      });
 		$("#tripDialogBusType").change(function(){
-	         checkButton();
-	      });
+	      checkButton();
+	   });
+		
 		$("#tripDialogBusPlate").change(function(){
-	         checkButton(); 
+	      checkButton(); 
       });
 		
 		$('#cancelAdd').bind('click', function() {

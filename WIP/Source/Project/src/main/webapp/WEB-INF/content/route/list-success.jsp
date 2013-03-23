@@ -77,6 +77,18 @@
 		} 
    }
    
+   function checkAdd() {
+	   var startAt = $('#startAt').val();
+	   var endAt = $("#endAt").val();
+	   var duration = $('#duration').val();
+
+	   if(startAt != -1 && endAt != -1 && duration != ""){
+		   $("#add").removeAttr("disabled"); 
+	   } else { 
+		   $("#add").attr("disabled","disabled");
+	   }
+   }
+   
    $(document).ready(function() {
       
 	   var routeTable = $('#routeTable').dataTable({ bSort : false });
@@ -84,6 +96,7 @@
       	   
       $('#addRoute').bind('click', function(event) {
     	   giCount = 0;
+    	   $("#routeAddDialogOk").attr("disabled","disabled"); 
     	   segmentTable.dataTable().fnClearTable();
     	   $("#startAt").prop("disabled", false);
     	   $("#stationStartAt").prop("disabled", false);
@@ -135,25 +148,33 @@
     	   $('#stationEndAt').empty();
     	   getStation('startAt', 'stationStartAt');
     	   $("#endAt option[value=" + $("#startAt").val() + "]").hide();
+    	   checkAdd();
       });
                   
       $('#endAt').change(function() {
          getStation('endAt', 'stationEndAt');
+         checkAdd();
+      });
+      
+      $('#duration').change(function(){
+    	   checkAdd();
       });
                   
       $("#validDateDiv").datetimepicker({
-            format : "yyyy/mm/dd - hh:ii",
-            autoclose : true,
-            todayBtn : true,
-            startDate : new Date(),
-            minuteStep : 10
-         });
+         format : "yyyy/mm/dd - hh:ii",
+         autoclose : true,
+         todayBtn : true,
+         startDate : new Date(),
+         minuteStep : 10
+      });
       
       $("#add").bind('click', function() {
     	      if (giCount == 6) {
-	              $("#errorMessage").text("Maximum segment added!");
-	              $("#add").disable();
-            }
+               $("#errorMessage").text("Maximum segment added!");
+               return;
+    	      }
+    	      
+    	    	$("#routeAddDialogOk").removeAttr("disabled");  
 
             var startAtKey = $("#startAt").val();
             var stationStartAtKey = $("#stationStartAt").val();
@@ -214,10 +235,6 @@
             info['segments'] = segments;
             info['validDate'] = $('#validDate').val();
                            
-            if (giCount == 0) {
-               return;
-            }
-            
             $.ajax({
                type : "POST",
                url : 'saveSegment.html',
@@ -237,6 +254,7 @@
                }
             });
          });
+     
      $('#saveSuccessDialogOk').click(function() {
             var url = $('#contextPath').val() + "/route/list.html";
             window.location = url;
@@ -246,7 +264,7 @@
     	 info = {};
     	 segments = [];
     	 giCount = 0;
-   });
+     });
    });
 
    var info = {};
@@ -336,7 +354,7 @@
                   id="stationEndAt" headerKey="-1"
                   headerValue="--- Select End Station ---"></select></td>
                <td><input type="text" id="duration" /></td>
-               <td><input class="btn btn-primary" type="button" id="add" value="Add" 
+               <td><input class="btn btn-primary" type="button" id="add" value="Add" disabled="disabled"
                   style="margin-bottom: 10px; margin-left: 10px; margin-right: 0; width: 75px;"/></td>
             </tr>
          </table>
@@ -344,7 +362,7 @@
       </div>
       <div class="modal-footer">
          <button class="btn" data-dismiss="modal" id="routeAddDialogCancel" aria-hidden="true">Cancel</button>
-         <button class="btn btn-primary" type="button" id="routeAddDialogOk">Save</button>
+         <button class="btn btn-primary" type="button" id="routeAddDialogOk" disabled="disabled">Save</button>
       </div>
    </div>
 

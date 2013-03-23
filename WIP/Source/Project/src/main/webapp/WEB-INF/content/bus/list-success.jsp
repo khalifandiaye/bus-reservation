@@ -72,20 +72,16 @@ function maintainBus(id) {
 	});
 </script>
 <style type="text/css">
-.dataTables_filter {
-	display: none;
-}
-
 .dataTables_length {
-	display: none;
-}
-
-.dataTables_paginate {
 	display: none;
 }
 
 .dataTables_info {
 	display: none;
+}
+
+#addBusTable_filter {
+   display: none;
 }
 </style>
 </head>
