@@ -26,12 +26,29 @@
 	function deleteTrip(id) {
 		$('#busStatusId').val(id);
 		$("#deleteTripDialog").modal();
-	 };
+	};
+	
+	function checkButton(){
+		var route = $('#tripDialogRoutes').val();
+      var departureTime = $("#tripDialogDepartureTime").val();
+      var busPlate = $('#tripDialogBusPlate').val();
+      var addNewSchedule = $("#addNewSchedule");
+
+      if(route != -1 && departureTime != "" && busPlate != null && busPlate != ''){
+         addNewSchedule.removeAttr("disabled"); 
+      } else { 
+         addNewSchedule.attr("disabled","disabled");
+      }
+   }
 	 
 	$(document).ready(
 			function() {
 				var oTable = $('#scheduleTable').dataTable();
-
+				
+		      $("#tripDialogBusPlate").change(function(){
+		         checkButton(); 
+		      });
+		      
 				$('#busStatusInsertBtn').click(function() {
 					$('#tripDialogRoutes').val(-1);
 					$('#tripDialogDepartureTime').val('');
@@ -51,6 +68,7 @@
 					}).on('changeDate', function(ev) {
 						getAvailBus();
 						getArrivalTime();
+						checkButton();
 					});
 				});
 				
@@ -66,12 +84,14 @@
 				$('#tripDialogBusType').change(function() {
 					getAvailBus();
 					getArrivalTime();
+					checkButton();
 				});
 				
 				$('#tripDialogRoutes').change(function() {
 					getBusTypesInRoute();
 					getAvailBus();
 					getArrivalTime();
+					checkButton();
 		      });
 				
 				function getAvailBus() {
@@ -244,7 +264,7 @@
 			</div>
 			<div class="modal-footer">
 				<button class="btn" id="cancelAdd" data-dismiss="modal" aria-hidden="true">Cancel</button>
-				<input type="button" id="addNewSchedule" class="btn btn-primary" value='Save changes'/>
+				<input type="button" id="addNewSchedule" class="btn btn-primary" value='Save changes' disabled="disabled"/>
 			</div>
 		</form>
 	</div>
