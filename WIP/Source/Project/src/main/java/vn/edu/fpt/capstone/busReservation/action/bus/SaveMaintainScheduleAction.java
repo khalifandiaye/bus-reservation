@@ -30,13 +30,34 @@ public class SaveMaintainScheduleAction extends BaseAction {
 	private int busId;
 	private long maintainDuration;
 
-	private String message;
+	public long getMaintainDuration() {
+      return maintainDuration;
+   }
+
+   public void setMaintainDuration(long maintainDuration) {
+      this.maintainDuration = maintainDuration;
+   }
+
+   public int getBusId() {
+      return busId;
+   }
+
+   public void setMessage(String message) {
+      this.message = message;
+   }
+
+   private String message;
 
 	@Action(value = "/saveMaintainSchedule", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
 		try {
 
 			Date dfromDate = busStatusDAO.getMaintainFromDate(busId).get(0);
+			if (dfromDate == null) {
+			   Calendar cal = Calendar.getInstance();
+			   dfromDate = cal.getTime();
+			}
+			
 			Long calToDate = dfromDate.getTime() + maintainDuration * 24 * 60
 					* 60;
 

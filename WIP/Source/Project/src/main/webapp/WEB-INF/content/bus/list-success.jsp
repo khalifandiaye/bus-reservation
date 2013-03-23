@@ -13,11 +13,16 @@
 <script src="<%=request.getContextPath()%>/js/index.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
+function maintainBus(id) {
+    $('#busId').val(id);
+    $("#maintainBusDialog").modal();
+ };
+ 
    function deleteBus(id) {
       $('#busId').val(id);
       $("#deleteBusDialog").modal();
    };
-
+   
 	$(document).ready(function() {
 		var busTable = $('#busTable').dataTable({bSort : false});
 		var addBusTable = $('#addBusTable').dataTable({bSort : false});
@@ -27,13 +32,24 @@
 			  $('#busType').val(-1);
 			  $("#addBusDialog").modal();
 		});
-
+		
 		$('#busDeleteDialogOk').click(function() {
 			   var busId = $('#busId').val();
             $.ajax({
             	url: "deleteBus.html?busId=" + busId,
             }).done(function(data) {
             	alert(data.message);
+               var url = $('#contextPath').val() + "/bus/list.html";
+               window.location = url;
+            });
+      });
+		
+		$('#busMaintainDialogOk').click(function() {
+            var busId = $('#busId').val();
+            $.ajax({
+               url: "saveMaintainSchedule.html?busId=" + busId + "&maintainDuration=" + $("#maintainDurationId").val(),
+            }).done(function(data) {
+               alert(data.message);
                var url = $('#contextPath').val() + "/bus/list.html";
                window.location = url;
             });
@@ -91,6 +107,7 @@
 						<th>Assigned route</th>
 						<th>Status</th>
 						<th></th>
+                  <th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -101,6 +118,10 @@
 							<td><s:property value="plateNumber" /></td>
 							<td><s:property value="forwardRoute.name" /></td>
 							<td><s:property value="status" /></td>
+                     <td style="width: 6%"><input
+                        data-maintain="<s:property value='id'/>" class="btn btn-danger"
+                        type="button" value="Maintain"
+                        onclick='javascript: maintainBus(<s:property value='id'/>)' /></td>
 							<td style="width: 6%"><input
 								data-delete="<s:property value='id'/>" class="btn btn-danger"
 								type="button" value="Delete"
@@ -128,6 +149,24 @@
 			<button id="busDeleteDialogOk" class="btn btn-danger">Delete</button>
 		</div>
 	</div>
+   
+   <!-- Modal Delete Dialog -->
+   <div id="maintainBusDialog" class="modal hide fade" tabindex="-1"
+      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true">×</button>
+         <h3 id="busMaintainDialogLabel">Maintain Bus Schedule</h3>
+      </div>
+      <div class="modal-body">
+         <p>Duration :</p>
+         <input id="maintainDurationId" type="text" value=""></input> 
+      </div>
+      <div class="modal-footer">
+         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+         <button id="busMaintainDialogOk" class="btn btn-danger">Save</button>
+      </div>
+   </div>
 
 	<!-- Modal Add Dialog -->
 	<div id="addBusDialog" class="modal hide fade" tabindex="-1"
