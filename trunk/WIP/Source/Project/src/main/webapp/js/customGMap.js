@@ -35,9 +35,7 @@
                     $(this).data('directionsDisplay', directionsDisplay);
                     directionsService = new google.maps.DirectionsService();
                 }
-                if (console) {
-                    console.log('CustomGMap initialized at ' + this);
-                }
+                logger.log('CustomGMap initialized at ' + this);
             });
         },
         addMarker : function(options) {
@@ -47,16 +45,12 @@
                 if (!markers) {
                     markers = [];
                     $(this).data('markers', markers);
-                    if (console) {
-                        console.log('Created new marker list');
-                    }
+                    logger.log('Created new marker list');
                 }
                 if (!options
                         || ((!options.latitude || !options.longitude) 
                                 && (!options.markerOptions || !options.markerOptions.position))) {
-                    if (console) {
-                        console.log('ERROR: Coordinates not specified!');
-                    }
+                    logger.log('ERROR: Coordinates not specified!');
                     return;
                 }
                 if (map) {
@@ -81,9 +75,7 @@
                     }
                     markers.push(new MarkerWithLabel(opts.markerOptions));
                 } else {
-                    if (console) {
-                        console.log('No map, no marker');
-                    }
+                    logger.log('No map, no marker');
                 }
             });
         },
@@ -93,21 +85,15 @@
                 var markers = $(this).data('markers');
                 var index = 0;
                 if (!map) {
-                    if (console) {
-                        console.log('ERROR: No map');
-                    }
+                    logger.log('ERROR: No map');
                     return;
                 }
                 if (!markers) {
-                    if (console) {
-                        console.log('ERROR: No markers');
-                    }
+                    logger.log('ERROR: No markers');
                     return;
                 }
                 if (!options || (isNaN(options) && (!options.index || isNaN(options.index)))) {
-                    if (console) {
-                        console.log('ERROR: Index not specified!');
-                    }
+                    logger.log('ERROR: Index not specified!');
                     return;
                 } else if (isNaN(options)) {
                     index = options.index;
@@ -116,9 +102,7 @@
                 }
                 var marker = markers[index];
                 if (!marker) {
-                    if (console) {
-                        console.log('ERROR: Invalid index: ' + index);
-                    }
+                    logger.log('ERROR: Invalid index: ' + index);
                     return;
                 }
                 marker.setMap(null);
@@ -131,24 +115,18 @@
                 var markers = $(this).data('markers');
                 var indices = 0;
                 if (!map) {
-                    if (console) {
-                        console.log('ERROR: No map');
-                    }
+                    logger.log('ERROR: No map');
                     return;
                 }
                 if (!markers) {
-                    if (console) {
-                        console.log('ERROR: No markers');
-                    }
+                    logger.log('ERROR: No markers');
                     return;
                 }
                 if (!options
                         || (!($.isArray(options))
                                 && (!options.indices || !($.isArray(options.indices)))
                                 && (!options.all))) {
-                    if (console) {
-                        console.log('ERROR: Index not specified!');
-                    }
+                    logger.log('ERROR: Index not specified!');
                     return;
                 } else if (options.all) {
                 } else if (!($.isArray(options))) {
@@ -167,9 +145,7 @@
                     for (var i = 0; i < indices.length; i++) {
                         marker = markers[indices[i]];
                         if (!marker) {
-                            if (console) {
-                                console.log('ERROR: Invalid index: ' + indices[i]);
-                            }
+                            logger.log('ERROR: Invalid index: ' + indices[i]);
                         }
                         marker.setMap(null);
                         markers.splice(indices[i], 1);
@@ -183,31 +159,22 @@
                 var markers = $(this).data('markers');
                 var directionsDisplay = $(this).data('directionsDisplay');
                 if (!map) {
-                    if (console) {
-                        console.log('ERROR: No map');
-                    }
+                    logger.log('ERROR: No map');
                     return;
                 }
                 if (!markers) {
-                    if (console) {
-                        console.log('ERROR: No markers');
-                    }
+                    logger.log('ERROR: No markers');
                     return;
                 } else if (markers.length < 2) {
-                    if (console) {
-                        console.log('INFO: Not enough markers');
-                    }
+                    logger.log('INFO: Not enough markers');
                     return;
-                } else {
-                    logger.log(markers);
                 }
                 if (!directionsDisplay) {
-                    if (console) {
-                        console.log('ERROR: No render');
-                    }
+                    logger.log('ERROR: No render');
                     return;
                 }
-                var waypts = [];
+                var waypts;
+                waypts = [];
                 for (var i = 1; i < markers.length - 1; i++) {
                     waypts.push({
                         location : markers[i].getPosition(),
@@ -224,7 +191,6 @@
                     }
                 };
                 $.extend(true, opts, options);
-                logger.log(opts.request);
                 if (directionsService) {
                     directionsService.route(opts.request, function(response, status) {
                         if (status == google.maps.DirectionsStatus.OK) {
