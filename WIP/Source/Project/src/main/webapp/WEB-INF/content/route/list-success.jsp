@@ -27,6 +27,15 @@
  	   $('#routeId').val(id);
  	   $("#deleteRouteDialog").modal();
  	};
+ 	
+ 	function activeRoute(id) {
+ 		$.ajax({
+         url: "activeRoute.html?routeId=" + id,
+      }).done(function(data) {
+         $("#saveSuccessDialogLabeMessage").text(data.message);
+         $("#saveSuccess").modal();
+      });
+ 	}
 </script>
 
 <script type="text/javascript">
@@ -96,8 +105,6 @@
         	   $("#saveSuccessDialogLabeMessage").text(data.message);
             $("#saveSuccess").modal();
         	});
-         
-         
       });
 	   
       $('#return').bind('click', function() {
@@ -249,6 +256,7 @@
 
 <style type="text/css">
    .dataTables_length { display: none; }
+   #segmentTable_filter { display: none; }
    #addRouteDialog { width: 900px; margin-left: -440px; }
 </style>
 </head>
@@ -277,10 +285,19 @@
 							<td style="width: 6%"><input class="btn btn-primary"
 								type="button" value="View Details"
 								onclick='javascript: loadDetails(<s:property value='id'/>)' /></td>
-							<td style="width: 6%"><input
-								data-delete="<s:property value='id'/>" class="btn btn-danger"
-								type="button" value="Delete"
-								onclick='javascript: deleteRoute(<s:property value='id'/>)' /></td>
+                     <s:set name="status" value="active"/>
+                     <s:if test="%{#status == 'active'}">
+                        <td style="width: 6%"><input
+                        data-delete="<s:property value='id'/>" class="btn btn-danger"
+                        type="button" value="Deactice"
+                        onclick='javascript: deleteRoute(<s:property value='id'/>)' /></td>
+                     </s:if>
+                     <s:else>
+                        <td style="width: 6%"><input
+                        data-active="<s:property value='id'/>" class="btn btn-danger"
+                        type="button" value="Active"
+                        onclick='javascript: activeRoute(<s:property value='id'/>)' /></td>
+                     </s:else>
 						</tr>
 					</s:iterator>
 				</tbody>
