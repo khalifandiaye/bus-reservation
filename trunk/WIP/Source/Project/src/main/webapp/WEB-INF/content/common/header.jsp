@@ -55,11 +55,9 @@
 			<div class="navbar">
 				<div class="navbar-inner">
 					<ul class="nav pull-left">
-						<li class="active"><a href="<%=request.getContextPath()%>/">TRANG
+						<li class="active customer"><a href="<%=request.getContextPath()%>/">TRANG
 								CHỦ</a></li>
-						<li><a href="#">CHÍNH SÁCH GIÁ</a></li>
-						<li><a href="#">VỀ CHÚNG TÔI</a></li>
-						<li id="tab_reservationList"><a
+						<li id="tab_reservationList customer"><a
 							href="<%=request.getContextPath()%>/rsv/rsv01010.html">VÉ CỦA
 								TÔI</a></li>
 						<li class="dropdown operator admin hidden"><a href="#" class="dropdown-toggle"

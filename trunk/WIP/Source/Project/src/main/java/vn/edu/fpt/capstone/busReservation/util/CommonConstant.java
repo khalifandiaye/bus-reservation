@@ -68,25 +68,29 @@ public interface CommonConstant {
      * GMT
      */
     public final static TimeZone UTC_TIME_ZONE = TimeZone.getTimeZone("GMT");
-    
+
     /**
      * Ticket type: One way
      */
     public final static String TICKET_ONE_WAY = "oneway";
-    
+
     /**
      * Ticket type: Round trip
      */
     public final static String TICKET_ROUND_TRIP = "roundtrip";
-    
+
     /**
      * http prefix
      */
-    //TODO remove localhost:8080 when deploy on real server
+    // TODO remove localhost:8080 when deploy on real server
     public final static String URL_HTTP = "http://localhost:8080";
     /**
      * https prefix
      */
-    //TODO remove localhost:8443 when deploy on real server
+    // TODO remove localhost:8443 when deploy on real server
     public final static String URL_HTTPS = "https://localhost:8443";
+    /**
+     * Switch to enable/disable debug mode
+     */
+    public final static boolean DEBUG_MODE = true;
 }
