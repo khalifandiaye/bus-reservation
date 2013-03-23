@@ -82,7 +82,7 @@
 	   var endAt = $("#endAt").val();
 	   var duration = $('#duration').val();
 
-	   if(startAt != -1 && endAt != -1 && duration != ""){
+	   if(startAt != -1 && endAt != -1){
 		   $("#add").removeAttr("disabled"); 
 	   } else { 
 		   $("#add").attr("disabled","disabled");
