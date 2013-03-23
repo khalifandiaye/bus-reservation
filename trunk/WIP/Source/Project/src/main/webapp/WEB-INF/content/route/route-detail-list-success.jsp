@@ -326,8 +326,7 @@
 			});
 		});
 
-		$("#busDetailAdd").click(
-			function() {
+		$("#busDetailAdd").click(function() {
 				var busId = $("#busDetailbusPlate").val();
 				if (!busId || busId == '') {
 					return;
@@ -346,7 +345,7 @@
 					$('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
 					busDetailTable.dataTable().fnDeleteRow(aPos[0]);
 				});
-			});
+		});
 
 		$("#busDetailSave").click(
 			function() {
