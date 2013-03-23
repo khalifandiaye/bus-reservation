@@ -10,24 +10,9 @@
 		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-2.5.xsd">
-	<!-- define Action here -->
-	<!-- <bean id="helloWorldAction" class="vn.edu.fpt.capstone.busReservation.action.HelloWorldAction"> 
-		<property name="helloWorldLogic" ref="helloWorldLogic" /> </bean> -->
-	<!-- <bean id="indexAction" class="vn.edu.fpt.capstone.busReservation.action.IndexAction"> 
-		</bean> -->
-	<!-- <bean id="successAction" class="vn.edu.fpt.capstone.busReservation.action.SuccessAction"> 
-		</bean> <bean id="testPayAction" class="vn.edu.fpt.capstone.busReservation.action.TestPayAction"> 
-		</bean> <bean id="testPaySuccessAction" class="vn.edu.fpt.capstone.busReservation.action.TestPayReturnAction"> 
-		</bean> -->
-	<!-- <bean id="listEmployeeAction" class="vn.edu.fpt.capstone.busReservation.action.EmployeeListAction"> 
-		</bean> -->
 
 	<!-- ****************define Logic here**************** -->
 	<context:annotation-config />
-	<bean id="helloWorldLogic"
-		class="vn.edu.fpt.capstone.busReservation.logic.HelloWorldLogicImpl">
-		<property name="helloWorldDAO" ref="helloWorldDAO" />
-	</bean>
 	<bean id="paymentLogic" class="vn.edu.fpt.capstone.busReservation.logic.PaymentLogic"
 		scope="singleton">
 	</bean>
@@ -39,10 +24,6 @@
 		scope="singleton">
 	</bean>
 	<!-- *****************define DAO here***************** -->
-	<bean id="helloWorldDAO"
-		class="vn.edu.fpt.capstone.busReservation.dao.HelloWorldDAOImpl">
-		<!-- <property name="sessionFactory" ref="sessionFactory" /> -->
-	</bean>
 	<bean id="stationDAO" class="vn.edu.fpt.capstone.busReservation.dao.StationDAO">
 		<property name="sessionFactory" ref="sessionFactory" />
 		<constructor-arg

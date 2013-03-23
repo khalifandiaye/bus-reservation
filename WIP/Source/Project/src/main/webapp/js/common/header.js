@@ -26,11 +26,22 @@ $(document).ready(function(){
         $("div.login").addClass('hidden');
         $("div.logout").removeClass('hidden');
         $("span#name").html(data.name);
-        if (2 == data.roleId) {
+        if (1 == data.roleId) {
+            $(".operator").addClass('hidden');
+            $(".admin").addClass('hidden');
+            $(".customer").removeClass('hidden');
+        } else if (2 == data.roleId) {
+            $(".customer").addClass('hidden');
+            $(".admin").addClass('hidden');
             $(".operator").removeClass('hidden');
         } else if (3 == data.roleId) {
+            $(".customer").addClass('hidden');
+            $(".operator").addClass('hidden');
+            $(".admin").removeClass('hidden');
+        } else if (4 == data.roleId) {
             $(".operator").removeClass('hidden');
             $(".admin").removeClass('hidden');
+            $(".customer").removeClass('hidden');
         }
     }
     
@@ -42,6 +53,7 @@ $(document).ready(function(){
         $("span#name").html('');
         $(".operator").addClass('hidden');
         $(".admin").addClass('hidden');
+        $(".customer").removeClass('hidden');
     }
     
     checkUser();
