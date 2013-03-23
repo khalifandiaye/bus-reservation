@@ -33,7 +33,7 @@ public class ListAction extends ActionSupport {
    private BusTypeDAO busTypeDAO;
 
    public String execute() {
-      routeBeans = routeDAO.getAllActiveRoute();
+      routeBeans = routeDAO.getAll();
       cityBeans = cityDAO.getAll();
       busTypeBeans = busTypeDAO.getAll();
       
@@ -43,6 +43,7 @@ public class ListAction extends ActionSupport {
          long travelTime = 0;
          routeDetailsInfo.setId(routeId);
          routeDetailsInfo.setRouteName(routeBean.getName());
+         routeDetailsInfo.setActive(routeBean.getStatus());
          List<SegmentBean> segments = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
          for (SegmentBean segmentBean : segments) {
             travelTime += segmentBean.getTravelTime();
