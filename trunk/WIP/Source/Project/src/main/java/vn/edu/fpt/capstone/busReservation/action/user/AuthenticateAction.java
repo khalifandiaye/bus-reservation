@@ -90,7 +90,7 @@ public class AuthenticateAction extends BaseAction {
             errorMessage = getText("msgerrcm001", params);
         } else {
             try {
-                user = userLogic.loginUser(username, password);
+                user = userLogic.loginUser(username, password, servletRequest.getContextPath());
             } catch (CommonException e) {
                 errorProcessing(e);
                 errorMessage = getActionErrors().iterator().next();
