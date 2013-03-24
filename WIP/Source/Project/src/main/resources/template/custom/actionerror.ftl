@@ -21,6 +21,7 @@
  */
 -->
 <#if (actionErrors?? && actionErrors?size > 0)>
+	<div class="well error">
 	<ul<#rt/>
 <#if parameters.id?if_exists != "">
  id="${parameters.id?html}"<#rt/>
@@ -40,4 +41,5 @@
         </#if>
 	</#list>
 	</ul>
+	</div>
 </#if>

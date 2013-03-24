@@ -62,6 +62,11 @@ public class BaseAction extends ActionSupport implements SessionAware,
     public void setServletRequest(HttpServletRequest request) {
         this.servletRequest = request;
     }
+    
+    @Override
+    public String execute() {
+        return SUCCESS;
+    }
 
     // ====================GENERIC ERROR PROCESSING====================
 

@@ -78,8 +78,7 @@ public class UserLogic extends BaseLogic {
         this.roleDAO = roleDAO;
     }
 
-    public void registerUser(RegisterModel model, String contextPath)
-            throws CommonException {
+    public void registerUser(RegisterModel model) throws CommonException {
         // TODO implement it
         UserBean bean = null;
         bean = new UserBean();
@@ -111,8 +110,6 @@ public class UserLogic extends BaseLogic {
         bean.setRole(roleDAO.getById(1));
         bean.setStatus(UserStatus.NEW.getValue());
         userDAO.insert(bean);
-        sendConfirmationMail(bean.getUsername(), bean.getFirstName(),
-                bean.getLastName(), bean.getEmail(), contextPath);
     }
 
     public User activateUser(String username, String code)
@@ -155,7 +152,28 @@ public class UserLogic extends BaseLogic {
         return userDAO.getByUsername(username) != null;
     }
 
-    private void sendConfirmationMail(String username, String firstName,
+    public void sendActivationMail(RegisterModel model, String contextPath)
+            throws CommonException {
+        sendActivationMail(model.getUsername(), model.getFirstName(),
+                model.getLastName(), model.getEmail(), contextPath);
+    }
+
+    public void sendActivationMail(String username, String contextPath)
+            throws CommonException {
+        UserBean user = null;
+        try {
+            user = userDAO.getByUsername(username);
+            sendActivationMail(user.getUsername(), user.getFirstName(),
+                    user.getLastName(), user.getEmail(), contextPath);
+        } catch (Exception e) {
+            String[] params = { CommonConstant.URL_HTTPS
+                    + contextPath
+                    + "/user/reg01021.html?username=" + username };
+            throw new CommonException("msgerrau008", params, e);
+        }
+    }
+
+    private void sendActivationMail(String username, String firstName,
             String lastName, String email, String contextPath)
             throws CommonException {
         Properties globalProps = null;
@@ -211,7 +229,8 @@ public class UserLogic extends BaseLogic {
         // prepare mail object
         props = new Properties();
         props.put("mail.smtp.auth", globalProps.get("mail.smtp.auth"));
-        props.put("mail.smtp.starttls.enable", globalProps.get("mail.smtp.starttls.enable"));
+        props.put("mail.smtp.starttls.enable",
+                globalProps.get("mail.smtp.starttls.enable"));
         props.put("mail.smtp.host", globalProps.get("mail.smtp.host"));
         props.put("mail.smtp.port", globalProps.get("mail.smtp.port"));
         session = Session.getInstance(
@@ -258,7 +277,7 @@ public class UserLogic extends BaseLogic {
         return reCaptchaResponse.isValid();
     }
 
-    public User loginUser(String username, String password)
+    public User loginUser(String username, String password, String contextPath)
             throws CommonException {
         User user = null;
         UserBean userBean = null;
@@ -280,7 +299,10 @@ public class UserLogic extends BaseLogic {
             user.setMobilePhone(userBean.getMobileNumber());
         } else if (userBean != null
                 && UserStatus.NEW.getValue().equals(userBean.getStatus())) {
-            throw new CommonException("msgerrau007");
+            String[] params = { CommonConstant.URL_HTTPS
+                    + contextPath
+                    + "/user/reg01021.html?username=" + username };
+            throw new CommonException("msgerrau007", params);
         } else {
             throw new CommonException("msgerrau001");
         }

@@ -66,7 +66,7 @@ public class CommonException extends Exception {
         log.error(messageId, cause);
     }
 
-    public CommonException(String[] parameters, String messageId,
+    public CommonException(String messageId, String[] parameters,
             Throwable cause) {
         super(messageId, cause);
         if (CheckUtils.isNullOrBlank(messageId)) {

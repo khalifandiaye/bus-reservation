@@ -13,12 +13,14 @@ import vn.edu.fpt.capstone.busReservation.displayModel.RegisterModel;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.UserLogic;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 /**
  * @author NoName
  * 
  */
-public class Reg01020Action extends BaseAction implements ModelDriven<RegisterModel> {
+public class Reg01020Action extends BaseAction implements
+        ModelDriven<RegisterModel> {
 
     /**
      * 
@@ -75,9 +77,20 @@ public class Reg01020Action extends BaseAction implements ModelDriven<RegisterMo
     @Action(results = { @Result(name = INPUT, location = "reg01010-success.jsp") })
     public String execute() {
         try {
-            userLogic.registerUser(model, servletRequest.getContextPath());
+            userLogic.registerUser(model);
         } catch (CommonException e) {
             errorProcessing(e);
+            return ERROR;
+        }
+        try {
+            userLogic
+                    .sendActivationMail(model, servletRequest.getContextPath());
+        } catch (CommonException e) {
+            String[] params = { CommonConstant.URL_HTTPS
+                    + servletRequest.getContextPath()
+                    + "/user/reg01021.html?username=" + model.getUsername() };
+            errorProcessing(new CommonException("msgerrau008", params, e),
+                    false);
             return ERROR;
         }
         return SUCCESS;
