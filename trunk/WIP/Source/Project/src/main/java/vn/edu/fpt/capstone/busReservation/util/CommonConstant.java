@@ -21,15 +21,11 @@ public interface CommonConstant {
      */
     public final static String SESSION_KEY_USER = "user";
     /**
-     * <b>Class<b> {@link java.lang.String}
+     * <b>Class<b> {@link java.lang.Integer}
      */
     public final static String SESSION_KEY_PAYMENT_METHOD_ID = "paymentMethodId";
     /**
-     * <b>Class<b> {@link java.lang.String}
-     */
-    public final static String SESSION_KEY_RESERVATION_ID = "reservationId";
-    /**
-     * <b>Class<b> {@link java.lang.String}
+     * <b>Class<b> {@link java.lang.Integer}
      */
     public final static String SESSION_KEY_PAYMENT_TOKEN = "paymentToken";
     /**

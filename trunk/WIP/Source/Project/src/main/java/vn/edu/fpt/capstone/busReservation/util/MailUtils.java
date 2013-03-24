@@ -39,7 +39,8 @@ public class MailUtils implements Serializable {
         int index = 0;
         while (stringBuilder.indexOf(str) >= 0) {
             index = stringBuilder.indexOf(str);
-            stringBuilder.replace(index, index + str.length(), replaceWith);
+            stringBuilder.replace(index, index + str.length(),
+                    replaceWith == null ? "" : replaceWith);
         }
     }
 

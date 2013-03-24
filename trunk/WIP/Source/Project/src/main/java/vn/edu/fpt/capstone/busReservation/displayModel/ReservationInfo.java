@@ -231,6 +231,13 @@ public class ReservationInfo implements Serializable {
     }
 
     /**
+     * @return the totalAmount
+     */
+    public Double getTotalAmountValue() {
+        return totalAmount;
+    }
+
+    /**
      * @param totalAmount
      *            the totalAmount to set
      */

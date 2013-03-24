@@ -101,13 +101,15 @@ public class BookingInfoAction extends BaseAction {
         if (seatToPayment == null) {
             return ERROR;
         }
-        User user;
+        User user = null;
+        User sessionUser = null;
         if (!(session.get(CommonConstant.SESSION_KEY_USER) == null)
                 || !(session.get("User_tmp") == null)) {
             if (!(session.get("User_tmp") == null)) {
                 user = (User) session.get("User_tmp");
             } else {
                 user = (User) session.get(CommonConstant.SESSION_KEY_USER);
+                sessionUser = user;
             }
             this.inputFirstName = user.getFirstName();
             this.inputLastName = user.getLastName();
@@ -118,7 +120,7 @@ public class BookingInfoAction extends BaseAction {
         List<TripBean> tripBeanList = null;
         List<TripBean> returnTrips = null;
 
-        paymentMethods = paymentLogic.getPaymentMethods();
+        paymentMethods = paymentLogic.getPaymentMethods(sessionUser == null ? 0 : sessionUser.getRoleId());
         tripBeanList = (List<TripBean>) session.get("listTripBean");
         returnTrips = (List<TripBean>) session.get("returnTrips");
         try {
