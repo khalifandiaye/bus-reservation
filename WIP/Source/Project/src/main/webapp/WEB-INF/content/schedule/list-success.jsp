@@ -194,8 +194,6 @@
 						<th>Bus Number</th>
 						<th>From Date</th>
 						<th>To Date</th>
-						<th>Status</th>
-						<th>End Station</th>
 						<th></th>
 						<th></th>
 					</tr>
@@ -207,8 +205,6 @@
 							<td><s:property value="bus.plateNumber" /></td>
 							<td><s:date name="fromDate" format="dd/MM/yyyy hh:mm:ss" /></td>
 							<td><s:date name="toDate" format="dd/MM/yyyy hh:mm:ss" /></td>
-							<td><s:property value="status" /></td>
-							<td><s:property value="endStation.city.name" /></td>
 							<td style="width: 6%"><input class="btn btn-primary"
 								type="button" value="View Details"
 								onclick='javascript: loadDetails(<s:property value='id'/>)' /></td>
