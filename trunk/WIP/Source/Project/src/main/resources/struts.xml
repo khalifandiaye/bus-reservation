@@ -8,11 +8,14 @@
 	<constant name="struts.convention.default.parent.package" value="transactionalPackage"/>
 	<package name="transactionalPackage" extends="struts-default">
 		<interceptors>
+			<interceptor name="exceptionInterceptor"
+				class="vn.edu.fpt.capstone.busReservation.util.ExceptionInterceptor" />
 			<interceptor name="hibernateSessionInterceptor"
 				class="vn.edu.fpt.capstone.busReservation.util.HibernateSessionInterceptor" />
 			<interceptor name="authorizationInterceptor"
 				class="vn.edu.fpt.capstone.busReservation.util.AuthorizationInterceptor"></interceptor>
 			<interceptor-stack name="dbStack">
+				<interceptor-ref name="exceptionInterceptor" />
 				<interceptor-ref name="authorizationInterceptor" />
 				<interceptor-ref name="hibernateSessionInterceptor" />
 				<interceptor-ref name="defaultStack" />
@@ -25,11 +28,14 @@
 	</package>
 	<package name="jsonPackage" extends="json-default">
 		<interceptors>
+			<interceptor name="exceptionInterceptor"
+				class="vn.edu.fpt.capstone.busReservation.util.ExceptionInterceptor" />
 			<interceptor name="hibernateSessionInterceptor"
 				class="vn.edu.fpt.capstone.busReservation.util.HibernateSessionInterceptor" />
 			<interceptor name="authorizationInterceptor"
 				class="vn.edu.fpt.capstone.busReservation.util.AuthorizationInterceptor"></interceptor>
 			<interceptor-stack name="dbStack">
+				<interceptor-ref name="exceptionInterceptor" />
 				<interceptor-ref name="authorizationInterceptor" />
 				<interceptor-ref name="hibernateSessionInterceptor" />
 				<interceptor-ref name="defaultStack" />
