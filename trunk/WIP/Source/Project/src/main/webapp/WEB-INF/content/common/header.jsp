@@ -45,7 +45,7 @@
 			value="<%=request.getContextPath()%>">
 		<header class="header">
 			<div class="brand-wrapper">
-				<a class="brand" href="index.html">VINA<span
+				<a class="brand" href="<%=request.getContextPath()%>/">VINA<span
 					style="color: #555555">BUS</span></a>
 			</div>
 			<div class="bus-logo-left pull-right">
