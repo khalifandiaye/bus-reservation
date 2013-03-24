@@ -229,7 +229,6 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 
             reservationDAO.endTransaction();
 
-            String paymentToken = null;
             ReservationInfo reservationInfo = null;
             PaymentSetupDetails setupDetails = null;
 
@@ -246,7 +245,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
             redirectUrl = setupDetails.getRedirectUrl();
             if (!CheckUtils.isNullOrBlank(setupDetails.getPaymentToken())) {
                 session.put(CommonConstant.SESSION_KEY_PAYMENT_TOKEN,
-                        paymentToken);
+                        setupDetails.getPaymentToken());
             }
             session.put(CommonConstant.SESSION_KEY_PAYMENT_METHOD_ID,
                     paymentMethodId);

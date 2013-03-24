@@ -668,7 +668,7 @@ public class PaymentLogic extends BaseLogic {
             paymentDetails = doPaypalExpressCheckoutPayment(getPaypalExpressCheckoutDetails(token));
             paymentDetails.setFeeAmount(BigDecimal
                     .valueOf(reservationInfo.getTransactionFeeInUSDValue())
-                    .setScale(2).toString());
+                    .setScale(2, RoundingMode.CEILING).toString());
             savePayment(reservationInfo.getId(), paymentDetails,
                     paymentMethodId, paymentType);
         } else {
