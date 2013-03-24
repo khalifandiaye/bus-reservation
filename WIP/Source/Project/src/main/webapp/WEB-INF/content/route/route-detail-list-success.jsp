@@ -311,12 +311,11 @@
    								busDetailTable.dataTable().fnDeleteRow(aPos[0]);
    							});
    					} else {
-   		            $.each(busInRoute, function() {busDetailTable.dataTable().fnAddData([
+   		            busDetailTable.dataTable().fnAddData([
    		               this.id,
    		               this.plateNumber,
    		               '<button type="button" data-id="'+ this.id +'" class="btn btn-danger" disabled="disabled">Delete</button>' ]);
-   		            });
-   		         }
+   		         };
    				});
 
 					$('#busDetailbusPlate').empty();
@@ -518,30 +517,6 @@
             <input class="btn btn-primary" type="button" id="return" value="Return to Route List" />
          </div>
       </div>
-   </div>
-   <!-- Modal Show Fare Price By BusType Dialog -->
-<!--    <div id="priceDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" -->
-<!--       aria-hidden="true"> -->
-<!--       <div class="modal-header"> -->
-<!--          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
-<!--          <h3 id="priceDialogLabel">Price</h3> -->
-<!--       </div> -->
-<!--       <div class="modal-body"> -->
-<!--          <table id="priceTable"> -->
-<!--             <thead> -->
-<!--                <tr> -->
-<!--                   <th>Name</th> -->
-<!--                   <th>Fare</th> -->
-<!--                </tr> -->
-<!--             </thead> -->
-<!--             <tbody> -->
-<!--             </tbody> -->
-<!--          </table> -->
-<!--       </div> -->
-<!--       <div class="modal-footer"> -->
-<!--          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button> -->
-<!--          <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Update</button> -->
-<!--       </div> -->
    </div>
    
    <!-- Modal Show Route Details Price By BusType Dialog -->

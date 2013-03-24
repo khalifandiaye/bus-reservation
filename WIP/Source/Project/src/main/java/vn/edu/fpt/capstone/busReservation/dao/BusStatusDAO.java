@@ -129,6 +129,35 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 		}
 		return result;
 	}
+	
+	/**
+	 * Common database exception handling
+	 * Get all bus status in the future by bus id
+	 * 
+	 * @param e
+	 *            the occurred exception
+	 * @throws HibernateException
+	 *             the occurred exception
+	 */
+	
+	@SuppressWarnings("unchecked")
+	public List<BusStatusBean> getAllTripByBusId(int busId, Date date) {
+		String hql = "SELECT bs.id FROM BusStatusBean bs WHERE bs.bus.id = :busId "
+				+ "AND bs.toDate >= :date AND bs.status = :status";
+		Session session = sessionFactory.getCurrentSession();
+		List<BusStatusBean> result = new ArrayList<BusStatusBean>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameter("busId", busId);
+			query.setParameter("date", date);
+			query.setParameter("status", "active");
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
 
 	/**
 	 * Common database exception handling Get all max date to maintain
@@ -175,6 +204,32 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 			Query query = session.createQuery(hql);
 			query.setParameter("status", "active");
 			query.setParameter("toDate", toDate);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+	
+	/**
+	 * Common database exception handling Get current station by toDate
+	 * Get last station of bus
+	 * @param e
+	 *            the occurred exception
+	 * @throws HibernateException
+	 *             the occurred exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getLastStationByBusId(int busId) {
+		String hql = "SELECT bs.endStation, MAX(bs.toDate) FROM BusStatusBean bs WHERE bs.status = :status "
+				+ "AND bs.bus.id = :busId";
+		Session session = sessionFactory.getCurrentSession();
+		List<Object[]> result = new ArrayList<Object[]>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameter("status", "active");
+			query.setParameter("busId", busId);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);

@@ -1,6 +1,7 @@
 package vn.edu.fpt.capstone.busReservation.action.route;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -8,6 +9,8 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 
 import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
+import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
+import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.BusInfo;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -26,6 +29,7 @@ public class BusDetailAction extends ActionSupport {
 	private List<BusInfo> busNotInRouteBeans = new ArrayList<BusInfo>();
 	
 	private BusDAO busDAO;
+	private BusStatusDAO busStatusDAO;
 
 	@Action(value = "getBusInRoute", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
@@ -34,7 +38,8 @@ public class BusDetailAction extends ActionSupport {
 			BusInfo busInfo = new BusInfo();
 			busInfo.setId((Integer) objects[0]);
 			busInfo.setPlateNumber((String) objects[1]);
-			List<Object[]> futurePlans = busDAO.checkAvaileBus((Integer) objects[0], routeId, "active");
+			List<BusStatusBean> futurePlans = busStatusDAO.getAllTripByBusId((Integer) objects[0], 
+					Calendar.getInstance().getTime());
 			if (futurePlans.size() > 0) {
 			   busInfo.setDelete("false");
 			} else {
@@ -87,6 +92,10 @@ public class BusDetailAction extends ActionSupport {
 
 	public void setBusNotInRouteBeans(List<BusInfo> busNotInRouteBeans) {
 		this.busNotInRouteBeans = busNotInRouteBeans;
+	}
+
+	public void setBusStatusDAO(BusStatusDAO busStatusDAO) {
+		this.busStatusDAO = busStatusDAO;
 	}
 	
 }

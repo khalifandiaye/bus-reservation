@@ -30,23 +30,7 @@ public class SaveMaintainScheduleAction extends BaseAction {
 	private int busId;
 	private long maintainDuration;
 
-	public long getMaintainDuration() {
-      return maintainDuration;
-   }
-
-   public void setMaintainDuration(long maintainDuration) {
-      this.maintainDuration = maintainDuration;
-   }
-
-   public int getBusId() {
-      return busId;
-   }
-
-   public void setMessage(String message) {
-      this.message = message;
-   }
-
-   private String message;
+	private String message;
 
 	@Action(value = "/saveMaintainSchedule", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
@@ -54,11 +38,12 @@ public class SaveMaintainScheduleAction extends BaseAction {
 
 			Date dfromDate = busStatusDAO.getMaintainFromDate(busId).get(0);
 			if (dfromDate == null) {
-			   Calendar cal = Calendar.getInstance();
-			   dfromDate = cal.getTime();
+				Calendar cal = Calendar.getInstance();
+				dfromDate = cal.getTime();
 			}
-			
-			Long calToDate = dfromDate.getTime() + maintainDuration * 24 * 60 * 60;
+
+			Long calToDate = dfromDate.getTime() + maintainDuration * 24 * 60
+					* 60;
 
 			Date dtoDate = new Date(calToDate);
 
@@ -70,7 +55,7 @@ public class SaveMaintainScheduleAction extends BaseAction {
 			busStatusBean.setFromDate(dfromDate);
 			busStatusBean.setToDate(dtoDate);
 			busStatusBean.setStatus("active");
-			
+
 			// get end station by date
 			StationBean stationBean = busStatusDAO.getCurrentStation(dfromDate)
 					.get(0);
@@ -78,15 +63,14 @@ public class SaveMaintainScheduleAction extends BaseAction {
 			busStatusDAO.insert(busStatusBean);
 
 			Calendar cal = Calendar.getInstance();
-			
-			
-			//set toString fromDate
+
+			// set toString fromDate
 			cal.setTime(dfromDate);
 			String sfromDate = FormatUtils.formatDate(cal.getTime(),
 					"yyyy/MM/dd - HH:mm", CommonConstant.LOCALE_US,
 					CommonConstant.DEFAULT_TIME_ZONE);
-			
-			//set toString endDate
+
+			// set toString endDate
 			cal.setTime(dtoDate);
 			String stoDate = FormatUtils.formatDate(cal.getTime(),
 					"yyyy/MM/dd - HH:mm", CommonConstant.LOCALE_US,
@@ -97,6 +81,22 @@ public class SaveMaintainScheduleAction extends BaseAction {
 			message = "Add maintain schedule failed!";
 		}
 		return SUCCESS;
+	}
+
+	public long getMaintainDuration() {
+		return maintainDuration;
+	}
+
+	public void setMaintainDuration(long maintainDuration) {
+		this.maintainDuration = maintainDuration;
+	}
+
+	public int getBusId() {
+		return busId;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public void setBusDAO(BusDAO busDAO) {

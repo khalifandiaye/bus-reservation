@@ -1,7 +1,5 @@
 package vn.edu.fpt.capstone.busReservation.action.route;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -9,8 +7,6 @@ import java.util.List;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
@@ -45,52 +41,53 @@ public class SaveBusDetailAction extends BaseAction {
 
 	@Action(value = "saveBusDetail", results = { @Result(type = "json", name = SUCCESS, params = {
 			"root", "message" }) })
-	public String execute() throws JsonParseException, JsonMappingException,
-			IOException, ParseException {
-		BusDetailInfo busDetailInfo = mapper.readValue(data,
-				new TypeReference<BusDetailInfo>() {
-				});
-		List<BusInfo> busInfos = busDetailInfo.getBus();
-		List<BusInfo> unSelectBus = busDetailInfo.getUnSelectBus();
-		int routeId = busDetailInfo.getRouteId();
-		for (BusInfo busInfo : busInfos) {
-			BusBean busBean = busDAO.getById(busInfo.getId());
-			RouteBean routeBean = routeDAO.getById(routeId);
-			List<Integer> routeIDs = routeDAO.getRouteTerminal(routeBean
-					.getId());
-			if (routeIDs.size() != 0) {
-				busBean.setForwardRoute(routeDAO.getById(routeIDs.get(0)));
-				busBean.setReturnRoute(routeDAO.getById(routeIDs.get(1)));
-
-				// create initiation bus status
-				busDAO.update(busBean);
-				Date currentTime = Calendar.getInstance().getTime();
-				BusStatusBean busStatusBean = new BusStatusBean();
-				busStatusBean.setBus(busBean);
-				busStatusBean.setBusStatus("initiation");
-				busStatusBean.setFromDate(currentTime);
-				busStatusBean.setToDate(currentTime);
-				StationBean endStationBean = routeDAO.getById(routeId)
-						.getRouteDetails().get(0).getSegment().getStartAt();
-				busStatusBean.setEndStation(endStationBean);
-				busStatusBean.setStatus("active");
-				busStatusDAO.insert(busStatusBean);
-			}
-		}
-
-		for (BusInfo busInfo : unSelectBus) {
-			// checking available trip of this bus
-			List<BusStatusBean> busStatusBeans = busStatusDAO
-					.getAllAvailTripByBusId(busInfo.getId(), Calendar
-							.getInstance().getTime());
-			if (busStatusBeans.size() == 0) {
+	public String execute() {
+		try {
+			BusDetailInfo busDetailInfo = mapper.readValue(data,
+					new TypeReference<BusDetailInfo>() {
+					});
+			List<BusInfo> busInfos = busDetailInfo.getBus();
+			List<BusInfo> unSelectBus = busDetailInfo.getUnSelectBus();
+			int routeId = busDetailInfo.getRouteId();
+			for (BusInfo busInfo : busInfos) {
 				BusBean busBean = busDAO.getById(busInfo.getId());
-				busBean.setForwardRoute(null);
-				busBean.setReturnRoute(null);
-				busDAO.update(busBean);
-			}
-		}
+				RouteBean routeBean = routeDAO.getById(routeId);
+				List<Integer> routeIDs = routeDAO.getRouteTerminal(routeBean
+						.getId());
+				if (routeIDs.size() != 0) {
+					busBean.setForwardRoute(routeDAO.getById(routeIDs.get(0)));
+					busBean.setReturnRoute(routeDAO.getById(routeIDs.get(1)));
 
+					// create initiation bus status
+					busDAO.update(busBean);
+					Date currentTime = Calendar.getInstance().getTime();
+					BusStatusBean busStatusBean = new BusStatusBean();
+					busStatusBean.setBus(busBean);
+					busStatusBean.setBusStatus("initiation");
+					busStatusBean.setFromDate(currentTime);
+					busStatusBean.setToDate(currentTime);
+					StationBean endStationBean = routeDAO.getById(routeId)
+							.getRouteDetails().get(0).getSegment().getStartAt();
+					busStatusBean.setEndStation(endStationBean);
+					busStatusBean.setStatus("active");
+					busStatusDAO.insert(busStatusBean);
+				}
+			}
+
+			for (BusInfo busInfo : unSelectBus) {
+				// checking available trip of this bus
+				List<BusStatusBean> busStatusBeans = busStatusDAO
+						.getAllTripByBusId(busInfo.getId(), Calendar
+								.getInstance().getTime());
+				if (busStatusBeans.size() == 0) {
+					BusBean busBean = busDAO.getById(busInfo.getId());
+					busBean.setForwardRoute(null);
+					busBean.setReturnRoute(null);
+					busDAO.update(busBean);
+				}
+			}
+		} catch (Exception e) {
+		}
 		return SUCCESS;
 	}
 

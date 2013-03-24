@@ -63,7 +63,8 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 				+ "WHERE (b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId) "
 				+ "AND b.bus_type_id = :busTypeId AND b.status = 'active'" 
 				+ "GROUP BY b.id "
-				+ "HAVING bs.to_date < :departureTime AND bs.end_station_id = :startStationId";
+				+ "HAVING bs.to_date < :departureTime OR bs.to_date IS NULL AND bs.end_station_id = :startStationId " +
+				"OR bs.end_station_id IS NULL";
 
 		Session session = sessionFactory.getCurrentSession();
 		List<Object[]> result = new ArrayList<Object[]>();
