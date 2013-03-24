@@ -36,25 +36,87 @@ public class BookingAction extends BaseAction implements SessionAware {
 	private String outArriveTime;
 	private String outFare;
 	private TripDAO tripDAO;
-	private List<SeatInfo[][]> seatMap;
-	private String selectedSeat;
+	private List<SeatInfo[][]> seatMapOut;
+	private List<SeatInfo[][]> seatMapReturn;
 	private SeatPositionDAO seatPositionDAO;
-	private String busType;
 	private String message;
+	private String out_journey;
+	private String rtn_journey;
+	private String selectedOutSeat;
+	private String selectedReturnSeat;
+	private String rtnDepartTime;
+	private String rtnArriveTime;
+	private String rtnBusStatus;
 	
 	
+	/**
+	 * @param rtnBusStatus the rtnBusStatus to set
+	 */
+	public void setRtnBusStatus(String rtnBusStatus) {
+		this.rtnBusStatus = rtnBusStatus;
+	}
+
+	/**
+	 * @param rtnDepartTime the rtnDepartTime to set
+	 */
+	public void setRtnDepartTime(String rtnDepartTime) {
+		this.rtnDepartTime = rtnDepartTime;
+	}
+
+	/**
+	 * @param rtnArriveTime the rtnArriveTime to set
+	 */
+	public void setRtnArriveTime(String rtnArriveTime) {
+		this.rtnArriveTime = rtnArriveTime;
+	}
+
+	/**
+	 * @return the selectedOutSeat
+	 */
+	public String getSelectedOutSeat() {
+		return selectedOutSeat;
+	}
+
+	/**
+	 * @return the selectedReturnSeat
+	 */
+	public String getSelectedReturnSeat() {
+		return selectedReturnSeat;
+	}
+
+	/**
+	 * @return the seatMapOut
+	 */
+	public List<SeatInfo[][]> getSeatMapOut() {
+		return seatMapOut;
+	}
+
+	/**
+	 * @return the seatMapReturn
+	 */
+	public List<SeatInfo[][]> getSeatMapReturn() {
+		return seatMapReturn;
+	}
+
+	/**
+	 * @param out_journey the out_journey to set
+	 */
+	public void setOut_journey(String out_journey) {
+		this.out_journey = out_journey;
+	}
+
+	/**
+	 * @param rtn_journey the rtn_journey to set
+	 */
+	public void setRtn_journey(String rtn_journey) {
+		this.rtn_journey = rtn_journey;
+	}
+
 	/**
 	 * @return the message
 	 */
 	public String getMessage() {
 		return message;
-	}
-
-	/**
-	 * @param busType the busType to set
-	 */
-	public void setBusType(String busType) {
-		this.busType = busType;
 	}
 
 	/**
@@ -110,32 +172,10 @@ public class BookingAction extends BaseAction implements SessionAware {
 		this.seatPositionDAO = seatPositionDAO;
 	}
 
-	public String getSelectedSeat() {
-		return selectedSeat;
-	}
-
-	public List<SeatInfo[][]> getSeatMap() {
-		return seatMap;
-	}
-
 	Map<String,Object> session = null;	
 
 	public void setTripDAO(TripDAO tripDAO) {
 		this.tripDAO = tripDAO;
-	}
-
-	@SuppressWarnings("unchecked")
-	private List<TripBean> getListTripBean() {
-		List<TripBean> listTripBean = null;
-		if(!CheckUtils.isNullOrBlank(outBusStatus)){
-			int busStatus = Integer.parseInt(outBusStatus);
-			listTripBean = tripDAO.getBookingTrips(busStatus, outDepartTime, outArriveTime);
-			session.put("listTripBean", listTripBean);	
-		}else if(session.containsKey("listTripBean")){
-			//redirect from some where
-			listTripBean = (List<TripBean>)session.get("listTripBean");
-		}
-		return listTripBean;
 	}
 	
 	private List<SeatInfo> getSeatsList(List<TripBean> listTripBean){
@@ -151,7 +191,9 @@ public class BookingAction extends BaseAction implements SessionAware {
 	}
 	
 	private List<SeatInfo[][]> buildSeatMap(List<TripBean> listTripBean){
-		
+		if(listTripBean == null){
+			return null;
+		}
 		List<SeatInfo> seats = getSeatsList(listTripBean);
 		int tmpBustType = listTripBean.get(0).getBusStatus().getBus().getBusType().getId();
 		String[] bigText = {"A","B","C","D","E"}; 
@@ -213,35 +255,75 @@ public class BookingAction extends BaseAction implements SessionAware {
 	
 	@SuppressWarnings("unchecked")
 	public String execute(){
-		List<TripBean> listTripBeans = getListTripBean();
-		if(listTripBeans == null){
-			return ERROR;
-		}
+		
+		List<TripBean> listTripBean = null;
+		List<TripBean> listReturnTripBean = null;
+		
+		if(!CheckUtils.isNullOrBlank(outBusStatus)){
+			
+			if(!CheckUtils.isNullOrBlank(out_journey) && out_journey.equalsIgnoreCase("on")){
+				int busStatus = Integer.parseInt(outBusStatus);
+				listTripBean = tripDAO.getBookingTrips(busStatus, outDepartTime, outArriveTime);
+				session.put("listOutTripBean", listTripBean);
+			}
+			if(!CheckUtils.isNullOrBlank(rtn_journey) && rtn_journey.equalsIgnoreCase("on")){
+				int busStatus = Integer.parseInt(rtnBusStatus);
+				listReturnTripBean = tripDAO.getBookingTrips(busStatus, rtnDepartTime, rtnArriveTime);
+				session.put("listReturnTripBean", listReturnTripBean);
+			}	
+		}else if(session.containsKey("listOutTripBean") || session.containsKey("listReturnTripBean")){
+			//redirect from some where
+			if(session.containsKey("listOutTripBean")){ 
+				listTripBean = (List<TripBean>)session.get("listOutTripBean");
+			}
+			if(session.containsKey("listReturnTripBean")){
+				listReturnTripBean = (List<TripBean>)session.get("listReturnTripBean");
+			}
+		}		
+		
 		
 		if(session != null
-                && session.containsKey("seatsDouble")){
-			String selSeat = (String)session.get("selectedSeats");
-			String[] list = selSeat.split(";");
-			List<String> listDouble = (List<String>)session.get("seatsDouble");
+                && (session.containsKey("seatsDouble") || session.containsKey("seatsReturnDouble"))){
 			
-			this.passengerNo = list.length+"";
+			String selOutSeat = (String)session.get("selectedOutSeat");
+			String selReturnSeat = (String)session.get("selectedReturnSeat");
+			String[] listOutSeats = selOutSeat.split(";");
+			String[] listReturnSeats = selReturnSeat.split(";");
 			
-			String nwSelectedSeat = "";
+			List<String> listOutDouble = (List<String>)session.get("seatsOutDouble");
+			List<String> listReturnDouble = (List<String>)session.get("seatsReturnDouble");
 			
-			for (String string : list) {
-				if(!listDouble.contains(string)){ 
-					nwSelectedSeat += string+";";
+			this.passengerNo = listOutSeats.length+"";
+			
+			String nwOutSeat = "";
+			String nwReturnSeat = "";
+			
+			for (String string : listOutSeats) {
+				if(!listOutDouble.contains(string)){ 
+					nwOutSeat += string+";";
 				}
 			}
+			for (String string : listReturnSeats) {
+				if(!listReturnDouble.contains(string)){ 
+					nwReturnSeat += string+";";
+				}
+			}
+			this.selectedOutSeat = nwOutSeat;
+			this.selectedReturnSeat = nwReturnSeat;
 			
-			this.selectedSeat = nwSelectedSeat;
 			this.message = (String)session.get("message");
 			
 			session.remove("message");
-			session.remove("seatsDouble");
+			session.remove("seatsOutDouble");
+			session.remove("seatsReturnDouble");
+		}
+		if(listTripBean != null){
+			seatMapOut = buildSeatMap(listTripBean);
+		}
+		if(listReturnTripBean != null){
+			seatMapReturn = buildSeatMap(listReturnTripBean);
 		}
 		
-		seatMap = buildSeatMap(listTripBeans);
 		return SUCCESS;
 	}
 

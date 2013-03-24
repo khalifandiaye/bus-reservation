@@ -1,25 +1,41 @@
-function removeSeatInHiddenInput(seatName){
-	var seatsSelected = $.cookie('selectedSeat').split(";");
-	for(var i = 0; i < seatsSelected.length; i++){
-		if(seatsSelected[i] == seatName || seatsSelected[i] == ""){
-			seatsSelected.splice(i, 1);
+function removeSeatInHiddenInput(seatName,seatType){
+	if(seatType == "deleteOutSeats"){
+		var selectedOutSeat = sessionStorage.getItem("selectedOutSeat").split(";");
+		for(var i = 0; i < selectedOutSeat.length; i++){
+			if(selectedOutSeat[i] == seatName || selectedOutSeat[i] == ""){
+				selectedOutSeat.splice(i, 1);
+			}
+		} 
+		var nwHiddenInput = "";
+		for(var i = 0;i < selectedOutSeat.length; i++){
+			nwHiddenInput += selectedOutSeat[i]+";";
 		}
-	} 
-	var nwHiddenInput = "";
-	for(var i = 0;i < seatsSelected.length; i++){
-		nwHiddenInput += seatsSelected[i]+";";
+		sessionStorage.setItem("selectedOutSeat", nwHiddenInput);
+		$("#selectedOutSeat").val(nwHiddenInput);
+	}else if(seatType == "deleteReturnSeats"){
+		var selectedReturnSeat = sessionStorage.getItem("selectedReturnSeat").split(";");
+		for(var i = 0; i < selectedReturnSeat.length; i++){
+			if(selectedReturnSeat[i] == seatName || selectedReturnSeat[i] == ""){
+				selectedReturnSeat.splice(i, 1);
+			}
+		} 
+		var nwHiddenInput = "";
+		for(var i = 0;i < selectedReturnSeat.length; i++){
+			nwHiddenInput += selectedReturnSeat[i]+";";
+		}
+		sessionStorage.setItem("selectedReturnSeat", nwHiddenInput);
+		$("#selectedReturnSeat").val(nwHiddenInput);
 	}
-	$.cookie('selectedSeat', nwHiddenInput, { expires: 1 });
-	$("#selectedSeat").val(nwHiddenInput);
 }
 
 function removeSeat(){
 	var isDel = false;
 	var seatList = $(".listCheckedSeats tbody tr");
 	for(var i = 0; i < seatList.length; i++ ){
+		var seatType = seatList.eq(i).find("input[type='checkbox']").attr("name");
 		if($(seatList).eq(i).find("input[type='checkbox']").is(":checked")){
 			$(seatList).eq(i).remove();
-			removeSeatInHiddenInput($(seatList).eq(i).find(".seatChecked").text());
+			removeSeatInHiddenInput($(seatList).eq(i).find(".seatChecked").text(),seatType);
 			isDel = true;
 		}
 	}
@@ -34,11 +50,25 @@ function showPopup(message){
 }
 
 function genSeatFromCookie(){
-	var listSeat = $.cookie('selectedSeat').split(";");
-	$("#selectedSeat").val($.cookie('selectedSeat'));
-	for ( var i = 0; i < listSeat.length; i++) {
-		if(listSeat[i] != ""){ 
-			$(".listCheckedSeats tbody").append('<tr><td class="seatChecked">'+listSeat[i]+'</td><td style="text-align: center"><input type="checkbox" name="deleteSeats"></td></tr>');
+	
+	var listOutSeat = sessionStorage.getItem("selectedOutSeat").split(";");
+	var listReturnSeat = sessionStorage.getItem("selectedReturnSeat").split(";");
+	$("#selectedOutSeat").val(sessionStorage.getItem("selectedOutSeat"));
+	$("#selectedReturnSeat").val(sessionStorage.getItem("selectedReturnSeat"));
+	if(listOutSeat.length > 0){
+		$(".listCheckedSeats tbody").append("<tr><th colspan='2'>Chuyến đi :</th></tr>"); 
+		for ( var i = 0; i < listOutSeat.length; i++) {
+			if(listOutSeat[i] != ""){ 
+				$(".listCheckedSeats tbody").append('<tr><td class="seatChecked">'+listOutSeat[i]+'</td><td style="text-align: center"><input type="checkbox" name="deleteOutSeats"></td></tr>');
+			}
+		}
+	}
+	if(listReturnSeat.length > 0){
+		$(".listCheckedSeats tbody").append("<tr><th colspan='2'>Chuyến khứ hồi :</th></tr>");
+		for ( var i = 0; i < listReturnSeat.length; i++) {
+			if(listReturnSeat[i] != ""){ 
+				$(".listCheckedSeats tbody").append('<tr><td class="seatChecked">'+listReturnSeat[i]+'</td><td style="text-align: center"><input type="checkbox" name="deleteReturnSeats"></td></tr>');
+			}
 		}
 	}
 }
@@ -62,12 +92,5 @@ $(function(){
 		if(message){
             showPopup(message);
         }
-	});
-	
-	$("#booking-info-submit").bind("click",function(event){
-		if($("#booking-form").valid()){
-			$.removeCookie('selectedSeat');
-			console.log("removed cookie");
-		}
 	});
 });

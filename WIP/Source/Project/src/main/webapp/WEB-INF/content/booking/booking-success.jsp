@@ -44,43 +44,45 @@
 	<setion class="booking-bus-seat">
 	<div class="well">
 		<div style="font-size:21px;line-height: 41px;margin: 0 0px 10px 0px;">Vui lòng chọn ghế </div>
-		<s:if test="seatMap.size == 1"> 
-			<div class="seat-map ">
-				<div class="seat-map-wrapper">
-					<div class="seat-map-inner" style="">
-						<s:iterator value="seatMap">
-							<s:iterator>
-								<s:div cssClass="seat-map-row">
-									<s:iterator>
-										<s:if test="status != null">
-											<s:div cssClass="seat">
-												<s:if test="status != 1">
-													<span class="seat-name"><s:property value="name" /></span>
-													<img class="seat-img" src="../images/seat-available.png"
-														alt="" data-seat="<s:property value="name" />"
-														data-status="<s:property value="status" />">
-												</s:if>
-												<s:else>
-													<span class="seat-name"><s:property value="name" /></span>
-													<img class="seat-img" src="../images/seat-sold.png" alt=""
-														data-seat="<s:property value="name" />"
-														data-status="<s:property value="status" />">
-												</s:else>
-											</s:div>
-										</s:if>
-										<s:else>
-											<!--  no  seat  here -->
-										</s:else>
-									</s:iterator>
-								</s:div>
+		
+		<s:if test="seatMapOut != null">
+			<s:if test="seatMapOut.size == 1"> 
+				<div class="seat-map ">
+					<div class="seat-map-wrapper">
+						<div class="seat-map-inner" style="">
+							<s:iterator value="seatMapOut">
+								<s:iterator>
+									<s:div cssClass="seat-map-row">
+										<s:iterator>
+											<s:if test="status != null">
+												<s:div cssClass="seat">
+													<s:if test="status != 1">
+														<span class="seat-name"><s:property value="name" /></span>
+														<img class="seat-img" src="../images/seat-available.png"
+															alt="" data-seat="<s:property value="name" />"
+															data-status="<s:property value="status"/>" data-type="out">
+													</s:if>
+													<s:else>
+														<span class="seat-name"><s:property value="name" /></span>
+														<img class="seat-img" src="../images/seat-sold.png" alt=""
+															data-seat="<s:property value="name" />"
+															data-status="<s:property value="status"/>" data-type="out">
+													</s:else>
+												</s:div>
+											</s:if>
+											<s:else>
+												<!--  no  seat  here -->
+											</s:else>
+										</s:iterator>
+									</s:div>
+								</s:iterator>
 							</s:iterator>
-						</s:iterator>
+						</div>
 					</div>
 				</div>
-			</div>
-		</s:if>
-		<s:else>
-			<s:iterator value="seatMap">
+			</s:if>
+			<s:else>
+			<s:iterator value="seatMapOut">
 					<div class="seat-map ">
 						<div class="seat-map-wrapper">
 							<div class="seat-map-inner" style="">
@@ -114,6 +116,79 @@
 					</div>
 			</s:iterator>
 		</s:else>
+		</s:if>
+		<s:if test="seatMapReturn != null">
+			<s:if test="seatMapReturn.size == 1"> 
+				<div class="seat-map ">
+					<div class="seat-map-wrapper">
+						<div class="seat-map-inner" style="">
+							<s:iterator value="seatMapReturn">
+								<s:iterator>
+									<s:div cssClass="seat-map-row">
+										<s:iterator>
+											<s:if test="status != null">
+												<s:div cssClass="seat">
+													<s:if test="status != 1">
+														<span class="seat-name"><s:property value="name" /></span>
+														<img class="seat-img" src="../images/seat-available.png"
+															alt="" data-seat="<s:property value="name" />"
+															data-status="<s:property value="status"/>" data-type="return">
+													</s:if>
+													<s:else>
+														<span class="seat-name"><s:property value="name" /></span>
+														<img class="seat-img" src="../images/seat-sold.png" alt=""
+															data-seat="<s:property value="name" />"
+															data-status="<s:property value="status"/>" data-type="return">
+													</s:else>
+												</s:div>
+											</s:if>
+											<s:else>
+												<!--  no  seat  here -->
+											</s:else>
+										</s:iterator>
+									</s:div>
+								</s:iterator>
+							</s:iterator>
+						</div>
+					</div>
+				</div>
+			</s:if>
+			<s:else>
+			<s:iterator value="seatMapReturn">
+					<div class="seat-map ">
+						<div class="seat-map-wrapper">
+							<div class="seat-map-inner" style="">
+								<s:iterator>
+								<s:div cssClass="seat-map-row bed-row">
+									<s:iterator>
+										<s:if test="status != null">
+											<s:div cssClass="seat bed-seat">
+												<s:if test="status != 1">
+													<span class="seat-name"><s:property value="name" /></span>
+													<img class="seat-img" src="../img/bed-seat-available.png"
+														alt="" data-seat="<s:property value="name" />"
+														data-status="<s:property value="status" />">
+												</s:if> 
+												<s:else>  
+													<span class="seat-name"><s:property value="name" /></span>
+													<img class="seat-img" src="../img/bed-seat-sold.png" alt=""
+						 								data-seat="<s:property value="name" />"
+														data-status="<s:property value="status" />">
+												</s:else> 
+											</s:div>
+										</s:if>
+										<s:else>
+											<!--  no  seat  here -->
+										</s:else>
+									</s:iterator>
+								</s:div>
+								</s:iterator> 
+							</div>
+						</div>
+					</div>
+			</s:iterator>
+		</s:else>
+		 </s:if>
 		<div class="seat-description"
 			style="overflow: hidden; padding-left: 20px;">
 			<div style="width: 25%; float: left">
@@ -148,7 +223,8 @@
 					style="margin-top: 15px; margin-right: 30px;">Tiếp Tục</button>  
 			</div>
 			<s:hidden id="message" name="message"></s:hidden>
-			<s:hidden id="selectedSeat" name="selectedSeat"></s:hidden>
+			<s:hidden id="selectedOutSeat" name="selectedOutSeat"></s:hidden>
+			<s:hidden id="selectedReturnSeat" name="selectedReturnSeat"></s:hidden>
 			<s:hidden id="passengerNo" name="passengerNo"></s:hidden>
 		</div>
 	</div>
