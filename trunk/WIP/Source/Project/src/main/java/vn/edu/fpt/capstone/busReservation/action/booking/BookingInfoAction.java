@@ -121,8 +121,8 @@ public class BookingInfoAction extends BaseAction {
         List<TripBean> returnTrips = null;
 
         paymentMethods = paymentLogic.getPaymentMethods(sessionUser == null ? 0 : sessionUser.getRoleId());
-        tripBeanList = (List<TripBean>) session.get("listTripBean");
-        returnTrips = (List<TripBean>) session.get("returnTrips");
+        tripBeanList = (List<TripBean>) session.get("listOutTripBean");
+        returnTrips = (List<TripBean>) session.get("listReturnTripBean");
         try {
             reservationInfo = reservationLogic.createReservationInfo(
                     tripBeanList, returnTrips, seatToPayment.split(";").length);

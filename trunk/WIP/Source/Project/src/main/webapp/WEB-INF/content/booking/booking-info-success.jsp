@@ -90,7 +90,9 @@
 					    	</tbody>
 				    	</table>
 					  	
-					  	<s:hidden id="selectedSeat" name="selectedSeat"></s:hidden>
+					  	<s:hidden id="selectedOutSeat" name="selectedOutSeat"></s:hidden>
+					  	<s:hidden id="selectedReturnSeat" name="selectedReturnSeat"></s:hidden>
+					  	
 					  	<a class="btn btn-large" href="#" onclick="history.go(-1);return false;">Chọn lại ghế</a> 
 					  	<button style="margin-left: 36px;" id="booking-info-submit" class="btn btn-large btn-primary" type="submit"><s:text name="pay" /></button>
 				</fieldset>

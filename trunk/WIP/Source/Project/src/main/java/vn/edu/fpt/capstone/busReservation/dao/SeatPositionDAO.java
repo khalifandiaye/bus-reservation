@@ -54,7 +54,7 @@ public class SeatPositionDAO extends
         } catch (HibernateException e) {
             exceptionHandling(e, session);
         }
-        return result;
+        return result.size()>0 ? result : null;
     }
     
     @SuppressWarnings("unchecked")

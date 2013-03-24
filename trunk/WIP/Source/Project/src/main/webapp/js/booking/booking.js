@@ -1,9 +1,12 @@
 
-var SeatsToAllocate = 5;
-var SeatsNotAllocatedCount = 5;
+var SeatsOutToAllocate = 5;
+var SeatsOutNotAllocatedCount = 5;
+var SeatsReturnToAllocate = 5;
+var SeatsReturnNotAllocatedCount = 5;
 
 var t_selectedSeat = [{
-        "seats" : []
+        "OutSeats" : [],
+        "ReturnSeats" : []
 }];
 
 
@@ -11,23 +14,65 @@ var SEAT_EMPTY = 0,
     SEAT_SOLD = 1,
     SEAT_SELECTED = 2;
  
-function initSelectedSeat(){
-	var selectedSeatInput = $("#selectedSeat").val();
-	var arraySelectedSeat;
-	
-	if(selectedSeatInput != ""){
-		arraySelectedSeat = selectedSeatInput.split(";");
+function getSeatsToAllocate(seatType){
+	if(seatType=="return"){
+		return SeatsReturnToAllocate;
 	}else{
-		if($.cookie('selectedSeat') == null){
+		return SeatsOutToAllocate;
+	}
+}
+
+function getSeatsNotAllocatedCount(seatType){
+	if(seatType == "return"){
+		return SeatsReturnNotAllocatedCount;
+	}else{
+		return SeatsOutNotAllocatedCount;
+	}
+}
+
+function updateSeatsNotAllocatedCount(seatType,numSeat){
+	if(seatType == "return"){
+		return SeatsReturnNotAllocatedCount += numSeat;
+	}else{
+		return SeatsOutNotAllocatedCount += numSeat; 
+	}
+} 
+
+function initSelectedSeat(){
+	var selectedOutSeat = $("#selectedOutSeat").val();
+	var selectedReturnSeat = $("#selectedReturnSeat").val();
+	
+	var arraySelectedOutSeat,arraySelectedReturnSeat;
+	
+	if(selectedOutSeat != ""){
+		arraySelectedOutSeat = selectedOutSeat.split(";");
+	}else{
+		if(sessionStorage.getItem("selectedOutSeat") == null){
 			return;
 		}
-		arraySelectedSeat = $.cookie('selectedSeat').split(";");
+		arraySelectedOutSeat = sessionStorage.getItem("selectedOutSeat").split(";");
+		for(var i = 0; i < arraySelectedOutSeat.length ;i++){
+			if(arraySelectedOutSeat[i] != ""){
+				seatClicked($('.seat-img[data-seat="'+arraySelectedOutSeat[i]+'"][data-type="out"]'));
+				}
+		} 
 	}
-	for(var i = 0; i < arraySelectedSeat.length ;i++){
-		if(arraySelectedSeat[i] != ""){
-			seatClicked($('.seat-img[data-seat="'+arraySelectedSeat[i]+'"]'));
-			}
+	
+	if(selectedReturnSeat != ""){
+		arraySelectedReturnSeat = selectedReturnSeat.split(";");
+	}else{
+		if(sessionStorage.getItem("selectedReturnSeat") == null){
+			return;
+		}
+		arraySelectedReturnSeat = sessionStorage.getItem("selectedReturnSeat").split(";");
+		for(var i = 0; i < arraySelectedReturnSeat.length ;i++){
+			if(arraySelectedReturnSeat[i] != ""){
+				seatClicked($('.seat-img[data-seat="'+arraySelectedReturnSeat[i]+'"][data-type="return"]'));
+				}
+		}
 	}
+	
+	
 	if($("#message").val() != null && $("#message").val() != ""){
 		showPopup($("#message").val());
 	}
@@ -40,45 +85,69 @@ function seatAvailable(seatImage){
 	if(seatImage.data('status') === SEAT_SOLD){
 		return false;
 	}
-	for ( var i = 0; i <t_selectedSeat[0].seats.length; i++) {
-		if(t_selectedSeat[0].seats[i].seatNum === seatImage.data('seat')){ 
-			return false;
-		}
-	} 
-
+	if(seatImage.data('type')=="out"){
+		for ( var i = 0; i <t_selectedSeat[0].OutSeats.length; i++) {
+			if(t_selectedSeat[0].OutSeats[i].seatNum === seatImage.data('seat')){ 
+				return false;
+			}
+		} 
+	}else if(seatImage.data('type')=="return"){
+		for ( var i = 0; i <t_selectedSeat[0].ReturnSeats.length; i++) {
+			if(t_selectedSeat[0].ReturnSeats[i].seatNum === seatImage.data('seat')){ 
+				return false;
+			}
+		} 
+	}
 	return true;
 }
 
-function getSelectedSeatList(){
-    return t_selectedSeat[0];
+function getSelectedSeatList(seatType){
+	if(seatType=="return"){
+		return t_selectedSeat[0].ReturnSeats;
+	}else{
+		return t_selectedSeat[0].OutSeats;
+	}
+    
 }
 
-function getSelectedSeatString(){
+function getSelectedOutSeatString(){
 	var listString = "";
-	for(var i = 0; i < t_selectedSeat[0].seats.length; i++){
-		listString += t_selectedSeat[0].seats[i].seatNum+";";
+	for(var i = 0; i < t_selectedSeat[0].OutSeats.length; i++){
+		listString += t_selectedSeat[0].OutSeats[i].seatNum+";";
 	}
 	return listString;
 }
 
-function getSeatImage(seatNumber) {
-    return $('.seat-map-inner img[data-seat=\'' + seatNumber + '\']');
+function getSelectedReturnSeatString(){
+	var listString = "";
+	for(var i = 0; i < t_selectedSeat[0].ReturnSeats.length; i++){
+		listString += t_selectedSeat[0].ReturnSeats[i].seatNum+";";
+	}
+	return listString;
 }
 
-function getSeatStatus(seatNumber){
-	return $('.seat-map-inner img[data-seat=\'' + seatNumber + '\']').attr('data-status');
+function getSeatImage(seatNumber,seatType) {
+    return $('.seat-map-inner img[data-seat=\'' + seatNumber + '\'][data-type=\''+seatType+'\']');
+}
+
+function getSeatStatus(seatNumber,seatType){
+	return $('.seat-map-inner img[data-seat=\'' + seatNumber + '\'][data-type=\''+seatType+'\']').attr('data-status');
 }
 
 function addSeatToSelectedList(seatImage){
     var seatSelectionObject = { "seatNum" : seatImage.data('seat') };
-    t_selectedSeat[0].seats.unshift(seatSelectionObject); // Push to front
+    if(seatImage.data('type')=="out"){
+    	t_selectedSeat[0].OutSeats.unshift(seatSelectionObject); // Push to front
+    }else if(seatImage.data('type')=="return"){
+    	t_selectedSeat[0].ReturnSeats.unshift(seatSelectionObject);
+    }
     return;
 
 }
 
-function blockSeat(){
-	var listSeatImg = $(".seat-img");
-	if(SeatsNotAllocatedCount < 1){
+function blockSeat(seatTyle){
+	var listSeatImg = $(".seat-img[data-type='"+seatTyle+"']");
+	if(getSeatsNotAllocatedCount(seatTyle) < 1){
 		for ( var i = 0; i < listSeatImg.length; i++) {
 			if(listSeatImg.eq(i).data('status') == 0){
 				listSeatImg.eq(i).attr('src', listSeatImg.eq(i).attr('src').replace('seat-available', 'seat-block'));
@@ -93,13 +162,14 @@ function blockSeat(){
 	} 
 }
 
-function selectSeat(seatNumber) {
-    var seatImage = getSeatImage(seatNumber);
+function selectSeat(seatNumber,seatType) {
+    var seatImage = getSeatImage(seatNumber,seatType);
     
-    if(SeatsNotAllocatedCount == 0){
+    if(getSeatsNotAllocatedCount(seatType) == 0){
         return false;
     }
-    SeatsNotAllocatedCount -= 1; // Reduce the number of available seats
+    
+    updateSeatsNotAllocatedCount(seatType,-1); // Reduce the number of available seats
 
     seatImage.attr('data-status',SEAT_SELECTED);
 
@@ -109,48 +179,46 @@ function selectSeat(seatNumber) {
     addSeatToSelectedList(seatImage);
 }
 
-function removeSeatFromSelectedList(seatImage){
-    var selectedSeats = getSelectedSeatList();
-    for (var i = 0; i < selectedSeats.seats.length; i++) {
-        if (selectedSeats.seats[i].seatNum === seatImage) {
-            selectedSeats.seats.splice(i, 1); // Remove from selected seats array
+function removeSeatFromSelectedList(seatImage,seatType){
+    var selectedSeats = getSelectedSeatList(seatType);
+    for (var i = 0; i < selectedSeats.length; i++) {
+        if (selectedSeats[i].seatNum === seatImage) {
+        	selectedSeats.splice(i, 1); // Remove from selected seats array
             return;
         }
     }
 }
 
-function deselectSeat(seatNumber){
-    var seatImage = getSeatImage(seatNumber);
+function deselectSeat(seatNumber,seatType){
+    var seatImage = getSeatImage(seatNumber,seatType);
 
-    SeatsNotAllocatedCount += 1; // Increase the number of available seats for this area category
+    updateSeatsNotAllocatedCount(seatType,1); // Increase the number of available seats for this area category
 
     seatImage.attr('data-status',SEAT_EMPTY);
     seatImage.attr('src', seatImage.attr('src').replace('seat-selected', 'seat-available'));
     
 
-    removeSeatFromSelectedList(seatNumber);
+    removeSeatFromSelectedList(seatNumber,seatType);
 }
 
 function seatClicked(seatImage){
 	var message,thisImage;
 	
-	thisImage = getSeatImage(seatImage.data('seat'));
-	
-	
+	thisImage = getSeatImage(seatImage.data('seat'),seatImage.data('type'));
 	
     if (seatAvailable(thisImage)) {
        
-        if(selectSeat(seatImage.data('seat')) == false){
+        if(selectSeat(seatImage.data('seat'),seatImage.data('type')) == false){
 //            return "Đặt quá số ghế quy định";
         	return;
         }
-        updateSeatNum();
+        updateSeatNum(seatImage.data('type'));
     }
-    else if (getSeatStatus(seatImage.data('seat')) == SEAT_SELECTED) { // The seat is already selected
+    else if (getSeatStatus(seatImage.data('seat'),seatImage.data('type')) == SEAT_SELECTED) { // The seat is already selected
 
-        deselectSeat(seatImage.data('seat'));
+        deselectSeat(seatImage.data('seat'),seatImage.data('type'));
         
-        updateSeatNum();
+        updateSeatNum(seatImage.data('type'));
     }
     else {
 
@@ -159,7 +227,7 @@ function seatClicked(seatImage){
     }
     
     //check seat and block
-    blockSeat(); 
+    blockSeat(seatImage.data('type')); 
     
     return message;
 }
@@ -171,16 +239,18 @@ function showPopup(message){
 	$(".notify-message").append('<div class="alert fade in"><button type="button" class="close" data-dismiss="alert">×</button>'+message+'</div>');
 }
 
-function updateSeatNum(){
-    $(".seat-number").text(SeatsToAllocate - SeatsNotAllocatedCount);
+function updateSeatNum(seatType){
+    $(".seat-number").text(getSeatsToAllocate(seatType) - getSeatsNotAllocatedCount(seatType));
     
 }
 
 $(function(){
-	SeatsToAllocate = parseInt($("#passengerNo").val());
+	SeatsOutToAllocate = parseInt($("#passengerNo").val());
+	SeatsReturnToAllocate = parseInt($("#passengerNo").val());
 	$(".seat-number-selected").text($("#passengerNo").val()); 
 	
-	SeatsNotAllocatedCount = parseInt($("#passengerNo").val());
+	SeatsOutNotAllocatedCount = parseInt($("#passengerNo").val());
+	SeatsReturnNotAllocatedCount = parseInt($("#passengerNo").val());
 	
     $(".seat").bind("click",function(event){
 
@@ -216,16 +286,18 @@ $(function(){
 	initSelectedSeat();
 	
 	$("#booking-submit").bind("click",function(){
-		if(SeatsToAllocate - SeatsNotAllocatedCount == 0){
-			showPopup("Bạn phải chọn ít nhất 1 ghế để tiếp tục.");
+		if(SeatsOutToAllocate - SeatsOutNotAllocatedCount == 0 && SeatsReturnToAllocate - SeatsReturnNotAllocatedCount == 0){
+			showPopup("Bạn phải chọn ít nhất 1 ghế cho để tiếp tục.");
 			return;
 		}
 		
-		$.cookie('selectedSeat', getSelectedSeatString(), { expires: 1 });
+		sessionStorage.setItem("selectedOutSeat", getSelectedOutSeatString());
+		sessionStorage.setItem("selectedReturnSeat", getSelectedReturnSeatString());
 		
-		$("#selectedSeat").val("");
+		$("#selectedOutSeat").val("");
+		$("#selectedReturnSeat").val("");
 		
-	    $("#seatToPayment").val(getSelectedSeatString());
+	    $("#seatToPayment").val(getSelectedOutSeatString());
 	    
 	    $("form.booking").submit(); 
 	});
