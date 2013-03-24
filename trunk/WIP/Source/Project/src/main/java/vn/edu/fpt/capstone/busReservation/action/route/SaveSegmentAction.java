@@ -72,18 +72,20 @@ public class SaveSegmentAction extends BaseAction {
 		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
 
 		for (int i = 0; i < segmentInfos.size(); i++) {
+
 			// Check if segment exist
 			StationBean startStation = new StationBean();
 			StationBean endStation = new StationBean();
+
 			List<SegmentBean> duplicatedSegmentBeans = new ArrayList<SegmentBean>();
 			if (!isReturnRoute) {
-				duplicatedSegmentBeans = segmentDAO
-						.getDuplicatedSegment(segmentInfos.get(i).getStartAt(),
-								segmentInfos.get(i).getEndAt());
+				duplicatedSegmentBeans = segmentDAO.getDuplicatedSegment(
+						segmentInfos.get(i).getStationStartAt(), segmentInfos
+								.get(i).getStationEndAt());
 			} else {
-				duplicatedSegmentBeans = segmentDAO
-						.getDuplicatedSegment(segmentInfos.get(i).getEndAt(),
-								segmentInfos.get(i).getStartAt());
+				duplicatedSegmentBeans = segmentDAO.getDuplicatedSegment(
+						segmentInfos.get(i).getStationEndAt(), segmentInfos
+								.get(i).getStationStartAt());
 			}
 
 			// add new segment
@@ -100,6 +102,7 @@ public class SaveSegmentAction extends BaseAction {
 							.getStationStartAt());
 					endStation = stationDAO.getById(segmentInfos.get(i)
 							.getStationEndAt());
+
 				} else {
 					endStation = stationDAO.getById(segmentInfos.get(i)
 							.getStationStartAt());
@@ -118,8 +121,16 @@ public class SaveSegmentAction extends BaseAction {
 				segmentBean.setEndAt(endStation);
 				segmentBean.setTravelTime(dtravelTime);
 				segmentDAO.insert(segmentBean);
+				//add recent created segment to route detail
 				segmentBeans.add(segmentBean);
 			} else {
+				if (i == 0) {
+					routeName += duplicatedSegmentBeans.get(0).getStartAt().getCity().getName();
+				}
+				if (i == segmentInfos.size() - 1) {
+					routeName += " - " + duplicatedSegmentBeans.get(0).getEndAt().getCity().getName();
+				}
+				//add segment to route detail
 				segmentBeans.add(duplicatedSegmentBeans.get(0));
 			}
 		}

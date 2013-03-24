@@ -63,5 +63,26 @@ public class SystemSettingDAO extends GenericDAO<String, SystemSettingBean> {
         // return result, if needed
         return list == null || list.size() <= 0 ? null : list.get(0);
     }
+    
+    @SuppressWarnings("unchecked")
+    public Integer getStationDelayTime() {
+        List<Integer> list = null;
+        Session session = null;
+        String queryString = null;
+        Query query = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            queryString = "SELECT CAST(ss.value AS integer) FROM SystemSettingBean ss WHERE ss.id LIKE :pattern";
+            query = session.createQuery(queryString);
+            query.setString("pattern", "%station%delay%");
+            list = query.list();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+        // return result, if needed
+        return list == null || list.size() <= 0 ? null : list.get(0);
+    }
 
 }

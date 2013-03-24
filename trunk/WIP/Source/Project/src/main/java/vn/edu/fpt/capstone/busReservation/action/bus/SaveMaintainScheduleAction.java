@@ -58,8 +58,7 @@ public class SaveMaintainScheduleAction extends BaseAction {
 			   dfromDate = cal.getTime();
 			}
 			
-			Long calToDate = dfromDate.getTime() + maintainDuration * 24 * 60
-					* 60;
+			Long calToDate = dfromDate.getTime() + maintainDuration * 24 * 60 * 60;
 
 			Date dtoDate = new Date(calToDate);
 
@@ -71,6 +70,7 @@ public class SaveMaintainScheduleAction extends BaseAction {
 			busStatusBean.setFromDate(dfromDate);
 			busStatusBean.setToDate(dtoDate);
 			busStatusBean.setStatus("active");
+			
 			// get end station by date
 			StationBean stationBean = busStatusDAO.getCurrentStation(dfromDate)
 					.get(0);
@@ -78,11 +78,14 @@ public class SaveMaintainScheduleAction extends BaseAction {
 			busStatusDAO.insert(busStatusBean);
 
 			Calendar cal = Calendar.getInstance();
+			
+			
 			//set toString fromDate
 			cal.setTime(dfromDate);
 			String sfromDate = FormatUtils.formatDate(cal.getTime(),
 					"yyyy/MM/dd - HH:mm", CommonConstant.LOCALE_US,
 					CommonConstant.DEFAULT_TIME_ZONE);
+			
 			//set toString endDate
 			cal.setTime(dtoDate);
 			String stoDate = FormatUtils.formatDate(cal.getTime(),
