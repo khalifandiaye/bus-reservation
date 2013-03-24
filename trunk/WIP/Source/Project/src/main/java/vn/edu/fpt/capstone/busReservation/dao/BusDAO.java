@@ -161,5 +161,29 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 		}
 		return result;
 	}
+	
+	@SuppressWarnings("unchecked")
+   public List<Object[]> checkAvaileBus(int busId, int routeId, String status) {
+      String strQuery = "SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id " +
+      		"FROM bus b LEFT JOIN " +
+      		"( SELECT t1.* FROM bus_status t1 JOIN ( SELECT Max(id) id, MAX(to_date) to_date " +
+      		"FROM bus_status WHERE STATUS = :status GROUP BY bus_id ) t2 ON t1.id = t2.id " +
+      		"AND t1.to_date = t2.to_date ) bs ON b.id = bs.bus_id " +
+      		"WHERE ( b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId ) " +
+      		"AND b.id = :busId AND b.STATUS = :status AND bs.to_date > NOW()";
+      Session session = sessionFactory.getCurrentSession();
+      List<Object[]> result = new ArrayList<Object[]>();
+      try {
+         // must have to start any transaction
+         Query query = session.createSQLQuery(strQuery);
+         query.setParameter("busId", busId);
+         query.setParameter("routeId", routeId);
+         query.setParameter("status", status);
+         result = query.list();
+      } catch (HibernateException e) {
+         exceptionHandling(e, session);
+      }
+      return result;
+   }
 
 }
