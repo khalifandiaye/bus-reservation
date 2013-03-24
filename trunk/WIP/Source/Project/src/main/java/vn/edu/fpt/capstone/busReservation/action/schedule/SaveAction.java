@@ -92,6 +92,7 @@ public class SaveAction extends ActionSupport {
 			message = "Add schedule Success!";
 		} catch (Exception ex) {
 			message = "Error! Please try again!";
+			ex.printStackTrace();
 		}
 		return SUCCESS;
 	}
