@@ -33,6 +33,7 @@
 	 $("#tripData").val(myString);
 	 } */
 	
+	 //notification message on error cases.
 	function showPopup(message){
 		if($(".notify-message").html().trim()!=""){
 			$(".notify-message").empty();
@@ -40,7 +41,21 @@
 		$(".notify-message").append('<div class="alert fade in"><button type="button" class="close" data-dismiss="alert">×</button>'+message+'</div>');
 	}
 	
+	 //document ready
 	$(function() {
+		var rtnFlg = $('#rtnFlg').val();
+		var outFlg = $('#outFlg').val();
+		
+		//disable submit button if there're no trips
+		if(rtnFlg == '' && outFlg ==''){
+			$('#confirm-submit').attr("disabled", "disabled");
+			$('#confirm-submit').removeClass('btn-primary');
+		}else {
+			$('#confirm-submit').removeAttr("disabled");
+			$('#confirm-submit').addClass('btn-primary');
+		};
+		
+		//onclick submit button
 		$("#confirm-submit").bind("click",function(){
 			var outRadio = $('form input[name="out_journey"]:checked');
 			var rtnRadio = $('form input[name="rtn_journey"]:checked');
@@ -50,6 +65,7 @@
 				var depart = $(rtnRadio).siblings('.rtn_deptTime').val();
 				var arrive = $(outRadio).siblings('.out_arrTime').val();
 				
+				//cannot arrive before depart
 				if(depart <= arrive){
 					if($(".notify-message").html().trim()!=""){
 						$(".notify-message").empty();
@@ -61,6 +77,7 @@
 					return;
 				}
 				
+				//set parameter for return journey
 				$('input[name="rtnBusStatus"]').val(
 						$(rtnRadio).siblings('.rtn_status').val());
 				$('input[name="rtnDepartTime"]').val(
@@ -69,6 +86,7 @@
 						$(rtnRadio).siblings('.rtn_arrTime').val());
 				$('input[name="rtnFare"]').val($(rtnRadio).siblings('.rtn_fare').val());
 			}
+			//set parameter for onward journey
 			$('input[name="outBusStatus"]').val(
 					$(outRadio).siblings('.out_status').val());
 			$('input[name="outDepartTime"]').val(
@@ -80,11 +98,12 @@
 			$('form').submit(); 
 		});
 		
+		//view trip details
 		$('.trip-details').bind(
 				'click',
 				(function() {
 					var className = $(this).attr('class').split(' ')[1];
-					
+					//set param for onward journey
 					if(className == 'onward') {
 					var busStatus = $(this).parent("td").next().next().find(
 							'.out_status').val();
@@ -93,6 +112,7 @@
 					var arriveTime = $(this).parent("td").next().next().find(
 							'.out_arrTime').val();
 					} else {
+					//for return journey
 					var	busStatus = $(this).parent("td").next().next().find(
 						'.rtn_status').val();
 					var	departTime = $(this).parent("td").next().next().find(
@@ -100,7 +120,7 @@
 					var	arriveTime = $(this).parent("td").next().next().find(
 						'.rtn_arrTime').val();
 					}
-					//console.log(departTime);
+					//call ajax
 					$.ajax({
 						type : "GET",
 						url : $('#contextPath').val()
@@ -111,6 +131,7 @@
 							arriveTime : arriveTime
 						},
 						success : function(data) {
+							//set data to screen
 							console.log(data.tripList);
 							$('#trips-list tbody').empty();
 							$('#trips-list tbody').append('<tr class="row">' + 
@@ -131,6 +152,8 @@
 						}
 				});
 		}));
+		
+		//show message on error
 		if($("#message").val() != null && $("#message").val() != ""){
 			showPopup($("#message").val());
 		}
@@ -170,6 +193,7 @@
 			<s:set name="pssgrNo" value="passengerNo" />
 			<s:set name="msgRtn" value="searchMessage"/>
 			<script type="text/javascript">
+				//show result details for onward journey
 				$(document).ready(function() {
 					if($('.list-header.onward4').size()!=0){
 						showResultDetails('onward4');
@@ -187,6 +211,7 @@
 						showResultDetails('onward7');
 					}
 					
+					//show result details on click header for return journey
 					if($('.list-header-rtn.return4').size()!=0){
 						showResultDetailsRtn('return4');
 					} else if($('.list-header-rtn.return3').size()!=0){
@@ -203,17 +228,18 @@
 						showResultDetailsRtn('return7');
 					}
 					
+					//onlick list-header
 					$('.list-header').bind('click',(function() {
 						var className = $(this).attr('class').split(' ')[1];
 						showResultDetails(className);
 					}));
-					
-										
+				
 					$('.list-header-rtn').bind('click',(function() {
 						var rtnClassName = $(this).attr('class').split(' ')[1];
 						showResultDetailsRtn(rtnClassName);
 					}));
-					
+				
+					//on click 
 					$('#out_journey').bind(
 							'click', (function(){
 						
@@ -242,6 +268,7 @@
 			</script>
 			<div>
 			<form action="../booking/booking.html">
+			<!-- <<<***ONWARD INFORMATION***>>> -->
 			<div class="onward-info">
 				<legend>Chuyến đi</legend>
 				<div class="trip-details" style="display:block;width:100%">
@@ -269,6 +296,7 @@
 				<s:if test="%{#result4.size != 0}">
 					<div style="display:block; margin-left:10px; margin-bottom:15px">Vui lòng chọn chuyến đi và nhấn <strong>"Tiếp tục"</strong></div>
 				</s:if>
+				<!-- ONWARD RESULT HEADER -->
 					<div class="result-header onward">
 						<s:if test="%{#result1.size != 0}">			
 							<span class="list-header onward1">
@@ -306,6 +334,7 @@
 							</span>
 						</s:if>
 						</div>
+						<!-- ONWARD RESULT TABLE DETAILS -->
 					<div class="result-table onward">
 						<s:if test="%{#result1.size != 0}">			
 							<div class="search-rs-dtl onward1">
@@ -381,6 +410,7 @@
 			</div>
 			<s:set name="ticketType" value="ticketType" />
 			<s:if test="%{#ticketType=='roundtrip'}">
+			<!-- <<<***RETURN INFORMATION***>>> -->
 			<div class="return-info">
 				<legend>Chuyến về</legend>
 				<div class="trip-details" style="display:block;width:100%">
@@ -409,6 +439,7 @@
 				<s:if test="%{#rtnResult4.size != 0}">
 					<div style="display:block; margin-left:10px; margin-bottom:15px">Vui lòng chọn chuyến đi và nhấn <strong>"Tiếp tục"</strong></div>
 				</s:if>
+				<!-- RETURN RESULT HEADER -->
 					<div class="result-header return">
 						<s:if test="%{#rtnResult1.size != 0}">			
 							<span class="list-header-rtn return1">
@@ -446,6 +477,7 @@
 							</span>
 						</s:if>
 						</div>
+						<!-- RETURN RESULT TABLE DETAILS -->
 					<div class="result-table return">
 						<s:if test="%{#rtnResult1.size != 0}">			
 							<div class="search-rs-dtl-rtn return1">
@@ -534,15 +566,17 @@
 					<button id="confirm-submit"
 							class="btn btn-large pull-right btn-primary"
 							style="margin-top: 15px; margin-right: 10px;" ><s:text name="next"/></button>
-					<a style="margin-top: 15px; margin-right: 30px;" class="btn btn-large pull-right" href="../index.html">Quay lại</a>
+					<a style="margin-top: 15px; margin-right: 30px;" class="btn btn-large pull-right" href="../index.html"><s:text name="button.back"/></a>
 				</div>	
 			</div>
 		</div>
+			<s:hidden id="rtnFlg" name="rtnExistResultFlag"></s:hidden>
+			<s:hidden id="outFlg" name="searchMessage"></s:hidden>
 			<s:hidden id="message" name="message"></s:hidden>
 	</div>
 	</section>
 
-	<!-- Modal -->
+	<!-- Modal trip details-->
 	<div id="trip-details" class="modal hide fade" tabindex="-1"
 		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header">
@@ -553,12 +587,6 @@
 		<div class="modal-body">
 			<table border="0" cellspacing="0" cellpadding="0" id="trips-list" class="tbl-trip-list">
  			<tbody>
-				<!-- <tr class="row"> 
-					<th class="head">Giờ khởi hành</th>
-					<th class="head">Giờ dừng nghỉ</th>
-					<th class="head">Trạm khởi hành</th>
-					<th class="head">Trạm dừng nghỉ</th>
-				</tr> -->
 			</tbody>
 			</table>
 		</div>
@@ -567,7 +595,22 @@
 		</div>
 	</div>
 
-
+	<!-- Modal confirm message-->
+	<div id="confirm-message" class="modal hide fade" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"
+				aria-hidden="true">×</button>
+			<h3 id="myModalLabel">Xác nhận chọn chuyến</h3>
+		</div>
+		<div class="modal-body">
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Hủy</button>
+			<button class="btn btn-primary">Xác nhận</button>
+		</div>
+	</div>
+	
 	<jsp:include page="../common/footer.jsp" />
 </body>
 </html>

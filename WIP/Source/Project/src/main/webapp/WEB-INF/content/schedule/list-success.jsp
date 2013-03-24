@@ -94,6 +94,10 @@
 					checkButton();
 		      });
 				
+				$('#tripDialogBusPlate').change(function() {
+					checkButton();
+				});
+				
 				function getAvailBus() {
 					var selectedRouteId = $("#tripDialogRoutes").val();
 					var departureTime = $("#tripDialogDepartureTime").val();

@@ -92,7 +92,7 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 	public List<BusStatusBean> getAllAvailTripByRouteId(int routeId, Date date) {
 		String hql = "SELECT bs.id FROM BusStatusBean bs WHERE (bs.bus.forwardRoute.id = :routeId "
 				+ "OR  bs.bus.returnRoute.id = :routeId) "
-				+ "AND bs.busStatus != :busStatus "
+				+ "AND bs.busStatus = :busStatus "
 				+ "AND bs.fromDate >= :date AND bs.status != :status";
 		Session session = sessionFactory.getCurrentSession();
 		List<BusStatusBean> result = new ArrayList<BusStatusBean>();
@@ -100,7 +100,7 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 			// must have to start any transaction
 			Query query = session.createQuery(hql);
 			query.setParameter("routeId", routeId);
-			query.setParameter("busStatus", "initiation");
+			query.setParameter("busStatus", "ontrip");
 			query.setParameter("date", date);
 			query.setParameter("status", "inactive");
 			result = query.list();
@@ -160,7 +160,8 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 	}
 
 	/**
-	 * Common database exception handling Get all max date to maintain
+	 * Common database exception handling 
+	 * Get all max date to maintain
 	 * 
 	 * @param e
 	 *            the occurred exception

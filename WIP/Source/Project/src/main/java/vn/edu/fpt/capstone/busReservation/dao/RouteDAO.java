@@ -73,7 +73,7 @@ public class RouteDAO extends GenericDAO<Integer, RouteBean> {
 				+ "ON `seg`.`departure_station_id` = `seg_r`.`arrival_station_id` "
 				+ "AND `seg`.`arrival_station_id` = `seg_r`.`departure_station_id` "
 				+ "GROUP BY `rdt`.`route_id`,`rdt_r`.`route_id` "
-				+ "HAVING COUNT(DISTINCT `rdt_r`.`id`) = (SELECT COUNT(*) FROM `bus_reservation`.`route_details` `rdt1` WHERE `rdt1`.`route_id` = `rdt`.`route_id`)) ter "
+				+ "HAVING COUNT(DISTINCT `rdt_r`.`id`) = (SELECT COUNT(*) FROM `bus_reservation`.`route_details` `rdt1` WHERE `rdt1`.`route_id` = `rdt_r`.`route_id`)) ter "
 				+ "WHERE ter.forward_route_id = :routeId";
 		List<Integer> result = null;
 		Session session = sessionFactory.getCurrentSession();

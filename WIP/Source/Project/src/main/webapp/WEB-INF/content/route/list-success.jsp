@@ -21,12 +21,12 @@
 	function loadDetails(routeid) {
     	var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId=" + routeid;
     	window.location = url;
- 	}
+ 	};
  
  	function deleteRoute(id) {
  	   $('#routeId').val(id);
  	   $("#deleteRouteDialog").modal();
- 	}
+ 	};
  	
  	function activeRoute(id) {
  		$.ajax({
@@ -54,7 +54,7 @@
                 getDuration();
             });
        }
-   }
+   };
    
    function getDuration() {
 	   var startStationAt = $("#stationStartAt").val();
@@ -72,8 +72,8 @@
 					   } else {
 						   $("#duration").prop("disabled", false);
 					   }
-			      }
-			);
+					   checkAdd();
+			      });
 		} 
    }
    
@@ -82,7 +82,7 @@
 	   var endAt = $("#endAt").val();
 	   var duration = $('#duration').val();
 
-	   if(startAt != -1 && endAt != -1){
+	   if(startAt != -1 && endAt != -1 && duration != ''){
 		   $("#add").removeAttr("disabled"); 
 	   } else { 
 		   $("#add").attr("disabled","disabled");
@@ -307,13 +307,13 @@
                      <s:if test="%{#status == 'active'}">
                         <td style="width: 6%"><input
                         data-delete="<s:property value='id'/>" class="btn btn-danger"
-                        type="button" value="Deactice"
+                        type="button" value="Deactivate"
                         onclick='javascript: deleteRoute(<s:property value='id'/>)' /></td>
                      </s:if>
                      <s:else>
                         <td style="width: 6%"><input
                         data-active="<s:property value='id'/>" class="btn btn-danger"
-                        type="button" value="Active"
+                        type="button" value="Activate"
                         onclick='javascript: activeRoute(<s:property value='id'/>)' /></td>
                      </s:else>
 						</tr>
@@ -371,14 +371,14 @@
 		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3 id="routeDeleteDialogLabel">Delete</h3>
+			<h3 id="routeDeleteDialogLabel">Deactivate</h3>
 		</div>
 		<div class="modal-body">
-			<p>Do you want to delete this route?</p>
+			<p>Do you want to deactivate this route?</p>
 		</div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-			<button id="routeDeleteDialogOk" class="btn btn-danger">Delete</button>
+			<button id="routeDeleteDialogOk" class="btn btn-danger">Deactivate</button>
 		</div>
 	</div>
 	

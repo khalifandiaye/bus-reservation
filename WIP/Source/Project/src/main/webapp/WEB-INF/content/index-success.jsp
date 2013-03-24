@@ -50,7 +50,7 @@
 		$("#dp1").change(function() {
 		  	setMinDate();
 		});
-		
+
 		getDuration();
 	});
 
@@ -74,6 +74,9 @@
 	}
 	
 	function getDuration() {
+		if(console) {
+			console.log('getDuration');
+		}
 		$.ajax({
 			type : "GET",
 			url : $('#contextPath').val() + "/search/getTravelTime.html",
@@ -83,6 +86,7 @@
 			},
 			success : function(data) {
 				duration = parseInt(data.duration);
+				console.log(data);
 				setMinDate();
 			}
 		});
@@ -92,6 +96,7 @@
 		  	test = $("#dp1").datepicker('getDate');
 		    testm = new Date(test.getTime());
 		    testm.setDate(testm.getDate() + duration);
+		  	console.log(testm);
 		    $("#dp2").datepicker("option", "minDate", testm);
 	}
 
