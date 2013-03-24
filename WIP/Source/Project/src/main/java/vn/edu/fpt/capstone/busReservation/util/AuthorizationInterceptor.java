@@ -61,9 +61,9 @@ public class AuthorizationInterceptor implements Interceptor {
         String result = null;
         String namespace = null;
         User user = null;
-        boolean needAdmin = false;
-        boolean needOp = false;
-        boolean needDev = false;
+        boolean allowAdmin = true;
+        boolean allowOp = true;
+        boolean allowCus = true;
         HttpServletRequest request = (HttpServletRequest) invocation
                 .getInvocationContext().get(ServletActionContext.HTTP_REQUEST);
         HttpSession session = request.getSession(true);
@@ -73,17 +73,22 @@ public class AuthorizationInterceptor implements Interceptor {
             namespace = ServletActionContext.getActionMapping().getNamespace();
 
             if ("/admin".equals(namespace)) {
-                needAdmin = true;
+                allowOp = false;
+                allowCus = false;
             } else if ("/route".equals(namespace) || "/bus".equals(namespace)
                     || "/schedule".equals(namespace)) {
-                needOp = true;
+                allowCus = false;
+                allowAdmin = false;
+            } else if (!"/".equals(namespace) && !"/user".equals(namespace)) {
+                allowAdmin = false;
             } else if ("/debug".equals(namespace)) {
-                needDev = true;
+                allowCus = false;
+                allowOp = false;
+                allowAdmin = false;
             }
-            if (needDev
-                    || (needAdmin && (user == null || user.getRoleId() != 3))
-                    || (needOp && (user == null || (user.getRoleId() != 2 && user
-                            .getRoleId() != 3)))) {
+            if ((!allowCus && (user == null || user.getRoleId() == 1))
+                    || (!allowOp && user != null && user.getRoleId() == 2)
+                    || (!allowAdmin && user != null && user.getRoleId() == 3)) {
                 return "unauthorized";
             }
         }

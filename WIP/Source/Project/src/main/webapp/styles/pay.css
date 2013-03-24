@@ -94,37 +94,25 @@ input.pay {
 	width: 60%;
 }
 
-.reservation-details .ticket-list {
+.reservation-details .ticket-list table,.reservation-details table.ticket-list {
 	margin-top: 20px;
-	overflow: hidden;
-}
-
-.reservation-details .ticket-list table {
-	margin: 0 auto;
 	clear: both;
 	width: 100%;
 }
 
 .reservation-details .ticket-list thead th {
 	padding: 3px 18px 3px 10px;
-	border-right: 1px solid black;
-	border-bottom: 1px solid black;
-	/* border: 1px solid black; */
+	border: 1px solid black;
 	font-weight: bold;
 }
 
 .reservation-details .ticket-list thead th.datetime {
-	width: 150px;
-}
-
-.reservation-details .ticket-list thead th:last-child {
-	border-right: none;
+	width: 200px;
 }
 
 .reservation-details .ticket-list td {
 	padding: 3px 10px;
-	border-right: 1px solid black;
-	border-bottom: 1px solid black;
+	border: 1px solid black;
 }
 
 .reservation-details .ticket-list td.right {
@@ -135,27 +123,15 @@ input.pay {
 	text-align: center;
 }
 
-.reservation-details .ticket-list td.small { /* padding-right: 3px; */
+.reservation-details .ticket-list td.small {
 	border-right-style: dashed;
 	border-right-color: #c0c0c0;
-	/* width: 30px; */
+	width: 30px;
+	padding-right: 5px;
 }
 
-.reservation-details .ticket-list td:last-child {
-	border-right: none;
-}
-
-.reservation-details .ticket-list tr:last-child td {
-	border-bottom: none;
-}
-
-.reservation-details .ticket-list tr:nth-child(odd) td:not ([rowspan='2']
-	) {
-	border-bottom-style: dashed;
-}
-
-.reservation-details .ticket-list tr:nth-last-child(2) td[rowspan='2'] {
-	border-bottom: none;
+.reservation-details .ticket-list td.small+td {
+	border-left: none;
 }
 
 .reservation-details .ticket-list td.index {
@@ -163,15 +139,19 @@ input.pay {
 }
 
 .reservation-details .ticket-list tbody tr {
-	background-color: white;
+	background-color: rgb(181, 214, 248);
 }
 
-.reservation-details .ticket-list tbody tr:nth-child(4n) {
-	background-color: #E2E4FF;
+.reservation-details .ticket-list thead tr,.reservation-details .ticket-list tbody tr:nth-child(4n+3),.reservation-details .ticket-list tbody tr:nth-child(4n) {
+	background-color: rgb(121, 182, 245);
 }
 
-.reservation-details .ticket-list tbody tr:nth-child(4n+3) {
-	background-color: #E2E4FF;
+.reservation-details .ticket-list tbody tr.return {
+	background-color: rgb(181, 248, 214);
+}
+
+.reservation-details .ticket-list tbody tr.return:nth-child(4n+3),.reservation-details .ticket-list tbody tr.return:nth-child(4n) {
+	background-color: rgb(121, 245, 182);
 }
 
 .reservation-details .payment-info {

@@ -71,6 +71,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SystemSettingBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.PaymentDetails;
+import vn.edu.fpt.capstone.busReservation.displayModel.PaymentSetupDetails;
 import vn.edu.fpt.capstone.busReservation.displayModel.RefundInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo.Ticket;
@@ -175,7 +176,7 @@ public class PaymentLogic extends BaseLogic {
     }
 
     // =========================Main Functions=========================
-    public List<PaymentMethodBean> getPaymentMethods()
+    public List<PaymentMethodBean> getPaymentMethods(int roleId)
             throws HibernateException {
         List<PaymentMethodBean> paymentMethods = null;
         PaymentMethodBean paymentMethod = null;
@@ -183,7 +184,8 @@ public class PaymentLogic extends BaseLogic {
         for (Iterator<PaymentMethodBean> paymentMethodIterator = paymentMethods
                 .iterator(); paymentMethodIterator.hasNext();) {
             paymentMethod = paymentMethodIterator.next();
-            if (paymentMethod.getId() != 2 && paymentMethod.getId() != 3) {
+            if ((roleId != 2 && paymentMethod.getId() == 1)
+                    || (roleId == 2 && paymentMethod.getId() != 1)) {
                 paymentMethodIterator.remove();
             }
         }
@@ -497,6 +499,26 @@ public class PaymentLogic extends BaseLogic {
         return result;
     }
 
+    public PaymentSetupDetails setupPayment(ReservationInfo reservationInfo,
+            Integer paymentMethodId, String contextPath) throws CommonException {
+        PaymentSetupDetails setupDetails = null;
+        setupDetails = new PaymentSetupDetails();
+        if (1 == paymentMethodId) {
+            setupDetails.setRedirectUrl(CommonConstant.URL_HTTPS + contextPath
+                    + "/pay/pay01030.html");
+        } else if (2 == paymentMethodId) {
+            setupDetails.setPaymentToken(setPaypalExpressCheckout(
+                    reservationInfo, contextPath));
+            setupDetails
+                    .setRedirectUrl("https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token="
+                            + setupDetails.getPaymentToken());
+        } else {
+            // unimplemented payment method
+            throw new CommonException("msgerrrs007");
+        }
+        return setupDetails;
+    }
+
     public String setPaypalExpressCheckout(ReservationInfo reservationInfo,
             String contextPath) throws CommonException {
         PayPalAPIInterfaceServiceService service = null;
@@ -624,6 +646,35 @@ public class PaymentLogic extends BaseLogic {
             throw new CommonException();
         }
         return paymentToken;
+    }
+
+    public void doPayment(ReservationInfo reservationInfo, int paymentMethodId,
+            String token) throws CommonException {
+        PaymentDetails paymentDetails = null;
+        PaymentType paymentType = null;
+        paymentType = PaymentType.PAY;
+        if (1 == paymentMethodId) {
+            paymentDetails = new PaymentDetails();
+            paymentDetails.setFeeAmount(BigDecimal
+                    .valueOf(reservationInfo.getTransactionFeeInUSDValue())
+                    .setScale(2).toString());
+            paymentDetails.setGrossAmount(BigDecimal
+                    .valueOf(reservationInfo.getTotalAmountInUSDValue())
+                    .setScale(2).toString());
+            paymentDetails.setTransactionID("");
+            savePayment(reservationInfo.getId(), paymentDetails,
+                    paymentMethodId, paymentType);
+        } else if (2 == paymentMethodId) {
+            paymentDetails = doPaypalExpressCheckoutPayment(getPaypalExpressCheckoutDetails(token));
+            paymentDetails.setFeeAmount(BigDecimal
+                    .valueOf(reservationInfo.getTransactionFeeInUSDValue())
+                    .setScale(2).toString());
+            savePayment(reservationInfo.getId(), paymentDetails,
+                    paymentMethodId, paymentType);
+        } else {
+            // unimplemented payment method
+            throw new CommonException("msgerrrs007");
+        }
     }
 
     public GetExpressCheckoutDetailsResponseType getPaypalExpressCheckoutDetails(
@@ -820,16 +871,16 @@ public class PaymentLogic extends BaseLogic {
      * @throws CommonException
      * @throws HibernateException
      */
-    public String savePayment(String reservationId,
-            PaymentDetails paymentDetails, int paymentMethodId,
-            PaymentType paymentType) throws CommonException, HibernateException {
+    public String savePayment(int reservationId, PaymentDetails paymentDetails,
+            int paymentMethodId, PaymentType paymentType)
+            throws CommonException, HibernateException {
         ReservationBean reservation = null;
         PaymentBean payment = null;
         int maxTry = CommonConstant.MAX_REGENERATE_CODE_TRY;
         String reservationCode = null;
         CurrencyConverter converter = null;
         // Update database
-        reservation = reservationDAO.getById(Integer.parseInt(reservationId));
+        reservation = reservationDAO.getById(reservationId);
         payment = new PaymentBean();
         payment.setReservation(reservation);
         // Payment method
@@ -1004,6 +1055,167 @@ public class PaymentLogic extends BaseLogic {
         templateName = (String) globalProps.get("mail.template.resCancel");
         ticketInfos = ticketDAO.getTicketInfo(reservationId);
         mailTemplateBean = mailTemplateDAO.getByName(templateName);
+        subject = new StringBuilder(mailTemplateBean.getSubject());
+        content = new StringBuilder(mailTemplateBean.getText());
+        MailUtils.replace(subject, ":companyName:",
+                globalProps.getProperty("company.fullName"));
+        MailUtils.replace(content, ":companyName:",
+                globalProps.getProperty("company.fullName"));
+        MailUtils.replace(content, ":siteName:",
+                globalProps.getProperty("company.siteName"));
+        MailUtils.replace(content, ":fullName:", ticketInfos.get(0).getId()
+                .getReservation().getBookerLastName()
+                + " "
+                + ticketInfos.get(0).getId().getReservation()
+                        .getBookerFirstName());
+        MailUtils.replace(content, ":reservationCode:", ticketInfos.get(0)
+                .getId().getReservation().getCode());
+        MailUtils.replace(content, ":bookTime:", DateUtils.date2String(
+                ticketInfos.get(0).getId().getReservation().getBookTime(),
+                "dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
+                CommonConstant.DEFAULT_TIME_ZONE));
+        MailUtils.replaceLoop(content, "loopTicket", ticketInfos.size());
+        seatNumbers = new StringBuilder();
+        for (TicketInfoBean bean : ticketInfos) {
+            count++;
+            MailUtils.replace(content, ":from_" + count + ":", bean
+                    .getStartTrip().getRouteDetails().getSegment().getStartAt()
+                    .getCity().getName());
+            MailUtils.replace(content, ":to_" + count + ":", bean.getEndTrip()
+                    .getRouteDetails().getSegment().getEndAt().getCity()
+                    .getName());
+            MailUtils.replace(content, ":fromDate_" + count + ":", DateUtils
+                    .date2String(bean.getStartTrip().getDepartureTime(),
+                            "dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
+                            CommonConstant.DEFAULT_TIME_ZONE));
+            MailUtils.replace(content, ":toDate_" + count + ":", DateUtils
+                    .date2String(bean.getEndTrip().getArrivalTime(),
+                            "dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
+                            CommonConstant.DEFAULT_TIME_ZONE));
+            // clean string builder
+            seatNumbers.setLength(0);
+            for (SeatPositionBean seatPosition : bean.getId()
+                    .getSeatPositions()) {
+                seatNumbers.append(seatPosition.getName() + ", ");
+            }
+            // remove the last ", "
+            seatNumbers.setLength(seatNumbers.length() - 2);
+            MailUtils.replace(content, ":seatNumbers_" + count + ":",
+                    seatNumbers.toString());
+            MailUtils.replace(content, ":ticketPrice_" + count + ":",
+                    FormatUtils.formatNumber(
+                            roundingVND(bean.getTicketPrice(),
+                                    RoundingMode.CEILING), 0,
+                            CommonConstant.LOCALE_VN));
+            total += bean.getTicketPrice()
+                    * bean.getId().getSeatPositions().size();
+        }
+        MailUtils.replace(
+                content,
+                ":totalAmount:",
+                FormatUtils.formatNumber(
+                        roundingVND(total, RoundingMode.CEILING), 0,
+                        CommonConstant.LOCALE_VN) + " VND");
+        if (ticketInfos.get(0).getId().getReservation().getPayments() != null) {
+            for (PaymentBean payment : ticketInfos.get(0).getId()
+                    .getReservation().getPayments()) {
+                if (PaymentType.PAY.getValue().equals(payment.getType())) {
+                    paidAmount += payment.getPayAmount();
+                } else {
+                    refundAmount += payment.getPayAmount();
+                }
+            }
+        }
+        MailUtils.replace(
+                content,
+                ":fee:",
+                FormatUtils.formatNumber(
+                        roundingVND(paidAmount - total, RoundingMode.FLOOR), 0,
+                        CommonConstant.LOCALE_VN) + " VND");
+        MailUtils.replace(
+                content,
+                ":amountToBePaid:",
+                FormatUtils.formatNumber(
+                        roundingVND(paidAmount, RoundingMode.CEILING), 0,
+                        CommonConstant.LOCALE_VN) + " VND");
+        MailUtils.replace(
+                content,
+                ":refundedAmount:",
+                FormatUtils.formatNumber(
+                        roundingVND(refundAmount, RoundingMode.CEILING), 0,
+                        CommonConstant.LOCALE_VN) + " VND");
+        url = new StringBuilder();
+        url.append(CommonConstant.URL_HTTP);
+        url.append(contextPath);
+        MailUtils.replace(content, ":siteurl:", url.toString() + "/");
+        try {
+            mailTemplateDAO.endTransaction();
+        } catch (HibernateException e) {
+            throw new CommonException("msgerrcm003", e);
+        }
+        // prepare mail object
+        props = new Properties();
+        props.put("mail.smtp.auth", globalProps.get("mail.smtp.auth"));
+        props.put("mail.smtp.starttls.enable",
+                globalProps.get("mail.smtp.starttls.enable"));
+        props.put("mail.smtp.host", globalProps.get("mail.smtp.host"));
+        props.put("mail.smtp.port", globalProps.get("mail.smtp.port"));
+        session = Session.getInstance(
+                props,
+                new MailPasswordAuthenticator(globalProps
+                        .getProperty("mail.auth.username"), globalProps
+                        .getProperty("mail.auth.password")));
+        try {
+            message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(globalProps
+                    .getProperty("mail.info.from")));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(ticketInfos.get(0).getId()
+                            .getReservation().getEmail()));
+            message.setSubject(MimeUtility.encodeText(subject.toString(),
+                    "utf-8", "Q"));
+            message.setContent(content.toString(), "text/html;charset=utf-8");
+
+            Transport.send(message);
+        } catch (MessagingException e) {
+            throw new CommonException("msgerrcm003", e);
+        } catch (UnsupportedEncodingException e) {
+            throw new CommonException("msgerrcm003", e);
+        }
+    }
+
+    public void sendReservationCompleteMail(int reservationId,
+            String contextPath) throws CommonException {
+        Properties globalProps = null;
+        Properties props = null;
+        String templateName = null;
+        MailTemplateBean mailTemplateBean = null;
+        StringBuilder subject = null;
+        StringBuilder content = null;
+        StringBuilder url = null;
+        Session session = null;
+        Message message = null;
+        List<TicketInfoBean> ticketInfos = null;
+        StringBuilder seatNumbers = null;
+        int count = 0;
+        double total = 0;
+        double paidAmount = 0;
+        double refundAmount = 0;
+        // build subject and content
+        globalProps = new Properties();
+        try {
+            globalProps.load(getClass().getResourceAsStream(
+                    "/global.properties"));
+        } catch (IOException e) {
+            throw new CommonException("msgerrcm003", e);
+        }
+        templateName = (String) globalProps.get("mail.template.resComplete");
+        ticketInfos = ticketDAO.getTicketInfo(reservationId);
+        mailTemplateBean = mailTemplateDAO.getByName(templateName);
+        if (mailTemplateBean == null) {
+            throw new CommonException();
+        }
         subject = new StringBuilder(mailTemplateBean.getSubject());
         content = new StringBuilder(mailTemplateBean.getText());
         MailUtils.replace(subject, ":companyName:",

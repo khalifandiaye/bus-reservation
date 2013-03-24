@@ -228,3 +228,7 @@ label.success{
 	-moz-border-radius: 0px;
 	border-radius: 0px;
 }
+
+.clear-fix {
+	overflow: auto;
+}

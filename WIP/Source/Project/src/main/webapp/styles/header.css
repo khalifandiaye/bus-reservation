@@ -11,10 +11,6 @@
 	color: #ffffff;
 }
 
-.clear-fix {
-	overflow: hidden;
-}
-
 .login .item,.logout .item {
 	margin: 5px;
 	display: inline-block;

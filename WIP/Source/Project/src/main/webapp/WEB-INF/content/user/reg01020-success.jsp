@@ -17,6 +17,7 @@
 	<jsp:include page="../common/header.jsp" />
 	<div class="notice">
 		<div class="container">
+			<s:actionerror/>
 			<div class="well">
 			<s:text name="message.regSuccess" />
 			</div>

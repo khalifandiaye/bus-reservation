@@ -48,7 +48,7 @@
 						<span><s:text name="%{reservationInfo.status}" /></span>
 					</div>
 				</div>
-				<div>
+				<div class="clear-fix">
 					<table class="ticket-list">
 						<thead>
 							<tr>
@@ -61,7 +61,12 @@
 						</thead>
 						<tbody>
 							<s:iterator value="reservationInfo.tickets" status="status">
+							<s:if test="returnTrip">
+								<tr class="return">
+							</s:if>
+							<s:else>
 								<tr>
+							</s:else>
 									<td class="index" rowspan="2"><s:property value="#status.count" /></td>
 									<td class="small"><s:text name="reservation.ticket.from" /></td><td><s:property value="departureStation" /></td>
 									<td class="center"><s:property value="departureDate" /></td>
@@ -70,7 +75,12 @@
 									</td>
 									<td rowspan="2"><s:property value="busType" /></td>
 								</tr>
+							<s:if test="returnTrip">
+								<tr class="return">
+							</s:if>
+							<s:else>
 								<tr>
+							</s:else>
 									<td class="small"><s:text name="reservation.ticket.to" /></td><td><s:property value="arrivalStation" /></td>
 									<td class="center"><s:property value="arrivalDate" /></td>
 								</tr>

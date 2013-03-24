@@ -18,11 +18,7 @@
 	<div class="search-reservation">
 		<form method="post" action="<%=request.getContextPath()%>/rsv/rsv01021.html">
 			<div class="container">
-				<s:if test="%{actionErros.size > 0}">
-					<div class="well error">
-						<s:actionerror/>
-					</div>
-				</s:if>
+				<s:actionerror/>
 				<div class="well">
 					<div class="item">
 						<label><s:text name="reservation.code" /></label><s:textfield name="reservationCode" />

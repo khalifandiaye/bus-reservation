@@ -270,9 +270,14 @@ public class ReservationLogic extends BaseLogic {
 
     public ReservationInfo loadReservationInfo(final String reservationId,
             int userId) throws CommonException {
+        return loadReservationInfo(Integer.parseInt(reservationId), userId);
+    }
+
+    public ReservationInfo loadReservationInfo(int reservationId, int userId)
+            throws CommonException {
         ReservationInfo info = null;
         List<TicketBean> tickets = null;
-        tickets = ticketDAO.getTickets(Integer.parseInt(reservationId));
+        tickets = ticketDAO.getTickets(reservationId);
         if (tickets != null && tickets.size() > 0) {
             if (tickets.get(0).getReservation().getBooker() != null
                     && userId != tickets.get(0).getReservation().getBooker()
@@ -387,7 +392,7 @@ public class ReservationLogic extends BaseLogic {
         info.setId(reservationBean.getId());
         info.setCode(reservationBean.getCode());
         info.setBookerName(reservationBean.getBookerLastName() + " "
-                + reservationBean.getBookerLastName());
+                + reservationBean.getBookerFirstName());
         info.setPhone(reservationBean.getPhone());
         info.setEmail(reservationBean.getEmail());
         info.setStatus(reservationBean.getStatus());
@@ -406,7 +411,7 @@ public class ReservationLogic extends BaseLogic {
             basePrice += ReservationUtils.addTickets(
                     info,
                     ticket,
-                    (tickets.size() <= 1 || ticket
+                    (tickets.size() > 1 && ticket
                             .getTrips()
                             .get(0)
                             .getDepartureTime()
@@ -437,7 +442,7 @@ public class ReservationLogic extends BaseLogic {
                     .doubleValue());
             info.setTotalAmount(paidAmount);
             info.setTotalAmountInUSD(converter.convert(paidAmount));
-            info.setTransactionFee(paidAmount - basePrice);
+            info.setTransactionFee(fee);
             info.setTransactionFeeInUSD(converter.convert(fee));
             if (refundedAmount > 0) {
                 info.setRefundedAmount(refundedAmount);

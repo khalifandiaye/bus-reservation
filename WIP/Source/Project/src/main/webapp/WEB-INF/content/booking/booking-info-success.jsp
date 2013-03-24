@@ -76,7 +76,7 @@
 					  	<div class="control-group">
 						    <label class="control-label" for="selectPaymentMethod">Thanh toán</label>
 						    <div class="controls">
-						      <s:select list="paymentMethods" listKey="id" listValue="name" name="paymentMethodId" id="selectPaymentMethod"/>
+					    		<s:select list="paymentMethods" listKey="id" listValue="name" name="paymentMethodId" id="selectPaymentMethod"/>
 					    	</div>
 					  	</div>
 					    <table class="listCheckedSeats table " style="width: 315px;">  

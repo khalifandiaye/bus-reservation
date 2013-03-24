@@ -35,6 +35,7 @@
 	<!-- End small nav -->
 	<div class="reservation-details">
 		<div class="container">
+			<s:actionerror/>
 			<div class="well">
 				<div class="success info"><s:text name="message.reservationComplete" /></div>
 				<h3><s:text name="reservationInfo" /> <img id="btnPrint" class="click-able" src="<%=request.getContextPath()%>/images/print.png" alt="<s:text name="label.print" />" /><img id="btnPrintPDF" class="click-able" src="<%=request.getContextPath()%>/images/print-pdf.png" alt="<s:text name="label.print-pdf" />" /></h3>
