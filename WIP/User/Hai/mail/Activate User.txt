@@ -1,0 +1,13 @@
+﻿<div style="width:100%;">
+<p style="color:rgb(255,132,0);font-weight:bold;font-size:16px;text-align:center;" >Kích hoạt tài khoản thành viên :companyName:</p>
+<p>Chào :fullName:</p>
+<p>Chúng tôi đã nhận được yêu cầu mở tài khoản thành viên
+của quý khách tại <a href=":siteurl:">:siteName:</a> với các thông tin sau:</P>
+<p>Tên đăng nhập: :username:</p>
+<p>Tên chủ tài khoản: :fullName:</p>
+<p>Địa chỉ email: :email:</p>
+<br/>
+<p>Để hoàn tất quy trình đăng ký, xin quý khách vui lòng nhấn vào đường dẫn bên dưới
+hoặc sao chép vào thanh địa chỉ trên trình duyệt và nhấn Enter:</p>
+<p><a href=":url:">:url:</a></p>
+</div>

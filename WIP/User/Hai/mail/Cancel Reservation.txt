@@ -1,0 +1,21 @@
+﻿<div style="width:100%;">
+<p style="color:rgb(255,132,0);font-weight:bold;font-size:16px;text-align:center;" >Thông báo huỷ đơn đặt vé :companyName:</p>
+<p>Chào :fullName:</p>
+<p>Chúng tôi đã nhận được yêu cầu huỷ đơn đặt vé
+của quý khách tại <a href=":siteurl:">:siteName:</a> với các thông tin sau:</P>
+<table>
+<tr><th>Mã đơn đặt vé</th><td>:reservationCode:</td></tr>
+<tr><th>Ngày đặt</th><td>:bookTime:</td></tr>
+</table>
+<p>Lộ trình:</p>
+<table>
+:loopTicket:<tr><td>Từ :from: đến :to:</td><td>:fromDate: - :toDate:</td><td>:seatNumbers:</td><td>:ticketPrice:</td></tr>
+:loopTicket:
+</table>
+<table>
+<tr><th>Tổng cộng</th><td>:totalAmount:</td></tr>
+<tr><th>Phí</th><td>:fee:</td></tr>
+<tr><th>Thành tiền</th><td>:amountToBePaid:</td></tr>
+<tr><th>Đã hoàn lại</th><td>:refundedAmount:</td></tr>
+</table>
+</div>
