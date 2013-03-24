@@ -1,6 +1,5 @@
 package vn.edu.fpt.capstone.busReservation.action.route;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,8 +8,6 @@ import java.util.List;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
@@ -49,18 +46,21 @@ public class SaveSegmentAction extends BaseAction {
 
 	@Action(value = "saveSegment", results = { @Result(type = "json", name = SUCCESS, params = {
 			"root", "message" }) })
-	public String execute() throws JsonParseException, JsonMappingException,
-			IOException, ParseException {
-		SegmentAddInfo segmentAddInfos = mapper.readValue(data,
-				new TypeReference<SegmentAddInfo>() {
-				});
-		List<SegmentInfo> segmentInfosFoward = segmentAddInfos.getSegments();
+	public String execute() {
+		try {
+			SegmentAddInfo segmentAddInfos = mapper.readValue(data,
+					new TypeReference<SegmentAddInfo>() {
+					});
+			List<SegmentInfo> segmentInfosFoward = segmentAddInfos
+					.getSegments();
 
-		if (!segmentInfosFoward.isEmpty()) {
-			insertSegment(segmentInfosFoward, segmentAddInfos, false);
+			if (!segmentInfosFoward.isEmpty()) {
+				insertSegment(segmentInfosFoward, segmentAddInfos, false);
 
-			Collections.reverse(segmentInfosFoward);
-			insertSegment(segmentInfosFoward, segmentAddInfos, true);
+				Collections.reverse(segmentInfosFoward);
+				insertSegment(segmentInfosFoward, segmentAddInfos, true);
+			}
+		} catch (Exception e) {
 		}
 		return SUCCESS;
 	}
@@ -121,16 +121,19 @@ public class SaveSegmentAction extends BaseAction {
 				segmentBean.setEndAt(endStation);
 				segmentBean.setTravelTime(dtravelTime);
 				segmentDAO.insert(segmentBean);
-				//add recent created segment to route detail
+				// add recent created segment to route detail
 				segmentBeans.add(segmentBean);
 			} else {
 				if (i == 0) {
-					routeName += duplicatedSegmentBeans.get(0).getStartAt().getCity().getName();
+					routeName += duplicatedSegmentBeans.get(0).getStartAt()
+							.getCity().getName();
 				}
 				if (i == segmentInfos.size() - 1) {
-					routeName += " - " + duplicatedSegmentBeans.get(0).getEndAt().getCity().getName();
+					routeName += " - "
+							+ duplicatedSegmentBeans.get(0).getEndAt()
+									.getCity().getName();
 				}
-				//add segment to route detail
+				// add segment to route detail
 				segmentBeans.add(duplicatedSegmentBeans.get(0));
 			}
 		}

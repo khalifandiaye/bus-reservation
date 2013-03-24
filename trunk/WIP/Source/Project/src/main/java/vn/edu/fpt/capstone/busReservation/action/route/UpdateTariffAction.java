@@ -1,6 +1,5 @@
 package vn.edu.fpt.capstone.busReservation.action.route;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,8 +9,6 @@ import java.util.List;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
@@ -55,26 +52,27 @@ public class UpdateTariffAction extends BaseAction {
 
 	@Action(value = "updateTariff", results = { @Result(type = "json", name = SUCCESS, params = {
 			"root", "message" }) })
-	public String execute() throws JsonParseException, JsonMappingException,
-			IOException, ParseException {
-		TariffUpdateInfo tariffUpdateInfo = mapper.readValue(data,
-				new TypeReference<TariffUpdateInfo>() {
-				});
-		List<TariffInfo> tariffInfos = tariffUpdateInfo.getTariffs();
-		int routeId = tariffUpdateInfo.getRouteId();
-		updateTarrif(tariffInfos, tariffUpdateInfo, routeId, false);
-		Collections.reverse(tariffInfos);
-		List<Integer> rt = routeDAO.getRouteTerminal(routeId);
-		int revertRouteId = 0;
-		if (rt.size() != 0) {
-			if (routeId == rt.get(0)) {
-				revertRouteId = rt.get(1);
-			} else {
-				revertRouteId = rt.get(0);
+	public String execute() {
+		try {
+			TariffUpdateInfo tariffUpdateInfo = mapper.readValue(data,
+					new TypeReference<TariffUpdateInfo>() {
+					});
+			List<TariffInfo> tariffInfos = tariffUpdateInfo.getTariffs();
+			int routeId = tariffUpdateInfo.getRouteId();
+			updateTarrif(tariffInfos, tariffUpdateInfo, routeId, false);
+			Collections.reverse(tariffInfos);
+			List<Integer> rt = routeDAO.getRouteTerminal(routeId);
+			int revertRouteId = 0;
+			if (rt.size() != 0) {
+				if (routeId == rt.get(0)) {
+					revertRouteId = rt.get(1);
+				} else {
+					revertRouteId = rt.get(0);
+				}
+				updateTarrif(tariffInfos, tariffUpdateInfo, revertRouteId, true);
 			}
-			updateTarrif(tariffInfos, tariffUpdateInfo, revertRouteId, true);
+		} catch (Exception e) {
 		}
-
 		return SUCCESS;
 	}
 
@@ -90,24 +88,29 @@ public class UpdateTariffAction extends BaseAction {
 			SegmentBean segmentBean = segmentDAO.getById(tariffInfo
 					.getSegmentId());
 			SegmentBean segmentBeanRevert = segmentDAO.getDuplicatedSegment(
-					segmentBean.getEndAt().getId(), segmentBean.getStartAt().getId()).get(0);
-			//get exist tariff
+					segmentBean.getEndAt().getId(),
+					segmentBean.getStartAt().getId()).get(0);
+			// get exist tariff
 			List<Object[]> tariffBeans = tariffDAO.getExistTariff(
-			      segmentBean.getId(), busTypeBean.getId(), validDate);
-			
+					segmentBean.getId(), busTypeBean.getId(), validDate);
+
 			List<Object[]> tariffBeansRevert = tariffDAO.getExistTariff(
 					segmentBeanRevert.getId(), busTypeBean.getId(), validDate);
-			
-			if (tariffBeans.size() != 0 && tariffBeans.get(0)[0] != null && 
-				      (((Double)tariffBeans.get(0)[3]).doubleValue() != tariffInfo.getFare().doubleValue())){
-				   TariffBean tariffBean = tariffDAO.getById((Integer)tariffBeans.get(0)[3]);
-				   TariffBean revertTariffBean = tariffDAO.getById((Integer)tariffBeansRevert.get(0)[3]);
-					//update current segment
-				   tariffBean.setFare(tariffInfo.getFare());
-					//update revert segment
-				   revertTariffBean.setFare(tariffInfo.getFare());
-					tariffDAO.update(tariffBean);
-					tariffDAO.update(revertTariffBean);
+
+			if (tariffBeans.size() != 0
+					&& tariffBeans.get(0)[0] != null
+					&& (((Double) tariffBeans.get(0)[3]).doubleValue() != tariffInfo
+							.getFare().doubleValue())) {
+				TariffBean tariffBean = tariffDAO.getById((Integer) tariffBeans
+						.get(0)[3]);
+				TariffBean revertTariffBean = tariffDAO
+						.getById((Integer) tariffBeansRevert.get(0)[3]);
+				// update current segment
+				tariffBean.setFare(tariffInfo.getFare());
+				// update revert segment
+				revertTariffBean.setFare(tariffInfo.getFare());
+				tariffDAO.update(tariffBean);
+				tariffDAO.update(revertTariffBean);
 			} else {
 				List<SegmentBean> segments = new ArrayList<SegmentBean>();
 				if (!isRevertRoute) {

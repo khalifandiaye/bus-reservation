@@ -1,12 +1,10 @@
 package vn.edu.fpt.capstone.busReservation.action.route;
 
-import java.text.ParseException;
 import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.json.JSONException;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
@@ -24,7 +22,7 @@ public class ActiveRouteAction extends BaseAction {
    private String message;
 
    @Action(value = "/activeRoute", results = { @Result(type = "json", name = SUCCESS) })
-   public String execute() throws ParseException, JSONException {
+   public String execute(){
       try {
          List<Integer> routeTerminals = routeDAO.getRouteTerminal(routeId);
          // delete route and its return

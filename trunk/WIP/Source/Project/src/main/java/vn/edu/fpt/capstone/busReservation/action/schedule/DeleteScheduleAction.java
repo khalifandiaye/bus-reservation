@@ -1,12 +1,10 @@
 package vn.edu.fpt.capstone.busReservation.action.schedule;
 
-import java.text.ParseException;
 import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.json.JSONException;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
@@ -25,27 +23,26 @@ public class DeleteScheduleAction extends BaseAction {
 	private String message;
 
 	@Action(value = "/deleteSchedule", results = { @Result(type = "json", name = SUCCESS) })
-	public String execute() throws ParseException, JSONException {
-
+	public String execute() {
 		List<TicketBean> reservationBeans = ticketDAO.getTicketByBusStatusId(busStatusId);
 		boolean isHaveReservation = false;
 		int countReservation = 0;
 		for (TicketBean ticketBean : reservationBeans) {
-         if (ticketBean.getReservation() != null 
-               && ticketBean.getReservation().getStatus().equals("paid")) {
-            isHaveReservation = false;
-            countReservation++;
-         }
-      }
-		
+			if (ticketBean.getReservation() != null
+					&& ticketBean.getReservation().getStatus().equals("paid")) {
+				isHaveReservation = false;
+				countReservation++;
+			}
+		}
+
 		if (!isHaveReservation) {
 			BusStatusBean busStatusBean = busStatusDAO.getById(busStatusId);
 			busStatusBean.setStatus("inactive");
 			busStatusDAO.update(busStatusBean);
 			message = "Delete trip successfully!";
 		} else {
-			message = "Cannot delete trip. This trip has "
-					+ countReservation + "reservation on it";
+			message = "Cannot delete trip. This trip has " + countReservation
+					+ "reservation on it";
 		}
 		return SUCCESS;
 	}
