@@ -156,6 +156,7 @@
 		$('#addNewSchedule').bind('click',
 			function(event) {
 				var selectedRouteId = $("#routeId").val();
+				$("#routeBeans").val(selectedRouteId);
 				var departureTime = $("#tripDialogDepartureTime").val();
 				var selectedBusType = $("#tripDialogBusType").val();
 				var busPlate = $('#tripDialogBusPlate').val();
@@ -293,21 +294,30 @@
 					var busInRoute = response.busInRouteBeans;
 					var busNotInRoute = response.busNotInRouteBeans;
 					$('#busDetailTable').dataTable().fnClearTable();
-					$.each(busInRoute,
-						function() {busDetailTable.dataTable().fnAddData([
-							this.id,
-							this.plateNumber,
-							'<button type="button" data-id="'+ this.id +'" class="btn btn-danger">Delete</button>' ]);
-							$("#busDetailTable tr button[data-id="+ this.id+ "]").click(
-								function() {
-									var td = this.parentNode;
-									var tr = td.parentNode;
-									var aPos = busDetailTable.dataTable().fnGetPosition(td);
-									var data = busDetailTable.fnGetData(tr);
-									$('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
-									busDetailTable.dataTable().fnDeleteRow(aPos[0]);
-								});
-						});
+					
+   				$.each(busInRoute, function() {
+   					if (this['delete'] == 'true') {
+   					busDetailTable.dataTable().fnAddData([
+   					   this.id,
+   						this.plateNumber,
+   						'<button type="button" data-id="'+ this.id +'" class="btn btn-danger">Delete</button>' ]);
+   						$("#busDetailTable tr button[data-id="+ this.id+ "]").click(
+   						function() {
+   							var td = this.parentNode;
+   							var tr = td.parentNode;
+   							var aPos = busDetailTable.dataTable().fnGetPosition(td);
+   							var data = busDetailTable.fnGetData(tr);
+   							$('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
+   								busDetailTable.dataTable().fnDeleteRow(aPos[0]);
+   							});
+   					} else {
+   		            $.each(busInRoute, function() {busDetailTable.dataTable().fnAddData([
+   		               this.id,
+   		               this.plateNumber,
+   		               '<button type="button" data-id="'+ this.id +'" class="btn btn-danger" disabled="disabled">Delete</button>' ]);
+   		            });
+   		         }
+   				});
 
 					$('#busDetailbusPlate').empty();
 					$.each(busNotInRoute,function() {$('#busDetailbusPlate').append(
@@ -354,13 +364,12 @@
 						}
 					});
 
-				$.each($("#busDetailbusPlate option"),
-					function() {
-						var unSelectBus = {};
-						unSelectBus['id'] = this.value;
-						unSelectBus['plateNumber'] = "0";
-						unSelectBusInfos.push(unSelectBus);
-					});
+				$.each($("#busDetailbusPlate option"), function() {
+					var unSelectBus = {};
+					unSelectBus['id'] = this.value;
+					unSelectBus['plateNumber'] = "0";
+					unSelectBusInfos.push(unSelectBus);
+				});
 
 				var busDetailInfo = {};
 				busDetailInfo['routeId'] = routeId;
@@ -383,12 +392,10 @@
 // 			$("#priceDialog").modal();
 // 		});
 
-		$('#return').bind('click',
-			function() {
-				var url = $('#contextPath').val()
-						+ "/route/list.html";
-				window.location = url;
-			});
+		$('#return').bind('click', function() {
+			var url = $('#contextPath').val() + "/route/list.html";
+			window.location = url;
+		});
 
 		$('tr[data-segment-id]').each(function() {
 			var id = this.dataset.segmentId;
@@ -618,6 +625,7 @@
    <div id="CreateScheduleDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true">
       <form id="addNewTripForm" action="save.html" method="POST">
+         <input id="routeBeans" size="16" type="hidden" value="" readonly name="routeBeans">
          <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="tripEditDialogLabel"></h3>

@@ -21,12 +21,12 @@
 	function loadDetails(routeid) {
     	var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId=" + routeid;
     	window.location = url;
- 	};
+ 	}
  
  	function deleteRoute(id) {
  	   $('#routeId').val(id);
  	   $("#deleteRouteDialog").modal();
- 	};
+ 	}
  	
  	function activeRoute(id) {
  		$.ajax({
@@ -54,7 +54,7 @@
                 getDuration();
             });
        }
-   };
+   }
    
    function getDuration() {
 	   var startStationAt = $("#stationStartAt").val();

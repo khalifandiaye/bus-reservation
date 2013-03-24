@@ -9,6 +9,7 @@ public class BusInfo implements Serializable {
 	private static final long serialVersionUID = -2195287469199563262L;
 	private int id;
 	private String plateNumber;
+	private String delete;
 	
 	public int getId() {
 		return id;
@@ -25,5 +26,13 @@ public class BusInfo implements Serializable {
 	public void setPlateNumber(String plateNumber) {
 		this.plateNumber = plateNumber;
 	}
+
+   public String getDelete() {
+      return delete;
+   }
+
+   public void setDelete(String delete) {
+      this.delete = delete;
+   }
 	
 }

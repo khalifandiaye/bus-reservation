@@ -89,10 +89,10 @@ public class SaveAction extends ActionSupport {
 				trip.setRouteDetails(routeDetailsBean);
 				tripDAO.insert(trip);
 			}
+			message = "Add schedule Success!";
 		} catch (Exception ex) {
 			message = "Error! Please try again!";
 		}
-		message = "Add schedule Success!";
 		return SUCCESS;
 	}
 

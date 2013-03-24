@@ -34,6 +34,12 @@ public class BusDetailAction extends ActionSupport {
 			BusInfo busInfo = new BusInfo();
 			busInfo.setId((Integer) objects[0]);
 			busInfo.setPlateNumber((String) objects[1]);
+			List<Object[]> futurePlans = busDAO.checkAvaileBus((Integer) objects[0], routeId, "active");
+			if (futurePlans.size() > 0) {
+			   busInfo.setDelete("false");
+			} else {
+			   busInfo.setDelete("true");
+			}
 			busInRouteBeans.add(busInfo);
 		}
 		
