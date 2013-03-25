@@ -1,6 +1,6 @@
 $(document).ready(function() {
     // create and display a map
-    $('#map').customGMap('initialize', {enableRoute : true});
+    $('#map').customGMap('initialize', {hideMapLabels : true, enableRoute : true});
     // add a marker
     $('#map').customGMap('addMarker', {
         latitude : '10.7500',
@@ -32,6 +32,7 @@ $(document).ready(function() {
     });
 
     $('#clear').on('click.map', function() {
+        $('#map').customGMap('hideRoute');
         $('#map').customGMap('removeMarkers', {
             all : true
         });
