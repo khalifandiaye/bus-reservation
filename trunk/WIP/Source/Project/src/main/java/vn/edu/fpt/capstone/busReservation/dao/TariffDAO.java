@@ -79,7 +79,7 @@ public class TariffDAO extends GenericDAO<Integer, TariffBean> {
 		try {
 			String queryString = "FROM TariffBean t WHERE t.segment.id = :segmentId AND " +
 					"t.busType.id = :busTypeId AND t.validFrom = :validDate";
-			Query query = session.createSQLQuery(queryString);
+			Query query = session.createQuery(queryString);
 			query.setParameter("segmentId", segmentId);
 			query.setParameter("busTypeId", busTypeId);
 			query.setParameter("validDate", validDate);
