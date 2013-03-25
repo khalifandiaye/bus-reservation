@@ -52,25 +52,30 @@ public class SaveBusDetailAction extends BaseAction {
 			for (BusInfo busInfo : busInfos) {
 				BusBean busBean = busDAO.getById(busInfo.getId());
 				RouteBean routeBean = routeDAO.getById(routeId);
-				List<Integer> routeIDs = routeDAO.getRouteTerminal(routeBean
-						.getId());
-				if (routeIDs.size() != 0) {
-					busBean.setForwardRoute(routeDAO.getById(routeIDs.get(0)));
-					busBean.setReturnRoute(routeDAO.getById(routeIDs.get(1)));
+				//check if bus is new added
+				if (busBean.getForwardRoute() == null || busBean.getForwardRoute().getId() == 0) {
+					List<Integer> routeIDs = routeDAO
+							.getRouteTerminal(routeBean.getId());
+					if (routeIDs.size() != 0) {
+						busBean.setForwardRoute(routeDAO.getById(routeIDs
+								.get(0)));
+						busBean.setReturnRoute(routeDAO.getById(routeIDs.get(1)));
 
-					// create initiation bus status
-					busDAO.update(busBean);
-					Date currentTime = Calendar.getInstance().getTime();
-					BusStatusBean busStatusBean = new BusStatusBean();
-					busStatusBean.setBus(busBean);
-					busStatusBean.setBusStatus("initiation");
-					busStatusBean.setFromDate(currentTime);
-					busStatusBean.setToDate(currentTime);
-					StationBean endStationBean = routeDAO.getById(routeId)
-							.getRouteDetails().get(0).getSegment().getStartAt();
-					busStatusBean.setEndStation(endStationBean);
-					busStatusBean.setStatus("active");
-					busStatusDAO.insert(busStatusBean);
+						// create initiation bus status
+						busDAO.update(busBean);
+						Date currentTime = Calendar.getInstance().getTime();
+						BusStatusBean busStatusBean = new BusStatusBean();
+						busStatusBean.setBus(busBean);
+						busStatusBean.setBusStatus("initiation");
+						busStatusBean.setFromDate(currentTime);
+						busStatusBean.setToDate(currentTime);
+						StationBean endStationBean = routeDAO.getById(routeId)
+								.getRouteDetails().get(0).getSegment()
+								.getStartAt();
+						busStatusBean.setEndStation(endStationBean);
+						busStatusBean.setStatus("active");
+						busStatusDAO.insert(busStatusBean);
+					}
 				}
 			}
 
