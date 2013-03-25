@@ -309,7 +309,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 			if(seatsOutDouble != null){
 				session.put("seatsOutDouble", seatsOutDouble);
 			}
-			if(seatsOutDouble != null){
+			if(seatsReturnDouble != null){
 				session.put("seatsReturnDouble", seatsReturnDouble);
 			}
 			return "double";

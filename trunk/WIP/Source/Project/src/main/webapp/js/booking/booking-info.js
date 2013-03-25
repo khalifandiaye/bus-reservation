@@ -93,4 +93,10 @@ $(function(){
             showPopup(message);
         }
 	});
+	$("#booking-info-submit").bind("click",function(){
+		if($("#booking-form").valid()){
+			sessionStorage.removeItem("selectedOutSeat");
+			sessionStorage.removeItem("selectedReturnSeat");
+		}
+	})
 });

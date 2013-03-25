@@ -47,31 +47,27 @@ function initSelectedSeat(){
 	if(selectedOutSeat != ""){
 		arraySelectedOutSeat = selectedOutSeat.split(";");
 	}else{
-		if(sessionStorage.getItem("selectedOutSeat") == null){
-			return;
-		}
 		arraySelectedOutSeat = sessionStorage.getItem("selectedOutSeat").split(";");
+	}
+	if(arraySelectedOutSeat.length > 0){
 		for(var i = 0; i < arraySelectedOutSeat.length ;i++){
 			if(arraySelectedOutSeat[i] != ""){
 				seatClicked($('.seat-img[data-seat="'+arraySelectedOutSeat[i]+'"][data-type="out"]'));
 				}
 		} 
 	}
-	
 	if(selectedReturnSeat != ""){
 		arraySelectedReturnSeat = selectedReturnSeat.split(";");
 	}else{
-		if(sessionStorage.getItem("selectedReturnSeat") == null){
-			return;
-		}
 		arraySelectedReturnSeat = sessionStorage.getItem("selectedReturnSeat").split(";");
+	}
+	if(arraySelectedReturnSeat.length > 0){
 		for(var i = 0; i < arraySelectedReturnSeat.length ;i++){
 			if(arraySelectedReturnSeat[i] != ""){
 				seatClicked($('.seat-img[data-seat="'+arraySelectedReturnSeat[i]+'"][data-type="return"]'));
 				}
 		}
 	}
-	
 	
 	if($("#message").val() != null && $("#message").val() != ""){
 		showPopup($("#message").val());
