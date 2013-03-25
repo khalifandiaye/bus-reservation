@@ -65,6 +65,13 @@ public class SaveSegmentAction extends BaseAction {
 		return SUCCESS;
 	}
 
+	private boolean isRouteExist(String routeName) {
+      
+	   
+	   
+	   return false;
+	}
+	
 	private void insertSegment(List<SegmentInfo> segmentInfos,
 			SegmentAddInfo segmentAddInfos, boolean isReturnRoute)
 			throws ParseException {

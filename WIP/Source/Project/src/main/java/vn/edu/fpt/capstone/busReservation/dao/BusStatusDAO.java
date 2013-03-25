@@ -237,4 +237,21 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 		}
 		return result;
 	}
+	
+	public List<BusStatusBean> getBusStatus(int routeId, int busId, Date date) {
+      String hql = "FROM BusStatusBean bs WHERE bs.endStation.id = :busId "
+            + "AND bs.bus.id = :busId";
+      Session session = sessionFactory.getCurrentSession();
+      List<BusStatusBean> result = new ArrayList<BusStatusBean>();
+      try {
+         // must have to start any transaction
+         Query query = session.createQuery(hql);
+         query.setParameter("status", "active");
+         query.setParameter("busId", busId);
+         result = query.list();
+      } catch (HibernateException e) {
+         exceptionHandling(e, session);
+      }
+      return result;
+   }
 }
