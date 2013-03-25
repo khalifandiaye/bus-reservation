@@ -52,11 +52,12 @@ public class SaveAction extends ActionSupport {
 
 			for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
 				traTime += routeDetailsBean.getSegment().getTravelTime();
+
 			}
-			for (int i = 0; i < (routeDetailsList.size() -1); i++) {
+			for (int i = 0; i < (routeDetailsList.size() - 1); i++) {
 				traTime += delayTime;
 			}
-			
+
 			Date toDate = new Date(fromDate.getTime() + traTime);
 
 			BusStatusBean busStatusBean = new BusStatusBean();
@@ -71,19 +72,19 @@ public class SaveAction extends ActionSupport {
 			busStatusDAO.insert(busStatusBean);
 
 			// time travel
-			long traDate = fromDate.getTime();
-
-			int i=0;
+			int i = 0;
+			long traDate = fromDate.getTime();			
 			for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
 				TripBean trip = new TripBean();
+				if (i > 0 && i < (routeDetailsList.size())) {
+					traDate += delayTime;					
+				}
+				i++;
 				Date travelDate = new Date(traDate);
 				trip.setDepartureTime(travelDate);
 				trip.setBusStatus(busStatusBean);
 				// calculate arrival time for each segment
-				traDate += routeDetailsBean.getSegment().getTravelTime();
-				if (i< (routeDetailsList.size() -1)){
-					traDate += delayTime;
-				}
+				traDate += routeDetailsBean.getSegment().getTravelTime();				
 				travelDate = new Date(traDate);
 				trip.setArrivalTime(travelDate);
 				trip.setRouteDetails(routeDetailsBean);
