@@ -66,6 +66,8 @@
 		};
 
 		$('#busStatusInsertBtn').click(function() {
+			var date = new Date();
+			date.setDate(d.getDate() + 1);
 			$("#addNewSchedule").attr("disabled","disabled");
 			$('#tripDialogRoutes').val(-1);
 			$('#tripDialogDepartureTime').val('');
@@ -77,7 +79,7 @@
 				format : "yyyy/mm/dd - hh:ii",
 				autoclose : true,
 				todayBtn : true,
-				startDate : new Date(),
+				startDate : date,
 				minuteStep : 10
 			}).on('changeDate', function(ev) {
 				getAvailBus();
