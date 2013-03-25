@@ -67,7 +67,7 @@
 
 		$('#busStatusInsertBtn').click(function() {
 			var date = new Date();
-			date.setDate(d.getDate() + 1);
+			date.setDate(date.getDate() + 1);
 			$("#addNewSchedule").attr("disabled","disabled");
 			$('#tripDialogRoutes').val(-1);
 			$('#tripDialogDepartureTime').val('');
@@ -78,7 +78,7 @@
 			$("#tripDialogDepartureTimeDiv").datetimepicker({
 				format : "yyyy/mm/dd - hh:ii",
 				autoclose : true,
-				todayBtn : true,
+				todayBtn : false,
 				startDate : date,
 				minuteStep : 10
 			}).on('changeDate', function(ev) {
