@@ -178,6 +178,7 @@
 							+ form.attr('action'),
 					data : form.serialize(),
 					success : function(response) {
+						$('#CreateScheduleDialog').modal('hide');
 						alert(response);
 					}
 				});
