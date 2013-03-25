@@ -18,7 +18,7 @@
 <td class="cell"><a href="#trip-details" role="button"
 	data-toggle="modal" class="trip-details return">Chi tiết</a></td>
 <td class="cell">
-		<s:property value="getText('{0,number,#,##0}',{fare})" />
+		<s:property value="getText('{0,number,#,##0}',{fare})" />,000
 	&nbsp;VND&nbsp;</td>
 <td class="cell rtn-journey-rdo">
 		<input title="Chọn chuyến này" type="radio" name="rtn_journey"
