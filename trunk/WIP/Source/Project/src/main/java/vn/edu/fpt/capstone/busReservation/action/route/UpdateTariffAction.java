@@ -90,21 +90,17 @@ public class UpdateTariffAction extends BaseAction {
 			SegmentBean segmentBeanRevert = segmentDAO.getDuplicatedSegment(
 					segmentBean.getEndAt().getId(),
 					segmentBean.getStartAt().getId()).get(0);
+			
 			// get exist tariff
-			List<Object[]> tariffBeans = tariffDAO.getExistTariff(
+			List<TariffBean> tariffBeans = tariffDAO.getExistTariff(
 					segmentBean.getId(), busTypeBean.getId(), validDate);
 
-			List<Object[]> tariffBeansRevert = tariffDAO.getExistTariff(
+			List<TariffBean> tariffBeansRevert = tariffDAO.getExistTariff(
 					segmentBeanRevert.getId(), busTypeBean.getId(), validDate);
 
-			if (tariffBeans.size() != 0
-					&& tariffBeans.get(0)[0] != null
-					&& (((Double) tariffBeans.get(0)[3]).doubleValue() != tariffInfo
-							.getFare().doubleValue())) {
-				TariffBean tariffBean = tariffDAO.getById((Integer) tariffBeans
-						.get(0)[3]);
-				TariffBean revertTariffBean = tariffDAO
-						.getById((Integer) tariffBeansRevert.get(0)[3]);
+			if (tariffBeans.size() != 0) {
+				TariffBean tariffBean = tariffBeans.get(0);
+				TariffBean revertTariffBean = tariffBeansRevert.get(0);
 				// update current segment
 				tariffBean.setFare(tariffInfo.getFare());
 				// update revert segment
