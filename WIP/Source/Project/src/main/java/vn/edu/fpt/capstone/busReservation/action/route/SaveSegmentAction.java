@@ -3,7 +3,9 @@ package vn.edu.fpt.capstone.busReservation.action.route;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -48,32 +50,50 @@ public class SaveSegmentAction extends BaseAction {
 			"root", "message" }) })
 	public String execute() {
 		try {
-			SegmentAddInfo segmentAddInfos = mapper.readValue(data,
-					new TypeReference<SegmentAddInfo>() {
-					});
-			List<SegmentInfo> segmentInfosFoward = segmentAddInfos
-					.getSegments();
-
-			if (!segmentInfosFoward.isEmpty()) {
-				insertSegment(segmentInfosFoward, segmentAddInfos, false);
-
-				Collections.reverse(segmentInfosFoward);
-				insertSegment(segmentInfosFoward, segmentAddInfos, true);
-			}
+			SegmentAddInfo segmentAddInfos = mapper.readValue(data, new TypeReference<SegmentAddInfo>() { });
+			List<SegmentInfo> segmentInfosFoward = segmentAddInfos.getSegments();
+			
+         if (!isRouteExist(segmentInfosFoward)) {
+            if (!segmentInfosFoward.isEmpty()) {
+               insertSegment(segmentInfosFoward, false);
+               Collections.reverse(segmentInfosFoward);
+               insertSegment(segmentInfosFoward, true);
+            }
+         } else {
+            message = "Route existed! Please verify again!";
+         }
 		} catch (Exception e) {
+		   message = "Error! Please contact admin!";
 		}
 		return SUCCESS;
 	}
 
-	private boolean isRouteExist(String routeName) {
+	private boolean isRouteExist(List<SegmentInfo> segmentInfos) {
+      Set<Integer> newStations = new HashSet<Integer>();
       
-	   
+      for (SegmentInfo segmentInfo : segmentInfos) {
+         newStations.add(segmentInfo.getStartAt());
+         newStations.add(segmentInfo.getEndAt());
+      }
+      
+      List<RouteBean> routeBeans = routeDAO.getAll();
+      for (RouteBean routeBean : routeBeans) {
+         List<RouteDetailsBean> segmentBeans = routeBean.getRouteDetails();
+         Set<Integer> stations = new HashSet<Integer>();
+         for (RouteDetailsBean routeDetailsBean : segmentBeans) {
+            SegmentBean segmentBean = routeDetailsBean.getSegment();
+            stations.add(segmentBean.getStartAt().getCity().getId());
+            stations.add(segmentBean.getEndAt().getCity().getId());
+         }
+         if (stations.size() == newStations.size() && stations.containsAll(newStations)) {
+            return true;
+         }
+      }
 	   
 	   return false;
 	}
 	
-	private void insertSegment(List<SegmentInfo> segmentInfos,
-			SegmentAddInfo segmentAddInfos, boolean isReturnRoute)
+	private void insertSegment(List<SegmentInfo> segmentInfos, boolean isReturnRoute)
 			throws ParseException {
 		String routeName = "";
 		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
