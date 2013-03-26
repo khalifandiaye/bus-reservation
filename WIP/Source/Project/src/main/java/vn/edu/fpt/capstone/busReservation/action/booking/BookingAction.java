@@ -275,7 +275,8 @@ public class BookingAction extends BaseAction implements SessionAware {
 				int busStatus = Integer.parseInt(rtnBusStatus);
 				listReturnTripBean = tripDAO.getBookingTrips(busStatus, rtnDepartTime, rtnArriveTime);
 				session.put("listReturnTripBean", listReturnTripBean);
-			}	
+			}
+			session.put("passengerNo", passengerNo);
 		}else if(session.containsKey("listOutTripBean") || session.containsKey("listReturnTripBean")){
 			//redirect from some where
 			if(session.containsKey("listOutTripBean")){ 
@@ -284,6 +285,7 @@ public class BookingAction extends BaseAction implements SessionAware {
 			if(session.containsKey("listReturnTripBean")){
 				listReturnTripBean = (List<TripBean>)session.get("listReturnTripBean");
 			}
+			this.passengerNo = (String)session.get("passengerNo");
 		}		
 		
 		
@@ -297,8 +299,6 @@ public class BookingAction extends BaseAction implements SessionAware {
 			
 			List<String> listOutDouble = (List<String>)session.get("seatsOutDouble");
 			List<String> listReturnDouble = (List<String>)session.get("seatsReturnDouble");
-			
-			this.passengerNo = listOutSeats.length+"";
 			
 			String nwOutSeat = "";
 			String nwReturnSeat = "";
@@ -331,7 +331,6 @@ public class BookingAction extends BaseAction implements SessionAware {
 		if(listReturnTripBean != null){
 			seatMapReturn = buildSeatMap(listReturnTripBean);
 		}
-		
 		return SUCCESS;
 	}
 

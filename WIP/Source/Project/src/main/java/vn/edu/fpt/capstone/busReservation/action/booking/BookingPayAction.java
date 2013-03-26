@@ -254,6 +254,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 			session.remove("listReturnTripBean");
 			session.remove("selectedOutSeat");
 			session.remove("selectedReturnSeat");
+			session.remove("passengerNo");
 			session.remove("User_tmp");
 
 			return SUCCESS;
