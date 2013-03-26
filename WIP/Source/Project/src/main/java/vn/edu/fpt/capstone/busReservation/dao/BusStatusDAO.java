@@ -238,6 +238,7 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<BusStatusBean> getBusStatus(int routeId, int busId, Date date) {
       String hql = "FROM BusStatusBean bs WHERE bs.endStation.id = :busId "
             + "AND bs.bus.id = :busId";

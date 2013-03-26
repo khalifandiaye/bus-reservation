@@ -177,7 +177,7 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
    }
 	
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public int getMinDuration(int deptCity,
 			int arrvCity) {
 		List<Integer> duration = null;

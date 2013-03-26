@@ -2,6 +2,7 @@ package vn.edu.fpt.capstone.busReservation.action.route;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -17,10 +18,12 @@ import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SegmentDAO;
+import vn.edu.fpt.capstone.busReservation.dao.SegmentTravelTimeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.StationDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentTravelTimeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentAddInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentInfo;
@@ -43,6 +46,8 @@ public class SaveSegmentAction extends BaseAction {
 	private SegmentDAO segmentDAO;
 	private RouteDAO routeDAO;
 	private RouteDetailsDAO routeDetailsDAO;
+	private SegmentTravelTimeDAO segmentTravelTimeDAO;
+
 
 	private String message = "New Route saved successfully!";
 
@@ -97,6 +102,7 @@ public class SaveSegmentAction extends BaseAction {
 			throws ParseException {
 		String routeName = "";
 		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
+		List<SegmentTravelTimeBean> segmentTravelTimeBeans = new ArrayList<SegmentTravelTimeBean>();
 
 		for (int i = 0; i < segmentInfos.size(); i++) {
 
@@ -146,10 +152,19 @@ public class SaveSegmentAction extends BaseAction {
 
 				segmentBean.setStartAt(startStation);
 				segmentBean.setEndAt(endStation);
-				segmentBean.setTravelTime(dtravelTime);
 				segmentDAO.insert(segmentBean);
 				// add recent created segment to route detail
 				segmentBeans.add(segmentBean);
+				
+				
+				// add initiation travel time of recent added segment
+				SegmentTravelTimeBean segmentTravelTimeBean = new SegmentTravelTimeBean();
+				segmentTravelTimeBean.setSegment(segmentBean);
+				segmentTravelTimeBean.setTravelTime(dtravelTime);
+				segmentTravelTimeBean.setValidFrom(Calendar.getInstance().getTime());
+				segmentTravelTimeDAO.insert(segmentTravelTimeBean);
+				segmentTravelTimeBeans.add(segmentTravelTimeBean);
+				
 			} else {
 				if (i == 0) {
 					routeName += duplicatedSegmentBeans.get(0).getStartAt()
@@ -178,6 +193,9 @@ public class SaveSegmentAction extends BaseAction {
 		}
 	}
 
+	public void setSegmentTravelTimeDAO(SegmentTravelTimeDAO segmentTravelTimeDAO) {
+		this.segmentTravelTimeDAO = segmentTravelTimeDAO;
+	}
 	public String getData() {
 		return data;
 	}
