@@ -500,8 +500,8 @@ public class ReservationLogic extends BaseLogic {
 
     public ReservationInfo createReservationInfo(
             final List<TripBean> forwardTrips,
-            final List<TripBean> returnTrips, int quantity)
-            throws CommonException {
+            final List<TripBean> returnTrips, int fowardQuantity,
+            int returnQuantity) throws CommonException {
         ReservationInfo info = null;
         CurrencyConverter converter = null;
         List<Ticket> tickets = null;
@@ -521,12 +521,12 @@ public class ReservationLogic extends BaseLogic {
         tickets = new ArrayList<ReservationInfo.Ticket>();
         info.setTickets(tickets);
         tripDAO.refresh(forwardTrips);
-        basePrice += ReservationUtils.addTickets(info, forwardTrips, quantity,
-                false, tariffViewDAO, converter);
+        basePrice += ReservationUtils.addTickets(info, forwardTrips,
+                fowardQuantity, false, tariffViewDAO, converter);
         if (returnTrips != null) {
             tripDAO.refresh(returnTrips);
             basePrice += ReservationUtils.addTickets(info, returnTrips,
-                    quantity, true, tariffViewDAO, converter);
+                    returnQuantity, true, tariffViewDAO, converter);
         }
         Collections.sort(info.getTickets());
         info.setBasePrice(basePrice);

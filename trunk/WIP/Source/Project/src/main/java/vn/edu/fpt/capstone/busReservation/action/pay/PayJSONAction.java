@@ -44,7 +44,8 @@ public class PayJSONAction extends BaseAction {
     // ==========================Action Input==========================
     private Integer paymentMethodId;
     private String reservationId;
-    private String selectedSeat;
+    private String forwardSeats;
+    private String returnSeats;
 
     /**
      * @param paymentMethodId
@@ -63,11 +64,19 @@ public class PayJSONAction extends BaseAction {
     }
 
     /**
-     * @param selectedSeat
-     *            the selectedSeat to set
+     * @param forwardSeats
+     *            the forwardSeats to set
      */
-    public void setSelectedSeat(String selectedSeat) {
-        this.selectedSeat = selectedSeat;
+    public void setForwardSeats(String forwardSeats) {
+        this.forwardSeats = forwardSeats;
+    }
+
+    /**
+     * @param returnSeats
+     *            the returnSeats to set
+     */
+    public void setReturnSeats(String returnSeats) {
+        this.returnSeats = returnSeats;
     }
 
     // ==========================Action Output=========================
@@ -104,8 +113,11 @@ public class PayJSONAction extends BaseAction {
                     .get(ReservationInfo.class.getName());
             if (reservationInfo != null) {
                 try {
-                    paymentLogic.updateReservationPaymentInfo(reservationInfo,
-                            selectedSeat.split(";"), paymentMethodId);
+                    paymentLogic.updateReservationPaymentInfo(
+                            reservationInfo,
+                            forwardSeats == null ? null : forwardSeats
+                                    .split(";"), returnSeats == null ? null
+                                    : returnSeats.split(";"), paymentMethodId);
                 } catch (CommonException e) {
                     errorMessage = getText(e.getMessageId(), e.getParameters());
                     ;

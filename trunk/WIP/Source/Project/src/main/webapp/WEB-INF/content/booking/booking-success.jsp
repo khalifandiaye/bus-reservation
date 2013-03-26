@@ -229,7 +229,8 @@
 					Bạn đã chọn <span class="seat-number">0</span> trên tổng số <span
 						class="seat-number-selected"></span> ghế được chọn
 				</div>
-				<s:hidden id="seatToPayment" name="seatToPayment"></s:hidden>
+				<s:hidden id="forwardSeats" name="forwardSeats"></s:hidden>
+				<s:hidden id="returnSeats" name="returnSeats"></s:hidden>
 			</form>
 			<div style="overflow: hidden; width: 100%;">
 				<a style="margin-top: 15px; margin-right: 30px;"
