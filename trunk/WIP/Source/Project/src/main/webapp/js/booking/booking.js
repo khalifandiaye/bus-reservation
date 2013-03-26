@@ -42,33 +42,36 @@ function initSelectedSeat(){
 	var selectedOutSeat = $("#selectedOutSeat").val();
 	var selectedReturnSeat = $("#selectedReturnSeat").val();
 	
-	var arraySelectedOutSeat,arraySelectedReturnSeat;
+	var arraySelectedOutSeat = null,arraySelectedReturnSeat = null;
 	
 	if(selectedOutSeat != ""){
 		arraySelectedOutSeat = selectedOutSeat.split(";");
-	}else{
+	}else if(sessionStorage.getItem("selectedOutSeat") != null){
 		arraySelectedOutSeat = sessionStorage.getItem("selectedOutSeat").split(";");
 	}
-	if(arraySelectedOutSeat.length > 0){
-		for(var i = 0; i < arraySelectedOutSeat.length ;i++){
-			if(arraySelectedOutSeat[i] != ""){
-				seatClicked($('.seat-img[data-seat="'+arraySelectedOutSeat[i]+'"][data-type="out"]'));
-				}
-		} 
-	}
-	if(selectedReturnSeat != ""){
-		arraySelectedReturnSeat = selectedReturnSeat.split(";");
-	}else{
-		arraySelectedReturnSeat = sessionStorage.getItem("selectedReturnSeat").split(";");
-	}
-	if(arraySelectedReturnSeat.length > 0){
-		for(var i = 0; i < arraySelectedReturnSeat.length ;i++){
-			if(arraySelectedReturnSeat[i] != ""){
-				seatClicked($('.seat-img[data-seat="'+arraySelectedReturnSeat[i]+'"][data-type="return"]'));
-				}
+	if(arraySelectedOutSeat != null){
+		if(arraySelectedOutSeat.length > 0){
+			for(var i = 0; i < arraySelectedOutSeat.length ;i++){
+				if(arraySelectedOutSeat[i] != ""){
+					seatClicked($('.seat-img[data-seat="'+arraySelectedOutSeat[i]+'"][data-type="out"]'));
+					}
+			} 
 		}
 	}
-	
+	if(selectedReturnSeat != ""){ 
+		arraySelectedReturnSeat = selectedReturnSeat.split(";");
+	}else if(sessionStorage.getItem("selectedReturnSeat") != null){
+		arraySelectedReturnSeat = sessionStorage.getItem("selectedReturnSeat").split(";");
+	}
+	if(arraySelectedReturnSeat != null){
+		if(arraySelectedReturnSeat.length > 0){
+			for(var i = 0; i < arraySelectedReturnSeat.length ;i++){
+				if(arraySelectedReturnSeat[i] != ""){
+					seatClicked($('.seat-img[data-seat="'+arraySelectedReturnSeat[i]+'"][data-type="return"]'));
+					}
+			}
+		}
+	}
 	if($("#message").val() != null && $("#message").val() != ""){
 		showPopup($("#message").val());
 	}
@@ -269,7 +272,7 @@ $(function(){
         if(seatImage.length == 0){
             return;
         }
-        
+         
         message = seatClicked(seatImage);
 
         if(message){
@@ -297,4 +300,12 @@ $(function(){
 	    
 	    $("form.booking").submit(); 
 	});
+	
+	$('#myTab a').click(function (e) {
+		  e.preventDefault();
+		  $(this).tab('show');
+	});
+	
+	$('#myTab a:first').tab('show'); 
+
 });

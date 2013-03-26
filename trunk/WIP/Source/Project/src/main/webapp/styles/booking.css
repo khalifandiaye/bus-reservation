@@ -38,7 +38,7 @@
 }
 .seat-map-wrapper{
 	border: 1px solid #008EDB;
-	width: 920px;
+	width: 918px; 
 	height: 230px;
     overflow: hidden;
     background: url("../images/bus-seat-map.png") no-repeat;

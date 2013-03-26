@@ -29,17 +29,16 @@ function removeSeatInHiddenInput(seatName,seatType){
 }
 
 function removeSeat(){
-	var isDel = false;
 	var seatList = $(".listCheckedSeats tbody tr");
 	for(var i = 0; i < seatList.length; i++ ){
 		var seatType = seatList.eq(i).find("input[type='checkbox']").attr("name");
 		if($(seatList).eq(i).find("input[type='checkbox']").is(":checked")){
 			$(seatList).eq(i).remove();
 			removeSeatInHiddenInput($(seatList).eq(i).find(".seatChecked").text(),seatType);
-			isDel = true;
+			return true; 
 		}
 	}
-	return isDel;
+	return false;
 }
 
 function showPopup(message){
@@ -49,7 +48,7 @@ function showPopup(message){
 	$(".notify-message").append('<div class="alert fade in"><button type="button" class="close" data-dismiss="alert">×</button>'+message+'</div>');
 }
 
-function genSeatFromCookie(){
+function genSeatFromSessionStorage(){
 	
 	var listOutSeat = sessionStorage.getItem("selectedOutSeat").split(";");
 	var listReturnSeat = sessionStorage.getItem("selectedReturnSeat").split(";");
@@ -74,10 +73,16 @@ function genSeatFromCookie(){
 }
 
 $(function(){
-	genSeatFromCookie();
+	genSeatFromSessionStorage();
 	
 	$(".listCheckedSeats button").bind("click",function(event){
 		var message = "";
+		var allSelectedSeat = $("input[type='checkbox']:checked");
+		var allSeatCheckbox = $("input[type='checkbox']");
+		if(allSelectedSeat.length == allSeatCheckbox.length){ 
+			showPopup("Không được phép bỏ chọn tất cả các ghế.");
+			return;
+		} 
 		if($(".seatChecked").size() > 1){
 			if(removeSeat()){
 				message = ("Bỏ ghế thành công.");
@@ -93,10 +98,15 @@ $(function(){
             showPopup(message);
         }
 	});
+	
 	$("#booking-info-submit").bind("click",function(){
 		if($("#booking-form").valid()){
 			sessionStorage.removeItem("selectedOutSeat");
 			sessionStorage.removeItem("selectedReturnSeat");
+			
+			$("#booking-form").submit();
+		}else{
+			return;
 		}
 	})
 });
