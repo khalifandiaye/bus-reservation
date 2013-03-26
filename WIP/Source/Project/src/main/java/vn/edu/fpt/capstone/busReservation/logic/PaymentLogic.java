@@ -27,6 +27,7 @@ import javax.mail.internet.MimeUtility;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.hibernate.HibernateException;
+import org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.SAXException;
 
@@ -250,18 +251,21 @@ public class PaymentLogic extends BaseLogic {
 
     /**
      * @param info
-     *            reservation information
+     * @param forwardSeats
+     * @param returnSeats
      * @param paymentMethodId
      * @throws CommonException
      * @throws HibernateException
      */
     public void updateReservationPaymentInfo(ReservationInfo info,
-            String[] selectedSeats, final int paymentMethodId)
-            throws CommonException, HibernateException {
+            String[] forwardSeats, String[] returnSeats,
+            final int paymentMethodId) throws CommonException,
+            HibernateException {
         BigDecimal fee = null;
         BigDecimal totalAmount = null;
         CurrencyConverter converter = null;
         PaymentMethodBean paymentMethod = null;
+        double basePrice = 0;
         try {
             converter = CurrencyConverter.getInstance(
                     Currency.getInstance("VND"), Currency.getInstance("USD"));
@@ -271,16 +275,24 @@ public class PaymentLogic extends BaseLogic {
             // TODO handle error
             throw new CommonException(e);
         }
+        for (Ticket ticket : info.getTickets()) {
+            if (ticket.isReturnTrip()) {
+                ticket.setSeats(returnSeats);
+                basePrice += (ticket.getTicketPriceValue() == null ? 0 : ticket
+                        .getTicketPriceValue())
+                        * (returnSeats == null ? 0 : returnSeats.length);
+            } else {
+                ticket.setSeats(forwardSeats);
+                basePrice += (ticket.getTicketPriceValue() == null ? 0 : ticket
+                        .getTicketPriceValue())
+                        * (forwardSeats == null ? 0 : forwardSeats.length);
+            }
+        }
         paymentMethod = paymentMethodDAO.getById(paymentMethodId);
-        info.setBasePrice(info.getBasePriceValue() * selectedSeats.length
-                / info.getTickets().get(0).getSeats().length);
-        info.getTickets().get(0).setSeats(selectedSeats);
         try {
-            fee = roundingVND(
-                    calculateFee(info.getBasePriceValue(), paymentMethod),
+            fee = roundingVND(calculateFee(basePrice, paymentMethod),
                     RoundingMode.CEILING);
-            totalAmount = roundingVND(
-                    calculateTotal(info.getBasePriceValue(), fee),
+            totalAmount = roundingVND(calculateTotal(basePrice, fee),
                     RoundingMode.CEILING);
         } catch (IOException e) {
             // TODO handle error
@@ -289,6 +301,8 @@ public class PaymentLogic extends BaseLogic {
             // TODO handle error
             throw new CommonException(e);
         }
+        info.setBasePrice(basePrice);
+        info.setBasePriceInUSD(converter.convert(basePrice).doubleValue());
         info.setTransactionFee(fee.doubleValue());
         info.setTransactionFeeInUSD(converter.convert(fee).doubleValue());
         info.setTotalAmount(totalAmount.doubleValue());

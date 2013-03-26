@@ -296,7 +296,8 @@ $(function(){
 		$("#selectedOutSeat").val("");
 		$("#selectedReturnSeat").val("");
 		
-	    $("#seatToPayment").val(getSelectedOutSeatString());
+	    $("#forwardSeats").val(getSelectedOutSeatString());
+        $("#returnSeats").val(getSelectedReturnSeatString());
 	    
 	    $("form.booking").submit(); 
 	});

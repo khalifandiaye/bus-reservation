@@ -38,21 +38,32 @@ public class BookingInfoAction extends BaseAction {
         this.reservationLogic = reservationLogic;
     }
 
+    // ==========================Action Input==========================
+    private String forwardSeats;
+    private String returnSeats;
+
+    /**
+     * @param forwardSeats
+     *            the forwardSeats to set
+     */
+    public void setForwardSeats(String forwardSeats) {
+        this.forwardSeats = forwardSeats;
+    }
+
+    /**
+     * @param returnSeats
+     *            the returnSeats to set
+     */
+    public void setReturnSeats(String returnSeats) {
+        this.returnSeats = returnSeats;
+    }
+
     private List<PaymentMethodBean> paymentMethods;
     private ReservationInfo reservationInfo;
     private String inputFirstName;
     private String inputLastName;
     private String inputMobile;
     private String inputEmail;
-    private String seatToPayment;
-
-    /**
-     * @param seatToPayment
-     *            the seatToPayment to set
-     */
-    public void setSeatToPayment(String seatToPayment) {
-        this.seatToPayment = seatToPayment;
-    }
 
     /**
      * @return the inputFirstName
@@ -98,7 +109,7 @@ public class BookingInfoAction extends BaseAction {
 
     @SuppressWarnings("unchecked")
     public String execute() {
-        if (seatToPayment == null) {
+        if (forwardSeats == null) {
             return ERROR;
         }
         User user = null;
@@ -120,14 +131,18 @@ public class BookingInfoAction extends BaseAction {
         List<TripBean> tripBeanList = null;
         List<TripBean> returnTrips = null;
 
-        paymentMethods = paymentLogic.getPaymentMethods(sessionUser == null ? 0 : sessionUser.getRoleId());
+        paymentMethods = paymentLogic.getPaymentMethods(sessionUser == null ? 0
+                : sessionUser.getRoleId());
         tripBeanList = (List<TripBean>) session.get("listOutTripBean");
         returnTrips = (List<TripBean>) session.get("listReturnTripBean");
         try {
             reservationInfo = reservationLogic.createReservationInfo(
-                    tripBeanList, returnTrips, seatToPayment.split(";").length);
+                    tripBeanList, returnTrips, forwardSeats.split(";").length,
+                    returnSeats == null ? 0 : returnSeats.split(";").length);
             paymentLogic.updateReservationPaymentInfo(reservationInfo,
-                    seatToPayment.split(";"), paymentMethods.get(0).getId());
+                    forwardSeats.split(";"), returnSeats == null ? null
+                            : returnSeats.split(";"), paymentMethods.get(0)
+                            .getId());
         } catch (CommonException e) {
             errorProcessing(e);
             return ERROR;
