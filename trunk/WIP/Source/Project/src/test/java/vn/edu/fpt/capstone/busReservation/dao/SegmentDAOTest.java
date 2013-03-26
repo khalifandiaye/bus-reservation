@@ -3,13 +3,15 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao;
 
+import static org.junit.Assert.*;
+
 import java.text.ParseException;
+import java.util.List;
 
 import org.junit.Test;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 import vn.edu.fpt.capstone.busReservation.testUtil.DAOTest;
-import vn.edu.fpt.capstone.busReservation.util.DateUtils;
 
 /**
  * @author Yoshimi
@@ -23,7 +25,14 @@ public class SegmentDAOTest extends DAOTest {
         SegmentBean segmentBean = new SegmentBean();
         segmentBean.setStartAt(stationDAO.getById(3));
         segmentBean.setEndAt(stationDAO.getById(8));
-        segmentBean.setTravelTime(DateUtils.getTime(27, 0, 0));
         segmentDAO.insert(segmentBean);
+    }
+
+    @Test
+    public void testGetAll001() throws ParseException {
+        SegmentDAO segmentDAO = (SegmentDAO) getBean("segmentDAO");
+        List<SegmentBean> beans = segmentDAO.getAll();
+        assertNotNull(beans);
+        assertNotEquals(0, beans.size());
     }
 }
