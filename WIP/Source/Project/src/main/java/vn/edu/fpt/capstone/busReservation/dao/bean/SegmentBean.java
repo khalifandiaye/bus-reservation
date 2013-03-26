@@ -5,6 +5,7 @@ package vn.edu.fpt.capstone.busReservation.dao.bean;
 
 import java.util.List;
 
+
 /**
  * @author Yoshimi
  *
@@ -16,7 +17,7 @@ public class SegmentBean extends AbstractBean<Integer> {
 	private static final long serialVersionUID = -8476937436323359378L;
 	private StationBean startAt;
 	private StationBean endAt;
-	private Long travelTime;
+	private List<SegmentTravelTimeBean> segmentTravelTimes;
 	private List<TariffBean> tariffs;
 	private List<RouteDetailsBean> routeDetails;
 	/**
@@ -44,18 +45,18 @@ public class SegmentBean extends AbstractBean<Integer> {
 		this.endAt = endAt;
 	}
 	/**
-	 * @return the travelTime
-	 */
-	public Long getTravelTime() {
-		return travelTime;
-	}
-	/**
-	 * @param travelTime the travelTime to set
-	 */
-	public void setTravelTime(Long travelTime) {
-		this.travelTime = travelTime;
-	}
-	/**
+     * @return the segmentTravelTimes
+     */
+    public List<SegmentTravelTimeBean> getSegmentTravelTimes() {
+        return segmentTravelTimes;
+    }
+    /**
+     * @param segmentTravelTimes the segmentTravelTimes to set
+     */
+    public void setSegmentTravelTimes(List<SegmentTravelTimeBean> segmentTravelTimes) {
+        this.segmentTravelTimes = segmentTravelTimes;
+    }
+    /**
 	 * @return the tariffs
 	 */
 	public List<TariffBean> getTariffs() {
