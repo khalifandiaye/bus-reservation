@@ -131,10 +131,8 @@ public class SaveSegmentAction extends BaseAction {
 						Integer.parseInt(travelTime[1]), 0);
 
 				if (!isReturnRoute) {
-					startStation = stationDAO.getById(segmentInfos.get(i)
-							.getStationStartAt());
-					endStation = stationDAO.getById(segmentInfos.get(i)
-							.getStationEndAt());
+					startStation = stationDAO.getById(segmentInfos.get(i).getStationStartAt());
+					endStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
 
 				} else {
 					endStation = stationDAO.getById(segmentInfos.get(i)
