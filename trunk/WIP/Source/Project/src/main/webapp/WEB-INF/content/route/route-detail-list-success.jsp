@@ -195,7 +195,7 @@
 
 		accounting.settings = {
 			currency : {
-				symbol : ".000 VNĐ", // default currency symbol is '$'
+				symbol : ".000", // default currency symbol is '$'
 				format : "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
 				decimal : ",", // decimal point separator
 				thousand : ".", // thousands separator
@@ -504,15 +504,15 @@
                <tr>
                   <th>Name</th>
                   <th>Travel Time</th>
-                  <th>Price</th>
+                  <th>Price (VND)</th>
                </tr>
             </thead>
             <tbody>
                <s:iterator value="segmentInfos">
                   <tr id="segment_<s:property value='id'/>" data-segment-id="<s:property value='id'/>">
                      <td><s:property value="name" /></td>
-                     <td><s:property value="duration" /></td>
-                     <td><s:property value="price" /></td>
+                     <td style="text-align: center;"><s:property value="duration"/></td>
+                     <td style="text-align: right;padding-right:100px;"><s:property value="price"/></td>
                   </tr>
                </s:iterator>
             </tbody>
@@ -537,7 +537,7 @@
          <table id="busDetailTable">
             <thead>
                <tr>
-                  <th>id</th>
+                  <th>Bus Id</th>
                   <th>Plate Number</th>
                   <th></th>
                </tr>
@@ -570,7 +570,7 @@
                   </td>
                   <td>Select bus type :
                      <div class="input-append date form_datetime">
-                        <s:select id="busTypes" headerKey="-1" headerValue="--- Select Bus Type ---" list="busTypes"
+                        <s:select id="busTypes" list="busTypes"
                            name="busTypes" listKey="id" listValue="name" />
                      </div>
                   </td>
@@ -579,9 +579,9 @@
             <table id="editSegmentTable">
                <thead>
                   <tr>
-                     <td>Start At</td>
-                     <td>End At</td>
-                     <td>Price</td>
+                     <th>Start At</th>
+                     <th>End At</th>
+                     <th>Price (VND)</th>
                   </tr>
                <thead>
                <tbody>
@@ -589,9 +589,10 @@
                      <tr>
                         <td><s:property value="startAt.name" /></td>
                         <td><s:property value="endAt.name" /></td>
-                        <td><input id="<s:property value='id'/>" type="text" value="" maxlength="7" style="text-align: right;" /> .000 VNĐ</td>
+                        <td><input id="<s:property value='id'/>" type="text" value="" maxlength="7" style="text-align: right;" /> .000</td>
                      </tr>
                   </s:iterator>
+                  
                </tbody>
             </table>
          </div>
