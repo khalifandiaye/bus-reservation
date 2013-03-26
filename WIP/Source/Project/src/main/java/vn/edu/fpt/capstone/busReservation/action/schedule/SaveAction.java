@@ -1,5 +1,6 @@
 package vn.edu.fpt.capstone.busReservation.action.schedule;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.apache.struts2.convention.annotation.Result;
 import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
+import vn.edu.fpt.capstone.busReservation.dao.SegmentTravelTimeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
@@ -35,6 +37,7 @@ public class SaveAction extends ActionSupport {
 	private TripDAO tripDAO;
 	private BusStatusDAO busStatusDAO;
 	private SystemSettingDAO systemSettingDAO;
+	private SegmentTravelTimeDAO segmentTravelTimeDAO;
 
 	@Action(value = "save", results = { @Result(type = "json", name = SUCCESS, params = {
 			"root", "message" }) })
@@ -45,20 +48,34 @@ public class SaveAction extends ActionSupport {
 					CommonConstant.DEFAULT_TIME_ZONE);
 
 			// cannot get tripDialogArrivalTime: GUI issue
-			long traTime = 0;
-			long delayTime = (long) systemSettingDAO.getStationDelayTime() * 60;
+
+			long delayTime = (long) systemSettingDAO.getStationDelayTime() * 60 * 1000;
 			List<RouteDetailsBean> routeDetailsList = routeDAO.getById(
 					routeBeans).getRouteDetails();
+			// list start date of each segment (required to get valid travel
+			// time of each segment)
+			List<Date> startDateOfSegment = new ArrayList<Date>();
+			startDateOfSegment.add(fromDate);
+			//list endDate of each segment (startDate + traveltime)
+			List<Date> endDateOfSegment = new ArrayList<Date>();
 
+			long traTime = 0;
+			int i = 0;
 			for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
-				traTime += routeDetailsBean.getSegment().getTravelTime();
+				traTime = segmentTravelTimeDAO.getTravelTimebyDate(
+								routeDetailsBean.getSegment().getId(),
+								startDateOfSegment.get(i)).get(0).getTravelTime();
 
-			}
-			for (int i = 0; i < (routeDetailsList.size() - 1); i++) {
-				traTime += delayTime;
+				Date newEndDate = new Date(startDateOfSegment.get(i).getTime()+ traTime);
+				endDateOfSegment.add(newEndDate);
+				if (i < (routeDetailsList.size() - 1)) {
+					Date newStartDate = new Date(endDateOfSegment.get(i).getTime() + delayTime);
+					startDateOfSegment.add(newStartDate);
+				}
+				i++;
 			}
 
-			Date toDate = new Date(fromDate.getTime() + traTime);
+			Date toDate = endDateOfSegment.get(endDateOfSegment.size()-1);
 
 			BusStatusBean busStatusBean = new BusStatusBean();
 			BusBean busBean = busDAO.getById(tripDialogBusPlate);
@@ -72,23 +89,15 @@ public class SaveAction extends ActionSupport {
 			busStatusDAO.insert(busStatusBean);
 
 			// time travel
-			int i = 0;
-			long traDate = fromDate.getTime();			
+			i = 0;
 			for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
 				TripBean trip = new TripBean();
-				if (i > 0 && i < (routeDetailsList.size())) {
-					traDate += delayTime;					
-				}
-				i++;
-				Date travelDate = new Date(traDate);
-				trip.setDepartureTime(travelDate);
+				trip.setDepartureTime(startDateOfSegment.get(i));
 				trip.setBusStatus(busStatusBean);
-				// calculate arrival time for each segment
-				traDate += routeDetailsBean.getSegment().getTravelTime();				
-				travelDate = new Date(traDate);
-				trip.setArrivalTime(travelDate);
+				trip.setArrivalTime(endDateOfSegment.get(i));
 				trip.setRouteDetails(routeDetailsBean);
 				tripDAO.insert(trip);
+				i++;
 			}
 			message = "Add schedule Success!";
 		} catch (Exception ex) {
@@ -96,6 +105,11 @@ public class SaveAction extends ActionSupport {
 			ex.printStackTrace();
 		}
 		return SUCCESS;
+	}
+
+	public void setSegmentTravelTimeDAO(
+			SegmentTravelTimeDAO segmentTravelTimeDAO) {
+		this.segmentTravelTimeDAO = segmentTravelTimeDAO;
 	}
 
 	public void setSystemSettingDAO(SystemSettingDAO systemSettingDAO) {
