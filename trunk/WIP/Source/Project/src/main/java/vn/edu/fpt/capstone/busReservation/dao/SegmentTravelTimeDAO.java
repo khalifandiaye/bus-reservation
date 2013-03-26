@@ -37,12 +37,12 @@ public class SegmentTravelTimeDAO extends
 				+ "WHERE stt.segment.id = :segmentId "
 				+ "AND stt.validFrom = (SELECT MAX(stt1.validFrom) "
 				+ "FROM SegmentTravelTimeBean stt1 "
-				+ "WHERE stt1.segment = stt.segment AND stt1.validFrom < :date)";
+				+ "WHERE stt1.segment = stt.segment AND stt1.validFrom <= :date)";
 		Session session = sessionFactory.getCurrentSession();
 		List<SegmentTravelTimeBean> result = new ArrayList<SegmentTravelTimeBean>();
 		try {
 			Query query = session.createQuery(hql);
-			query.setInteger("segmentId", segmentId).setDate("date", date);
+			query.setParameter("segmentId", segmentId).setParameter("date", date);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);

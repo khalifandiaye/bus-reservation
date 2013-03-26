@@ -35,6 +35,7 @@ public class RouteDetailListAction extends ActionSupport {
 
 	public String execute() {
 		segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
+		busTypes = busTypeDAO.getAll();
 
 		long delayTime = (long) systemSettingDAO.getStationDelayTime() * 60 * 1000;
 		// list start date of each segment (required to get valid travel
@@ -82,7 +83,6 @@ public class RouteDetailListAction extends ActionSupport {
 				busTypeBeans.add(busTypeBean);
 			}
 		}
-
 		routeName = segmentBeans.get(0).getStartAt().getCity().getName()
 				+ " - "
 				+ segmentBeans.get(segmentBeans.size() - 1).getEndAt()
@@ -110,6 +110,10 @@ public class RouteDetailListAction extends ActionSupport {
 
 	public void setRouteId(int routeId) {
 		this.routeId = routeId;
+	}
+
+	public int getRouteId() {
+		return this.routeId;
 	}
 
 	public List<SegmentInfo> getSegmentInfos() {
