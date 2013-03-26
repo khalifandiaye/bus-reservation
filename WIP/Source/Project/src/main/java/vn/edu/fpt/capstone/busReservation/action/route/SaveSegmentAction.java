@@ -102,7 +102,6 @@ public class SaveSegmentAction extends BaseAction {
 			throws ParseException {
 		String routeName = "";
 		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
-		List<SegmentTravelTimeBean> segmentTravelTimeBeans = new ArrayList<SegmentTravelTimeBean>();
 
 		for (int i = 0; i < segmentInfos.size(); i++) {
 
@@ -131,8 +130,10 @@ public class SaveSegmentAction extends BaseAction {
 						Integer.parseInt(travelTime[1]), 0);
 
 				if (!isReturnRoute) {
-					startStation = stationDAO.getById(segmentInfos.get(i).getStationStartAt());
-					endStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
+					startStation = stationDAO.getById(segmentInfos.get(i)
+							.getStationStartAt());
+					endStation = stationDAO.getById(segmentInfos.get(i)
+							.getStationEndAt());
 
 				} else {
 					endStation = stationDAO.getById(segmentInfos.get(i)
@@ -161,7 +162,6 @@ public class SaveSegmentAction extends BaseAction {
 				segmentTravelTimeBean.setTravelTime(dtravelTime);
 				segmentTravelTimeBean.setValidFrom(Calendar.getInstance().getTime());
 				segmentTravelTimeDAO.insert(segmentTravelTimeBean);
-				segmentTravelTimeBeans.add(segmentTravelTimeBean);
 				
 			} else {
 				if (i == 0) {

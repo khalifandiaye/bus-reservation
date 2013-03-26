@@ -56,8 +56,9 @@
 		{$.ajax({url : $('#contextPath').val()
 			+ "/schedule/busTypes.html?&routeId="
 			+ selectedRouteId,}).done(
-			function(data) {$('#tripDialogBusType').empty();
-				$.each(data.busTypeInfos,function() {
+			function(data) {
+				$('#tripDialogBusType').empty();
+				$.each(data.busTypeInfos, function() {
 					   $('#tripDialogBusType').append('<option value="' + this.id + '">'
 							+ this.type
 							+ '</option>');
@@ -292,7 +293,8 @@
 			var busType = $("#busType").val();
 			$.ajax({
 				type : "GET",
-				url : 'getBusInRoute.html?routeId='+ routeId+ '&type='+ busType,contentType : "application/x-www-form-urlencoded; charset=utf-8",
+				url : 'getBusInRoute.html?routeId='+ routeId+ '&type='+ busType,
+						contentType : "application/x-www-form-urlencoded; charset=utf-8",
 				success : function(response) {
 					var busInRoute = response.busInRouteBeans;
 					var busNotInRoute = response.busNotInRouteBeans;
