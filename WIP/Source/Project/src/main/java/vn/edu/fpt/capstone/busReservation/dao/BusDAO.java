@@ -34,19 +34,35 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 	}
 
 	@SuppressWarnings("unchecked")
-   public List<BusBean> getBusByStatus(String status) {
-      String hql = "from BusBean busBean where busBean.status = :status";
-      Session session = sessionFactory.getCurrentSession();
-      List<BusBean> result = new ArrayList<BusBean>();
-      try {
-         Query query = session.createQuery(hql);
-         query.setParameter("status", status);
-         result = query.list();
-      } catch (HibernateException e) {
-         exceptionHandling(e, session);
-      }
-      return result;
-   }
+	public List<BusBean> getBusByStatus(String status) {
+		String hql = "from BusBean busBean where busBean.status = :status";
+		Session session = sessionFactory.getCurrentSession();
+		List<BusBean> result = new ArrayList<BusBean>();
+		try {
+			Query query = session.createQuery(hql);
+			query.setParameter("status", status);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<BusBean> getBusByplateNumber(String plateNumber) {
+		String hql = "from BusBean busBean where busBean.plateNumber = :plateNumber";
+		Session session = sessionFactory.getCurrentSession();
+		List<BusBean> result = new ArrayList<BusBean>();
+		try {
+			Query query = session.createQuery(hql);
+			query.setParameter("plateNumber", plateNumber);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+
 	/*
 	 * SELECT b.id, b.plate_number, MAX(bs.to_date) FROM bus b LEFT JOIN
 	 * bus_status bs ON b.id = bs.bus_id WHERE bs.end_station_id = 8 AND
@@ -61,10 +77,10 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 				+ "JOIN (SELECT Max(id) id, MAX(to_date) to_date FROM bus_status WHERE status = 'active' GROUP BY bus_id ) t2 "
 				+ "ON t1.id = t2.id AND t1.to_date = t2.to_date) bs ON b.id = bs.bus_id "
 				+ "WHERE (b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId) "
-				+ "AND b.bus_type_id = :busTypeId AND b.status = 'active'" 
+				+ "AND b.bus_type_id = :busTypeId AND b.status = 'active'"
 				+ "GROUP BY b.id "
-				+ "HAVING bs.to_date < :departureTime OR bs.to_date IS NULL AND bs.end_station_id = :startStationId " +
-				"OR bs.end_station_id IS NULL";
+				+ "HAVING bs.to_date < :departureTime OR bs.to_date IS NULL AND bs.end_station_id = :startStationId "
+				+ "OR bs.end_station_id IS NULL";
 
 		Session session = sessionFactory.getCurrentSession();
 		List<Object[]> result = new ArrayList<Object[]>();
@@ -81,7 +97,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 		}
 		return result;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<BusBean> getBusByType(int busType) {
 		String hql = "FROM BusBean b WHERE b.busType.id = :busType";
@@ -97,7 +113,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 		}
 		return result;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<BusBean> getBusByRouteId(int routeId) {
 		String hql = "FROM BusBean b WHERE b.forwardRoute.id = :routeId OR b.returnRoute.id = :routeId";
@@ -113,15 +129,16 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 		}
 		return result;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<Object[]> getBusByTypeInRoute(int routeId, int busTypeId, String status) {
+	public List<Object[]> getBusByTypeInRoute(int routeId, int busTypeId,
+			String status) {
 		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id "
 				+ "FROM bus b LEFT JOIN (SELECT t1.* FROM bus_status t1 "
 				+ "JOIN (SELECT Max(id) id, MAX(to_date) to_date FROM bus_status WHERE status = 'active' GROUP BY bus_id ) t2 "
 				+ "ON t1.id = t2.id AND t1.to_date = t2.to_date) bs ON b.id = bs.bus_id "
 				+ "WHERE (b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId) "
-				+ "AND b.bus_type_id = :busTypeId AND b.status = :busStatus " 
+				+ "AND b.bus_type_id = :busTypeId AND b.status = :busStatus "
 				+ "GROUP BY b.id";
 
 		Session session = sessionFactory.getCurrentSession();
@@ -138,7 +155,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 		}
 		return result;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Object[]> getBusByTypeNotInRoute(int busTypeId, String status) {
 		String stringQuery = "SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id "
@@ -146,7 +163,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 				+ "JOIN (SELECT Max(id) id, MAX(to_date) to_date FROM bus_status WHERE status = 'active' GROUP BY bus_id ) t2 "
 				+ "ON t1.id = t2.id AND t1.to_date = t2.to_date) bs ON b.id = bs.bus_id "
 				+ "WHERE (b.assigned_route_forward_id IS NULL OR b.assigned_route_return_id IS NULL) "
-				+ "AND b.bus_type_id = :busTypeId AND b.status = :busStatus " 
+				+ "AND b.bus_type_id = :busTypeId AND b.status = :busStatus "
 				+ "GROUP BY b.id";
 
 		Session session = sessionFactory.getCurrentSession();
@@ -162,29 +179,29 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 		}
 		return result;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-   public List<Object[]> checkAvaileBus(int busId, int routeId, String status) {
-      String strQuery = "SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id " +
-      		"FROM bus b LEFT JOIN " +
-      		"( SELECT t1.* FROM bus_status t1 JOIN ( SELECT Max(id) id, MAX(to_date) to_date " +
-      		"FROM bus_status WHERE STATUS = :status GROUP BY bus_id ) t2 ON t1.id = t2.id " +
-      		"AND t1.to_date = t2.to_date ) bs ON b.id = bs.bus_id " +
-      		"WHERE ( b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId ) " +
-      		"AND b.id = :busId AND b.STATUS = :status AND bs.to_date > NOW()";
-      Session session = sessionFactory.getCurrentSession();
-      List<Object[]> result = new ArrayList<Object[]>();
-      try {
-         // must have to start any transaction
-         Query query = session.createSQLQuery(strQuery);
-         query.setParameter("busId", busId);
-         query.setParameter("routeId", routeId);
-         query.setParameter("status", status);
-         result = query.list();
-      } catch (HibernateException e) {
-         exceptionHandling(e, session);
-      }
-      return result;
-   }
+	public List<Object[]> checkAvaileBus(int busId, int routeId, String status) {
+		String strQuery = "SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id "
+				+ "FROM bus b LEFT JOIN "
+				+ "( SELECT t1.* FROM bus_status t1 JOIN ( SELECT Max(id) id, MAX(to_date) to_date "
+				+ "FROM bus_status WHERE STATUS = :status GROUP BY bus_id ) t2 ON t1.id = t2.id "
+				+ "AND t1.to_date = t2.to_date ) bs ON b.id = bs.bus_id "
+				+ "WHERE ( b.assigned_route_forward_id = :routeId OR b.assigned_route_return_id = :routeId ) "
+				+ "AND b.id = :busId AND b.STATUS = :status AND bs.to_date > NOW()";
+		Session session = sessionFactory.getCurrentSession();
+		List<Object[]> result = new ArrayList<Object[]>();
+		try {
+			// must have to start any transaction
+			Query query = session.createSQLQuery(strQuery);
+			query.setParameter("busId", busId);
+			query.setParameter("routeId", routeId);
+			query.setParameter("status", status);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
 
 }
