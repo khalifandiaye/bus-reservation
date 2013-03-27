@@ -51,6 +51,14 @@
 	}
 
 	$(document).ready(function() {
+		
+		var active = $("#active").val();
+		if (active == 'false') {
+			$("#addBusPrice").attr("disabled","disabled");
+			$("#assignBus").attr("disabled","disabled");
+			$("#busStatusInsertBtn").attr("disabled","disabled");
+		}
+		
 		var selectedRouteId = $("#routeId").val();
 		if (selectedRouteId != '-1') 
 		{$.ajax({url : $('#contextPath').val()
@@ -212,6 +220,10 @@
 		var segmentTable = $('#segmentTable').dataTable({
 			"bSort" : false
 		});
+		
+		var scheduleTable = $('#scheduleTable').dataTable({
+	         "bSort" : false
+	      });
 
 		var priceTable = $('#priceTable').dataTable({
 			"bSort" : false
@@ -293,7 +305,7 @@
 			var busType = $("#busType").val();
 			$.ajax({
 				type : "GET",
-				url : 'getBusInRoute.html?routeId='+ routeId+ '&type='+ busType,
+				url : 'getBusInRoute.html?routeId='+ routeId+ '&type=1',
 						contentType : "application/x-www-form-urlencoded; charset=utf-8",
 				success : function(response) {
 					var busInRoute = response.busInRouteBeans;
@@ -350,7 +362,15 @@
 					var data = busDetailTable.fnGetData(tr);
 					$('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
 					busDetailTable.dataTable().fnDeleteRow(aPos[0]);
+					$("#busDetailAdd").removeAttr("disabled"); 
 				});
+		});
+
+		$("#busDetailAdd").bind('click', function(){
+			var busId = $("#busDetailbusPlate").val();
+			if (!busId || busId == '') {
+	               $("#busDetailAdd").attr("disabled","disabled");
+	      }
 		});
 
 		$("#busDetailSave").click(
@@ -436,10 +456,13 @@
 			data : {data : JSON.stringify(info)},
 			success : function(response) {
 				var data = response.tariffInfos;
+				var totalMoney = 0;
 				for ( var i = 0; i < data.length; i++) {
 					element = data[i];
+					totalMoney += element.fare;
 					$('#segmentTable').dataTable().fnUpdate(accounting.formatMoney(element.fare),i,2);
 				};
+				$('#totalMoney').html(accounting.formatMoney(element.fare) + " VNĐ");
 			}
 		});
 	};
@@ -476,11 +499,12 @@
       <div class="post" style="margin: 0px auto; width: 95%;">
          <div style="margin-left: 10px; margin-top: 10px;">
             <input type="hidden" id="routeId" value="<s:property value='routeId'/>" />
+            <input type="hidden" id="active" value="<s:property value='active'/>" />
             <table>
                <tr>
                   <td><s:select id="busType" list="busTypeBeans" name="busTypeBeans" listKey="id"
                            listValue="name" /></td>
-                  <td><div id="validDateSelectDiv" class="input-append date form_datetime" data-date="" style="margin-top: -8px;">
+                  <td><div id="validDateSelectDiv" class="input-append date form_datetime" data-date="" style="margin-top: -6px;">
                         <input id="validDateSelect" size="16" type="text" value="" readonly ><span
                            class="add-on"><i class="icon-calendar"></i></span>
                      </div></td>
@@ -516,8 +540,37 @@
                   </tr>
                </s:iterator>
             </tbody>
+            <tfoot>
+               <tr>
+                  <th>Total : </th>
+                  <th><label><s:property value='sumaryTime'/></label></th>
+                  <th><label id="totalMoney"></label></th>
+               </tr>
+            </tfoot>
          </table>
          </br>
+         <h3 style="display: none;">
+            Schedule
+         </h3>
+         <table id="scheduleTable" align="center" border="1" style="display: none;">
+            <thead>
+               <tr>
+                  <th>Bus Number</th>
+                  <th>From Date</th>
+                  <th>To Date</th>
+               </tr>
+            </thead>
+            <tbody>
+               <s:iterator value="busStatusBeans">
+                  <tr id="busStatus_<s:property value='id'/>">
+                     <td><s:property value="bus.plateNumber" /></td>
+                     <td><s:date name="fromDate" format="dd/MM/yyyy hh:mm:ss" /></td>
+                     <td><s:date name="toDate" format="dd/MM/yyyy hh:mm:ss" /></td>
+                  </tr>
+               </s:iterator>
+            </tbody>
+         </table>
+         <br/>
          <div style="margin-bottom: 10px;">
             <input class="btn btn-primary" type="button" id="return" value="Return to Route List" />
          </div>
@@ -534,7 +587,7 @@
       <div class="modal-body">
          Select bus : <select id='busDetailbusPlate' name='busDetailBusPlate' style='margin-top: -6px;'></select>
          <button style="margin-top: -10px;" type="button" id="busDetailAdd" class="btn btn-primary">Add</button>
-         <table id="busDetailTable">
+         <table id="busDetailTable" border="1">
             <thead>
                <tr>
                   <th>Bus Id</th>
@@ -576,7 +629,7 @@
                   </td>
                </tr>
             </table>
-            <table id="editSegmentTable">
+            <table id="editSegmentTable" border="1">
                <thead>
                   <tr>
                      <th>Start At</th>
@@ -592,7 +645,6 @@
                         <td><input id="<s:property value='id'/>" type="text" value="" maxlength="7" style="text-align: right;" /> .000</td>
                      </tr>
                   </s:iterator>
-                  
                </tbody>
             </table>
          </div>

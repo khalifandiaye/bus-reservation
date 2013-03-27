@@ -15,6 +15,7 @@ import vn.edu.fpt.capstone.busReservation.dao.SegmentTravelTimeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentTravelTimeBean;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
@@ -53,9 +54,12 @@ public class GetArrivalTimeAction extends BaseAction {
 
 			int i = 0;
 			for (RouteDetailsBean routeDetailsBean : routeDetailsBeans) {
-				traTime = segmentTravelTimeDAO.getTravelTimebyDate(
-								routeDetailsBean.getSegment().getId(),
-								startDateOfSegment.get(i)).get(0).getTravelTime();
+			   List<SegmentTravelTimeBean> segmentTravelTimeBeans = segmentTravelTimeDAO.getTravelTimebyDate(
+                  routeDetailsBean.getSegment().getId(),
+                  startDateOfSegment.get(i));
+			   if (segmentTravelTimeBeans.size() != 0) {
+			      traTime = segmentTravelTimeBeans.get(0).getTravelTime();
+			   }
 
 				Date newEndDate = new Date(startDateOfSegment.get(i).getTime() + traTime);
 				endDateOfSegment.add(newEndDate);

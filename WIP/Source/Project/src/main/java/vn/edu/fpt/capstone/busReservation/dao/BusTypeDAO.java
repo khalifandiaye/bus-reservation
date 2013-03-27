@@ -39,17 +39,14 @@ public class BusTypeDAO extends GenericDAO<Integer, BusTypeBean>{
 		Session session = sessionFactory.getCurrentSession();
 		Transaction tx = session.beginTransaction();
 		try {
-			String queryString = " SELECT bty.* " +
-								 " FROM bus_type bty " +
-								 " 	 inner join tariff trf on bty.id = trf.bus_type_id " +
-								 "	 inner join route_details rdt on rdt.segment_id = trf.segment_id " +
-								 " where rdt.route_id = :route_id " +
-								 " group by bty.id " +
-								 " having count(distinct trf.segment_id) = (select count(rou.segment_id) " + 
-								 "							 			    from route_details rou " +
-								 "										    where rou.route_id = :route_id) ";
+			String queryString = "SELECT bt.* FROM " +
+               "( SELECT rd.route_id AS id, t.bus_type_id AS bus_type_id " +
+               "FROM route_details rd LEFT JOIN tariff t ON rd.segment_id = t.segment_id " +
+               "GROUP BY rd.route_id, t.bus_type_id HAVING rd.route_id = :routeId ) " +
+               "AS bir LEFT JOIN bus_type bt " +
+               "ON bir.bus_type_id = bt.id";
 			Query query = session.createSQLQuery(queryString);
-			query.setParameter("route_id", routeId);
+			query.setParameter("routeId", routeId);
 			result = query.list();
 			tx.commit();
 		} catch (HibernateException e) {

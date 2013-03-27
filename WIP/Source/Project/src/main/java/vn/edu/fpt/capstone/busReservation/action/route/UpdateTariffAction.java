@@ -98,7 +98,7 @@ public class UpdateTariffAction extends BaseAction {
 			List<TariffBean> tariffBeansRevert = tariffDAO.getExistTariff(
 					segmentBeanRevert.getId(), busTypeBean.getId(), validDate);
 
-			if (tariffBeans.size() != 0) {
+			if (tariffBeans.size() != 0 && tariffBeansRevert.size() != 0) {
 				TariffBean tariffBean = tariffBeans.get(0);
 				TariffBean revertTariffBean = tariffBeansRevert.get(0);
 				// update current segment
