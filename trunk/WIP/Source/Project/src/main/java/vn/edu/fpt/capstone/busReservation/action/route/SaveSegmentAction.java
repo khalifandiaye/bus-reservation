@@ -4,9 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -48,58 +46,109 @@ public class SaveSegmentAction extends BaseAction {
 	private RouteDetailsDAO routeDetailsDAO;
 	private SegmentTravelTimeDAO segmentTravelTimeDAO;
 
-
 	private String message = "New Route saved successfully!";
 
 	@Action(value = "saveSegment", results = { @Result(type = "json", name = SUCCESS, params = {
 			"root", "message" }) })
 	public String execute() {
 		try {
-			SegmentAddInfo segmentAddInfos = mapper.readValue(data, new TypeReference<SegmentAddInfo>() { });
-			List<SegmentInfo> segmentInfosFoward = segmentAddInfos.getSegments();
+			SegmentAddInfo segmentAddInfos = mapper.readValue(data,
+					new TypeReference<SegmentAddInfo>() {
+					});
+			List<SegmentInfo> segmentInfosFoward = segmentAddInfos
+					.getSegments();
+
+			// Verify again, check exacly what route is duplicated, check if
+			// route is disabled => enable it
+			// if routeId is endabled => message route existed.
+			List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
+
+			for (SegmentInfo segmentInfo : segmentInfosFoward) {
+				List<SegmentBean> segments = segmentDAO.getDuplicatedSegment(
+						segmentInfo.getStationStartAt(), segmentInfo.getStationEndAt());
+				
+				if (segments.size() != 0) {
+					segmentBeans.add(segments.get(0));
+				}
+			}
 			
-         if (!isRouteExist(segmentInfosFoward)) {
-            if (!segmentInfosFoward.isEmpty()) {
-               insertSegment(segmentInfosFoward, false);
-               Collections.reverse(segmentInfosFoward);
-               insertSegment(segmentInfosFoward, true);
-            }
-         } else {
-            message = "Route existed! Please verify again!";
-         }
+			if (segmentBeans.size() != 0) {
+				List<RouteBean> routeBeans = routeDAO
+						.getExistRoute(segmentBeans);
+				if (routeBeans.size() != 0) {
+					if (routeBeans.get(0).getStatus().equals("active")) {
+						message = "Route existed! Please verify again!";
+					} else {
+						routeBeans.add(routeDAO.getById(routeDAO
+								.getRouteTerminal(routeBeans.get(0).getId())
+								.get(0)));
+						for (RouteBean routeBean : routeBeans) {
+							routeBean.setStatus("active");
+						}
+						routeDAO.update(routeBeans);
+					}
+				}
+			} else {
+				insertSegment(segmentInfosFoward, false);
+				Collections.reverse(segmentInfosFoward);
+				insertSegment(segmentInfosFoward, true);
+			}
+			
+//			if (!isRouteExist(segmentInfosFoward)) {
+//				if (!segmentInfosFoward.isEmpty()) {
+//					insertSegment(segmentInfosFoward, false);
+//					Collections.reverse(segmentInfosFoward);
+//					insertSegment(segmentInfosFoward, true);
+//				}
+//			} else {
+//				message = "Route existed! Please verify again!";
+//			}
 		} catch (Exception e) {
-		   message = "Error! Please contact admin!";
+			message = "Error! Please contact admin!";
 		}
 		return SUCCESS;
 	}
 
-	private boolean isRouteExist(List<SegmentInfo> segmentInfos) {
-      Set<Integer> newStations = new HashSet<Integer>();
-      
-      for (SegmentInfo segmentInfo : segmentInfos) {
-         newStations.add(segmentInfo.getStartAt());
-         newStations.add(segmentInfo.getEndAt());
-      }
-      
-      List<RouteBean> routeBeans = routeDAO.getAll();
-      for (RouteBean routeBean : routeBeans) {
-         List<RouteDetailsBean> segmentBeans = routeBean.getRouteDetails();
-         Set<Integer> stations = new HashSet<Integer>();
-         for (RouteDetailsBean routeDetailsBean : segmentBeans) {
-            SegmentBean segmentBean = routeDetailsBean.getSegment();
-            stations.add(segmentBean.getStartAt().getCity().getId());
-            stations.add(segmentBean.getEndAt().getCity().getId());
-         }
-         if (stations.size() == newStations.size() && stations.containsAll(newStations)) {
-            return true;
-         }
-      }
-	   
-	   return false;
-	}
-	
-	private void insertSegment(List<SegmentInfo> segmentInfos, boolean isReturnRoute)
-			throws ParseException {
+//	private boolean isRouteExist(List<SegmentInfo> segmentInfos) {
+//		Set<Integer> newStations = new HashSet<Integer>();
+//
+//		for (SegmentInfo segmentInfo : segmentInfos) {
+//			newStations.add(segmentInfo.getStartAt());
+//			newStations.add(segmentInfo.getEndAt());
+//		}
+//
+//		List<RouteBean> routeBeans = routeDAO.getAll();
+//		for (RouteBean routeBean : routeBeans) {
+//			List<RouteDetailsBean> segmentBeans = routeBean.getRouteDetails();
+//			Set<Integer> stations = new HashSet<Integer>();
+//			for (RouteDetailsBean routeDetailsBean : segmentBeans) {
+//				SegmentBean segmentBean = routeDetailsBean.getSegment();
+//				stations.add(segmentBean.getStartAt().getCity().getId());
+//				stations.add(segmentBean.getEndAt().getCity().getId());
+//			}
+//			if (stations.size() == newStations.size()
+//					&& stations.containsAll(newStations)) {
+//				return true;
+//			}
+//		}
+//
+//		return false;
+//	}
+
+//	private int getExistRoute(List<SegmentInfo> segmentInfos) {
+//		for (SegmentInfo segmentInfo : segmentInfos) {
+//			List<SegmentBean> segmentBeans = segmentDAO.getDuplicatedSegment(
+//					segmentInfo.getStartAt(), segmentInfo.getEndAt());
+//			if (segmentBeans.size() != 0){
+//				
+//			}
+//		}
+//
+//		return 0;
+//	}
+
+	private void insertSegment(List<SegmentInfo> segmentInfos,
+			boolean isReturnRoute) throws ParseException {
 		String routeName = "";
 		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
 
@@ -154,15 +203,15 @@ public class SaveSegmentAction extends BaseAction {
 				segmentDAO.insert(segmentBean);
 				// add recent created segment to route detail
 				segmentBeans.add(segmentBean);
-				
-				
+
 				// add initiation travel time of recent added segment
 				SegmentTravelTimeBean segmentTravelTimeBean = new SegmentTravelTimeBean();
 				segmentTravelTimeBean.setSegment(segmentBean);
 				segmentTravelTimeBean.setTravelTime(dtravelTime);
-				segmentTravelTimeBean.setValidFrom(Calendar.getInstance().getTime());
+				segmentTravelTimeBean.setValidFrom(Calendar.getInstance()
+						.getTime());
 				segmentTravelTimeDAO.insert(segmentTravelTimeBean);
-				
+
 			} else {
 				if (i == 0) {
 					routeName += duplicatedSegmentBeans.get(0).getStartAt()
@@ -191,9 +240,11 @@ public class SaveSegmentAction extends BaseAction {
 		}
 	}
 
-	public void setSegmentTravelTimeDAO(SegmentTravelTimeDAO segmentTravelTimeDAO) {
+	public void setSegmentTravelTimeDAO(
+			SegmentTravelTimeDAO segmentTravelTimeDAO) {
 		this.segmentTravelTimeDAO = segmentTravelTimeDAO;
 	}
+
 	public String getData() {
 		return data;
 	}

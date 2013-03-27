@@ -46,9 +46,7 @@ public class SaveAction extends ActionSupport {
 			Date fromDate = FormatUtils.deFormatDate(tripDialogDepartureTime,
 					"yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US,
 					CommonConstant.DEFAULT_TIME_ZONE);
-
-			// cannot get tripDialogArrivalTime: GUI issue
-
+			
 			long delayTime = (long) systemSettingDAO.getStationDelayTime() * 60 * 1000;
 			List<RouteDetailsBean> routeDetailsList = routeDAO.getById(
 					routeBeans).getRouteDetails();
