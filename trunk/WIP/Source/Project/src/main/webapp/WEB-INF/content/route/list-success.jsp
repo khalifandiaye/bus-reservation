@@ -284,9 +284,9 @@
 	<div id="page">
 		<div class="post" style="margin: 0px auto; width: 95%;">
 			<div style="height: 45px; margin-left: 1%;">
-				<input class="btn btn-primary" id="addRoute" type="button" value="Add New Route" />
+				<input class=" btn btn-success" id="addRoute" type="button" value="Add New Route" />
 			</div>
-			<table id="routeTable" align="center">
+			<table id="routeTable" align="center" border="1">
 				<thead>
 					<tr>
 						<th>Route Name</th>
@@ -300,19 +300,19 @@
 						<tr id="route_<s:property value='id'/>">
 							<td><s:property value="routeName" /></td>
 							<td><s:property value="travelTime" /></td>
-							<td style="width: 6%"><input class="btn btn-primary"
+							<td style="width: 6%"><input class="btn btn-info"
 								type="button" value="View Details"
 								onclick='javascript: loadDetails(<s:property value='id'/>)' /></td>
                      <s:set name="status" value="active"/>
                      <s:if test="%{#status == 'active'}">
                         <td style="width: 6%"><input
-                        data-delete="<s:property value='id'/>" class="btn btn-danger"
+                        data-delete="<s:property value='id'/>" class="btn btn-danger" style="width: 95px;"
                         type="button" value="Deactivate"
                         onclick='javascript: deleteRoute(<s:property value='id'/>)' /></td>
                      </s:if>
                      <s:else>
                         <td style="width: 6%"><input
-                        data-active="<s:property value='id'/>" class="btn btn-danger"
+                        data-active="<s:property value='id'/>" class="btn btn-success" style="width: 95px;"
                         type="button" value="Activate"
                         onclick='javascript: activeRoute(<s:property value='id'/>)' /></td>
                      </s:else>
