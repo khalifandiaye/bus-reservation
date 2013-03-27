@@ -17,6 +17,7 @@ import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentTravelTimeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
@@ -94,6 +95,12 @@ public class SaveAction extends ActionSupport {
 								routeDetailsBean.getSegment().getId(),
 								startDateOfSegment.get(i)).get(0)
 						.getTravelTime();
+			   List<SegmentTravelTimeBean> segmentTravelTimeBeans = segmentTravelTimeDAO.getTravelTimebyDate(
+                  routeDetailsBean.getSegment().getId(),
+                  startDateOfSegment.get(i));
+			   if (segmentTravelTimeBeans.size() != 0) {
+			      traTime = segmentTravelTimeBeans.get(0).getTravelTime();
+			   }
 
 				Date newEndDate = new Date(startDateOfSegment.get(i).getTime()
 						+ traTime);
