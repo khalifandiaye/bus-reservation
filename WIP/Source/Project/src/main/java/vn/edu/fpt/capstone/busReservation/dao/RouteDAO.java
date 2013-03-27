@@ -8,6 +8,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 
 public class RouteDAO extends GenericDAO<Integer, RouteBean> {
 
@@ -69,4 +70,33 @@ public class RouteDAO extends GenericDAO<Integer, RouteBean> {
 		}
 		return list;
 	}
+	
+	/**
+	 * Common database exception handling
+	 * 
+	 * @param e
+	 *            the occurred exception
+	 * @throws HibernateException
+	 *             the occurred exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<RouteBean> getExistRoute(List<SegmentBean> segmentList) {
+		String hql = "SELECT route FROM RouteBean route WHERE 0 = "
+				+ "(SELECT COUNT(*) FROM RouteDetailsBean rdt "
+				+ "WHERE rdt.route = route AND rdt.segment NOT IN (:segmentList)) "
+				+ "AND :segmentCount = (SELECT COUNT(*) FROM RouteDetailsBean rdt WHERE rdt.route = route)";
+		Session session = sessionFactory.getCurrentSession();
+		List<RouteBean> result = new ArrayList<RouteBean>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameterList("segmentList", segmentList);
+			query.setParameter("segmentCount", (long) segmentList.size());
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+	
 }
