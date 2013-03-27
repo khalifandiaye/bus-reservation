@@ -11,6 +11,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 
@@ -255,4 +256,35 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
       }
       return result;
    }
+	
+	/**
+	 * Common database exception handling
+	 * Get exist busStatus(used by add new schedule)
+	 * @param e
+	 *            the occurred exception
+	 * @throws HibernateException
+	 *             the occurred exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<BusStatusBean> getDuplicatedBusAndDate(BusBean busBean,
+			Date date, StationBean endStation) {
+		String hql = "SELECT bs FROM BusStatusBean bs WHERE bs.bus = :busBean AND bs.fromDate = :date "
+				+ "AND bs.endStation = :endStation "
+				+ "AND bs.busStatus = :busStatus AND bs.status = :status";
+		Session session = sessionFactory.getCurrentSession();
+		List<BusStatusBean> result = new ArrayList<BusStatusBean>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameter("busBean", busBean);
+			query.setParameter("date", date);
+			query.setParameter("endStation", endStation);
+			query.setParameter("busStatus", "ontrip");
+			query.setParameter("status", "inactive");
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
 }

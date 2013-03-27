@@ -46,37 +46,69 @@ public class SaveAction extends ActionSupport {
 			Date fromDate = FormatUtils.deFormatDate(tripDialogDepartureTime,
 					"yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US,
 					CommonConstant.DEFAULT_TIME_ZONE);
-			
-			long delayTime = (long) systemSettingDAO.getStationDelayTime() * 60 * 1000;
+			BusBean busBean = busDAO.getById(tripDialogBusPlate);
 			List<RouteDetailsBean> routeDetailsList = routeDAO.getById(
 					routeBeans).getRouteDetails();
+
+			// check if bus_status is duplicated in DB
+			List<BusStatusBean> busStatusBeans = busStatusDAO
+					.getDuplicatedBusAndDate(busBean, fromDate, routeDetailsList
+							.get(routeDetailsList.size() - 1).getSegment().getEndAt());
+			
+			boolean isUpdated = false;
+			for (int i = 0; i < busStatusBeans.size(); i++) {
+				if (busStatusBeans.get(i).getTrips().get(0).getRouteDetails()
+						.getRoute().getId() == routeBeans) {
+					busStatusBeans.get(0).setStatus("active");
+					busStatusDAO.update(busStatusBeans.get(0));
+					message = "Add schedule Success!";
+					isUpdated = true;
+				}
+			}
+			if(!isUpdated){
+				addNewSchedule(fromDate, busBean, routeDetailsList);
+			}
+
+		} catch (Exception ex) {
+			message = "Error! Please try again!";
+			ex.printStackTrace();
+		}
+		return SUCCESS;
+	}
+
+	public void addNewSchedule(Date fromDate, BusBean busBean, List<RouteDetailsBean> routeDetailsList) {
+		try {
+			long delayTime = (long) systemSettingDAO.getStationDelayTime() * 60 * 1000;
+			
 			// list start date of each segment (required to get valid travel
 			// time of each segment)
 			List<Date> startDateOfSegment = new ArrayList<Date>();
 			startDateOfSegment.add(fromDate);
-			//list endDate of each segment (startDate + traveltime)
 			List<Date> endDateOfSegment = new ArrayList<Date>();
 
 			long traTime = 0;
 			int i = 0;
 			for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
-				traTime = segmentTravelTimeDAO.getTravelTimebyDate(
+				traTime = segmentTravelTimeDAO
+						.getTravelTimebyDate(
 								routeDetailsBean.getSegment().getId(),
-								startDateOfSegment.get(i)).get(0).getTravelTime();
+								startDateOfSegment.get(i)).get(0)
+						.getTravelTime();
 
-				Date newEndDate = new Date(startDateOfSegment.get(i).getTime()+ traTime);
+				Date newEndDate = new Date(startDateOfSegment.get(i).getTime()
+						+ traTime);
 				endDateOfSegment.add(newEndDate);
 				if (i < (routeDetailsList.size() - 1)) {
-					Date newStartDate = new Date(endDateOfSegment.get(i).getTime() + delayTime);
+					Date newStartDate = new Date(endDateOfSegment.get(i)
+							.getTime() + delayTime);
 					startDateOfSegment.add(newStartDate);
 				}
 				i++;
 			}
 
-			Date toDate = endDateOfSegment.get(endDateOfSegment.size()-1);
+			Date toDate = endDateOfSegment.get(endDateOfSegment.size() - 1);
 
 			BusStatusBean busStatusBean = new BusStatusBean();
-			BusBean busBean = busDAO.getById(tripDialogBusPlate);
 			busStatusBean.setBus(busBean);
 			busStatusBean.setBusStatus("ontrip");
 			busStatusBean.setFromDate(fromDate);
@@ -102,7 +134,6 @@ public class SaveAction extends ActionSupport {
 			message = "Error! Please try again!";
 			ex.printStackTrace();
 		}
-		return SUCCESS;
 	}
 
 	public void setSegmentTravelTimeDAO(
