@@ -33,6 +33,7 @@
             $.ajax({
             	url: "deleteBus.html?busId=" + busId,
             }).done(function(data) {
+            	$('#deleteBusDialog').modal('hide');
             	alert(data.message);
                var url = $('#contextPath').val() + "/bus/list.html";
                window.location = url;
@@ -48,6 +49,7 @@
             $.ajax({
                url: "saveBus.html?plateNumber=" + plateNumber + "&busTypeBeans=" + busType,
             }).done(function(data) {
+            	$('#addBusDialog').modal('hide');
                alert(data.message);
                var url = $('#contextPath').val() + "/bus/list.html";
                window.location = url;
@@ -149,8 +151,7 @@
 								name="plateNumber" value="">
 							</td>
 							<td>
-							  Select Bus Type : <s:select id="busType" headerKey="-1"
-									headerValue="--- Select Bus Type ---" list="busTypeBeans"
+							  Select Bus Type : <s:select id="busType" list="busTypeBeans"
 									name="busTypeBeans" listKey="id" listValue="name" />
 						   </td>
 						</tr>
