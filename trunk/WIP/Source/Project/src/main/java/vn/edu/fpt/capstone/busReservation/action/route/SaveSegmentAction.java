@@ -86,6 +86,7 @@ public class SaveSegmentAction extends BaseAction {
 							routeBean.setStatus("active");
 						}
 						routeDAO.update(routeBeans);
+						message = "Existed route is re-activated successfully!";
 					}
 				}
 			} else {
