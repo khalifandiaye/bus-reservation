@@ -46,8 +46,12 @@
 			style="font-size: 21px; line-height: 41px; margin: 0 0px 10px 0px;">Vui
 			lòng chọn ghế</div>
 		<ul class="nav nav-tabs" id="myTab">
-			<li><a href="#seat-map-out">Chuyến đi</a></li>
+			<s:if test="seatMapOut != null">
+				<li><a href="#seat-map-out">Chuyến đi</a></li>
+			</s:if>
+			<s:if test="seatMapReturn != null">
 			<li><a href="#seat-map-return">Chuyến về</a></li>
+			</s:if>
 		</ul>
 		<div class="tab-content">
 		<s:if test="seatMapOut != null">
