@@ -462,7 +462,7 @@
 					totalMoney += element.fare;
 					$('#segmentTable').dataTable().fnUpdate(accounting.formatMoney(element.fare),i,2);
 				};
-				$('#totalMoney').html(accounting.formatMoney(totalMoney) + " VNĐ");
+				$('#totalMoney').html(accounting.formatMoney(totalMoney));
 			}
 		});
 	};
@@ -542,9 +542,11 @@
             </tbody>
             <tfoot>
                <tr>
-                  <th>Total : </th>
-                  <th><label><s:property value='sumaryTime'/></label></th>
-                  <th><label id="totalMoney"></label></th>
+                  <td style="text-align: right; font-weight:bold;">Total : </td>
+                  <td style="text-align: center; font-weight:bold;"><s:property value='sumaryTime'/></td>
+                  <td style="text-align: right;padding-right:100px; font-weight:bold;">
+                     <label id="totalMoney"></label>
+                  </td>
                </tr>
             </tfoot>
          </table>
