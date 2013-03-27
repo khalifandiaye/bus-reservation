@@ -70,6 +70,8 @@
 								<li class="operator hidden"><a
 									href="<%=request.getContextPath()%>/schedule/list.html">LỊCH
 										XE CHẠY</a></li>
+								<li class="operator hidden"><a
+									href="<%=request.getContextPath()%>/segment/list.html">CHẶNG ĐI</a></li>
 								<li class="admin hidden"><a
 									href="<%=request.getContextPath()%>/admin/user-management.html">THÀNH
 										VIÊN</a></li>
