@@ -462,7 +462,7 @@
 					totalMoney += element.fare;
 					$('#segmentTable').dataTable().fnUpdate(accounting.formatMoney(element.fare),i,2);
 				};
-				$('#totalMoney').html(accounting.formatMoney(element.fare) + " VNĐ");
+				$('#totalMoney').html(accounting.formatMoney(totalMoney) + " VNĐ");
 			}
 		});
 	};
