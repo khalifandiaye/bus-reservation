@@ -499,7 +499,7 @@
          <h3>
             <s:property value="routeName" />
          </h3>
-         <table id="segmentTable">
+         <table id="segmentTable" border="1">
             <thead>
                <tr>
                   <th>Name</th>
@@ -621,7 +621,7 @@
             <label for="tripDialogDepartureTimeDiv">From Date: </label>
             <div id="tripDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
                <input id="tripDialogDepartureTime" size="16" type="text" value="" readonly
-                  name="tripDialogDepartureTime"> <span class="add-on"><i class="icon-remove"></i></span> <span
+                  name="tripDialogDepartureTime"><span
                   class="add-on"><i class="icon-calendar"></i></span>
             </div>
             <label for="tripDialogArrivalTimeDiv">To Date: </label>

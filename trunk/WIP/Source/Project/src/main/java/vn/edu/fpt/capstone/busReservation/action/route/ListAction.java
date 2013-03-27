@@ -15,6 +15,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.CityBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentTravelTimeBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.RouteDetailsInfo;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -60,10 +61,12 @@ public class ListAction extends ActionSupport {
 			List<SegmentBean> segmentBeans = routeDetailsDAO
 					.getAllSegmemtsByRouteId(routeId);
 			for (SegmentBean segmentBean : segmentBeans) {
-				traTime += segmentTravelTimeDAO
-						.getTravelTimebyDate(segmentBean.getId(),
-								startDateOfSegment.get(i)).get(0)
-						.getTravelTime();
+			   List<SegmentTravelTimeBean> segmentTravelTimeBeans = segmentTravelTimeDAO
+                  .getTravelTimebyDate(segmentBean.getId(),
+                        startDateOfSegment.get(i));
+			   if (segmentTravelTimeBeans.size() != 0) {
+			      traTime += segmentTravelTimeBeans.get(0).getTravelTime();
+			   }
 
 				if (i < (segmentBeans.size() - 1)) {
 					Date newStartDate = new Date(startDateOfSegment.get(i)
