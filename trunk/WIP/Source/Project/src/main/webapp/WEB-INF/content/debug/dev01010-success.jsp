@@ -39,6 +39,10 @@
 				</select>
 				<button id="add">Add</button>
 				<button id="clear">Clear</button>
+    			<select id="routes">
+				  <option value="1">Route 1</option>
+				  <option value="2">Route 2</option>
+				</select>
 				</div>
    			</div>
    			<div class="slider">
