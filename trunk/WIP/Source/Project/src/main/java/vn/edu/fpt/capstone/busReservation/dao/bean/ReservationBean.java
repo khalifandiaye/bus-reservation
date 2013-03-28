@@ -221,10 +221,15 @@ public class ReservationBean extends AbstractBean<Integer> {
         public static final ReservationStatus DELETED = new ReservationStatus(
                 "deleted");
         /**
-         * The reservation was cancelled, and refund is completed.
+         * The reservation was cancelled by user, and refund is completed.
          */
         public static final ReservationStatus REFUNDED = new ReservationStatus(
                 "refunded");
+        /**
+         * The reservation was cancelled by company, and refund is completed.
+         */
+        public static final ReservationStatus REFUNDED2 = new ReservationStatus(
+                "refunded2");
 
         private ReservationStatus(String value) {
             this.value = value;
@@ -249,6 +254,8 @@ public class ReservationBean extends AbstractBean<Integer> {
                 return DELETED;
             } else if (REFUNDED.value.equalsIgnoreCase(value)) {
                 return REFUNDED;
+            } else if (REFUNDED2.value.equalsIgnoreCase(value)) {
+                return REFUNDED2;
             } else {
                 throw new InvalidParameterException("Can not instantiate new "
                         + ReservationStatus.class.getName()
