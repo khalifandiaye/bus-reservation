@@ -22,7 +22,8 @@ public class BusStatusBean extends AbstractBean<Integer> {
 	private StationBean endStation;
 	private String status;
 	private List<TripBean> trips;
-	private BusFreeTimeBean busFreeTime;
+	private List<BusStatusChangeBean> changes;
+	
 	/**
 	 * @return the bus
 	 */
@@ -108,15 +109,15 @@ public class BusStatusBean extends AbstractBean<Integer> {
 	    this.trips = trips;
 	}
     /**
-     * @return the busFreeTime
+     * @return the changes, sorted by date
      */
-    public BusFreeTimeBean getBusFreeTime() {
-        return busFreeTime;
+    public List<BusStatusChangeBean> getChanges() {
+        return changes;
     }
     /**
-     * @param busFreeTime the busFreeTime to set
+     * @param changes the changes to set
      */
-    public void setBusFreeTime(BusFreeTimeBean busFreeTime) {
-        this.busFreeTime = busFreeTime;
+    public void setChanges(List<BusStatusChangeBean> changes) {
+        this.changes = changes;
     }
 }

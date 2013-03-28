@@ -11,6 +11,8 @@
 			<generator class="native" />
 		</id>
 		<property name="name" type="string" not-null="true" />
+		<property name="latitude" type="double" not-null="true" />
+		<property name="longitude" type="double" not-null="true" />
 		<bag name="stations" table="station" inverse="true" order-by="id">
 			<key column="location_id" />
 			<one-to-many
@@ -64,14 +66,17 @@
 		</bag>
 	</class>
 	<!-- SEGMENT_TRAVEL_TIME -->
-	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.SegmentTravelTimeBean"
+	<class
+		name="vn.edu.fpt.capstone.busReservation.dao.bean.SegmentTravelTimeBean"
 		table="segment_travel_time">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
 		<many-to-one name="segment" column="segment_id" />
-		<property name="travelTime" column="travel_time" type="long" not-null="true" />
-		<property name="validFrom" column="valid_from" type="timestamp" not-null="true" />
+		<property name="travelTime" column="travel_time" type="long"
+			not-null="true" />
+		<property name="validFrom" column="valid_from" type="timestamp"
+			not-null="true" />
 	</class>
 	<!-- ROUTE -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean"
@@ -179,7 +184,13 @@
 			<key column="bus_status_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
 		</bag>
-<!-- 		<one-to-one name="busFreeTime" property-ref="id" /> -->
+		<bag name=changes table="bus_status_change" inverse="true"
+			order-by="date">
+			<key column="bus_status_id" />
+			<one-to-many
+				class="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusChangeBean" />
+		</bag>
+		<!-- <one-to-one name="busFreeTime" property-ref="id" /> -->
 	</class>
 	<!-- TRIP -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean"
@@ -240,6 +251,22 @@
 			<one-to-many
 				class="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean" />
 		</bag>
+	</class>
+	<!-- BUS_STATUS_CHANGE -->
+	<class
+		name="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusChangeBean"
+		table="user">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<many-to-one name="busStatus" column="bus_status_id" />
+		<many-to-one name="user" column="user_id" />
+		<property name="change" column="change" type="string"
+			not-null="true" />
+		<property name="reason" column="reason" type="string"
+			not-null="true" />
+		<property name="date" column="date" type="timestamp"
+			not-null="true" />
 	</class>
 	<!-- RESERVATION -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean"
@@ -389,24 +416,24 @@
 			not-null="false" />
 	</class>
 	<!-- BUS_FREE_TIME VIEW -->
-<!-- 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.BusFreeTimeBean" -->
-<!-- 		table="bus_free_time"> -->
-<!-- 		<composite-id> -->
-<!-- 			<key-many-to-one name="id" column="id" -->
-<!-- 				class="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean" /> -->
-<!-- 		</composite-id> -->
-<!-- 		<many-to-one name="id" column="id" -->
-<!-- 			class="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean" -->
-<!-- 			insert="false" update="false" /> -->
-<!-- 		<many-to-one name="bus" column="bus_id" -->
-<!-- 			class="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" /> -->
-<!-- 		<property name="fromDate" column="from_date" type="timestamp" -->
-<!-- 			not-null="true" /> -->
-<!-- 		<property name="toDate" column="to_date" type="timestamp" -->
-<!-- 			not-null="false" /> -->
-<!-- 		<many-to-one name="station" column="station_id" -->
-<!-- 			class="vn.edu.fpt.capstone.busReservation.dao.bean.StationBean" /> -->
-<!-- 	</class> -->
+	<!-- <class name="vn.edu.fpt.capstone.busReservation.dao.bean.BusFreeTimeBean" -->
+	<!-- table="bus_free_time"> -->
+	<!-- <composite-id> -->
+	<!-- <key-many-to-one name="id" column="id" -->
+	<!-- class="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean" /> -->
+	<!-- </composite-id> -->
+	<!-- <many-to-one name="id" column="id" -->
+	<!-- class="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean" -->
+	<!-- insert="false" update="false" /> -->
+	<!-- <many-to-one name="bus" column="bus_id" -->
+	<!-- class="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" /> -->
+	<!-- <property name="fromDate" column="from_date" type="timestamp" -->
+	<!-- not-null="true" /> -->
+	<!-- <property name="toDate" column="to_date" type="timestamp" -->
+	<!-- not-null="false" /> -->
+	<!-- <many-to-one name="station" column="station_id" -->
+	<!-- class="vn.edu.fpt.capstone.busReservation.dao.bean.StationBean" /> -->
+	<!-- </class> -->
 	<!-- TRIP_WITH_NUMBER_OF_REMAINED_SEATS_IN_SUBROUTE -->
 	<!-- <class name="vn.edu.fpt.capstone.busReservation.dao.bean.TripWithNumberOfRemainedSeatsInSubrouteBean" 
 		table="trip_with_number_of_remained_seats_in_subroute"> -->
@@ -446,8 +473,8 @@
 		<property name="arrivalTime" column="arrival_time" type="timestamp"
 			not-null="true" />
 		<property name="fare" column="fare" type="double" not-null="true" />
-		<property name="remainedSeats" column="remained_seats" type="int" 
-			not-null="true"/>
+		<property name="remainedSeats" column="remained_seats" type="int"
+			not-null="true" />
 	</class>
 	<sql-query name="callSearchTripsProcedure">
 		<return alias="searchResult"
@@ -463,7 +490,7 @@
 			<return-property name="arrivalStationAddress" column="arrival_station_address" />
 			<return-property name="arrivalTime" column="arrival_time" />
 			<return-property name="fare" column="fare" />
-			<return-property name="remainedSeats" column="remained_seats"/>
+			<return-property name="remainedSeats" column="remained_seats" />
 		</return>
 		<![CDATA[CALL search_trips(:deptCity, :arrvCity, :deptDate, :pssgrNo, :busType, :minDate);]]>
 	</sql-query>
