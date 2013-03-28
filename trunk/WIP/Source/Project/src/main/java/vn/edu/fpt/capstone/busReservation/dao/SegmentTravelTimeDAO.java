@@ -37,7 +37,8 @@ public class SegmentTravelTimeDAO extends
 				+ "WHERE stt.segment.id = :segmentId "
 				+ "AND stt.validFrom = (SELECT MAX(stt1.validFrom) "
 				+ "FROM SegmentTravelTimeBean stt1 "
-				+ "WHERE stt1.segment = stt.segment AND stt1.validFrom <= :date)";
+				+ "WHERE stt1.segment = stt.segment AND stt1.validFrom <= :date) " +
+				"ORDER BY stt.validFrom DESC";
 		Session session = sessionFactory.getCurrentSession();
 		List<SegmentTravelTimeBean> result = new ArrayList<SegmentTravelTimeBean>();
 		try {
