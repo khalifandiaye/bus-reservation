@@ -22,7 +22,7 @@ public class SearchResultInfo implements Serializable{
 		private String arrivalStationAddress;
 		private Date arrivalTime;
 		private double fare;
-		
+		private int remainedSeats;
 		/**
 		 * @return the busStatusId
 		 */
@@ -143,4 +143,17 @@ public class SearchResultInfo implements Serializable{
 		public void setFare(double fare) {
 			this.fare = fare;
 		}
+		/**
+		 * @return the remainedSeats
+		 */
+		public int getRemainedSeats() {
+			return remainedSeats;
+		}
+		/**
+		 * @param remainedSeats the remainedSeats to set
+		 */
+		public void setRemainedSeats(int remainedSeats) {
+			this.remainedSeats = remainedSeats;
+		}
+		
 }

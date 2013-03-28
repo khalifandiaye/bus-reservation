@@ -135,6 +135,17 @@ border-bottom-right-radius:5px;
 	background-position: left 0px;
 	background: url(../img/bus_64.png) 64px 64px no-repeat;
 }
+.trip-details .blue-bus-ico-ret {
+	font-weight: bold;
+	width: 50%;
+	margin-top: -57px;
+	margin-left: -46px;
+	height: 115px;
+	float: left;
+	display: inline-block;
+	background-position: left 0px;
+	background: url(../img/bus_ret_64.png) 64px 64px no-repeat;
+}
 .trip-details .city-info {
 	margin-top: -73px;
 	margin-left: -46px;
@@ -142,14 +153,34 @@ border-bottom-right-radius:5px;
 	float: right;
 }
 
-.arrow-right {
+.arrow-left {
 	font-weight: bold;
 	width: 30%;
-	margin-top: -86px;
-	margin-left: -79px;
+	margin-top: -85px;
+	margin-left: -62px;
 	height: 116px;
 	float: left;
 	display: inline-block;
 	background-position: left 0px;
-	background: url(../img/arrow-right.png) 64px 64px no-repeat;
+	background: url(../img/arrow_left_001.png) 64px 64px no-repeat;
+}
+.arrow-right {
+	font-weight: bold;
+	width: 30%;
+	margin-top: -85px;
+	margin-left: -68px;
+	height: 116px;
+	float: left;
+	display: inline-block;
+	background-position: left 0px;
+	background: url(../img/arrow_right_001.png) 64px 64px no-repeat;
+}
+.dept-city h5{
+	margin-top : 0 px;
+	margin-left : 0 px;
+}
+
+.arr-city h5{
+	margin-left: 0px;
+	margin-top: 20px;
 }

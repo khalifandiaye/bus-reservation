@@ -74,6 +74,11 @@ public interface CommonConstant {
      * Ticket type: Round trip
      */
     public final static String TICKET_ROUND_TRIP = "roundtrip";
+    
+    /**
+     * Min time to book a ticket before the bus is departed
+     */
+    public final static int MIN_TIME_BEFORE_DEPART = 30;
 
     /**
      * http prefix
