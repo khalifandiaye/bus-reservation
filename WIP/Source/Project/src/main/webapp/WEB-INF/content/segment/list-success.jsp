@@ -56,7 +56,6 @@
 	         format : "dd/mm/yyyy - hh:ii",
 	         autoclose : true,
 	         todayBtn : true,
-	         startDate : new Date(),
 	         minuteStep : 10
 	      }).change(function(){
 	    	  getSegmentDuration($("#validDateSelect").val());
