@@ -13,6 +13,8 @@ import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -330,10 +332,14 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 					Locale.US);
 			SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd",
 					Locale.US);
+			SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			// Departure date for onward journey
 			String deptDate = toFormat.format(fromFormat.parse(departureDate));
+			Calendar now = Calendar.getInstance();
+			now.add(Calendar.MINUTE, CommonConstant.MIN_TIME_BEFORE_DEPART);
+			String minDate = dateTimeFormat.format(now.getTime());
 			searchResult = tripDAO.searchAvailableTrips(departureCity,
-					arrivalCity, deptDate, passengerNo, busType);
+					arrivalCity, deptDate, passengerNo, busType, minDate);
 			if (searchResult.size() != 0) {
 				// searchResultMap = filterByDate(searchResult);
 				filterResultByDate(searchResult);
@@ -344,10 +350,16 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 
 			// round-trip
 			if (CommonConstant.TICKET_ROUND_TRIP.equals(ticketType)) {
+				if(searchResult.size()!=0){
+					Calendar arrvTime = Calendar.getInstance();;
+					arrvTime.setTime(searchResult.get(0).getArrivalTime());
+					arrvTime.add(Calendar.MINUTE, CommonConstant.MIN_TIME_BEFORE_DEPART);
+					minDate = dateTimeFormat.format(arrvTime.getTime());
+				}
 				// return journey
 				String retDate = toFormat.format(fromFormat.parse(returnDate));
 				searchResult = tripDAO.searchAvailableTrips(arrivalCity,
-						departureCity, retDate, passengerNo, busType);
+						departureCity, retDate, passengerNo, busType, minDate);
 				if (searchResult.size() != 0) {
 					// searchResultMap = filterByDate(searchResult);
 					filterReturnResultByDate(searchResult);

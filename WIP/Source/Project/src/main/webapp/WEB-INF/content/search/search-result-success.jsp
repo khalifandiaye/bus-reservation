@@ -105,19 +105,19 @@
 					var className = $(this).attr('class').split(' ')[1];
 					//set param for onward journey
 					if(className == 'onward') {
-					var busStatus = $(this).parent("td").next().next().find(
+					var busStatus = $(this).parent("td").next().next().next().find(
 							'.out_status').val();
-					var departTime = $(this).parent("td").next().next().find(
+					var departTime = $(this).parent("td").next().next().next().find(
 							'.out_deptTime').val();
-					var arriveTime = $(this).parent("td").next().next().find(
+					var arriveTime = $(this).parent("td").next().next().next().find(
 							'.out_arrTime').val();
 					} else {
 					//for return journey
-					var	busStatus = $(this).parent("td").next().next().find(
+					var	busStatus = $(this).parent("td").next().next().next().find(
 						'.rtn_status').val();
-					var	departTime = $(this).parent("td").next().next().find(
+					var	departTime = $(this).parent("td").next().next().next().find(
 						'.rtn_deptTime').val();
-					var	arriveTime = $(this).parent("td").next().next().find(
+					var	arriveTime = $(this).parent("td").next().next().next().find(
 						'.rtn_arrTime').val();
 					}
 					//call ajax
@@ -132,7 +132,7 @@
 						},
 						success : function(data) {
 							//set data to screen
-							console.log(data.tripList);
+							//console.log(data.tripList);
 							$('#trips-list tbody').empty();
 							$('#trips-list tbody').append('<tr class="row">' + 
 							'<th class="head">Giờ khởi hành</th>' +
@@ -152,6 +152,32 @@
 						}
 				});
 		}));
+		
+		var $unique = $('input.chb-out');
+		var $uniqueRet = $('input.chb-ret');
+		//make checkbox act like radio
+		$unique.click(function() {
+	    	$unique.filter(':checked').not(this).removeAttr('checked');
+	   		checkChecked001();
+		});
+	
+	
+		$uniqueRet.click(function() {
+	    	$uniqueRet.filter(':checked').not(this).removeAttr('checked');
+	    	checkChecked001();
+		});
+	
+		//check if at least one journey (onward or return) is checked
+		function checkChecked001(){
+		 	if($unique.filter(':checked').size() == 0 && 
+		 			$uniqueRet.filter(':checked').size() == 0 ){
+		    	$('#confirm-submit').attr("disabled", "disabled");
+				$('#confirm-submit').removeClass('btn-primary');
+		    } else {
+		    	$('#confirm-submit').removeAttr("disabled");
+				$('#confirm-submit').addClass('btn-primary');
+		    }
+		}
 		
 		//show message on error
 		if($("#message").val() != null && $("#message").val() != ""){
@@ -192,7 +218,16 @@
 			<!-- Start contents -->
 			<s:set name="pssgrNo" value="passengerNo" />
 			<s:set name="msgRtn" value="searchMessage"/>
-			<script type="text/javascript">
+			<script type="text/javascript">				
+				function checkChecked(){
+				 	if($('.chb-out:checked').size() == 0 && $('.chb-ret:checked').size() == 0 ){
+				    	$('#confirm-submit').attr("disabled", "disabled");
+						$('#confirm-submit').removeClass('btn-primary');
+				    } else {
+				    	$('#confirm-submit').removeAttr("disabled");
+						$('#confirm-submit').addClass('btn-primary');
+				    }
+				}
 				//show result details for onward journey
 				$(document).ready(function() {
 					if($('.list-header.onward4').size()!=0){
@@ -237,19 +272,17 @@
 					$('.list-header-rtn').bind('click',(function() {
 						var rtnClassName = $(this).attr('class').split(' ')[1];
 						showResultDetailsRtn(rtnClassName);
-					}));
-				
-					//on click 
-					$('#out_journey').bind(
-							'click', (function(){
-						
-					}));
+					}));				
+								
 				});
-
+							
 				function showResultDetails(headerName){
 					$('.search-rs-dtl').hide();	
 					$('.search-rs-dtl.' + headerName).show();
+					//var checkbox = $('table.' + headerName + ' tr.tripDetails #out_journey')[0];
+					$(".chb-out").attr('checked',false);
 					$('table.' + headerName + ' tr.tripDetails #out_journey')[0].checked = true;
+					checkChecked();
 					$('.list-header').removeClass('header-current');
 					$('.list-header').addClass('header-default');
 					$('.list-header.' + headerName).removeClass('header-default');
@@ -259,7 +292,9 @@
 				function showResultDetailsRtn(headerName){
 					$('.search-rs-dtl-rtn').hide();	
 					$('.search-rs-dtl-rtn.' + headerName).show();
+					$(".chb-ret").attr('checked',false);
 					$('table.' + headerName + ' tr.tripDetails #rtn_journey')[0].checked = true;
+					checkChecked();
 					$('.list-header-rtn').removeClass('header-current');
 					$('.list-header-rtn').addClass('header-default');
 					$('.list-header-rtn.' + headerName).removeClass('header-default');
@@ -269,12 +304,13 @@
 			<div>
 			<form action="../booking/booking.html">
 			<!-- <<<***ONWARD INFORMATION***>>> -->
+			<s:set name="pssgrNo" value="passengerNo"/>
 			<div class="onward-info">
 				<legend>Chuyến đi</legend>
 				<div class="trip-details" style="display:block;width:100%">
 					<span class="blue-bus-ico"></span>
-					<span><h5>${deptCity}</h5>
-					 	<span class="arrow-right"></span><h5>${arrCity}</h5>
+					<span><span class="dept-city"><h5>${deptCity}</h5></span>
+					 	<span class="arrow-left"></span><span class="arr-city"><h5>${arrCity}</h5></span>
 					</span>
 				</div>
 				<br/>
@@ -414,9 +450,9 @@
 			<div class="return-info">
 				<legend>Chuyến về</legend>
 				<div class="trip-details" style="display:block;width:100%">
-					<span class="blue-bus-ico"></span>
-					<span><h5>${arrCity}</h5>
-					 	<span class="arrow-right"></span><h5>${deptCity}</h5>
+					<span class="blue-bus-ico-ret"></span>
+					<span><span class="dept-city"><h5>${deptCity}</h5></span>
+					 	<span class="arrow-right"></span><span class="arr-city"><h5>${arrCity}</h5></span>
 					</span>
 				</div>
 				<br/>
