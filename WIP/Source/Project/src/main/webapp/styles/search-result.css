@@ -94,11 +94,16 @@ border-bottom-right-radius:5px;
 .focus-background{
 	background: #ccc;
 }
+span.list-header{
+	width: 14.2857%;
+}
+span.list-header-rtn{
+	width: 14.2857%;
+}
 .header-current {
 	display: inline-block;
 	cursor: default;
 	background: #6E6E6E;
-	width: 14.2857%;
 	color:#FFFFFF;
 	font: 20px;
 	background:#6E6E6E;
@@ -116,7 +121,6 @@ border-bottom-right-radius:5px;
 	vertical-align:middle;
 	cursor: pointer;
 	cursor: hand;
-	width: 14.2857%;
 	font: 16px;
 	padding:5px 0px;
 }

@@ -50,8 +50,14 @@
 		$("#dp1").change(function() {
 		  	setMinDate();
 		});
-
+		
 		getDuration();
+		
+		if($('#rdoOneway').prop('checked')){
+			$("#input-return").hide(500);
+		} else {
+			$("#input-return").show(500);
+		}
 	});
 
 	function findArriveCity() {
