@@ -184,7 +184,7 @@
 			<key column="bus_status_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
 		</bag>
-		<bag name=changes table="bus_status_change" inverse="true"
+		<bag name="changes" table="bus_status_change" inverse="true"
 			order-by="date">
 			<key column="bus_status_id" />
 			<one-to-many
