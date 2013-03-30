@@ -313,6 +313,8 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 			if(seatsReturnDouble != null){
 				session.put("seatsReturnDouble", seatsReturnDouble);
 			}
+			//session to knows redirect form booking pay
+			session.put("redirectFrom", "bookingPay");
 			return "double";
 		}
 	}

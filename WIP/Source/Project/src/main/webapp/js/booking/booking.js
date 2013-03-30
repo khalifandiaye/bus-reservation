@@ -285,7 +285,8 @@ $(function(){
 	initSelectedSeat();
 	
 	$("#booking-submit").bind("click",function(){
-		if((SeatsOutToAllocate - SeatsOutNotAllocatedCount == 0) || (SeatsReturnToAllocate - SeatsReturnNotAllocatedCount == 0)){
+		if(((SeatsOutToAllocate - SeatsOutNotAllocatedCount == 0) && $('#seat-map-out').length > 0) 
+				|| ((SeatsReturnToAllocate - SeatsReturnNotAllocatedCount == 0) && $('#seat-map-return').length > 0)){
 			showPopup("Bạn phải chọn ít nhất 1 ghế cho để tiếp tục.");
 			return;
 		}
@@ -298,7 +299,7 @@ $(function(){
 		
 	    $("#forwardSeats").val(getSelectedOutSeatString());
         $("#returnSeats").val(getSelectedReturnSeatString());
-	    
+	     
 	    $("form.booking").submit();  
 	});
 	
