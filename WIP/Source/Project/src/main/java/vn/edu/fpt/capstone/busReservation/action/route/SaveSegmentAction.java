@@ -62,7 +62,8 @@ public class SaveSegmentAction extends BaseAction {
 			// route is disabled => enable it
 			// if routeId is endabled => message route existed.
 			List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
-
+			
+			//check if any duplicated segment in new route
 			for (SegmentInfo segmentInfo : segmentInfosFoward) {
 				List<SegmentBean> segments = segmentDAO.getDuplicatedSegment(
 						segmentInfo.getStationStartAt(), segmentInfo.getStationEndAt());
@@ -88,7 +89,11 @@ public class SaveSegmentAction extends BaseAction {
 						routeDAO.update(routeBeans);
 						message = "Existed route is re-activated successfully!";
 					}
-				}
+				} else {
+					insertSegment(segmentInfosFoward, false);
+					Collections.reverse(segmentInfosFoward);
+					insertSegment(segmentInfosFoward, true);
+					}
 			} else {
 				insertSegment(segmentInfosFoward, false);
 				Collections.reverse(segmentInfosFoward);

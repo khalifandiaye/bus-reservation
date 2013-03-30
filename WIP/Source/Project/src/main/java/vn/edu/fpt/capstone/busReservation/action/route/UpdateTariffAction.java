@@ -82,7 +82,7 @@ public class UpdateTariffAction extends BaseAction {
 			TariffUpdateInfo tariffUpdateInfo, int routeId,
 			boolean isRevertRoute) throws ParseException {
 		Date validDate = FormatUtils.deFormatDate(
-				tariffUpdateInfo.getValidDate(), "yyyy/MM/dd - hh:mm",
+				tariffUpdateInfo.getValidDate(), "yyyy/MM/dd",
 				CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
 		BusTypeBean busTypeBean = busTypeDAO.getById(tariffUpdateInfo.getBusTypeId());
 		for (TariffInfo tariffInfo : tariffInfos) {

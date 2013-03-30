@@ -41,7 +41,7 @@ public class SaveSegmentAction extends BaseAction {
 			SegmentTravelTimeBean segmentTravelTimeBeanForward = new SegmentTravelTimeBean();
 			segmentTravelTimeBeanForward.setSegment(segmentForward);
 			segmentTravelTimeBeans.add(segmentTravelTimeBeanForward);
-			//Add new tariff for return segment
+			//Add new duration for return segment
 			SegmentBean segmentReturn = (segmentDAO.getDuplicatedSegment(
 					segmentForward.getStartAt().getId(), segmentForward
 							.getEndAt().getId())).get(0);
@@ -51,7 +51,7 @@ public class SaveSegmentAction extends BaseAction {
 			
 			for (SegmentTravelTimeBean segmentTravelTimeBean : segmentTravelTimeBeans) {
 				Date validDate = DateUtils.string2Date(validFromTime,
-						"dd/mm/yyyy - hh:mm", CommonConstant.LOCALE_VN,
+						"dd/MM/yyyy", CommonConstant.LOCALE_VN,
 						CommonConstant.DEFAULT_TIME_ZONE);
 				segmentTravelTimeBean.setValidFrom(validDate);
 
