@@ -18,7 +18,7 @@
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/admin/admin-user.js"></script>
 </head>
-<body>
+<body> 
 	<jsp:include page="../common/header.jsp" />
 	<!-- Start register -->
 	<section class="container">

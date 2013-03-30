@@ -266,26 +266,45 @@ public class BookingAction extends BaseAction implements SessionAware {
 			if(session.containsKey("listReturnTripBean")){
 				session.remove("listReturnTripBean");
 			}
-			if(!CheckUtils.isNullOrBlank(out_journey) && out_journey.equalsIgnoreCase("on")){
+			if(!CheckUtils.isNullOrBlank(out_journey) && out_journey.equalsIgnoreCase("on") && CheckUtils.isNullOrBlank(rtn_journey)){
 				int busStatus = Integer.parseInt(outBusStatus);
 				listOutTripBean = tripDAO.getBookingTrips(busStatus, outDepartTime, outArriveTime);
 				session.put("listOutTripBean", listOutTripBean);
-			}
-			if(!CheckUtils.isNullOrBlank(rtn_journey) && rtn_journey.equalsIgnoreCase("on")){
+			}else if(!CheckUtils.isNullOrBlank(rtn_journey) && rtn_journey.equalsIgnoreCase("on") && CheckUtils.isNullOrBlank(out_journey)){
 				int busStatus = Integer.parseInt(rtnBusStatus);
-				listReturnTripBean = tripDAO.getBookingTrips(busStatus, rtnDepartTime, rtnArriveTime);
+				listOutTripBean = tripDAO.getBookingTrips(busStatus, rtnDepartTime, rtnArriveTime);
+				session.put("listOutTripBean", listOutTripBean);
+			}else if(!CheckUtils.isNullOrBlank(rtn_journey) && rtn_journey.equalsIgnoreCase("on") && !CheckUtils.isNullOrBlank(out_journey) && out_journey.equalsIgnoreCase("on")){
+				int busStatusOut = Integer.parseInt(outBusStatus);
+				int busStatusRtn = Integer.parseInt(rtnBusStatus);
+				listOutTripBean = tripDAO.getBookingTrips(busStatusOut, outDepartTime, outArriveTime);
+				session.put("listOutTripBean", listOutTripBean);
+				listReturnTripBean = tripDAO.getBookingTrips(busStatusRtn, rtnDepartTime, rtnArriveTime);
 				session.put("listReturnTripBean", listReturnTripBean);
 			}
 			session.put("passengerNo", passengerNo);
 		}else if(session.containsKey("listOutTripBean") || session.containsKey("listReturnTripBean")){
 			//redirect from some where
-			if(session.containsKey("listOutTripBean")){ 
-				listOutTripBean = (List<TripBean>)session.get("listOutTripBean");
+			if(session.containsKey("redirectFrom")){
+				if("bookingPay".equals((String)session.get("redirectFrom"))){
+					if(session.containsKey("listOutTripBean")){ 
+						listOutTripBean = (List<TripBean>)session.get("listOutTripBean");
+					}
+					if(session.containsKey("listReturnTripBean")){
+						listReturnTripBean = (List<TripBean>)session.get("listReturnTripBean");
+					}
+					this.passengerNo = (String)session.get("passengerNo");
+					session.remove("redirectFrom");
+				}
+			}else{
+				session.remove("listOutTripBean");
+				session.remove("listReturnTripBean");
+				
+				session.remove("message");
+				session.remove("seatsOutDouble");
+				session.remove("seatsReturnDouble");
+				return ERROR;
 			}
-			if(session.containsKey("listReturnTripBean")){
-				listReturnTripBean = (List<TripBean>)session.get("listReturnTripBean");
-			}
-			this.passengerNo = (String)session.get("passengerNo");
 		}		
 		
 		

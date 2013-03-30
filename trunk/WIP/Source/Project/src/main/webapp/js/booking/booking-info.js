@@ -54,7 +54,7 @@ function genSeatFromSessionStorage(){
 	var listReturnSeat = sessionStorage.getItem("selectedReturnSeat").split(";");
 	$("#selectedOutSeat").val(sessionStorage.getItem("selectedOutSeat"));
 	$("#selectedReturnSeat").val(sessionStorage.getItem("selectedReturnSeat"));
-	if(listOutSeat.length > 0){
+	if(sessionStorage.getItem("selectedOutSeat") != "" && listOutSeat[0] != ""){ 
 		$(".listCheckedSeats tbody").append("<tr><th colspan='2'>Chuyến đi :</th></tr>"); 
 		for ( var i = 0; i < listOutSeat.length; i++) {
 			if(listOutSeat[i] != ""){ 
@@ -62,7 +62,7 @@ function genSeatFromSessionStorage(){
 			}
 		}
 	}
-	if(listReturnSeat.length > 0){
+	if(sessionStorage.getItem("selectedReturnSeat") != "" && listReturnSeat[0] != ""){
 		$(".listCheckedSeats tbody").append("<tr><th colspan='2'>Chuyến khứ hồi :</th></tr>");
 		for ( var i = 0; i < listReturnSeat.length; i++) {
 			if(listReturnSeat[i] != ""){ 
