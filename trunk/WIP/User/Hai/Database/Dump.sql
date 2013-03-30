@@ -4,7 +4,7 @@ USE `bus_reservation`;
 --
 -- Host: localhost    Database: bus_reservation
 -- ------------------------------------------------------
--- Server version	5.5.28-log
+-- Server version	5.5.29
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -1016,18 +1016,20 @@ DELIMITER ;;
 							  IN ARRV_CITY INT,
 							  IN DEPT_DATE VARCHAR(10),
 							  IN PSSGR_NO INT,
-                              IN BUS_TYPE INT)
+                              IN BUS_TYPE INT,
+							  IN MIN_DATE VARCHAR(20))
 BEGIN
 SELECT  dept.bus_status_id,
-		dept.city_name       		AS departure_city,
-	    dept.station_name    		AS departure_station_name,
-	    dept.station_address 		AS departure_station_address,
+		dept.city_name       			AS departure_city,
+	    dept.station_name    			AS departure_station_name,
+	    dept.station_address 			AS departure_station_address,
         dept.departure_time,
-		arrv.city_name       		AS arrival_city,
-        arrv.station_name    		AS arrival_station_name,
-		arrv.station_address 		AS arrival_station_address,
+		arrv.city_name       			AS arrival_city,
+        arrv.station_name    			AS arrival_station_name,
+		arrv.station_address 			AS arrival_station_address,
 		arrv.arrival_time,
-        SUM(trff.fare) * PSSGR_NO 	AS fare
+        SUM(trff.fare) * PSSGR_NO 		AS fare,
+		rmst.number_of_remained_seats 	AS remained_seats
 FROM   
 	-- departure trip information
 	    (SELECT dtrp.bus_status_id,
@@ -1051,7 +1053,8 @@ FROM
 		 WHERE DATE(dtrp.departure_time) >= SUBDATE(DATE(DEPT_DATE), INTERVAL 3 DAY)
 		   AND DATE(dtrp.departure_time) <= ADDDATE(DATE(DEPT_DATE), INTERVAL 3 DAY)
 			-- DATE(dtrp.departure_time) = DATE(DEPT_DATE)
-		   AND DATE(dtrp.departure_time) >= ADDDATE(NOW(), INTERVAL 30 MINUTE)) dept
+		    -- AND DATE(dtrp.departure_time) >= ADDDATE(NOW(), INTERVAL 30 MINUTE)
+		   AND dtrp.departure_time >= cast(MIN_DATE as datetime)) dept
 	INNER JOIN	 
 	-- arrival trip information
         (SELECT atrp.bus_status_id,
@@ -1098,7 +1101,7 @@ WHERE   -- departure date is in range of valid fare dates
 								   ttrf.segment_id = trff.segment_id) AND
         rmst.number_of_remained_seats >= PSSGR_NO
 GROUP BY ftrp.bus_status_id
-ORDER BY dept.departure_time ASC;
+ORDER BY dept.departure_time ASC, rmst.number_of_remained_seats ASC;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1286,4 +1289,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-03-28 21:33:51
+-- Dump completed on 2013-03-30  7:11:36
