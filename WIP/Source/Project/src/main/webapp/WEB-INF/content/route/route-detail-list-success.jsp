@@ -150,6 +150,7 @@
 		}
 		
 		$("#tripDialogBusType").change(function(){
+			getAvailBus();
 	      checkButton();
 	   });
 		
