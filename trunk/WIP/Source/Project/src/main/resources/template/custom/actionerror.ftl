@@ -21,7 +21,8 @@
  */
 -->
 <#if (actionErrors?? && actionErrors?size > 0)>
-	<div class="well error">
+	<div class="alert fade in">
+	<button type="button" class="close" data-dismiss="alert">&#x00D7;</button>
 	<ul<#rt/>
 <#if parameters.id?if_exists != "">
  id="${parameters.id?html}"<#rt/>
