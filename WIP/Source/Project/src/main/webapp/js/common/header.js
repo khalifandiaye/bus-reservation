@@ -70,7 +70,7 @@ $(document).ready(function(){
             },
             success : function(data) {
                 if (data.success) {
-                    loginDisplay(data);
+                    location.reload();
                 } else {
                     $("#loginErrorMessage").html(data.errorMessage);
                 }
@@ -96,7 +96,7 @@ $(document).ready(function(){
             crossDomain: true,
             success : function(data) {
                 if (data.success) {
-                    logoutDisplay();
+                	window.location.replace($('#contextPath').val() + "/");
                 } else {
                     // do nothing
                 }
