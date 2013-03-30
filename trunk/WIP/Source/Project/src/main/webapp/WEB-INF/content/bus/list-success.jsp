@@ -9,19 +9,26 @@
 <title>Test page</title>
 <jsp:include page="../common/xheader.jsp" />
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/styles/trip/jquery.dataTables.css">
+	href="<%=request.getContextPath()%>/styles/custom-data-table.css" />
 <script src="<%=request.getContextPath()%>/js/index.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/common/custom-data-table.js"></script>
 <script type="text/javascript">
    function deleteBus(id) {
       $('#busId').val(id);
       $("#deleteBusDialog").modal();
    };
    
-	$(document).ready(function() {
-		var busTable = $('#busTable').dataTable({bSort : false});
-		var addBusTable = $('#addBusTable').dataTable({bSort : false});
-
+	$(document).ready(function() {		
+		
+		var busTable = $("#busTable").dataTable({
+			"sDom": "<'row'<'span6 pull-left'l><'span5 pull-right'f>r>t<'row'<'span6'i><'span6'p>>",
+			"sPaginationType": "bootstrap", 
+			"aoColumnDefs": [ 
+			                 { 'bSortable': false, 'aTargets': [5] } 
+			              ]			
+		}); 
+		
 		$('#addBus').bind().bind('click', function(event) {
 			  $('#plateNumber').val('');
 			  $('#busType').val(-1);
@@ -74,22 +81,23 @@
 <body>
 	<jsp:include page="../common/header.jsp" />
 	<jsp:include page="../common/menu.jsp" />
-	<div id="page">
-		<div class="post" style="margin: 0px auto; width: 95%;">
-			<div style="height: 45px; margin-left: 1%;">
-				<input class="btn btn-primary" id="addBus" type="button"
+	<div id="page" class="well small-well">   
+		<div class="post">
+			<h3 style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">    
+				Quản lý xe bus  
+				<input class="btn btn-primary pull-right" id="addBus" type="button"
 					value="Add New Bus" />
-			</div>
-			<table id="busTable" align="center">
+			</h3>  
+			<table id="busTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
 				<thead>
 					<tr>
-						<th>ID</th>
-						<th>Bus Type</th>
-						<th>Plate Number</th>
-						<th>Assigned route</th>
-						<th>Status</th>
-                  <th></th>
-					</tr>
+					<th>ID</th>
+					<th>Bus Type</th>
+					<th>Plate Number</th>
+					<th>Assigned route</th>
+					<th>Status</th>
+               		<th></th>
+               		</tr>
 				</thead>
 				<tbody>
 					<s:iterator value="busBeans">
@@ -99,10 +107,9 @@
 							<td><s:property value="plateNumber" /></td>
 							<td><s:property value="forwardRoute.name" /></td>
 							<td><s:property value="status" /></td>
-							<td style="width: 6%"><input
-								data-delete="<s:property value='id'/>" class="btn btn-danger"
-								type="button" value="Delete"
-								onclick='javascript: deleteBus(<s:property value='id'/>)' /></td>
+							<td style="width: 6%"><a
+								data-delete="<s:property value='id'/>" style="cursor: pointer;color: red" 
+								onclick='javascript: deleteBus(<s:property value='id'/>)' >Delete</a></td>
 						</tr>
 					</s:iterator>
 				</tbody>

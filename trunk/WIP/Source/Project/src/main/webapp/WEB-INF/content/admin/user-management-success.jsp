@@ -12,7 +12,7 @@
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/styles/style.css">
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/styles/admin-user.css">
+	href="<%=request.getContextPath()%>/styles/custom-data-table.css">
 
 <script src="<%=request.getContextPath()%>/js/jquery.validate.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>

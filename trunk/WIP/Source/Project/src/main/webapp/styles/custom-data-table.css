@@ -14,11 +14,14 @@ table.table thead .sorting_desc { background: url('images/sort_desc.png') no-rep
 table.table thead .sorting_asc_disabled { background: url('images/sort_asc_disabled.png') no-repeat center right; }
 table.table thead .sorting_desc_disabled { background: url('images/sort_desc_disabled.png') no-repeat center right; }
 .dataTables_filter label{
-	float: right;
+	float: right; 
 }
 .row .span6:last-child{
 	margin-left:0px;
-}
+} 
 .row .span6 .pagination{
-	float: right;
+	float: right; 
 }
+.table-striped tbody > tr:nth-child(odd) > td{
+	background-color: #cae6e8 !important;
+} 
