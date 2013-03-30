@@ -14,6 +14,8 @@
 <script src="<%=request.getContextPath()%>/js/accounting.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.maskedinput.min.js"></script>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/styles/custom-data-table.css" />
+<script src="<%=request.getContextPath()%>/js/common/custom-data-table.js"></script>
 <script type="text/javascript">
    function changeDuration(id) {
 	   $("#segmentId").val(id);
@@ -84,7 +86,7 @@
 <body>
    <jsp:include page="../common/header.jsp" />
    <jsp:include page="../common/menu.jsp" />
-   <div id="page">
+   <div id="page" class="well small-well">
       <div class="post" style="margin: 0px auto; width: 95%;">
          <table>
             <tr>
@@ -96,7 +98,7 @@
                   </div></td>
             </tr>
          </table>
-         <table id="segmentTable" align="center" border="1">
+         <table id="segmentTable"  align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
                   <th>ID</th>
