@@ -21,6 +21,7 @@
 	<form method="post">
 		<input type="hidden" name="reservationId" value="" />
 		<div class="container">
+		<div class="well">
 			<table id="reservationList">
 				<thead>
 					<tr>
@@ -62,6 +63,7 @@
 					</s:else>
 				</tbody>
 			</table>
+		</div>
 		</div>
 	</form>
 	<jsp:include page="../common/footer.jsp" />
