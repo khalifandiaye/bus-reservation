@@ -496,7 +496,7 @@
 <body>
    <jsp:include page="../common/header.jsp" />
    <jsp:include page="../common/menu.jsp" />
-   <div id="page">
+   <div id="page" class="well small-well">
       <div class="post" style="margin: 0px auto; width: 95%;">
          <div style="margin-left: 10px; margin-top: 10px;">
             <input type="hidden" id="routeId" value="<s:property value='routeId'/>" />
@@ -524,7 +524,7 @@
          <h3>
             <s:property value="routeName" />
          </h3>
-         <table id="segmentTable" border="1">
+         <table id="segmentTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
                   <th>Name</th>
@@ -555,7 +555,7 @@
          <h3 style="display: none;">
             Schedule
          </h3>
-         <table id="scheduleTable" align="center" border="1" style="display: none;">
+         <table id="scheduleTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
                   <th>Bus Number</th>
@@ -590,7 +590,7 @@
       <div class="modal-body">
          Select bus : <select id='busDetailbusPlate' name='busDetailBusPlate' style='margin-top: -6px;'></select>
          <button style="margin-top: -10px;" type="button" id="busDetailAdd" class="btn btn-primary">Add</button>
-         <table id="busDetailTable" border="1">
+         <table id="busDetailTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
                   <th>Bus Id</th>

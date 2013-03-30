@@ -17,6 +17,8 @@
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
 <script
 	src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/styles/custom-data-table.css" />
+<script src="<%=request.getContextPath()%>/js/common/custom-data-table.js"></script>
 <script type="text/javascript">
 	function loadDetails(id) {
 	    var url = $('#contextPath').val() + "/trip/list.html?id=" + id;
@@ -185,13 +187,13 @@
 <body>
 	<jsp:include page="../common/header.jsp" />
 	<jsp:include page="../common/menu.jsp" />
-	<div id="page">
+	<div id="page" class="well small-well">
 		<div class="post" style="margin: 0px auto; width: 95%;">
 			<div style="height: 45px; margin-left: 1%;">
 				<input id="busStatusInsertBtn" type="button" class="btn btn-success"
 					value="Add New Schedule" />
 			</div>
-			<table id="scheduleTable" align="center">
+			<table id="scheduleTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
 				<thead>
 					<tr>
 					   <th>Route Name</th>
