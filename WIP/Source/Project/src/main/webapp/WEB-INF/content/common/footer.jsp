@@ -4,12 +4,12 @@
 <!-- Start footer -->
 <footer class="footer">
     <div class="container">
-	    <div class="about"> 
-	        <div><strong>Địa chỉ liên hệ : </strong><p>FPT University.</p></div>
-	        <div><strong>Điện thoại :</strong><p>+1 0198 432 4567</p></div>
-	        <div><strong>E-mail :</strong><p><a href="mailto:mail@domain.com">mail@domain.com</a></p></div>
+	    <div class="about" style="padding-bottom: 20px"> 
+	        <div><strong>Địa chỉ liên hệ : </strong>FPT University.</div>
+	        <div><strong>Điện thoại :</strong> +1 0198 432 4567</div>
+	        <div><strong>E-mail :</strong><a href="mailto:buscompany2013@gmail.com"> buscompany2013@gmail.com</a></div>
 	    </div>
     </div>
 </footer>
 <!-- End footer -->
-</div> 
+</div>  

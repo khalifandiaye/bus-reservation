@@ -29,17 +29,16 @@
 	margin: 0px 3px;
 }
 
-.login.error {
+.error { 
 	color: red;
-	background-color: rgb(253, 194, 194);
 	font-weight: bold;
 }
 
-.login.error:empty {
-	display: none;
+.error.item, .well.error {
+	background-color: rgb(253, 194, 194);
 }
 
-.login.error.well {
+.error.well {
 	border-color: red !important;
 }
 

@@ -50,7 +50,7 @@
 				<li><a href="#seat-map-out">Chuyến đi</a></li>
 			</s:if>
 			<s:if test="seatMapReturn != null">
-			<li><a href="#seat-map-return">Chuyến về</a></li>
+				<li><a href="#seat-map-return">Chuyến về</a></li>
 			</s:if>
 		</ul>
 		<div class="tab-content">
