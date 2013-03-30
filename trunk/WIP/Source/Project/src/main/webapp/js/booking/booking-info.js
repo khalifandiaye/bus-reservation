@@ -79,21 +79,23 @@ $(function(){
 		var message = "";
 		var allSelectedSeat = $("input[type='checkbox']:checked");
 		var allSeatCheckbox = $("input[type='checkbox']");
+		var seatOutNumber = $("input[name='deleteOutSeats']").size();
+		var seatReturnNumber = $("input[name='deleteReturnSeats']").size();
+		
 		if(allSelectedSeat.length == allSeatCheckbox.length){ 
-			showPopup("Không được phép bỏ chọn tất cả các ghế.");
-			return;
-		} 
-		if($(".seatChecked").size() > 1){
-			if(removeSeat()){
-				message = ("Bỏ ghế thành công.");
-			}else{
-				message = ("Bạn chưa chọn ghế để bỏ.");
-			}
-		}else if($(".listCheckedSeats tbody tr").find("input[type='checkbox']").is(":checked") && $(".seatChecked").size() <= 1){
 			message = "Không được phép bỏ chọn tất cả các ghế.";
+		}else if(seatOutNumber > 0 && seatOutNumber == $("input[name='deleteOutSeats']:checked").size()){
+			message = "Bạn không được phép bỏ chọn tất cả các ghế chuyến đi.";
+		}else if(seatReturnNumber > 0 && seatReturnNumber == $("input[name='deleteReturnSeats']:checked").size()){
+			message = "Bạn không được phép bỏ chọn tất cả các ghế chuyến khứ hồi.";
 		}else{
-			message = ("Bạn chưa chọn ghế để bỏ.");
+			if(removeSeat()){
+				message = "Bỏ ghế thành công.";
+			}else{
+				message = "Bạn chưa chọn ghế để bỏ.";
+			}
 		}
+		
 		if(message){
             showPopup(message);
         }
