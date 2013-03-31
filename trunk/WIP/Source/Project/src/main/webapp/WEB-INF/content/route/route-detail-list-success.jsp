@@ -15,7 +15,27 @@
 <script src="<%=request.getContextPath()%>/js/accounting.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/styles/custom-data-table.css" />
+<link rel="stylesheet" href="<%=request.getContextPath()%>/styles/jquery-ui.css" />
+<script src="<%=request.getContextPath()%>/js/jquery-ui.js"></script>
+<script src="<%=request.getContextPath()%>/js/jquery.ui.datepicker-vi.js"></script>
 <script type="text/javascript">
+Date.prototype.toMyString = function () {
+
+    function padZero(obj) {
+          obj = obj + '';
+          if (obj.length == 1)
+              obj = "0" + obj
+          return obj;
+    }
+
+    var output = "";
+    output += padZero(this.getDate()) + "/";
+    output += padZero(this.getMonth()+1) + "/";
+    output += this.getFullYear();
+
+    return output; 
+};
+
 	function validate(evt) {
 		var theEvent = evt || window.event;
 		var key = theEvent.keyCode || theEvent.which;
@@ -51,6 +71,26 @@
 		});
 	}
 
+	var d = new Date();
+	var now = d.toMyString();
+	d.setDate(d.getDate() + 1);
+	$(function() {
+	      $('#validDateSelect').datepicker({
+	         dateFormat : 'dd/mm/yy',
+	         maxDate : '+3M',
+	         regional : 'vi'
+	      });
+	      $('#validDateSelect').val(now);
+	      
+	      $('#validDate').datepicker({
+	            dateFormat : 'dd/mm/yy',
+	            minDate : '+1D',
+	            maxDate : '+3M',
+	            regional : 'vi'
+	         });
+	         $('#validDate').val(d.toMyString());
+	});
+	
 	$(document).ready(function() {
 		
 		var active = $("#active").val();
@@ -85,6 +125,7 @@
 			$('#tripDialogBusPlate').empty();
 			$('#CreateScheduleDialog').modal();
 			$('#tripEditDialogLabel').html("Add New Schedule");
+			
 			$("#tripDialogDepartureTimeDiv").datetimepicker({
 				format : "yyyy/mm/dd - hh:ii",
 				autoclose : true,
@@ -255,14 +296,14 @@
 			minuteStep : 10
 		});
 		
-		$("#validDateSelectDiv").datetimepicker({
+		/* $("#validDateSelectDiv").datetimepicker({
 	      format : "yyyy/mm/dd - hh:ii",
 	      autoclose : true,
 	      todayBtn : true,
 	      startDate : new Date(),
 	      minuteStep : 10
 	   });
-		$('#validDateSelectDiv').datetimepicker("setDate", new Date() );
+		$('#validDateSelectDiv').datetimepicker("setDate", new Date() ); */
 
 		$("#editPriceSave").bind('click',function() {
 			var info = {};
@@ -461,12 +502,22 @@
 			success : function(response) {
 				var data = response.tariffInfos;
 				var totalMoney = 0;
+				
+				for ( var i = 0; i < $('#segmentTable').dataTable().length; i++) {
+					  $('#segmentTable').dataTable().fnUpdate(0,i,2);
+				}
+				
 				for ( var i = 0; i < data.length; i++) {
 					element = data[i];
 					totalMoney += element.fare;
 					$('#segmentTable').dataTable().fnUpdate(accounting.formatMoney(element.fare),i,2);
 				};
-				$('#totalMoney').html(accounting.formatMoney(totalMoney));
+				
+				if (totalMoney != 0) {
+					  $('#totalMoney').html(accounting.formatMoney(totalMoney));
+				} else {
+					$('#totalMoney').html(0);
+				}
 			}
 		});
 	};
@@ -520,10 +571,12 @@
                <tr>
                   <td><s:select id="busType" list="busTypeBeans" name="busTypeBeans" listKey="id"
                            listValue="name" /></td>
-                  <td><div id="validDateSelectDiv" class="input-append date form_datetime" data-date="" style="margin-top: -6px;">
+                  <td><%-- <div id="validDateSelectDiv" class="input-append date form_datetime" data-date="" style="margin-top: -6px;">
                         <input id="validDateSelect" size="16" type="text" value="" readonly ><span
                            class="add-on"><i class="icon-calendar"></i></span>
-                     </div></td>
+                     </div> --%>
+                      <input type="text" id="validDateSelect" name="departureDate">
+                  </td>
                </tr>
             </table>
          </div>
@@ -625,10 +678,11 @@
             <table>
                <tr>
                   <td style="width: 65%">Valid date :
-                     <div id="validDateDiv" class="input-append date form_datetime" data-date="">
+                    <%-- <div id="validDateDiv" class="input-append date form_datetime" data-date="">
                         <input id="validDate" size="16" type="text" value="" readonly name="tripDialogDepartureTime"><span
                            class="add-on"><i class="icon-calendar"></i></span>
-                     </div>
+                     </div> --%>
+                     <input id="validDate" name="tripDialogDepartureTime"/>
                   </td>
                   <td>Select bus type :
                      <div class="input-append date form_datetime">

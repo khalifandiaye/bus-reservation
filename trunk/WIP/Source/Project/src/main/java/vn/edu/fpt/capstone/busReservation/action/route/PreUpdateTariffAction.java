@@ -14,43 +14,47 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 @ParentPackage("jsonPackage")
 public class PreUpdateTariffAction extends BaseAction {
 
-	private static final long serialVersionUID = 5439903464802687338L;
-	private RouteDetailsDAO routeDetailsDAO;
+   private static final long serialVersionUID = 5439903464802687338L;
+   private RouteDetailsDAO routeDetailsDAO;
 
-	private int routeId;
+   private int routeId;
 
-	private String message;
+   private String message = "";
 
-	@Action(value = "getPreUpdateTariffAction", results = { @Result(type = "json", name = SUCCESS) })
-	public String execute() {
-		// get route each segment
-		List<SegmentBean> segmentBeans;
-		segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
-		message = "Affected route";
-		for (SegmentBean segmentBean : segmentBeans) {
-			List<RouteBean> routeBeans = routeDetailsDAO
-					.getAllRoutesBySegmentId(segmentBean.getId());
-			for (RouteBean routeBean : routeBeans) {
-				if (routeBean.getId() != routeId) {
-					message = routeBean.getName() + " (affected segment: "
-							+ segmentBean.getStartAt().getName() + " - "
-							+ segmentBean.getEndAt().getName() + " ) \n";
-				}
-			}
-		}
-		return SUCCESS;
-	}
+   @Action(value = "getPreUpdateTariffAction", results = { @Result(type = "json", name = SUCCESS) })
+   public String execute() {
+      // get route each segment
+      List<SegmentBean> segmentBeans;
+      segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
 
-	public void setRouteDetailsDAO(RouteDetailsDAO routeDetailsDAO) {
-		this.routeDetailsDAO = routeDetailsDAO;
-	}
+      if (segmentBeans.size() != 0) {
+         message = "Affected route";
+         for (SegmentBean segmentBean : segmentBeans) {
+            List<RouteBean> routeBeans = routeDetailsDAO
+                  .getAllRoutesBySegmentId(segmentBean.getId());
 
-	public void setRouteId(int routeId) {
-		this.routeId = routeId;
-	}
+            for (RouteBean routeBean : routeBeans) {
+               if (routeBean.getId() != routeId) {
+                  message = routeBean.getName() + " (affected segment: "
+                        + segmentBean.getStartAt().getName() + " - "
+                        + segmentBean.getEndAt().getName() + " ) \n";
+               }
+            }
+         }
+      }
+      return SUCCESS;
+   }
 
-	public String getMessage() {
-		return message;
-	}
+   public void setRouteDetailsDAO(RouteDetailsDAO routeDetailsDAO) {
+      this.routeDetailsDAO = routeDetailsDAO;
+   }
+
+   public void setRouteId(int routeId) {
+      this.routeId = routeId;
+   }
+
+   public String getMessage() {
+      return message;
+   }
 
 }

@@ -38,7 +38,7 @@ public class GetPriceAction extends BaseAction {
 					});
 			List<SegmentInfo> segmentInfos = segmentAddInfo.getSegments();
 			Date validDate = FormatUtils.deFormatDate(
-					segmentAddInfo.getValidDate(), "yyyy/MM/dd - hh:mm",
+					segmentAddInfo.getValidDate(), "dd/MM/yyyy",
 					CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
 			for (SegmentInfo segmentInfo : segmentInfos) {
 				List<TariffBean> resultList = tariffDAO.getPrice(
