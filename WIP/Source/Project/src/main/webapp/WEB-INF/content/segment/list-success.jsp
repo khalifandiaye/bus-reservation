@@ -175,7 +175,7 @@ Date.prototype.toMyString = function () {
             <input type="hidden" name="segmentId" value="" id="segmentId" />
             <table>
                <tr>
-                  <td>Valid from :</td>
+                  <td>Valid from </td>
                   <td><%-- <div id="validFromDiv" class="input-append date form_datetime" data-date="">
                         <input id="validFromTime" size="16" type="text" value="" readonly name="validFromTime">
                         <span class="add-on"><i class="icon-calendar"></i></span>
@@ -184,7 +184,7 @@ Date.prototype.toMyString = function () {
                   </td>
                </tr>
                <tr>
-                  <td>Duration :</td>
+                  <td>Duration (hh:mm)</td>
                   <td><input type="text" id="duration" name="duration"></td>
                </tr>
             </table>
