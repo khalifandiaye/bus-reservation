@@ -43,14 +43,13 @@ public class RouteDetailListAction extends ActionSupport {
    private RouteDAO routeDAO;
 
    public String execute() {
+      busStatusBeans = busStatusDAO.getAllAvailTripByRouteId(routeId, Calendar.getInstance().getTime());
       RouteBean routeBean = routeDAO.getById(routeId);
       if (routeBean.getStatus().equals("active")) {
          active = true;
       }
       segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
       busTypes = busTypeDAO.getAll();
-      busStatusBeans = busStatusDAO.getAllAvailTripByRouteId(routeId, Calendar
-            .getInstance().getTime());
 
       long delayTime = (long) systemSettingDAO.getStationDelayTime() * 60 * 1000;
       // list start date of each segment (required to get valid travel

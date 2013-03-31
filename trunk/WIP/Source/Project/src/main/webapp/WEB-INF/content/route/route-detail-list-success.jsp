@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+   pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <!DOCTYPE html PUBLIC 
    "-//W3C//DTD XHTML 1.1 Transitional//EN"
@@ -192,6 +193,8 @@
 					success : function(response) {
 						$('#CreateScheduleDialog').modal('hide');
 						alert(response);
+						var url = window.location.toString();
+	                     window.location = url;
 					}
 				});
 			});
@@ -555,7 +558,7 @@
             </tfoot>
          </table>
          </br>
-         <h3 style="display: none;">
+         <h3>
             Schedule
          </h3>
          <table id="scheduleTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
@@ -568,8 +571,8 @@
             </thead>
             <tbody>
                <s:iterator value="busStatusBeans">
-                  <tr id="busStatus_<s:property value='id'/>">
-                     <td><s:property value="bus.plateNumber" /></td>
+                  <tr>
+                     <td><s:property value="bus" /></td>
                      <td><s:date name="fromDate" format="dd/MM/yyyy hh:mm:ss" /></td>
                      <td><s:date name="toDate" format="dd/MM/yyyy hh:mm:ss" /></td>
                   </tr>
