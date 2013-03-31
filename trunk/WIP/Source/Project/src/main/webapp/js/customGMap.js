@@ -50,7 +50,7 @@
                     hideMapLabels : false,
                     mapOptions : {
                         center : new google.maps.LatLng(16.0667,
-                                108.2333),
+                                107.2333),
                         zoom : 6,
                         disableDoubleClickZoom : true,
                         keyboardShortcuts : false,
