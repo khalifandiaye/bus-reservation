@@ -43,7 +43,7 @@ public class GetDurationAction extends BaseAction {
                new TypeReference<SegmentAddInfo>() {
                });
          Date validDate = FormatUtils.deFormatDate(
-               segmentAddInfo.getValidDate(), "dd/MM/yyyy - hh:mm",
+               segmentAddInfo.getValidDate(), "dd/MM/yyyy",
                CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
          List<SegmentBean> segmentBeans = segmentDAO.getAll();
          for (SegmentBean segmentBean : segmentBeans) {

@@ -14,12 +14,56 @@
 <script src="<%=request.getContextPath()%>/js/jquery.maskedinput.min.js"></script>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/styles/custom-data-table.css" />
 <script src="<%=request.getContextPath()%>/js/common/custom-data-table.js"></script>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/styles/jquery-ui.css" />
+<script src="<%=request.getContextPath()%>/js/jquery-ui.js"></script>
+<script src="<%=request.getContextPath()%>/js/jquery.ui.datepicker-vi.js"></script>
 <script type="text/javascript">
+Date.prototype.toMyString = function () {
+
+    function padZero(obj) {
+          obj = obj + '';
+          if (obj.length == 1)
+              obj = "0" + obj
+          return obj;
+    }
+
+    var output = "";
+    output += padZero(this.getDate()) + "/";
+    output += padZero(this.getMonth()+1) + "/";
+    output += this.getFullYear();
+
+    return output; 
+};
+
    function changeDuration(id) {
 	   $("#segmentId").val(id);
       $("#deleteBusDialog").modal();
    };
 
+   var d = new Date();
+   var now = d.toMyString();
+   d.setDate(d.getDate() + 1);
+   $(function() {
+       $('#validDateSelect').datepicker({
+          dateFormat : 'dd/mm/yy',
+          minDate : '0',
+          maxDate : '+3M',
+          regional : 'vi'
+       });
+       $('#validDateSelect').val(now);
+       $("#validDateSelect").change(function() {
+    	   getSegmentDuration($("#validDateSelect").val());
+        });
+       
+       $('#validFromTime').datepicker({
+             dateFormat : 'dd/mm/yy',
+             minDate : '+1D',
+             maxDate : '+3M',
+             regional : 'vi'
+          });
+          $('#validFromTime').val(d.toMyString());
+ });
+    
 	$(document).ready(function() {
 		var busTable = $('#segmentTable').dataTable({bSort : false});
 		$("#duration").mask("99:99");
@@ -40,26 +84,22 @@
 	            });
 		});
 		
-		var date = new Date();
-      date.setDate(date.getDate() + 1);
-      date.setHours(0);
-      date.setMinutes(0);
-		$("#validFromDiv").datetimepicker({
+		/* $("#validFromDiv").datetimepicker({
 	         format : "dd/mm/yyyy - hh:ii",
 	         autoclose : true,
 	         todayBtn : true,
 	         startDate : date,
 	         minuteStep : 10
-	      });
+	   });
 		
 		$("#validDateSelectDiv").datetimepicker({
 	         format : "dd/mm/yyyy - hh:ii",
 	         autoclose : true,
 	         todayBtn : true,
 	         minuteStep : 10
-	      }).change(function(){
+	   }).change(function(){
 	    	  getSegmentDuration($("#validDateSelect").val());
-	      });
+	   }); */
 	});
 	
 	function getSegmentDuration(date) {
@@ -93,11 +133,8 @@
       	<table class="pull-right row"> 
             <tr>
                <td style="font-size: 14px;font-weight: normal;vertical-align: middle">Valid Date :</td>
-               <td><div id="validDateSelectDiv" class="input-append date form_datetime" data-date=""
-                     style="margin-top: -6px;">
-                     <input id="validDateSelect" size="16" type="text" value="" readonly><span class="add-on"><i
-                        class="icon-calendar"></i></span>
-                  </div></td>
+               <td><input id="validDateSelect" type="text" value="" readonly/>
+               </td>
             </tr>
          </table>
       </div>
@@ -139,10 +176,12 @@
             <table>
                <tr>
                   <td>Valid from :</td>
-                  <td><div id="validFromDiv" class="input-append date form_datetime" data-date="">
+                  <td><%-- <div id="validFromDiv" class="input-append date form_datetime" data-date="">
                         <input id="validFromTime" size="16" type="text" value="" readonly name="validFromTime">
                         <span class="add-on"><i class="icon-calendar"></i></span>
-                     </div></td>
+                     </div> --%>
+                  <input id="validFromTime" type="text" value="" readonly name="validFromTime">   
+                  </td>
                </tr>
                <tr>
                   <td>Duration :</td>
