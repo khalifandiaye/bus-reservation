@@ -106,7 +106,8 @@ public class PayJSONAction extends BaseAction {
     }
 
     @Action(value = "/calculateFee", results = { @Result(type = "json", name = SUCCESS, params = {
-            "excludeProperties", "cancelConfirmMessage" }) })
+            "excludeProperties", "cancelConfirmMessage", "callbackParameter",
+            "callback" }) })
     public String calculateFee() {
         if (paymentMethodId != null) {
             reservationInfo = (ReservationInfo) session
@@ -146,7 +147,8 @@ public class PayJSONAction extends BaseAction {
     }
 
     @Action(value = "/calculateRefund", results = { @Result(type = "json", name = SUCCESS, params = {
-            "excludeProperties", "reservationInfo" }) })
+            "excludeProperties", "reservationInfo", "callbackParameter",
+            "callback" }) })
     public String calculateRefund() {
         String args[] = null;
         RefundInfo refundInfo = null;
@@ -181,7 +183,8 @@ public class PayJSONAction extends BaseAction {
     }
 
     @Action(value = "/cancelReservation", results = { @Result(type = "json", name = SUCCESS, params = {
-            "excludeProperties", "reservationInfo" }) })
+            "excludeProperties", "reservationInfo", "callbackParameter",
+            "callback" }) })
     public String cancelReservation() {
         PaymentDetails refundDetails = null;
         if (CheckUtils.isNullOrBlank(reservationId)) {
@@ -214,7 +217,7 @@ public class PayJSONAction extends BaseAction {
             paymentLogic.sendCancelReservationMail(
                     Integer.parseInt(reservationId),
                     servletRequest.getContextPath());
-        } catch (CommonException e) {
+        } catch (Exception e) {
             errorProcessing(e, false);
             errorMessage = getActionErrors().iterator().next();
             return SUCCESS;

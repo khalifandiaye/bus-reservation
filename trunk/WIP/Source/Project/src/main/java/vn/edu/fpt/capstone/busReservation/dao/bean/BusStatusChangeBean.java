@@ -16,7 +16,7 @@ public class BusStatusChangeBean extends AbstractBean<Integer> {
     private static final long serialVersionUID = 1L;
     private BusStatusBean busStatus;
     private UserBean user;
-    private String change;
+    private BusStatusChangeTypeBean type;
     private String reason;
     private Date date;
 
@@ -51,17 +51,17 @@ public class BusStatusChangeBean extends AbstractBean<Integer> {
     }
 
     /**
-     * @return the change
+     * @return the type
      */
-    public String getChange() {
-        return change;
+    public BusStatusChangeTypeBean getType() {
+        return type;
     }
 
     /**
-     * @param change the change to set
+     * @param type the type to set
      */
-    public void setChange(String change) {
-        this.change = change;
+    public void setType(BusStatusChangeTypeBean type) {
+        this.type = type;
     }
 
     /**

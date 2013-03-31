@@ -15,6 +15,7 @@
 <script src="<%=request.getContextPath()%>/js/rsv/rsv01020.js"></script>
 </head>
 <body>
+	<div class="not-printable">
 	<jsp:include page="../common/header.jsp" />
 	<div class="reservation-details">
 		<div class="container">
@@ -47,6 +48,21 @@
 						<label><s:text name="reservation.status" /></label>
 						<span><s:text name="%{reservationInfo.status}" /></span>
 					</div>
+				 	<s:if test="%{reservationInfo.status == 'cancelled' || reservationInfo.status == 'refunded' || reservationInfo.status == 'refunded2'}" >
+					<div class="item long">
+						<label><s:text name="label.reservation.cancelReason" /></label>
+						<span>
+							<s:if test="%{reservationInfo.status == 'cancelled' || reservationInfo.status == 'refunded2'}" >
+								<s:text name="message.cancelReason.companySide">
+									<s:param><s:property value="reservationInfo.cancelReason" /></s:param>
+								</s:text>
+							</s:if>
+							<s:else>
+								<s:text name="message.cancelReason.customerSide">Cancelled by customer</s:text>
+							</s:else>
+						</span>
+					</div>
+			 		</s:if>
 				</div>
 				<div class="clear-fix">
 					<table class="ticket-list">
@@ -57,6 +73,7 @@
 								<th class="datetime"><s:text name="reservation.ticket.departureTime" /> / <s:text name="reservation.ticket.arrivalTime" /></th>
 								<th><s:text name="reservation.ticket.seatNumbers" /></th>
 								<th><s:text name="reservation.ticket.busType" /></th>
+								<th><s:text name="reservation.status" /></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -74,6 +91,7 @@
 										<s:iterator value="seats" ><s:property/> </s:iterator>
 									</td>
 									<td rowspan="2"><s:property value="busType" /></td>
+									<td rowspan="2"><s:text name="%{status}" /> <s:if test="%{status == 'cancelled' || status == 'refunded2'}" ><span title='<s:text name="message.cancelReason.companySide"><s:param><s:property value="cancelReason" /></s:param></s:text>'>?</span></s:if></td>
 								</tr>
 							<s:if test="returnTrip">
 								<tr class="return">
@@ -123,6 +141,124 @@
 		</div>
 	</div>
 	<jsp:include page="../common/footer.jsp" />
+	</div>
+	<div class="printable">
+		<h3><s:text name="reservationInfo" /> <img id="btnPrint" class="click-able" src="<%=request.getContextPath()%>/images/print.png" alt="<s:text name="label.print" />" /><img id="btnPrintPDF" class="click-able" src="<%=request.getContextPath()%>/images/print-pdf.png" alt="<s:text name="label.print-pdf" />" /></h3>
+		<div class="general-info">
+			<div class="item">
+				<label><s:text name="reservation.booker" /></label>
+				<span><s:property value="reservationInfo.bookerName" /></span>
+			</div>
+			<div class="item">
+			<s:if test="%{reservationInfo.code != null && reservationInfo.code != ''}">
+				<label><s:text name="reservation.code" /></label>
+				<span><s:property value="reservationInfo.code"/></span>
+			</s:if>
+			</div>
+			<div class="item">
+				<label><s:text name="reservation.phone" /></label>
+				<span><s:property value="reservationInfo.phone" /></span>
+			</div>
+			<div class="item">
+				<label><s:text name="reservation.email" /></label>
+				<span><s:property value="reservationInfo.email" /></span>
+			</div>
+			<div class="item">
+				<label><s:text name="reservation.departureDate" /></label>
+				<span><s:property value="reservationInfo.tickets[0].departureDate" /></span>
+			</div>
+			<div class="item">
+				<label><s:text name="reservation.status" /></label>
+				<span><s:text name="%{reservationInfo.status}" /></span>
+			</div>
+		 	<s:if test="%{reservationInfo.status == 'cancelled' || reservationInfo.status == 'refunded' || reservationInfo.status == 'refunded2'}" >
+			<div class="item long">
+				<label><s:text name="label.reservation.cancelReason" /></label>
+				<span>
+					<s:if test="%{reservationInfo.status == 'cancelled' || reservationInfo.status == 'refunded2'}" >
+						<s:text name="message.cancelReason.companySide">
+							<s:param><s:property value="reservationInfo.cancelReason" /></s:param>
+						</s:text>
+					</s:if>
+					<s:else>
+						<s:text name="message.cancelReason.customerSide">Cancelled by customer</s:text>
+					</s:else>
+				</span>
+			</div>
+	 		</s:if>
+		</div>
+		<div class="clear-fix">
+			<table class="ticket-list">
+				<thead>
+					<tr>
+						<th><s:text name="index" /></th>
+						<th colspan="2"><s:text name="reservation.ticket.station" /></th>
+						<th class="datetime"><s:text name="reservation.ticket.departureTime" /> / <s:text name="reservation.ticket.arrivalTime" /></th>
+						<th><s:text name="reservation.ticket.seatNumbers" /></th>
+						<th><s:text name="reservation.ticket.busType" /></th>
+						<th><s:text name="reservation.status" /></th>
+					</tr>
+				</thead>
+				<tbody>
+					<s:iterator value="reservationInfo.tickets" status="status">
+					<s:if test="returnTrip">
+						<tr class="return">
+					</s:if>
+					<s:else>
+						<tr>
+					</s:else>
+							<td class="index" rowspan="2"><s:property value="#status.count" /></td>
+							<td class="small"><s:text name="reservation.ticket.from" /></td><td><s:property value="departureStation" /></td>
+							<td class="center"><s:property value="departureDate" /></td>
+							<td rowspan="2">
+								<s:iterator value="seats" ><s:property/> </s:iterator>
+							</td>
+							<td rowspan="2"><s:property value="busType" /></td>
+							<td rowspan="2"><s:text name="%{status}" /> <s:if test="%{status == 'cancelled' || status == 'refunded2'}" ><span title='<s:text name="message.cancelReason.companySide"><s:param><s:property value="cancelReason" /></s:param></s:text>'>?</span></s:if></td>
+						</tr>
+					<s:if test="returnTrip">
+						<tr class="return">
+					</s:if>
+					<s:else>
+						<tr>
+					</s:else>
+							<td class="small"><s:text name="reservation.ticket.to" /></td><td><s:property value="arrivalStation" /></td>
+							<td class="center"><s:property value="arrivalDate" /></td>
+						</tr>
+					</s:iterator>
+				</tbody>
+			</table>
+		</div>
+		<div class="payment-info">
+			<div class="item">
+				<label><s:text name="resevation.ticketPrice" /></label>
+				<span class="vnd"><s:property value="%{reservationInfo.basePrice + ' đồng'}" /></span>
+				<span class="usd"><s:property value="%{'($' + reservationInfo.basePriceInUSD + ')'}" /></span>
+			</div>
+			<s:if test="%{reservationInfo.transactionFee != null && reservationInfo.transactionFee != ''}">
+				<div class="item">
+					<label><s:text name="resevation.transactionFee" /></label>
+					<span class="vnd"><s:property value="%{reservationInfo.transactionFee + ' đồng'}" /></span>
+					<span class="usd"><s:property value="%{'($' + reservationInfo.transactionFeeInUSD + ')'}" /></span>
+				</div>
+			</s:if>
+			<s:if test="%{reservationInfo.totalAmount != null && reservationInfo.totalAmount != ''}">
+				<div class="item">
+					<label><s:text name="reservation.totalAmount" /></label>
+					<span class="vnd"><s:property value="%{reservationInfo.totalAmount + ' đồng'}" /></span>
+					<span class="usd"><s:property value="%{'($' + reservationInfo.totalAmountInUSD + ')'}" /></span>
+				</div>
+			</s:if>
+			<s:if test="%{reservationInfo.refundedAmount != null && reservationInfo.refundedAmount != ''}">
+				<div class="item">
+					<label><s:text name="reservation.refundedAmount" /></label>
+					<span class="vnd"><s:property value="%{reservationInfo.refundedAmount + ' đồng'}" /></span>
+					<span class="usd"><s:property value="%{'($' + reservationInfo.refundedAmountInUSD + ')'}" /></span>
+					<span class="rate"><s:property value="%{'(' + reservationInfo.refundRate + '%)'}" /></span>
+				</div>
+			</s:if>
+		</div>
+	</div>
 </body>
 </html>
 	

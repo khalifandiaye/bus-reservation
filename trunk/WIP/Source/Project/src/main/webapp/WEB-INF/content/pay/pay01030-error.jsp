@@ -14,24 +14,6 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
-	<!-- Start small nav -->
-	<div class="small-nav">
-		<div class="nav-step-wrapper step4"> 
-			<div class="nav-step"> 
-				<div class="nav-step-des" ><s:text name="step_1_description" /></div>
-			</div>
-			<div class="nav-step">
-				<div class="nav-step-des"><s:text name="step_2_description" /></div> 
-			</div>
-			<div class="nav-step">
-				<div class="nav-step-des"><s:text name="step_3_description" /></div>
-			</div>
-			<div class="nav-step">
-				<div class="nav-step-des"><s:text name="step_4_description" /></div>
-			</div>
-		</div>
-	</div> 
-	<!-- End small nav -->
 	<div class="reservation-details">
 		<div class="container">
 			<s:actionerror />

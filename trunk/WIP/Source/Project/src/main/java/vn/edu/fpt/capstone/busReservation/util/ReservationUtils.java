@@ -15,10 +15,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import vn.edu.fpt.capstone.busReservation.dao.TariffViewDAO;
+import vn.edu.fpt.capstone.busReservation.dao.TicketDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean.TicketStatus;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo.Ticket;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
@@ -225,8 +227,8 @@ public abstract class ReservationUtils {
 
     public static double addTickets(ReservationInfo info,
             TicketBean ticketBean, boolean returnTrip,
-            TariffViewDAO tariffViewDAO, CurrencyConverter converter)
-            throws CommonException {
+            TariffViewDAO tariffViewDAO, TicketDAO ticketDao,
+            CurrencyConverter converter) throws CommonException {
         Map<Integer, List<TripBean>> tripMap = null;
         List<TripBean> trips = null;
         Ticket ticket = null;
@@ -247,6 +249,13 @@ public abstract class ReservationUtils {
                     ticket.getSeats()[count++] = seat.getName();
                 }
                 ticket.setStatus(ticketBean.getStatus());
+                if (TicketStatus.CANCELLED.getValue().equals(
+                        ticketBean.getStatus())
+                        || TicketStatus.REFUNDED2.getValue().equals(
+                                ticketBean.getStatus())) {
+                    ticket.setCancelReason(ticketDao.getChangeReason(
+                            ticketBean.getId(), 1));
+                }
                 basePrice += quantity * ticket.getTicketPriceValue();
             }
         }

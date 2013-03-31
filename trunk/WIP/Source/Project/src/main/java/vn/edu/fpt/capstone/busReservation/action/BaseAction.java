@@ -75,10 +75,16 @@ public class BaseAction extends ActionSupport implements SessionAware,
      * 
      * @param e
      */
-    protected void errorProcessing(CommonException e) {
+    protected void errorProcessing(Exception ex) {
         String[] parameters;
         String[] paramKeys;
+        CommonException e = null;
         int length = 0;
+        if (CommonException.class.isAssignableFrom(ex.getClass())) {
+            e = (CommonException) ex;
+        } else {
+            e = new CommonException(ex);
+        }
         rollback();
         paramKeys = e.getParameters();
         if (paramKeys != null && paramKeys.length > 0) {
@@ -97,10 +103,16 @@ public class BaseAction extends ActionSupport implements SessionAware,
      * 
      * @param e
      */
-    protected void errorProcessing(CommonException e, boolean rollback) {
+    protected void errorProcessing(Exception ex, boolean rollback) {
         String[] parameters;
         String[] paramKeys;
+        CommonException e = null;
         int length = 0;
+        if (CommonException.class.isAssignableFrom(ex.getClass())) {
+            e = (CommonException) ex;
+        } else {
+            e = new CommonException(ex);
+        }
         if (rollback) {
             rollback();
         }

@@ -38,21 +38,19 @@ $(document).ready(function() {
         });
     });
 
+    var waypoints = new Array();
+    waypoints.push({latitude : 21.0409, longitude : 105.7981});// Ha Noi
+    waypoints.push({
+        latitude : 12.2500,
+        longitude : 109.1833
+    }); // Nha Trang
+    waypoints.push({
+        latitude : 10.7500,
+        longitude : 106.6667
+    }); // TP. Ho Chi Minh
     $('#map').customGMap('addRoute', {
         routeId : 1,
-        waypoints : [ {
-            latitude : 21.0409,
-            longitude : 105.7981
-        }, // Ha Noi
-        {
-            latitude : 12.2500,
-            longitude : 109.1833
-        }, // Nha Trang
-        {
-            latitude : 10.7500,
-            longitude : 106.6667
-        } // TP. Ho Chi Minh
-        ]
+        waypoints : waypoints
     });
     $('#map').customGMap('addRoute', {
         routeId : 2,

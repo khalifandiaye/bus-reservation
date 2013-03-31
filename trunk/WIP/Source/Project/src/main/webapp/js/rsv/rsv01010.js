@@ -78,6 +78,8 @@ $(document).ready(function(){
         $.ajax({
             type : "GET",
             url : $('#contextPath').val() + "/pay/calculateRefund.html",
+            dataType: 'jsonp',
+            crossDomain: true,
             data : {
                 reservationId : id
             },
@@ -119,6 +121,8 @@ $(document).ready(function(){
         $.ajax({
             type : "POST",
             url : $('#contextPath').val() + "/pay/cancelReservation.html",
+            dataType: 'jsonp',
+            crossDomain: true,
             data : {
                 // get id from hidden input
                 reservationId : $('input[name="cancelReservationId"]').val()

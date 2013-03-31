@@ -60,6 +60,7 @@
 			<web-resource-name>securedapp</web-resource-name>
 			<url-pattern>/pay/*</url-pattern>
 			<url-pattern>/user/*</url-pattern>
+			<url-pattern>/secured/*</url-pattern>
 		</web-resource-collection>
 		<user-data-constraint>
 			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
