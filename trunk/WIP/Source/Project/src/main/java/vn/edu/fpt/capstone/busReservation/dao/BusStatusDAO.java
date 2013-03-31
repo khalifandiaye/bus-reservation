@@ -65,7 +65,7 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 	public List<BusStatusBean> getAllScheduledTrip(Date fromDate) {
 		String hql = "SELECT bs FROM BusStatusBean bs WHERE bs.status = :status "
 				+ "AND bs.busStatus != :busStatus " 
-				+ "AND bs.fromDate >= :fromDate";
+				+ "AND bs.fromDate >= :fromDate ORDER BY bs.fromDate ASC";
 		Session session = sessionFactory.getCurrentSession();
 		List<BusStatusBean> result = new ArrayList<BusStatusBean>();
 		try {
