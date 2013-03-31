@@ -8,11 +8,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>VinaBus - Route list</title>
 <jsp:include page="../common/xheader.jsp" />
-<link rel="stylesheet" href="<%=request.getContextPath()%>/styles/trip/jquery.dataTables.css">
 <link href="<%=request.getContextPath()%>/styles/trip/datetimepicker.css" rel="stylesheet">
 <link href="<%=request.getContextPath()%>/styles/route/jquery-ui-1.10.1.custom.min.css" rel="stylesheet">
-<script src="<%=request.getContextPath()%>/js/index.js"></script>
-<script src="<%=request.getContextPath()%>/js/route/jquery-ui-1.10.1.custom.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.maskedinput.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/accounting.min.js"></script>
@@ -94,7 +91,7 @@
    $(document).ready(function() {
       
 	   var routeTable = $('#routeTable').dataTable({ bSort : false });
-	   var segmentTable = $('#segmentTable').dataTable({ bSort : false });
+	   var segmentTable = $('#segmentTable').dataTable({ bSort : false , bPaginate : false });
       	   
       $('#addRoute').bind('click', function(event) {
     	   giCount = 0;
@@ -283,11 +280,12 @@
 <body>
 	<jsp:include page="../common/header.jsp" />
 	<jsp:include page="../common/menu.jsp" />
-	<div id="page" class="well small-well">
-		<div class="post" style="margin: 0px auto; width: 95%;">
-			<div style="height: 45px; margin-left: 1%;">
-				<input class=" btn btn-success" id="addRoute" type="button" value="Add New Route" />
-			</div>
+	<div id="page" class="well">
+		<h3 style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">    
+				Manage route  
+				<input class="pull-right btn btn-primary" id="addRoute" type="button" value="Add New Route" />
+		</h3>  
+		<div class="post">
 			<table id="routeTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
 				<thead>
 					<tr>
@@ -302,19 +300,19 @@
 						<tr id="route_<s:property value='id'/>">
 							<td><s:property value="routeName" /></td>
 							<td><s:property value="travelTime" /></td>
-							<td style="width: 6%"><input class="btn btn-info"
+							<td style="width: 6%"><input class="btn btn-info btn-small"
 								type="button" value="View Details"
 								onclick='javascript: loadDetails(<s:property value='id'/>)' /></td>
                      <s:set name="status" value="active"/>
                      <s:if test="%{#status == 'active'}">
                         <td style="width: 6%"><input
-                        data-delete="<s:property value='id'/>" class="btn btn-danger" style="width: 95px;"
+                        data-delete="<s:property value='id'/>" class="btn btn-danger btn-small" style="width: 95px;"
                         type="button" value="Deactivate"
                         onclick='javascript: deleteRoute(<s:property value='id'/>)' /></td>
                      </s:if>
                      <s:else>
                         <td style="width: 6%"><input
-                        data-active="<s:property value='id'/>" class="btn btn-success" style="width: 95px;"
+                        data-active="<s:property value='id'/>" class="btn btn-success btn-small" style="width: 95px;"
                         type="button" value="Activate"
                         onclick='javascript: activeRoute(<s:property value='id'/>)' /></td>
                      </s:else>
@@ -329,7 +327,7 @@
    <div id="addRouteDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-header">
          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-         <h3 id="routeAddDialogLabel">Add New Route</h3>
+         <h3 id="routeAddDialogLabel">Add new route</h3>
       </div>
       <div class="modal-body">
          <div class="post" style="margin: 0px auto; width: 95%;">
@@ -343,21 +341,21 @@
             <thead>
             <tbody>
             </tbody>
-            <tr>
+            <tr style="margin-bottom: 10px;">
                <td><s:select id="startAt" headerKey="-1"
                      headerValue="--- Select Route ---" list="cityBeans"
                      name="routeBeans" listKey="id" listValue="name"></s:select><select
                   id="stationStartAt" headerKey="-1"
-                  headerValue="--- Select Start Station ---"></select></td>
+                  headerValue="--- Select Start Station ---" style="margin-top:10px;"></select></td>
                <td><s:select id="endAt" headerKey="-1"
                      headerValue="--- Select Route ---" list="cityBeans"
                      name="routeBeans" listKey="id" listValue="name">
                      </s:select><select
                   id="stationEndAt" headerKey="-1"
-                  headerValue="--- Select End Station ---"></select></td>
+                  headerValue="--- Select End Station ---" style="margin-top:10px;"></select></td>
                <td><input type="text" id="duration" /></td>
                <td><input class="btn btn-primary" type="button" id="add" value="Add" disabled="disabled"
-                  style="margin-bottom: 10px; margin-left: 10px; margin-right: 0; width: 75px;"/></td>
+                  style="margin-top: 10px;;margin-bottom: 10px; margin-left: 10px; margin-right: 0; width: 75px;"/></td>
             </tr>
          </table>
       </div>

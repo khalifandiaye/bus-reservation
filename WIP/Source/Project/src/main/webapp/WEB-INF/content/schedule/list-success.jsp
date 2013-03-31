@@ -8,8 +8,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>VinaBus - Schedule list</title>
 <jsp:include page="../common/xheader.jsp" />
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/styles/trip/jquery.dataTables.css">
 <link
 	href="<%=request.getContextPath()%>/styles/trip/datetimepicker.css"
 	rel="stylesheet">
@@ -45,7 +43,11 @@
 	 
 	$(document).ready(
 			function() {
-				var oTable = $('#scheduleTable').dataTable();
+				var oTable = $('#scheduleTable').dataTable({
+					"aoColumnDefs": [
+					                 { 'bSortable': false, 'aTargets': [ 4,5 ] }   
+					              ]
+				});
 				
 		      $("#tripDialogBusPlate").change(function(){
 		         checkButton(); 
@@ -188,11 +190,12 @@
 	<jsp:include page="../common/header.jsp" />
 	<jsp:include page="../common/menu.jsp" />
 	<div id="page" class="well small-well">
-		<div class="post" style="margin: 0px auto; width: 95%;">
-			<div style="height: 45px; margin-left: 1%;">
-				<input id="busStatusInsertBtn" type="button" class="btn btn-success"
+		<h3 style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">    
+				Manage schedule  
+				<input id="busStatusInsertBtn" type="button" class="btn btn-primary pull-right" 
 					value="Add New Schedule" />
-			</div>
+		</h3>  
+		<div class="post">
 			<table id="scheduleTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
 				<thead>
 					<tr>
@@ -211,11 +214,11 @@
 							<td><s:property value="bus.plateNumber" /></td>
 							<td><s:date name="fromDate" format="dd/MM/yyyy hh:mm:ss" /></td>
 							<td><s:date name="toDate" format="dd/MM/yyyy hh:mm:ss" /></td>
-							<td style="width: 6%"><input class="btn btn-primary"
-								type="button" value="View Details"
+							<td style="width: 6%"><input class="btn btn-info btn-small"
+								type="button" value="View Details" 
 								onclick='javascript: loadDetails(<s:property value='id'/>)' /></td>
 							<td><input data-delete="<s:property value='id'/>"
-								class="btn btn-danger" type="button" value="Delete"
+								class="btn btn-danger btn-small" type="button" value="Delete"  
 								onclick='javascript: deleteTrip(<s:property value='id'/>)' /></td>
 						</tr>
 					</s:iterator>

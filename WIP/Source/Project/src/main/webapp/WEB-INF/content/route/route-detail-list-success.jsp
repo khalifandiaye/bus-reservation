@@ -6,14 +6,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>VinaBus - Route details</title>
+<title>VinaBus - Route details</title> 
 <jsp:include page="../common/xheader.jsp" />
-<link rel="stylesheet" href="<%=request.getContextPath()%>/styles/trip/jquery.dataTables.css">
 <link href="<%=request.getContextPath()%>/styles/trip/datetimepicker.css" rel="stylesheet">
 <script src="<%=request.getContextPath()%>/js/index.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/accounting.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/styles/custom-data-table.css" />
 <script type="text/javascript">
 	function validate(evt) {
 		var theEvent = evt || window.event;
@@ -353,7 +353,7 @@
 				var plateNumber = $("#busDetailbusPlate option:selected").text();
 				busDetailTable.dataTable().fnAddData([
 					busId,plateNumber,
-					'<button type="button" data-id="'+ busId +'" class="btn btn-danger">Delete</button>' ]);
+					'<button type="button" data-id="'+ busId +'" class="btn btn-danger btn-small">Delete</button>' ]);
 				$("#busDetailbusPlate option[value="+ busId + "]").remove();
 				$("#busDetailTable tr button[data-id="+ busId + "]").click(
 				function() {
@@ -496,12 +496,24 @@
 <body>
    <jsp:include page="../common/header.jsp" />
    <jsp:include page="../common/menu.jsp" />
-   <div id="page" class="well small-well">
-      <div class="post" style="margin: 0px auto; width: 95%;">
-         <div style="margin-left: 10px; margin-top: 10px;">
+   <div id="page" class="well">
+  		<h3 style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">    
+				Route details
+				<table class="pull-right">
+	               <tr>
+	                  <td><input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price"
+	                        style="height: 30px" />
+	<!--                   <input class="btn btn-primary" type="button" id="viewPrice" value="View Price" style="height: 30px"/> -->
+	                  <input class="btn btn-primary" id="assignBus" type="button" value="Assign Bus to Route" style="height: 30px"/>
+	                  <input id="busStatusInsertBtn" type="button" class="btn btn-success" value="Add New Schedule" style="height: 30px"/></td>
+	               </tr>
+	            </table>
+		</h3>  
+      <div class="post">
+         <div style="margin-top: 10px;">
             <input type="hidden" id="routeId" value="<s:property value='routeId'/>" />
             <input type="hidden" id="active" value="<s:property value='active'/>" />
-            <table>
+            <table class="pull-right">
                <tr>
                   <td><s:select id="busType" list="busTypeBeans" name="busTypeBeans" listKey="id"
                            listValue="name" /></td>
@@ -511,15 +523,6 @@
                      </div></td>
                </tr>
             </table>
-            <table>
-               <tr>
-                  <td><input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price"
-                        style="height: 30px" />
-<!--                   <input class="btn btn-primary" type="button" id="viewPrice" value="View Price" style="height: 30px"/> -->
-                  <input class="btn btn-primary" id="assignBus" type="button" value="Assign Bus to Route" style="height: 30px"/>
-                  <input id="busStatusInsertBtn" type="button" class="btn btn-success" value="Add New Schedule" style="height: 30px"/></td>
-               </tr>
-            </table>
          </div>
          <h3>
             <s:property value="routeName" />
@@ -527,9 +530,9 @@
          <table id="segmentTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
-                  <th>Name</th>
-                  <th>Travel Time</th>
-                  <th>Price (VND)</th>
+                  <th style="text-align: center">Name</th>  
+                  <th style="text-align: center">Travel Time</th>
+                  <th style="text-align: center">Price (VND)</th>
                </tr>
             </thead>
             <tbody>
@@ -537,7 +540,7 @@
                   <tr id="segment_<s:property value='id'/>" data-segment-id="<s:property value='id'/>">
                      <td><s:property value="name" /></td>
                      <td style="text-align: center;"><s:property value="duration"/></td>
-                     <td style="text-align: right;padding-right:100px;"><s:property value="price"/></td>
+                     <td style="padding-right:100px; text-align: right"><s:property value="price"/></td>
                   </tr>
                </s:iterator>
             </tbody>
@@ -632,7 +635,7 @@
                   </td>
                </tr>
             </table>
-            <table id="editSegmentTable" border="1">
+            <table id="editSegmentTable" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
                <thead>
                   <tr>
                      <th>Start At</th>
@@ -645,7 +648,7 @@
                      <tr>
                         <td><s:property value="startAt.name" /></td>
                         <td><s:property value="endAt.name" /></td>
-                        <td><input id="<s:property value='id'/>" type="text" value="" maxlength="7" style="text-align: right;" /> .000</td>
+                        <td><input id="<s:property value='id'/>" type="text" value="" maxlength="7" style="text-align: right;margin: 0" /> .000</td>
                      </tr>
                   </s:iterator>
                </tbody>

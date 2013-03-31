@@ -232,3 +232,15 @@ label.success{
 .clear-fix {
 	overflow: auto;
 }
+.alert.fade.in{
+	background-color: #e1004f;
+	height: 30px;
+	line-height: 30px;
+	font-size: 20px;
+	text-align: center; 
+	color: white;
+	opacity: 0.8;
+} 
+.alert .button{
+	opacity: 0.7;
+}

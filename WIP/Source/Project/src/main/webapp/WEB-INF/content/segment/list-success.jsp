@@ -6,8 +6,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>VinaBus - Segment list</title>
 <jsp:include page="../common/xheader.jsp" />
-<link rel="stylesheet" href="<%=request.getContextPath()%>/styles/trip/jquery.dataTables.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/styles/trip/jquery.dataTables.css">
 <link href="<%=request.getContextPath()%>/styles/trip/datetimepicker.css" rel="stylesheet">
 <script src="<%=request.getContextPath()%>/js/index.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
@@ -87,10 +85,14 @@
    <jsp:include page="../common/header.jsp" />
    <jsp:include page="../common/menu.jsp" />
    <div id="page" class="well small-well">
-      <div class="post" style="margin: 0px auto; width: 95%;">
-         <table>
+   		<h3 style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">    
+				Manage segment
+		</h3>  
+      <div class="post">
+      <div class=row>
+      	<table class="pull-right row"> 
             <tr>
-               <td>Valid Date :</td>
+               <td style="font-size: 14px;font-weight: normal;vertical-align: middle">Valid Date :</td>
                <td><div id="validDateSelectDiv" class="input-append date form_datetime" data-date=""
                      style="margin-top: -6px;">
                      <input id="validDateSelect" size="16" type="text" value="" readonly><span class="add-on"><i
@@ -98,6 +100,7 @@
                   </div></td>
             </tr>
          </table>
+      </div>
          <table id="segmentTable"  align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
@@ -115,7 +118,7 @@
                      <td><s:property value="startAtName" /></td>
                      <td><s:property value="endAtName" /></td>
                      <td><s:property value="duration" /></td>
-                     <td style="width: 6%"><input class="btn btn-danger" type="button" value="Edit"
+                     <td style="width: 6%"><input class="btn btn-danger btn-small" type="button" value="Edit"
                         onclick='javascript: changeDuration(<s:property value='id'/>)' /></td>
                   </tr>
                </s:iterator>

@@ -24,4 +24,14 @@ table.table thead .sorting_desc_disabled { background: url('images/sort_desc_dis
 }
 .table-striped tbody > tr:nth-child(odd) > td{
 	background-color: #cae6e8 !important;
-} 
+}
+.paging_bootstrap{
+	float:right; 
+}
+.table th, .table td {
+	vertical-align: middle;
+}
+
+.dataTables_wrapper .row .span6:last-child{
+	float:right;
+}
