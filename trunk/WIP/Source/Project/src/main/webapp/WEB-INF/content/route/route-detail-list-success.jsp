@@ -77,6 +77,7 @@ Date.prototype.toMyString = function () {
 	$(function() {
 	      $('#validDateSelect').datepicker({
 	         dateFormat : 'dd/mm/yy',
+	         minDate : '0',
 	         maxDate : '+3M',
 	         regional : 'vi'
 	      });
