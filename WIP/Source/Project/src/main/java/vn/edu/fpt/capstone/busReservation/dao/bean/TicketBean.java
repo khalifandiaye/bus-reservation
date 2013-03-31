@@ -38,6 +38,10 @@ public class TicketBean extends AbstractBean<Integer> {
          * The ticket was cancelled, and refund is completed.
          */
         public static final TicketStatus REFUNDED = new TicketStatus("refunded");
+        /**
+         * The ticket was cancelled, and refund is completed.
+         */
+        public static final TicketStatus REFUNDED2 = new TicketStatus("refunded2");
         private final String value;
 
         /**
@@ -62,6 +66,8 @@ public class TicketBean extends AbstractBean<Integer> {
                 return MOVED;
             } else if (REFUNDED.value.equalsIgnoreCase(value)) {
                 return REFUNDED;
+            } else if (REFUNDED2.value.equalsIgnoreCase(value)) {
+                return REFUNDED2;
             } else {
                 throw new InvalidParameterException("Can not instantiate new "
                         + ReservationStatus.class.getName()

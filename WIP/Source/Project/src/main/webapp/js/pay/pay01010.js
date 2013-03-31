@@ -3,6 +3,8 @@ $(document).ready(function() {
           $.ajax({
               type : "GET",
               url : $('#contextPath') + "/pay/calculateFee.html",
+              dataType: 'jsonp',
+              crossDomain: true,
               data : {
                   paymentMethodId : $('#selectPaymentMethod').val(),
                   forwardSeats : sessionStorage.getItem("selectedOutSeat"),

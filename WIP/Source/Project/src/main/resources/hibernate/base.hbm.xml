@@ -252,17 +252,26 @@
 				class="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean" />
 		</bag>
 	</class>
+	<!-- BUS_STATUS_CHANGE_TYPE -->
+	<class
+		name="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusChangeTypeBean"
+		table="bus_status_change_type">
+		<id name="id" unsaved-value="0" type="integer">
+			<generator class="native" />
+		</id>
+		<property name="description" column="reason" type="string"
+			not-null="true" />
+	</class>
 	<!-- BUS_STATUS_CHANGE -->
 	<class
 		name="vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusChangeBean"
-		table="user">
+		table="bus_status_change">
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
 		<many-to-one name="busStatus" column="bus_status_id" />
 		<many-to-one name="user" column="user_id" />
-		<property name="change" column="change" type="string"
-			not-null="true" />
+		<many-to-one name="type" column="change_type_id" />
 		<property name="reason" column="reason" type="string"
 			not-null="true" />
 		<property name="date" column="date" type="timestamp"

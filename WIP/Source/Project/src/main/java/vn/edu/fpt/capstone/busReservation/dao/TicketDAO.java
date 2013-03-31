@@ -37,7 +37,7 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
         session = sessionFactory.getCurrentSession();
         try {
             // perform database access (query, insert, update, etc) here
-            queryString = "SELECT new vn.edu.fpt.capstone.busReservation.displayModel.SimpleReservationInfo(rsv.id, tkt.id, stas, stae, trps.departureTime, rsv.bookTime, rsv.status, tkt.status)"
+            queryString = "SELECT DISTINCT new vn.edu.fpt.capstone.busReservation.displayModel.SimpleReservationInfo(rsv.id, tkt.id, stas, stae, trps.departureTime, rsv.bookTime, rsv.status, tkt.status)"
                     + " FROM TicketBean tkt"
                     + "     INNER JOIN tkt.trips trps"
                     + "     INNER JOIN trps.routeDetails.segment.startAt stas"
@@ -77,7 +77,7 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
         session = sessionFactory.getCurrentSession();
         try {
             // perform database access (query, insert, update, etc) here
-            queryString = "SELECT new vn.edu.fpt.capstone.busReservation.displayModel.SimpleReservationInfo(tkt.id, stas, stae, trps.departureTime, rsv.bookTime, rsv.status, tkt.status)"
+            queryString = "SELECT DISTINCT new vn.edu.fpt.capstone.busReservation.displayModel.SimpleReservationInfo(tkt.id, stas, stae, trps.departureTime, rsv.bookTime, rsv.status, tkt.status)"
                     + " FROM TicketBean tkt"
                     + "     INNER JOIN tkt.trips trps"
                     + "     INNER JOIN trps.routeDetails.segment.startAt stas"
@@ -117,7 +117,7 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
         session = sessionFactory.getCurrentSession();
         try {
             // perform database access (query, insert, update, etc) here
-            queryString = "SELECT tkt" + " FROM TicketBean tkt"
+            queryString = "SELECT DISTINCT tkt" + " FROM TicketBean tkt"
                     + " INNER JOIN tkt.reservation rsv"
                     + " INNER JOIN tkt.trips trps"
                     + " WHERE rsv.id = :reservationId"
@@ -147,7 +147,7 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
         session = sessionFactory.getCurrentSession();
         try {
             // perform database access (query, insert, update, etc) here
-            queryString = "SELECT tkt" + " FROM TicketBean tkt"
+            queryString = "SELECT DISTINCT tkt FROM TicketBean tkt"
                     + " INNER JOIN tkt.reservation rsv"
                     + " INNER JOIN tkt.trips trps"
                     + " WHERE rsv.code = :reservationCode"
@@ -177,7 +177,7 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
         session = sessionFactory.getCurrentSession();
         try {
             // perform database access (query, insert, update, etc) here
-            queryString = "SELECT new vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean(tkt, trps, trpe, SUM(tar.fare))"
+            queryString = "SELECT DISTINCT new vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean(tkt, trps, trpe, SUM(tar.fare))"
                     + " FROM TicketBean tkt"
                     + " INNER JOIN tkt.trips trps"
                     + " INNER JOIN tkt.trips trpe"
@@ -235,6 +235,29 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
             exceptionHandling(e, session);
         }
         return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    public String getChangeReason(int ticketId, int changeTypeId) {
+        List<String> result = null;
+        Query query = null;
+        String queryString = null;
+        Session session = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            queryString = "SELECT change.reason FROM TicketBean ticket INNER JOIN ticket.trips trip INNER JOIN trip.busStatus.changes change INNER JOIN change.type changeType WHERE ticket.id = :ticketId AND changeType.id = :changeTypeId ORDER BY change.date DESC";
+            query = session.createQuery(queryString);
+            query.setInteger("ticketId", ticketId);
+            query.setInteger("changeTypeId", changeTypeId);
+            query.setMaxResults(1);
+            result = query.list();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+        // return result, if needed
+        return result == null || result.size() <= 0 ? "" : result.get(0);
     }
 
 }

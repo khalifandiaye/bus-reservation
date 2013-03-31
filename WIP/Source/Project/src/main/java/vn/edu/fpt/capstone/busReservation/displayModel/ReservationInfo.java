@@ -35,6 +35,7 @@ public class ReservationInfo implements Serializable {
     private Double refundedAmountInUSD;
     private Integer refundRate;
     private String status;
+    private String cancelReason;
     private Locale locale;
 
     /**
@@ -349,6 +350,20 @@ public class ReservationInfo implements Serializable {
     }
 
     /**
+     * @return the cancelReason
+     */
+    public String getCancelReason() {
+        return cancelReason;
+    }
+
+    /**
+     * @param cancelReason the cancelReason to set
+     */
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
+    /**
      * @return the locale
      */
     public Locale getLocale() {
@@ -386,6 +401,7 @@ public class ReservationInfo implements Serializable {
         private Double ticketPrice;
         private Double ticketPriceInUSD;
         private String status;
+        private String cancelReason;
         private boolean returnTrip;
 
         /**
@@ -456,7 +472,8 @@ public class ReservationInfo implements Serializable {
         }
 
         /**
-         * @param departureLocation the departureLocation to set
+         * @param departureLocation
+         *            the departureLocation to set
          */
         public void setDepartureLocation(String departureLocation) {
             this.departureLocation = departureLocation;
@@ -500,7 +517,8 @@ public class ReservationInfo implements Serializable {
         }
 
         /**
-         * @param arrivalLocation the arrivalLocation to set
+         * @param arrivalLocation
+         *            the arrivalLocation to set
          */
         public void setArrivalLocation(String arrivalLocation) {
             this.arrivalLocation = arrivalLocation;
@@ -596,6 +614,21 @@ public class ReservationInfo implements Serializable {
         }
 
         /**
+         * @return the cancelReason
+         */
+        public String getCancelReason() {
+            return cancelReason;
+        }
+
+        /**
+         * @param cancelReason
+         *            the cancelReason to set
+         */
+        public void setCancelReason(String cancelReason) {
+            this.cancelReason = cancelReason;
+        }
+
+        /**
          * @return the returnTrip
          */
         public boolean isReturnTrip() {
@@ -610,15 +643,21 @@ public class ReservationInfo implements Serializable {
             this.returnTrip = returnTrip;
         }
 
+        /* (non-Javadoc)
+         * @see java.lang.Comparable#compareTo(java.lang.Object)
+         */
         @Override
         public int compareTo(Ticket o) {
             int result = 0;
-            if (this.departureDateInMilisec == null) {
+            if (this.departureDateInMilisec == null
+                    || (!this.returnTrip && o.returnTrip)) {
                 result = -1;
-            } else if (o == null || o.departureDate == null) {
+            } else if (o == null || o.departureDateInMilisec == null
+                    || (this.returnTrip && !o.returnTrip)) {
                 result = 1;
             } else {
-                result = o.getDepartureDate().compareTo(departureDate);
+                result = o.departureDateInMilisec
+                        .compareTo(departureDateInMilisec);
             }
             return result;
         }

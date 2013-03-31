@@ -27,7 +27,6 @@ import javax.mail.internet.MimeUtility;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.hibernate.HibernateException;
-import org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.SAXException;
 
@@ -311,8 +310,18 @@ public class PaymentLogic extends BaseLogic {
 
     public RefundInfo calculateRefundAmount(int reservationId)
             throws CommonException {
-        RefundInfo refundInfo = null;
         ReservationInfoBean reservation = null;
+        reservation = reservationInfoDAO.getById(reservationId);
+        if (!ReservationStatus.PAID.getValue().equals(
+                reservation.getId().getStatus())) {
+            return null;
+        }
+        return calculateRefundAmount(reservation);
+    }
+
+    private RefundInfo calculateRefundAmount(ReservationInfoBean reservation)
+            throws CommonException {
+        RefundInfo refundInfo = null;
         double amount = 0;
         List<SystemSettingBean> settings = null;
         int refundRate = 0;
@@ -323,7 +332,6 @@ public class PaymentLogic extends BaseLogic {
         Calendar timelimit = null;
         Date today = null;
         CurrencyConverter converter = null;
-        reservation = reservationInfoDAO.getById(reservationId);
         if (reservation.getId().getPayments() != null
                 && reservation.getId().getPayments().size() > 0) {
             for (PaymentBean payment : reservation.getId().getPayments()) {
@@ -398,63 +406,18 @@ public class PaymentLogic extends BaseLogic {
             throws CommonException {
         PaymentDetails result = null;
         PayPalAPIInterfaceServiceService service = null;
-        PaymentBean payment = null;
         RefundTransactionResponseType response = null;
         RefundTransactionReq request = null;
         RefundTransactionRequestType requestDetails = null;
         BasicAmountType amount = null;
-        CurrencyConverter converter = null;
-        BigDecimal refundAmount = null;
-        Date today = null;
-        int[] limits = null;
-        int[] rates = null;
-        int refundRate = 0;
-        List<SystemSettingBean> settings = null;
-        int settingCount = 0;
-        String[] settingKey = null;
-        Calendar timelimit = null;
         ReservationInfoBean reservation = null;
+        RefundInfo refundInfo = null;
+        PaymentBean payment = null;
 
         reservation = reservationInfoDAO.getById(reservationId);
         if (ReservationStatus.PAID.getValue().equals(
                 reservation.getId().getStatus())) {
-            refundAmount = BigDecimal.valueOf(reservation.getPaidAmount());
-            settings = systemSettingDAO.getAllLike("refund%");
-            if (settings == null || settings.size() % 2 != 0) {
-                throw new CommonException();
-            }
-            settingCount = settings.size() / 2;
-            rates = new int[settingCount];
-            limits = new int[settingCount];
-            for (SystemSettingBean setting : settings) {
-                settingKey = setting.getId().split("\\.");
-                if (settingKey[2].equals("rate")) {
-                    rates[Integer.parseInt(settingKey[1]) - 1] = Integer
-                            .parseInt(setting.getValue());
-                } else {
-                    limits[Integer.parseInt(settingKey[1]) - 1] = Integer
-                            .parseInt(setting.getValue());
-                }
-            }
-            timelimit = Calendar.getInstance();
-            today = new Date();
-            for (int i = 0; i < settingCount; i++) {
-                timelimit
-                        .setTime(reservation.getStartTrip().getDepartureTime());
-                timelimit.add(Calendar.DATE, -limits[i]);
-                if (today.before(timelimit.getTime())) {
-                    refundRate = rates[i];
-                    break;
-                }
-            }
-            if (refundRate == 0) {
-                // TODO handle error
-                throw new CommonException();
-            }
-            refundAmount = roundingVND(
-                    refundAmount.multiply(BigDecimal.valueOf(refundRate))
-                            .divide(BigDecimal.valueOf(100)),
-                    RoundingMode.FLOOR);
+            refundInfo = calculateRefundAmount(reservation);
             payment = reservation.getId().getPayments().get(0);
             request = new RefundTransactionReq();
             requestDetails = new RefundTransactionRequestType();
@@ -464,19 +427,9 @@ public class PaymentLogic extends BaseLogic {
             amount = new BasicAmountType();
             requestDetails.setAmount(amount);
             amount.setCurrencyID(CurrencyCodeType.USD);
-            try {
-                converter = CurrencyConverter.getInstance(
-                        Currency.getInstance("VND"),
-                        Currency.getInstance("USD"));
-            } catch (InstantiationException e) {
-                LOG.error("Impossible error", e);
-            } catch (IOException e) {
-                // TODO handle error
-                throw new CommonException(e);
-            }
-            refundAmount = converter.convert(refundAmount);
-            amount.setValue(refundAmount.setScale(2, RoundingMode.FLOOR)
-                    .toString());
+            amount.setValue(BigDecimal
+                    .valueOf(refundInfo.getRefundAmountInUSD())
+                    .setScale(2, RoundingMode.FLOOR).toPlainString());
             try {
                 service = new PayPalAPIInterfaceServiceService(this.getClass()
                         .getResourceAsStream("/paypal/sdk_config.properties"));
@@ -1128,7 +1081,7 @@ public class PaymentLogic extends BaseLogic {
                 content,
                 ":totalAmount:",
                 FormatUtils.formatNumber(
-                        roundingVND(total, RoundingMode.CEILING), 0,
+                        roundingVND(total * 1000, RoundingMode.CEILING), 0,
                         CommonConstant.LOCALE_VN) + " VND");
         if (ticketInfos.get(0).getId().getReservation().getPayments() != null) {
             for (PaymentBean payment : ticketInfos.get(0).getId()
@@ -1144,20 +1097,22 @@ public class PaymentLogic extends BaseLogic {
                 content,
                 ":fee:",
                 FormatUtils.formatNumber(
-                        roundingVND(paidAmount - total, RoundingMode.FLOOR), 0,
-                        CommonConstant.LOCALE_VN) + " VND");
+                        roundingVND((paidAmount - total) * 1000,
+                                RoundingMode.FLOOR), 0,
+                        CommonConstant.LOCALE_VN)
+                        + " VND");
         MailUtils.replace(
                 content,
                 ":amountToBePaid:",
                 FormatUtils.formatNumber(
-                        roundingVND(paidAmount, RoundingMode.CEILING), 0,
-                        CommonConstant.LOCALE_VN) + " VND");
+                        roundingVND(paidAmount * 1000, RoundingMode.CEILING),
+                        0, CommonConstant.LOCALE_VN) + " VND");
         MailUtils.replace(
                 content,
                 ":refundedAmount:",
                 FormatUtils.formatNumber(
-                        roundingVND(refundAmount, RoundingMode.CEILING), 0,
-                        CommonConstant.LOCALE_VN) + " VND");
+                        roundingVND(refundAmount * 1000, RoundingMode.CEILING),
+                        0, CommonConstant.LOCALE_VN) + " VND");
         url = new StringBuilder();
         url.append(CommonConstant.URL_HTTP);
         url.append(contextPath);
@@ -1289,7 +1244,7 @@ public class PaymentLogic extends BaseLogic {
                 content,
                 ":totalAmount:",
                 FormatUtils.formatNumber(
-                        roundingVND(total, RoundingMode.CEILING), 0,
+                        roundingVND(total * 1000, RoundingMode.CEILING), 0,
                         CommonConstant.LOCALE_VN) + " VND");
         if (ticketInfos.get(0).getId().getReservation().getPayments() != null) {
             for (PaymentBean payment : ticketInfos.get(0).getId()
@@ -1305,20 +1260,22 @@ public class PaymentLogic extends BaseLogic {
                 content,
                 ":fee:",
                 FormatUtils.formatNumber(
-                        roundingVND(paidAmount - total, RoundingMode.FLOOR), 0,
-                        CommonConstant.LOCALE_VN) + " VND");
+                        roundingVND((paidAmount - total) * 1000,
+                                RoundingMode.FLOOR), 0,
+                        CommonConstant.LOCALE_VN)
+                        + " VND");
         MailUtils.replace(
                 content,
                 ":amountToBePaid:",
                 FormatUtils.formatNumber(
-                        roundingVND(paidAmount, RoundingMode.CEILING), 0,
-                        CommonConstant.LOCALE_VN) + " VND");
+                        roundingVND(paidAmount * 1000, RoundingMode.CEILING),
+                        0, CommonConstant.LOCALE_VN) + " VND");
         MailUtils.replace(
                 content,
                 ":refundedAmount:",
                 FormatUtils.formatNumber(
-                        roundingVND(refundAmount, RoundingMode.CEILING), 0,
-                        CommonConstant.LOCALE_VN) + " VND");
+                        roundingVND(refundAmount * 1000, RoundingMode.CEILING),
+                        0, CommonConstant.LOCALE_VN) + " VND");
         url = new StringBuilder();
         url.append(CommonConstant.URL_HTTP);
         url.append(contextPath);

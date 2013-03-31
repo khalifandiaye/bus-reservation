@@ -1,238 +1,208 @@
-.reservation_info .container {
-	background-color: rgb(0, 136, 204);
-	color: #fff;
-	padding: 20px;
-	border: medium;
-	border-color: #ffffff;
-	border-style: solid;
-	border-color: #ffffff;
-}
-
-.labeled_list label {
-	width: 20%;
-	float: left;
-	margin-top: 0px;
-	margin-bottom: 6px;
-	font-size: 14px;
-	font-weight: bold;
-	min-width: 180px;
-	cursor: default;
-}
-
-.labeled_list span {
-	width: 80%;
-	float: left;
-	margin-bottom: 6px;
-	font-size: 14px;
-}
-
-input.paypal_checkout {
-	background:
-		url(https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif)
-		no-repeat;
-	width: 145px;
-	height: 42px;
-	border: none;
-	cursor: pointer;
-}
-
-input.pay {
-	width: 145px;
-	height: 42px;
-	cursor: pointer;
-}
-
-.my-container {
-	width: 960px;
-	margin: 0 auto;
-}
-
-.hidden {
-	display: none;
-}
-
-.text_center {
-	text-align: center;
-}
-
-.text_right {
-	text-align: right;
-}
-
-.reservation_info th {
-	width: 190px;
-}
-
-.loading {
-	background: rgba(255, 255, 255, .8) url('../images/loading.gif') 50% 50%
-		no-repeat;
-}
-
-.reservation-details label {
-	font-weight: bold;
-	font-size: 14px;
-	cursor: default;
-	display: inline-block;
-}
-
-.reservation-details .general-info {
-	margin-top: 20px;
-	overflow: hidden;
-}
-
-.reservation-details .general-info .item {
-	width: 50%;
-	height: 30px;
-	float: left;
-}
-
-.reservation-details .general-info .item label {
-	width: 40%;
-}
-
-.reservation-details .general-info .item span {
-	width: 60%;
-}
-
-.reservation-details .ticket-list table,.reservation-details table.ticket-list {
-	margin-top: 20px;
-	clear: both;
-	width: 100%;
-}
-
-.reservation-details .ticket-list thead th {
-	padding: 3px 18px 3px 10px;
-	border: 1px solid black;
-	font-weight: bold;
-}
-
-.reservation-details .ticket-list thead th.datetime {
-	width: 200px;
-}
-
-.reservation-details .ticket-list td {
-	padding: 3px 10px;
-	border: 1px solid black;
-}
-
-.reservation-details .ticket-list td.right {
-	text-align: right;
-}
-
-.reservation-details .ticket-list td.center {
-	text-align: center;
-}
-
-.reservation-details .ticket-list td.small {
-	border-right-style: dashed;
-	border-right-color: #c0c0c0;
-	width: 30px;
-	padding-right: 5px;
-}
-
-.reservation-details .ticket-list td.small+td {
-	border-left: none;
-}
-
-.reservation-details .ticket-list td.index {
-	text-align: center;
-}
-
-.reservation-details .ticket-list tbody tr {
-	background-color: rgb(181, 214, 248);
-}
-
-.reservation-details .ticket-list thead tr,.reservation-details .ticket-list tbody tr:nth-child(4n+3),.reservation-details .ticket-list tbody tr:nth-child(4n) {
-	background-color: rgb(121, 182, 245);
-}
-
-.reservation-details .ticket-list tbody tr.return {
-	background-color: rgb(181, 248, 214);
-}
-
-.reservation-details .ticket-list tbody tr.return:nth-child(4n+3),.reservation-details .ticket-list tbody tr.return:nth-child(4n) {
-	background-color: rgb(121, 245, 182);
-}
-
-.reservation-details .payment-info {
-	margin-top: 20px;
-	overflow: hidden;
-}
-
-.reservation-details .payment-info .item {
-	height: 30px;
-	clear: both;
-}
-
-.reservation-details .payment-info .item label {
-	width: 20%;
-}
-
-.reservation-details .payment-info .item span {
-	display: inline-block;
-	text-align: right;
-}
-
-.reservation-details .payment-info .item span.vnd {
-	min-width: 100px;
-}
-
-.reservation-details .payment-info .item span.usd {
-	width: 60px;
-}
-
-.reservation-details .payment-info .item span.rate {
-	width: 60px;
-}
-
-.user-details .item {
-	height: auto;
-	width: 60%;
-	clear: both;
-	margin: 6px;
-}
-
-.user-details .item label {
-	font-weight: bold;
-	font-size: 14px;
-	cursor: default;
-	display: inline-block;
-	width: 176px;
-}
-
-.user-details .item .errorMessage {
-	list-style-type: none;
-	color: red;
-	display: inline-block;
-}
-
-.user-details .item noscript+ul.errorMessage {
-	margin-left: 0px;
-}
-
-.user-details .well {
-	padding: 5px;
-}
-
-.user-details .section {
-	overflow: hidden;
-	border-bottom: 1px solid gray;
-	margin: 7px;
-	padding: 10px;
-}
-
-.info {
-	margin: 0px auto;
-	font-size: large;
-	padding: 15px 30px;
-	border: 1px solid;
-}
-
-.click-able {
-	cursor: pointer;
-}
-
-.success {
-	background-color: rgb(84, 250, 217);
-	border-color: rgb(24, 85, 80);
+@media screen , print {
+	.reservation_info .container {
+		background-color: rgb(0, 136, 204);
+		color: #fff;
+		padding: 20px;
+		border: medium;
+		border-color: #ffffff;
+		border-style: solid;
+		border-color: #ffffff;
+	}
+	.labeled_list label {
+		width: 20%;
+		float: left;
+		margin-top: 0px;
+		margin-bottom: 6px;
+		font-size: 14px;
+		font-weight: bold;
+		min-width: 180px;
+		cursor: default;
+	}
+	.labeled_list span {
+		width: 80%;
+		float: left;
+		margin-bottom: 6px;
+		font-size: 14px;
+	}
+	input.paypal_checkout {
+		background:
+			url(https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif)
+			no-repeat;
+		width: 145px;
+		height: 42px;
+		border: none;
+		cursor: pointer;
+	}
+	input.pay {
+		width: 145px;
+		height: 42px;
+		cursor: pointer;
+	}
+	.my-container {
+		width: 960px;
+		margin: 0 auto;
+	}
+	.hidden {
+		display: none;
+	}
+	.text_center {
+		text-align: center;
+	}
+	.text_right {
+		text-align: right;
+	}
+	.reservation_info th {
+		width: 190px;
+	}
+	.loading {
+		background: rgba(255, 255, 255, .8) url('../images/loading.gif') 50% 50%
+			no-repeat;
+	}
+	.reservation-details label {
+		font-weight: bold;
+		font-size: 14px;
+		cursor: default;
+		display: inline-block;
+	}
+	.reservation-details .general-info {
+		margin-top: 20px;
+		overflow: hidden;
+	}
+	.reservation-details .general-info .item {
+		width: 48%;
+		height: 30px;
+		display: inline-block;
+	}
+	.reservation-details .general-info .item.long {
+		width: 100%;
+	}
+	.reservation-details .general-info .item label {
+		width: 40%;
+	}
+	.reservation-details .general-info .item.long label {
+		width: 20%;
+	}
+	.reservation-details .general-info .item span {
+		width: 60%;
+	}
+	.reservation-details .general-info .item.long span {
+		width: 80%;
+	}
+	.reservation-details .ticket-list table,.reservation-details table.ticket-list
+		{
+		margin-top: 20px;
+		clear: both;
+		width: 100%;
+	}
+	.reservation-details .ticket-list thead th {
+		padding: 3px 18px 3px 10px;
+		border: 1px solid black;
+		font-weight: bold;
+	}
+	.reservation-details .ticket-list thead th.datetime {
+		width: 200px;
+	}
+	.reservation-details .ticket-list td {
+		padding: 3px 10px;
+		border: 1px solid black;
+	}
+	.reservation-details .ticket-list td.right {
+		text-align: right;
+	}
+	.reservation-details .ticket-list td.center {
+		text-align: center;
+	}
+	.reservation-details .ticket-list td.small {
+		border-right-style: dashed;
+		border-right-color: #c0c0c0;
+		width: 30px;
+		padding-right: 5px;
+	}
+	.reservation-details .ticket-list td.small+td {
+		border-left: none;
+	}
+	.reservation-details .ticket-list td.index {
+		text-align: center;
+	}
+	.reservation-details .ticket-list tbody tr {
+		background-color: rgb(181, 214, 248);
+	}
+	.reservation-details .ticket-list thead tr,.reservation-details .ticket-list tbody tr:nth-child(4n+3),.reservation-details .ticket-list tbody tr:nth-child(4n)
+		{
+		background-color: rgb(121, 182, 245);
+	}
+	.reservation-details .ticket-list tbody tr.return {
+		background-color: rgb(181, 248, 214);
+	}
+	.reservation-details .ticket-list tbody tr.return:nth-child(4n+3),.reservation-details .ticket-list tbody tr.return:nth-child(4n)
+		{
+		background-color: rgb(121, 245, 182);
+	}
+	.reservation-details .payment-info {
+		margin-top: 20px;
+		overflow: hidden;
+	}
+	.reservation-details .payment-info .item {
+		height: 30px;
+		clear: both;
+	}
+	.reservation-details .payment-info .item label {
+		width: 20%;
+	}
+	.reservation-details .payment-info .item span {
+		display: inline-block;
+		text-align: right;
+	}
+	.reservation-details .payment-info .item span.vnd {
+		min-width: 100px;
+	}
+	.reservation-details .payment-info .item span.usd {
+		width: 60px;
+	}
+	.reservation-details .payment-info .item span.rate {
+		width: 60px;
+	}
+	.user-details .item {
+		height: auto;
+		width: 60%;
+		clear: both;
+		margin: 6px;
+	}
+	.user-details .item label {
+		font-weight: bold;
+		font-size: 14px;
+		cursor: default;
+		display: inline-block;
+		width: 176px;
+	}
+	.user-details .item .errorMessage {
+		list-style-type: none;
+		color: red;
+		display: inline-block;
+	}
+	.user-details .item noscript+ul.errorMessage {
+		margin-left: 0px;
+	}
+	.user-details .well {
+		padding: 5px;
+	}
+	.user-details .section {
+		overflow: hidden;
+		border-bottom: 1px solid gray;
+		margin: 7px;
+		padding: 10px;
+	}
+	.info {
+		margin: 0px auto;
+		font-size: large;
+		padding: 15px 30px;
+		border: 1px solid;
+	}
+	.click-able {
+		cursor: pointer;
+	}
+	.success {
+		background-color: rgb(84, 250, 217);
+		border-color: rgb(24, 85, 80);
+	}
 }
