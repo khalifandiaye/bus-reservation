@@ -33,7 +33,7 @@
                 }
             }
         },
-        debug : true,
+        debug : false,
         info : true,
         error : true,
     };
@@ -410,7 +410,7 @@
                     logger.logError('No map');
                     return;
                 }
-                if (!options || (isNaN(options) && !options.routeId)) {
+                if (!options || (typeof options === 'object' && !options.routeId)) {
                     markers = $(this).data('markers');
                     directionsDisplay = $(this).data('directionsDisplay');
                     if (!directionsDisplay) {
@@ -418,7 +418,7 @@
                         $(this).data('directionsDisplay', directionsDisplay);
                     }
                 } else {
-                    routeId = !isNaN(options) ? options : options.routeId;
+                    routeId = !(typeof options === 'object') ? options : options.routeId;
                     routes = $(this).data('routes');
                     if (!routes) {
                         logger.logError('No routes');
@@ -436,10 +436,14 @@
                         }
                         directionsDisplay.setMap(map);
                         waypoints = routes[routeId].waypoints;
-                        if (!routes[routeId].status || routes[routeId].status != 2) {
+                        if (!routes[routeId].status || routes[routeId].status == 0) {
                             routes[routeId].status = 1;
                         } else if (routes[routeId].status == 1) {
                             logger.logInfo('Loading');
+                            return;
+                        } else if (routes[routeId].status == 3) {
+                            logger.logInfo('Loading');
+                            routes[routeId].status = 1;
                             return;
                         } else  if (routes[routeId].status == 2) {
                             directionsDisplay.setMap(map);
@@ -529,8 +533,9 @@
                 if (routes) {
                     $.each(routes, function(key, value) {
                         if (value) {
-                            if (value.directionsDisplay)
+                            if (value.directionsDisplay) {
                                 value.directionsDisplay.setMap(null);
+                            }
                             if (value.status && value.status == 1) {
                                 value.status = 3;
                             }
@@ -538,6 +543,26 @@
                     });
                 }
             });
+        },
+        isRouteExist : function (options) {
+            var retVal = false;
+            this.each(function() {
+                var routeId = -1;
+                if (!options || (!options.routeId && typeof options === 'object')) {
+                    logger.logError('Method isRouteExist in ' + pluginName
+                            + ' require input parameter routeId');
+                    return;
+                } else if (typeof options === 'object') {
+                    routeId = options.routeId;
+                } else {
+                    routeId = options;
+                }
+                var routes = $(this).data('routes');
+                if (routes && routes[routeId]) {
+                    retVal = true;
+                }
+            });
+            return retVal;
         },
     };
 
