@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Test page</title>
+<title>VinaBus - Chọn chuyến</title>
 <jsp:include page="../common/xheader.jsp" />
 <link href="<%=request.getContextPath()%>/styles/search-result.css"
 	rel="stylesheet">
@@ -303,6 +303,7 @@
 			</script>
 			<div>
 			<form action="../booking/booking.html">
+			
 			<!-- <<<***ONWARD INFORMATION***>>> -->
 			<s:set name="pssgrNo" value="passengerNo"/>
 			<div class="onward-info">
@@ -322,8 +323,8 @@
 				<s:set name="result6" value="resultNo6" />
 				<s:set name="result7" value="resultNo7" />
 				<s:if test="%{#result4.size == 0 && #msgRtn != ''}">
-				<div style="display:block; margin-left:10px; margin-bottom:15px;">Hiện tại không có chuyến đi nào vào ngày <strong>${departureDate}</strong>. 
-					 Dưới đây là những chuyến đi có ngày gần với ngày quý khách mong muốn.</div>
+				<div style="display:block; margin-left:10px; margin-bottom:15px;">Hiện tại không có chuyến nào vào ngày <strong>${departureDate}</strong>. 
+					 Dưới đây là những chuyến có ngày gần với ngày quý khách mong muốn.</div>
 					 <br/>
 					 </s:if>
 				<s:if test="%{#msgRtn == ''}">
@@ -446,6 +447,12 @@
 			</div>
 			<s:set name="ticketType" value="ticketType" />
 			<s:if test="%{#ticketType=='roundtrip'}">
+			
+			<!-- <<<***SHOW MAP***>>> -->
+			<div class="slider">
+    			<div id="map" class="map-container"></div>
+   			</div>		
+   			
 			<!-- <<<***RETURN INFORMATION***>>> -->
 			<div class="return-info">
 				<legend>Chuyến về</legend>
@@ -465,15 +472,15 @@
 				<s:set name="rtnResult7" value="rtnResultNo7" />
 				<s:set name="flgRtn" value="rtnExistResultFlag"/>
 				<s:if test="%{#rtnResult4.size == 0 && #flgRtn != ''}">
-				<div style="display:block; margin-left:10px; margin-bottom:15px;">Hiện tại không có chuyến đi nào vào ngày <strong>${returnDate}</strong>. 
-					 Dưới đây là những chuyến đi có ngày gần với ngày quý khách mong muốn.</div>
+				<div style="display:block; margin-left:10px; margin-bottom:15px;">Hiện tại không có chuyến nào vào ngày <strong>${returnDate}</strong>. 
+					 Dưới đây là những chuyến có ngày gần với ngày quý khách mong muốn.</div>
 					 <br/>
 					 </s:if>
 				<s:if test="%{#flgRtn == ''}">
-					 Hiện tại chuyến đi từ <strong>${arrCity}</strong> đến <strong>${deptCity}</strong> vào ngày <strong>${returnDate}</strong> không có hoặc đã hết vé. Xin quý khách vui lòng thử tìm chuyến vào ngày khác.
+					 Hiện tại chuyến về từ <strong>${arrCity}</strong> đến <strong>${deptCity}</strong> vào ngày <strong>${returnDate}</strong> không có hoặc đã hết vé. Xin quý khách vui lòng thử tìm chuyến vào ngày khác.
 				</s:if>	 
 				<s:if test="%{#rtnResult4.size != 0}">
-					<div style="display:block; margin-left:10px; margin-bottom:15px">Vui lòng chọn chuyến đi và nhấn <strong>"Tiếp tục"</strong></div>
+					<div style="display:block; margin-left:10px; margin-bottom:15px">Vui lòng chọn chuyến về và nhấn <strong>"Tiếp tục"</strong></div>
 				</s:if>
 				<!-- RETURN RESULT HEADER -->
 					<div class="result-header return">
@@ -596,7 +603,7 @@
 			<input type="hidden" name="rtnBusStatus" />
 			<input type="hidden" name="rtnDepartTime" /> 
 			<input type="hidden" name="rtnArriveTime" /> 
-			<input type="hidden" name="rtnFare" />				
+			<input type="hidden" name="rtnFare" />	
 			</form>
 				<div style="overflow: hidden; width: 100%;">
 					<button id="confirm-submit"

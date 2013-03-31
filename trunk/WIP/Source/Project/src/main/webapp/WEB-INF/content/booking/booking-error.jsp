@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Payment Success</title>
+<title>VinaBus - Thông báo lỗi</title>
 <jsp:include page="../common/xheader.jsp" />
 <link href="<%=request.getContextPath()%>/styles/booking.css" rel="stylesheet">
 </head>

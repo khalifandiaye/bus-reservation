@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Bus travel</title>
+<title>VinaBus - Trang chủ</title>
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/styles/jquery-ui.css" />
 <jsp:include page="common/xheader.jsp" />
