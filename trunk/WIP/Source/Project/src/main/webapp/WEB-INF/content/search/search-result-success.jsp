@@ -276,6 +276,7 @@
 					'.out_deptTime').val();
 			 param.arriveTime = $source.parent("td").find(
 					'.out_arrTime').val();
+			 console.log('onward1');
 			} else {
 			//for return journey
 				param.busStatus = $source.parent("td").find(
@@ -284,6 +285,7 @@
 				'.rtn_deptTime').val();
 				param.arriveTime = $source.parent("td").find(
 				'.rtn_arrTime').val();
+				console.log('return1');
 			}
 			//call ajax
 			$.ajax({ 	
@@ -302,12 +304,19 @@
 					for(var i = 0; i < loop.length; i++){
 						waypoints.push({latitude : loop[i]['latitude'], longitude : loop[i]['longitude']}); 
 					}
+					if(className == 'chb-out') {
 					$('#map').customGMap('addRoute', {
 				        routeId : 1,
 				        waypoints : waypoints });
-					console.log('thiis');
-					console.log($('#map').data('routes')[1].waypoints);
+					//console.log($('#map').data('routes')[1].waypoints);
 					 $('#map').customGMap('showRoute', 1);
+					} else {
+						$('#map').customGMap('addRoute', {
+					        routeId : 2,
+					        waypoints : waypoints });
+						//console.log($('#map').data('routes')[1].waypoints);
+						 $('#map').customGMap('showRoute', 2);
+					}
 				}
 			});
 		}
@@ -318,7 +327,96 @@
 			showPopup($("#message").val());
 		}
 		
-	});
+	function checkChecked(){
+	 	if($('.chb-out:checked').size() == 0 && $('.chb-ret:checked').size() == 0 ){
+	    	$('#confirm-submit').attr("disabled", "disabled");
+			$('#confirm-submit').removeClass('btn-primary');
+	    } else {
+	    	$('#confirm-submit').removeAttr("disabled");
+			$('#confirm-submit').addClass('btn-primary');
+	    }
+	}
+	
+	//show result details for onward journey
+		if($('.list-header.onward4').size()!=0){
+			showResultDetails('onward4');
+		} else if($('.list-header.onward3').size()!=0){
+			showResultDetails('onward3');
+		} else if($('.list-header.onward5').size()!=0){
+			showResultDetails('onward5');
+		} else if($('.list-header.onward2').size()!=0){
+			showResultDetails('onward2');
+		} else if($('.list-header.onward6').size()!=0){
+			showResultDetails('onward6');
+		} else if($('.list-header.onward1').size()!=0){
+			showResultDetails('onward1');
+		} else if($('.list-header.onward7').size()!=0){
+			showResultDetails('onward7');
+		}
+		
+		//show result details on click header for return journey
+		if($('.list-header-rtn.return4').size()!=0){
+			showResultDetailsRtn('return4');
+		} else if($('.list-header-rtn.return3').size()!=0){
+			showResultDetailsRtn('return3');
+		} else if($('.list-header-rtn.return5').size()!=0){
+			showResultDetailsRtn('return5');
+		} else if($('.list-header-rtn.return2').size()!=0){
+			showResultDetailsRtn('return2');
+		} else if($('.list-header-rtn.return6').size()!=0){
+			showResultDetailsRtn('return6');
+		} else if($('.list-header-rtn.return1').size()!=0){
+			showResultDetailsRtn('return1');
+		} else if($('.list-header-rtn.return7').size()!=0){
+			showResultDetailsRtn('return7');
+		}
+		
+		//onlick list-header
+		$('.list-header').bind('click',(function() {
+			var className = $(this).attr('class').split(' ')[1];
+			showResultDetails(className);
+		}));
+	
+		$('.list-header-rtn').bind('click',(function() {
+			var rtnClassName = $(this).attr('class').split(' ')[1];
+			showResultDetailsRtn(rtnClassName);
+		}));				
+					
+			
+	function showResultDetails(headerName){
+		$('.search-rs-dtl').hide();	
+		$('.search-rs-dtl.' + headerName).show();
+		//var checkbox = $('table.' + headerName + ' tr.tripDetails #out_journey')[0];
+		$(".chb-out").attr('checked',false);
+		$('.result-table.onward tr.tripDetails').removeClass('choose');
+		$('table.' + headerName + ' tr.tripDetails #out_journey')[0].checked = true;
+		$($('table.' + headerName + ' tr.tripDetails')[0]).addClass('choose');
+		checkChecked();
+		$('.list-header').removeClass('header-current');
+		$('.list-header').addClass('header-default');
+		$('.list-header.' + headerName).removeClass('header-default');
+		$('.list-header.' + headerName).addClass('header-current');
+		console.log('onward');
+		getLatitudeList($($('table.' + headerName + ' tr.tripDetails #out_journey')[0]));
+	}
+	
+	function showResultDetailsRtn(headerName){
+		$('.search-rs-dtl-rtn').hide();	
+		$('.search-rs-dtl-rtn.' + headerName).show();
+		$(".chb-ret").attr('checked',false);
+		$('.result-table.return tr.tripDetails').removeClass('choose');
+		$('table.' + headerName + ' tr.tripDetails #rtn_journey')[0].checked = true;
+		$($('table.' + headerName + ' tr.tripDetails')[0]).addClass('choose');
+		checkChecked();
+		$('.list-header-rtn').removeClass('header-current');
+		$('.list-header-rtn').addClass('header-default');
+		$('.list-header-rtn.' + headerName).removeClass('header-default');
+		$('.list-header-rtn.' + headerName).addClass('header-current');
+		console.log('return');
+		getLatitudeList($($('table.' + headerName + ' tr.tripDetails #rtn_journey')[0]));
+	} 
+	
+});
 </script>
 </head>
 <body>
@@ -353,91 +451,7 @@
 			<s:set name="pssgrNo" value="passengerNo" />
 			<s:set name="msgRtn" value="searchMessage"/>
 			<script type="text/javascript">				
-				function checkChecked(){
-				 	if($('.chb-out:checked').size() == 0 && $('.chb-ret:checked').size() == 0 ){
-				    	$('#confirm-submit').attr("disabled", "disabled");
-						$('#confirm-submit').removeClass('btn-primary');
-				    } else {
-				    	$('#confirm-submit').removeAttr("disabled");
-						$('#confirm-submit').addClass('btn-primary');
-				    }
-				}
-				//show result details for onward journey
-				$(document).ready(function() {
-					if($('.list-header.onward4').size()!=0){
-						showResultDetails('onward4');
-					} else if($('.list-header.onward3').size()!=0){
-						showResultDetails('onward3');
-					} else if($('.list-header.onward5').size()!=0){
-						showResultDetails('onward5');
-					} else if($('.list-header.onward2').size()!=0){
-						showResultDetails('onward2');
-					} else if($('.list-header.onward6').size()!=0){
-						showResultDetails('onward6');
-					} else if($('.list-header.onward1').size()!=0){
-						showResultDetails('onward1');
-					} else if($('.list-header.onward7').size()!=0){
-						showResultDetails('onward7');
-					}
-					
-					//show result details on click header for return journey
-					if($('.list-header-rtn.return4').size()!=0){
-						showResultDetailsRtn('return4');
-					} else if($('.list-header-rtn.return3').size()!=0){
-						showResultDetailsRtn('return3');
-					} else if($('.list-header-rtn.return5').size()!=0){
-						showResultDetailsRtn('return5');
-					} else if($('.list-header-rtn.return2').size()!=0){
-						showResultDetailsRtn('return2');
-					} else if($('.list-header-rtn.return6').size()!=0){
-						showResultDetailsRtn('return6');
-					} else if($('.list-header-rtn.return1').size()!=0){
-						showResultDetailsRtn('return1');
-					} else if($('.list-header-rtn.return7').size()!=0){
-						showResultDetailsRtn('return7');
-					}
-					
-					//onlick list-header
-					$('.list-header').bind('click',(function() {
-						var className = $(this).attr('class').split(' ')[1];
-						showResultDetails(className);
-					}));
 				
-					$('.list-header-rtn').bind('click',(function() {
-						var rtnClassName = $(this).attr('class').split(' ')[1];
-						showResultDetailsRtn(rtnClassName);
-					}));				
-								
-				});
-							
-				function showResultDetails(headerName){
-					$('.search-rs-dtl').hide();	
-					$('.search-rs-dtl.' + headerName).show();
-					//var checkbox = $('table.' + headerName + ' tr.tripDetails #out_journey')[0];
-					$(".chb-out").attr('checked',false);
-					$('.result-table.onward tr.tripDetails').removeClass('choose');
-					$('table.' + headerName + ' tr.tripDetails #out_journey')[0].checked = true;
-					$($('table.' + headerName + ' tr.tripDetails')[0]).addClass('choose');
-					checkChecked();
-					$('.list-header').removeClass('header-current');
-					$('.list-header').addClass('header-default');
-					$('.list-header.' + headerName).removeClass('header-default');
-					$('.list-header.' + headerName).addClass('header-current');
-				}
-				
-				function showResultDetailsRtn(headerName){
-					$('.search-rs-dtl-rtn').hide();	
-					$('.search-rs-dtl-rtn.' + headerName).show();
-					$(".chb-ret").attr('checked',false);
-					$('.result-table.return tr.tripDetails').removeClass('choose');
-					$('table.' + headerName + ' tr.tripDetails #rtn_journey')[0].checked = true;
-					$($('table.' + headerName + ' tr.tripDetails')[0]).addClass('choose');
-					checkChecked();
-					$('.list-header-rtn').removeClass('header-current');
-					$('.list-header-rtn').addClass('header-default');
-					$('.list-header-rtn.' + headerName).removeClass('header-default');
-					$('.list-header-rtn.' + headerName).addClass('header-current');
-				}
 			</script>
 			<div>
 			<form action="../booking/booking.html">
@@ -586,14 +600,14 @@
 						</s:if>
 						</div>
 			</div>
-			<s:set name="ticketType" value="ticketType" />
-			<s:if test="%{#ticketType=='roundtrip'}">
 			
 			<!-- <<<***SHOW MAP***>>> -->
 			<div class="map-slider">
     			<div id="map" class="map-container"></div>
    			</div>		
    			
+			<s:set name="ticketType" value="ticketType" />
+			<s:if test="%{#ticketType=='roundtrip'}"> 			
 			<!-- <<<***RETURN INFORMATION***>>> -->
 			<div class="return-info">
 				<legend><span>Chuyến về</span>

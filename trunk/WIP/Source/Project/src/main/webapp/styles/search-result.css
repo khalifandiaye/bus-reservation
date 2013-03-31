@@ -223,5 +223,6 @@ span.list-header-rtn{
 	cursor:pointer;
 }
 .map-slider {
-	width: 475px;
+	width: 465px;
+	display: inline-block;
 }
