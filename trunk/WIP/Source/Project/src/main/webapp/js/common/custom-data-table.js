@@ -1,5 +1,5 @@
 $.extend( true, $.fn.dataTable.defaults, {
-	"sDom": "<'row-fluid'<'span3 pull-left'l><'span6 pull-right'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+	"sDom": "<'row'<'span6 pull-left'l><'span5 pull-right'f>r>t<'row'<'span6'i><'span6'p>>",
 	"sPaginationType": "bootstrap",
 	"oLanguage": { 
 		"sLengthMenu": "_MENU_ records per page"

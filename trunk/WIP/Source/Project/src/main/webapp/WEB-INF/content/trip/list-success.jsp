@@ -10,8 +10,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>VinaBus - Trip list</title>
 <jsp:include page="../common/xheader.jsp" />
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/styles/trip/jquery.dataTables.css">
 <link
 	href="<%=request.getContextPath()%>/styles/trip/datetimepicker.css"
 	rel="stylesheet">
@@ -19,6 +17,8 @@
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
 <script
 	src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/styles/custom-data-table.css" />
+<script src="<%=request.getContextPath()%>/js/common/custom-data-table.js"></script>
 <script type="text/javascript">
 	$(document).ready(
 			function() {
@@ -45,12 +45,12 @@
 <body>
 	<jsp:include page="../common/header.jsp" />
 	<jsp:include page="../common/menu.jsp" />
-	<div id="page">
-		<div class="post" style="margin: 0px auto; width: 95%;">
-				<div style="height: 45px; margin-left: 1%;">
-				</div>
-				<h3><s:property value="tripBeans[0].routeDetails.route.name" /></h3>
-				<table id="tripsTable">
+	<div id="page" class="well">
+		<div class="post"> 
+				<h3 style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+				<s:property value="tripBeans[0].routeDetails.route.name" /> 
+				</h3>  
+				<table id="tripsTable" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
 					<thead>
 						<tr>
 							<th>Name</th>

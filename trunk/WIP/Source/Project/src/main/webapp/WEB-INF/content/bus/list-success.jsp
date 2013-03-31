@@ -84,7 +84,7 @@
 	<div id="page" class="well small-well">   
 		<div class="post">
 			<h3 style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">    
-				Quản lý xe bus  
+				Manage bus  
 				<input class="btn btn-primary pull-right" id="addBus" type="button"
 					value="Add New Bus" />
 			</h3>  
@@ -108,8 +108,8 @@
 							<td><s:property value="forwardRoute.name" /></td>
 							<td><s:property value="status" /></td>
 							<td style="width: 6%"><a
-								data-delete="<s:property value='id'/>" style="cursor: pointer;color: red" 
-								onclick='javascript: deleteBus(<s:property value='id'/>)' >Delete</a></td>
+								data-delete="<s:property value='id'/>" style="cursor: pointer;"   
+								onclick='javascript: deleteBus(<s:property value='id'/>)' class="btn btn-small btn-danger" >Delete</a></td>
 						</tr>
 					</s:iterator>
 				</tbody>
