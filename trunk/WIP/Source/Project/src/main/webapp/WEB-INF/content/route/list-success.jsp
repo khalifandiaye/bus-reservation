@@ -336,7 +336,7 @@
                <tr>
                   <td>Start At</td>
                   <td>End At</td>
-                  <td>Duration</td>
+                  <td>Duration (hh:mm)</td>
                </tr>
             <thead>
             <tbody>

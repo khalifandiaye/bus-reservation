@@ -48,7 +48,7 @@ public class RouteDetailListAction extends ActionSupport {
 	public String execute() {
 		// routeDetailsList.get(routeDetailsList.size() -
 		// 1).getSegment().getEndAt()
-		List<SegmentBean> segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
+		segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
 		StationBean endStationBeans = segmentBeans.get(segmentBeans.size() -1).getEndAt();
 		busStatusBeans = busStatusDAO.getAllAvailTripByRouteId(routeId,
 				Calendar.getInstance().getTime(), 

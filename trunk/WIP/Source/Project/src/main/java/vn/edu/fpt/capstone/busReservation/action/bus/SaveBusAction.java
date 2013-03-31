@@ -38,7 +38,11 @@ public class SaveBusAction extends BaseAction {
 				busBean.setPlateNumber(plateNumber);
 				busBean.setStatus("active");
 				busDAO.insert(busBean);
-			} else {
+			} else if (busBeans.get(0).getStatus().equals("inactive")) {
+				busBeans.get(0).setStatus("inactive");
+				busDAO.update(busBeans.get(0));
+			}
+			else {
 				setMessage("Bus Plate number is existed!");
 			}
 		} catch (Exception ex) {
