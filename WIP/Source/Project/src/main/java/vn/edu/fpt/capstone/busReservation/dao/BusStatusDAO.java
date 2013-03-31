@@ -91,7 +91,7 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<BusStatusBean> getAllAvailTripByRouteId(int routeId, Date date) {
-		String hql = "FROM BusStatusBean bs WHERE (bs.bus.forwardRoute.id = :routeId "
+		String hql = "Select distinct bs FROM BusStatusBean bs WHERE (bs.bus.forwardRoute.id = :routeId "
 				+ "OR  bs.bus.returnRoute.id = :routeId) "
 				+ "AND bs.busStatus = :busStatus "
 				+ "AND bs.fromDate >= :date AND bs.status != :status";
