@@ -576,7 +576,7 @@ Date.prototype.toMyString = function () {
                         <input id="validDateSelect" size="16" type="text" value="" readonly ><span
                            class="add-on"><i class="icon-calendar"></i></span>
                      </div> --%>
-                      <input type="text" id="validDateSelect" name="departureDate">
+                      <input type="text" id="validDateSelect" name="departureDate" readonly>
                   </td>
                </tr>
             </table>
@@ -683,7 +683,7 @@ Date.prototype.toMyString = function () {
                         <input id="validDate" size="16" type="text" value="" readonly name="tripDialogDepartureTime"><span
                            class="add-on"><i class="icon-calendar"></i></span>
                      </div> --%>
-                     <input id="validDate" name="tripDialogDepartureTime"/>
+                     <input id="validDate" name="tripDialogDepartureTime" readonly/>
                   </td>
                   <td>Select bus type :
                      <div class="input-append date form_datetime">
