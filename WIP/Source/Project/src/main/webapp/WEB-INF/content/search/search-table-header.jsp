@@ -6,6 +6,6 @@
 	<th class="head outward arrive">Giờ đến</th>
 	<th class="head outward details">Chi tiết</th>
 	<th class="head outward funfares">Giá vé (VND)</th>
-	<th class="head outward remained">Số ghế</th>
-	<th class="head outward select bookingHeader">Chọn</th>
+	<th class="head outward remained">Số ghế trống</th>
+	<th class="head outward select bookingHeader"></th>
 </tr>

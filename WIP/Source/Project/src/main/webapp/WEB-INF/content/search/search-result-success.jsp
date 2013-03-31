@@ -18,11 +18,19 @@
 <link
 	href="<%=request.getContextPath()%>/styles/trip/datetimepicker.css"
 	rel="stylesheet">
+<link href="<%=request.getContextPath()%>/styles/gmap.css" rel="stylesheet">
 <script src="<%=request.getContextPath()%>/js/index.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.json-2.4.min.js"></script>
 <script
 	src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwRnLXPkJ6gSAug6fUJst2Nomn1fLnlAI&sensor=false&region=VN&language=vi">
+</script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/markerwithlabel_packed.js">
+    </script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/customGMap.js">
+    </script>	
 <script type="text/javascript">
 	/* 	function setValue(depart, arrive, fare, status){
 	 var obj = { departureTime: depart,
@@ -43,6 +51,10 @@
 	
 	 //document ready
 	$(function() {
+		
+		// create and display a map
+	    $('#map').customGMap('initialize', {hideMapLabels : true, showAdministrativeLabel : true, enableRoute : true});
+	    //$('div.map-slider').hide();
 		var rtnFlg = $('#rtnFlg').val();
 		var outFlg = $('#outFlg').val();
 		
@@ -102,7 +114,7 @@
 		$('.trip-details').bind(
 				'click',
 				(function() {
-					var className = $(this).attr('class').split(' ')[1];
+					/* var className = $(this).attr('class').split(' ')[1];
 					//set param for onward journey
 					if(className == 'onward') {
 					var busStatus = $(this).parent("td").next().next().next().find(
@@ -119,16 +131,19 @@
 						'.rtn_deptTime').val();
 					var	arriveTime = $(this).parent("td").next().next().next().find(
 						'.rtn_arrTime').val();
-					}
+					} */
+					var param = new Object();
+					getParameter($(this), param);
+					
 					//call ajax
 					$.ajax({
 						type : "GET",
 						url : $('#contextPath').val()
 								+ "/search/getTripDetails.html",
 						data : {
-							busStatus : busStatus,
-							departTime : departTime,
-							arriveTime : arriveTime
+							busStatus : param.busStatus,
+							departTime : param.departTime,
+							arriveTime : param.arriveTime
 						},
 						success : function(data) {
 							//set data to screen
@@ -153,17 +168,87 @@
 				});
 		}));
 		
+		//get parameter for showing trip details
+		function getParameter($source, param) {
+			console.log($source);
+			var className = $source.attr('class').split(' ')[1];
+			//set param for onward journey
+			if(className == 'onward') {
+			 param.busStatus = $source.parent("td").next().next().next().find(
+					'.out_status').val();
+			 param.departTime = $source.parent("td").next().next().next().find(
+					'.out_deptTime').val();
+			 param.arriveTime = $source.parent("td").next().next().next().find(
+					'.out_arrTime').val();
+			 console.log(param);
+			} else {
+			//for return journey
+				param.busStatus = $source.parent("td").next().next().next().find(
+				'.rtn_status').val();
+				param.departTime = $source.parent("td").next().next().next().find(
+				'.rtn_deptTime').val();
+				param.arriveTime = $source.parent("td").next().next().next().find(
+				'.rtn_arrTime').val();
+			}
+		}
+		
 		var $unique = $('input.chb-out');
 		var $uniqueRet = $('input.chb-ret');
+		
+		$('tr.tripDetails.row').click(function(event) {
+			 if (event.target.type !== 'checkbox' && event.target.nodeName !== 'A') {
+			      $(':checkbox', this).trigger('click');
+			    }
+		});
+		
+		window.onload = function () { $('div.map-slider').hide(); };
+		
+		$('span.map-active').click(function() {
+			$('div.map-slider').show();
+			$(this).hide();
+			if($(this).attr('class').split(' ')[1]=='onward'){
+				$('div.map-slider')[0].style.styleFloat = 'right';
+				$('div.map-slider')[0].style.cssFloat = 'right';
+				$('span.map-inactive.onward').show();
+				$('div.return-info').hide();
+			} else {
+				$('span.map-inactive.return').show();
+				$('div.onward-info').hide();
+			}
+		
+		});
+		$('span.map-inactive').click(function() {
+			$('div.map-slider').hide();
+			$(this).hide();
+			if($(this).attr('class').split(' ')[1]=='onward'){
+				$('div.map-slider')[0].style.styleFloat = 'left';
+				$('div.map-slider')[0].style.cssFloat = 'left';
+				$('span.map-active.onward').show();
+				$('div.return-info').show();	
+			} else {
+				$('span.map-active.return').show();
+				$('div.onward-info').show();
+			}
+		});
+		
 		//make checkbox act like radio
 		$unique.click(function() {
 	    	$unique.filter(':checked').not(this).removeAttr('checked');
+	    	$('.result-table.onward tr.tripDetails').removeClass('choose');
+			 if($(this).is(':checked')){
+				$(this).closest('tr').addClass('choose');
+				getLatitudeList($(this));
+			 } 		  
 	   		checkChecked001();
 		});
 	
 	
 		$uniqueRet.click(function() {
 	    	$uniqueRet.filter(':checked').not(this).removeAttr('checked');
+	    	$('.result-table.return tr.tripDetails').removeClass('choose');
+			 if($(this).is(':checked')){
+				$(this).closest('tr').addClass('choose');
+			 } 		
 	    	checkChecked001();
 		});
 	
@@ -178,6 +263,55 @@
 				$('#confirm-submit').addClass('btn-primary');
 		    }
 		}
+		
+		//getLatitude
+		function getLatitudeList($source){
+			var param = new Object();
+			var className = $source.attr('class');
+			//set param for onward journey
+			if(className == 'chb-out') {
+			 param.busStatus = $source.parent("td").find(
+					'.out_status').val();
+			 param.departTime = $source.parent("td").find(
+					'.out_deptTime').val();
+			 param.arriveTime = $source.parent("td").find(
+					'.out_arrTime').val();
+			} else {
+			//for return journey
+				param.busStatus = $source.parent("td").find(
+				'.rtn_status').val();
+				param.departTime = $source.parent("td").find(
+				'.rtn_deptTime').val();
+				param.arriveTime = $source.parent("td").find(
+				'.rtn_arrTime').val();
+			}
+			//call ajax
+			$.ajax({ 	
+				type : "GET",
+				url : $('#contextPath').val()
+						+ "/search/getRouteLatitude.html",
+				data : {
+					busStatus : param.busStatus,
+					departTime : param.departTime,
+					arriveTime : param.arriveTime
+				},
+				success : function(data) {
+					var loop = data.latitudeList;
+					var waypoints = new Array();
+					console.log("1st round - success");
+					for(var i = 0; i < loop.length; i++){
+						waypoints.push({latitude : loop[i]['latitude'], longitude : loop[i]['longitude']}); 
+					}
+					$('#map').customGMap('addRoute', {
+				        routeId : 1,
+				        waypoints : waypoints });
+					console.log('thiis');
+					console.log($('#map').data('routes')[1].waypoints);
+					 $('#map').customGMap('showRoute', 1);
+				}
+			});
+		}
+		
 		
 		//show message on error
 		if($("#message").val() != null && $("#message").val() != ""){
@@ -281,7 +415,9 @@
 					$('.search-rs-dtl.' + headerName).show();
 					//var checkbox = $('table.' + headerName + ' tr.tripDetails #out_journey')[0];
 					$(".chb-out").attr('checked',false);
+					$('.result-table.onward tr.tripDetails').removeClass('choose');
 					$('table.' + headerName + ' tr.tripDetails #out_journey')[0].checked = true;
+					$($('table.' + headerName + ' tr.tripDetails')[0]).addClass('choose');
 					checkChecked();
 					$('.list-header').removeClass('header-current');
 					$('.list-header').addClass('header-default');
@@ -293,7 +429,9 @@
 					$('.search-rs-dtl-rtn').hide();	
 					$('.search-rs-dtl-rtn.' + headerName).show();
 					$(".chb-ret").attr('checked',false);
+					$('.result-table.return tr.tripDetails').removeClass('choose');
 					$('table.' + headerName + ' tr.tripDetails #rtn_journey')[0].checked = true;
+					$($('table.' + headerName + ' tr.tripDetails')[0]).addClass('choose');
 					checkChecked();
 					$('.list-header-rtn').removeClass('header-current');
 					$('.list-header-rtn').addClass('header-default');
@@ -307,7 +445,10 @@
 			<!-- <<<***ONWARD INFORMATION***>>> -->
 			<s:set name="pssgrNo" value="passengerNo"/>
 			<div class="onward-info">
-				<legend>Chuyến đi</legend>
+				<legend>
+					<span>Chuyến đi</span>
+					<span class="map-active onward" title="Hiện bản đồ cho chuyến đi"></span>
+					<span class="map-inactive onward" title="Ẩn bản đồ của chuyến đi" style="display:none"></span></legend>
 				<div class="trip-details" style="display:block;width:100%">
 					<span class="blue-bus-ico"></span>
 					<span><span class="dept-city"><h5>${deptCity}</h5></span>
@@ -449,13 +590,15 @@
 			<s:if test="%{#ticketType=='roundtrip'}">
 			
 			<!-- <<<***SHOW MAP***>>> -->
-			<div class="slider">
+			<div class="map-slider">
     			<div id="map" class="map-container"></div>
    			</div>		
    			
 			<!-- <<<***RETURN INFORMATION***>>> -->
 			<div class="return-info">
-				<legend>Chuyến về</legend>
+				<legend><span>Chuyến về</span>
+						<span class="map-active return" title="Hiện bản đồ cho chuyến về"></span>
+						<span class="map-inactive return" style="display:none" title="Ẩn bản đồ của chuyến về"></span></legend>
 				<div class="trip-details" style="display:block;width:100%">
 					<span class="blue-bus-ico-ret"></span>
 					<span><span class="dept-city"><h5>${deptCity}</h5></span>
@@ -608,8 +751,8 @@
 				<div style="overflow: hidden; width: 100%;">
 					<button id="confirm-submit"
 							class="btn btn-large pull-right btn-primary"
-							style="margin-top: 15px; margin-right: 10px;" ><s:text name="next"/></button>
-					<a style="margin-top: 15px; margin-right: 30px;" class="btn btn-large pull-right" href="../index.html"><s:text name="button.back"/></a>
+							style="margin-top: 15px; margin-right: 10px;" title="Xác nhận chọn chuyến và chuyển đến trang chọn ghế"><s:text name="next"/></button>
+					<a style="margin-top: 15px; margin-right: 30px;" class="btn btn-large pull-right" href="../index.html" title="Quay lại tìm chuyến khác"><s:text name="button.back"/></a>
 				</div>	
 			</div>
 		</div>
