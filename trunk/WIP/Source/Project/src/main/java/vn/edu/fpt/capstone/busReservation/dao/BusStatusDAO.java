@@ -90,11 +90,12 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 	 *             the occurred exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<BusStatusBean> getAllAvailTripByRouteId(int routeId, Date date) {
+	public List<BusStatusBean> getAllAvailTripByRouteId(int routeId, Date date, StationBean endStation) {
 		String hql = "Select distinct bs FROM BusStatusBean bs WHERE (bs.bus.forwardRoute.id = :routeId "
 				+ "OR  bs.bus.returnRoute.id = :routeId) "
 				+ "AND bs.busStatus = :busStatus "
-				+ "AND bs.fromDate >= :date AND bs.status != :status";
+				+ "AND bs.fromDate >= :date AND bs.status != :status " 
+				+ "AND bs.endStation = :endStation ";
 		Session session = sessionFactory.getCurrentSession();
 		List<BusStatusBean> result = new ArrayList<BusStatusBean>();
 		try {
@@ -104,6 +105,7 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 			query.setParameter("busStatus", "ontrip");
 			query.setParameter("date", date);
 			query.setParameter("status", "inactive");
+			query.setParameter("endStation", endStation);
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
