@@ -11,9 +11,12 @@ import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
+import vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 
 @ParentPackage("jsonPackage")
 public class DeleteRouteAction extends BaseAction {
@@ -23,46 +26,63 @@ public class DeleteRouteAction extends BaseAction {
 	private BusStatusDAO busStatusDAO;
 	private RouteDAO routeDAO;
 	private BusDAO busDAO;
+	private RouteDetailsDAO routeDetailsDAO;
 
 	private int routeId;
 
 	private String message;
 
 	@Action(value = "/deleteRoute", results = { @Result(type = "json", name = SUCCESS) })
-	public String execute(){
+	public String execute() {
+		List<SegmentBean> segmentBeans = routeDetailsDAO
+				.getAllSegmemtsByRouteId(routeId);
+		StationBean startStationBeans = segmentBeans.get(0).getStartAt();
+		StationBean endStationBeans = segmentBeans.get(segmentBeans.size() - 1)
+				.getEndAt();
+
 		List<Integer> routeTerminals = routeDAO.getRouteTerminal(routeId);
 		List<BusStatusBean> busStatusBeansForward = busStatusDAO
-				.getAllAvailTripByRouteId(routeTerminals.get(0),
-						Calendar.getInstance().getTime());
+				.getAllAvailTripByRouteId(routeTerminals.get(0), Calendar
+						.getInstance().getTime(), endStationBeans);
 		List<BusStatusBean> busStatusBeansReturn = busStatusDAO
-				.getAllAvailTripByRouteId(routeTerminals.get(1),
-						Calendar.getInstance().getTime());
+				.getAllAvailTripByRouteId(routeTerminals.get(1), Calendar
+						.getInstance().getTime(), startStationBeans);
 		if ((busStatusBeansForward.size() + busStatusBeansReturn.size()) == 0) {
-			
-			//unassigned buses
-			List<BusBean> busBeans = busDAO.getBusByRouteId(routeTerminals.get(0));
+
+			// unassigned buses
+			List<BusBean> busBeans = busDAO.getBusByRouteId(routeTerminals
+					.get(0));
 			for (BusBean busBean : busBeans) {
 				busBean.setForwardRoute(null);
 				busBean.setReturnRoute(null);
 				busDAO.update(busBean);
 			}
-			
-			//delete route and its return
-			RouteBean routeBeanForward = routeDAO.getById(routeTerminals.get(0));
+
+			// delete route and its return
+			RouteBean routeBeanForward = routeDAO
+					.getById(routeTerminals.get(0));
 			RouteBean routeBeanReturn = routeDAO.getById(routeTerminals.get(1));
 			routeBeanForward.setStatus("inactive");
 			routeBeanReturn.setStatus("inactive");
 			routeDAO.update(routeBeanForward);
 			routeDAO.update(routeBeanReturn);
-			
-			message = "Route " + routeBeanForward.getName() +" and route " + routeBeanReturn.getName() +
-					" are deleted successfully! All buses belong to these routes are unassigned successfully!";
-		}
-		else if(busStatusBeansForward.size() > 0 || busStatusBeansReturn.size() > 0){
-			message = "Cannot delete this route due to this route has " + (busStatusBeansForward.size() + busStatusBeansReturn.size()) +
-					" available trip(s) depend on it";
+
+			message = "Route "
+					+ routeBeanForward.getName()
+					+ " and route "
+					+ routeBeanReturn.getName()
+					+ " are deleted successfully! All buses belong to these routes are unassigned successfully!";
+		} else if (busStatusBeansForward.size() > 0
+				|| busStatusBeansReturn.size() > 0) {
+			message = "Cannot delete this route due to this route has "
+					+ (busStatusBeansForward.size() + busStatusBeansReturn
+							.size()) + " available trip(s) depend on it";
 		}
 		return SUCCESS;
+	}
+
+	public void setRouteDetailsDAO(RouteDetailsDAO routeDetailsDAO) {
+		this.routeDetailsDAO = routeDetailsDAO;
 	}
 
 	public void setBusDAO(BusDAO busDAO) {

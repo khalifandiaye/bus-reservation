@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/styles/jquery-ui.css" />
 <script src="<%=request.getContextPath()%>/js/jquery-ui.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.ui.datepicker-vi.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/jqwidgets/jqxnumberinput.js"></script>
 <script type="text/javascript">
 Date.prototype.toMyString = function () {
 
@@ -93,6 +94,8 @@ Date.prototype.toMyString = function () {
 	});
 	
 	$(document).ready(function() {
+		
+		
 		
 		var active = $("#active").val();
 		if (active == 'false') {
@@ -524,6 +527,7 @@ Date.prototype.toMyString = function () {
 	};
 
 	var segments = [];
+
 </script>
 <style type="text/css">
 .dataTables_filter {
@@ -627,8 +631,8 @@ Date.prototype.toMyString = function () {
                <s:iterator value="busInfos">
                   <tr>
                      <td><s:property value="plateNumber" /></td>
-                     <td><s:date name="fromDate" format="dd/MM/yyyy hh:mm:ss" /></td>
-                     <td><s:date name="toDate" format="dd/MM/yyyy hh:mm:ss" /></td>
+                     <td><s:date name="fromDate" format="hh:mm - dd/MM/yyyy" /></td>
+                     <td><s:date name="toDate" format="hh:mm - dd/MM/yyyy" /></td>
                   </tr>
                </s:iterator>
             </tbody>
