@@ -62,17 +62,18 @@ public class SaveSegmentAction extends BaseAction {
 			// route is disabled => enable it
 			// if routeId is endabled => message route existed.
 			List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
-			
-			//check if any duplicated segment in new route
+
+			// check if any duplicated segment in new route
 			for (SegmentInfo segmentInfo : segmentInfosFoward) {
 				List<SegmentBean> segments = segmentDAO.getDuplicatedSegment(
-						segmentInfo.getStationStartAt(), segmentInfo.getStationEndAt());
-				
+						segmentInfo.getStationStartAt(),
+						segmentInfo.getStationEndAt());
+
 				if (segments.size() != 0) {
 					segmentBeans.add(segments.get(0));
 				}
 			}
-			
+
 			if (segmentBeans.size() != 0) {
 				List<RouteBean> routeBeans = routeDAO
 						.getExistRoute(segmentBeans);
@@ -80,9 +81,11 @@ public class SaveSegmentAction extends BaseAction {
 					if (routeBeans.get(0).getStatus().equals("active")) {
 						message = "Route existed! Please verify again!";
 					} else {
+						//add return routebean to the list
 						routeBeans.add(routeDAO.getById(routeDAO
 								.getRouteTerminal(routeBeans.get(0).getId())
-								.get(0)));
+								.get(1)));
+
 						for (RouteBean routeBean : routeBeans) {
 							routeBean.setStatus("active");
 						}
@@ -93,65 +96,65 @@ public class SaveSegmentAction extends BaseAction {
 					insertSegment(segmentInfosFoward, false);
 					Collections.reverse(segmentInfosFoward);
 					insertSegment(segmentInfosFoward, true);
-					}
+				}
 			} else {
 				insertSegment(segmentInfosFoward, false);
 				Collections.reverse(segmentInfosFoward);
 				insertSegment(segmentInfosFoward, true);
 			}
-			
-//			if (!isRouteExist(segmentInfosFoward)) {
-//				if (!segmentInfosFoward.isEmpty()) {
-//					insertSegment(segmentInfosFoward, false);
-//					Collections.reverse(segmentInfosFoward);
-//					insertSegment(segmentInfosFoward, true);
-//				}
-//			} else {
-//				message = "Route existed! Please verify again!";
-//			}
+
+			// if (!isRouteExist(segmentInfosFoward)) {
+			// if (!segmentInfosFoward.isEmpty()) {
+			// insertSegment(segmentInfosFoward, false);
+			// Collections.reverse(segmentInfosFoward);
+			// insertSegment(segmentInfosFoward, true);
+			// }
+			// } else {
+			// message = "Route existed! Please verify again!";
+			// }
 		} catch (Exception e) {
 			message = "Error! Please contact admin!";
 		}
 		return SUCCESS;
 	}
 
-//	private boolean isRouteExist(List<SegmentInfo> segmentInfos) {
-//		Set<Integer> newStations = new HashSet<Integer>();
-//
-//		for (SegmentInfo segmentInfo : segmentInfos) {
-//			newStations.add(segmentInfo.getStartAt());
-//			newStations.add(segmentInfo.getEndAt());
-//		}
-//
-//		List<RouteBean> routeBeans = routeDAO.getAll();
-//		for (RouteBean routeBean : routeBeans) {
-//			List<RouteDetailsBean> segmentBeans = routeBean.getRouteDetails();
-//			Set<Integer> stations = new HashSet<Integer>();
-//			for (RouteDetailsBean routeDetailsBean : segmentBeans) {
-//				SegmentBean segmentBean = routeDetailsBean.getSegment();
-//				stations.add(segmentBean.getStartAt().getCity().getId());
-//				stations.add(segmentBean.getEndAt().getCity().getId());
-//			}
-//			if (stations.size() == newStations.size()
-//					&& stations.containsAll(newStations)) {
-//				return true;
-//			}
-//		}
-//
-//		return false;
-//	}
+	// private boolean isRouteExist(List<SegmentInfo> segmentInfos) {
+	// Set<Integer> newStations = new HashSet<Integer>();
+	//
+	// for (SegmentInfo segmentInfo : segmentInfos) {
+	// newStations.add(segmentInfo.getStartAt());
+	// newStations.add(segmentInfo.getEndAt());
+	// }
+	//
+	// List<RouteBean> routeBeans = routeDAO.getAll();
+	// for (RouteBean routeBean : routeBeans) {
+	// List<RouteDetailsBean> segmentBeans = routeBean.getRouteDetails();
+	// Set<Integer> stations = new HashSet<Integer>();
+	// for (RouteDetailsBean routeDetailsBean : segmentBeans) {
+	// SegmentBean segmentBean = routeDetailsBean.getSegment();
+	// stations.add(segmentBean.getStartAt().getCity().getId());
+	// stations.add(segmentBean.getEndAt().getCity().getId());
+	// }
+	// if (stations.size() == newStations.size()
+	// && stations.containsAll(newStations)) {
+	// return true;
+	// }
+	// }
+	//
+	// return false;
+	// }
 
-//	private int getExistRoute(List<SegmentInfo> segmentInfos) {
-//		for (SegmentInfo segmentInfo : segmentInfos) {
-//			List<SegmentBean> segmentBeans = segmentDAO.getDuplicatedSegment(
-//					segmentInfo.getStartAt(), segmentInfo.getEndAt());
-//			if (segmentBeans.size() != 0){
-//				
-//			}
-//		}
-//
-//		return 0;
-//	}
+	// private int getExistRoute(List<SegmentInfo> segmentInfos) {
+	// for (SegmentInfo segmentInfo : segmentInfos) {
+	// List<SegmentBean> segmentBeans = segmentDAO.getDuplicatedSegment(
+	// segmentInfo.getStartAt(), segmentInfo.getEndAt());
+	// if (segmentBeans.size() != 0){
+	//
+	// }
+	// }
+	//
+	// return 0;
+	// }
 
 	private void insertSegment(List<SegmentInfo> segmentInfos,
 			boolean isReturnRoute) throws ParseException {
