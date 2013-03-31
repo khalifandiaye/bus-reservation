@@ -570,9 +570,9 @@
                </tr>
             </thead>
             <tbody>
-               <s:iterator value="busStatusBeans">
+               <s:iterator value="busInfos">
                   <tr>
-                     <td><s:property value="bus" /></td>
+                     <td><s:property value="plateNumber" /></td>
                      <td><s:date name="fromDate" format="dd/MM/yyyy hh:mm:ss" /></td>
                      <td><s:date name="toDate" format="dd/MM/yyyy hh:mm:ss" /></td>
                   </tr>

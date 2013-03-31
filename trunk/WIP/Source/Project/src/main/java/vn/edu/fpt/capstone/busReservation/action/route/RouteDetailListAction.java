@@ -16,6 +16,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentTravelTimeBean;
+import vn.edu.fpt.capstone.busReservation.displayModel.BusInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentInfo;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -29,6 +30,7 @@ public class RouteDetailListAction extends ActionSupport {
    private List<BusTypeBean> busTypeBeans = new ArrayList<BusTypeBean>();
    private List<BusTypeBean> busTypes = new ArrayList<BusTypeBean>();
    private List<BusStatusBean> busStatusBeans = new ArrayList<BusStatusBean>();
+   private List<BusInfo> busInfos = new ArrayList<BusInfo>();
 
    private int routeId;
    private boolean active = false;
@@ -44,6 +46,17 @@ public class RouteDetailListAction extends ActionSupport {
 
    public String execute() {
       busStatusBeans = busStatusDAO.getAllAvailTripByRouteId(routeId, Calendar.getInstance().getTime());
+      
+      // WORK AROUND
+      for (BusStatusBean busStatusBean : busStatusBeans) {
+         BusInfo busInfo = new BusInfo();
+         busInfo.setId(busStatusBean.getId());
+         busInfo.setPlateNumber(busStatusBean.getBus().getPlateNumber());
+         busInfo.setFromDate(busStatusBean.getFromDate());
+         busInfo.setToDate(busStatusBean.getToDate());
+         busInfos.add(busInfo);
+      }
+      
       RouteBean routeBean = routeDAO.getById(routeId);
       if (routeBean.getStatus().equals("active")) {
          active = true;
@@ -197,5 +210,13 @@ public class RouteDetailListAction extends ActionSupport {
 
    public void setSumaryTime(String sumaryTime) {
       this.sumaryTime = sumaryTime;
+   }
+
+   public List<BusInfo> getBusInfos() {
+      return busInfos;
+   }
+
+   public void setBusInfos(List<BusInfo> busInfos) {
+      this.busInfos = busInfos;
    }
 }
