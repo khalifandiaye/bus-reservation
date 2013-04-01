@@ -138,13 +138,13 @@
 					</div>
 				</div>
 				<div class="controls controls-row">
-					<label>Trạm khởi hành</label>
+					<label>Điểm đi</label>
 					<s:select list="deptCity" listKey="id" listValue="name"
 						name="departureCity" onchange="findArriveCity()" />
 				</div>
 				<div class="controls controls-row"
 					style="margin-bottom: 10px; border-bottom: 1px #fff dashed; padding-bottom: 5px;">
-					<label>Trạm kết thúc</label>
+					<label>Điểm đến</label>
 					<s:select list="arrCity" listKey="id" listValue="name"
 						name="arrivalCity" onchange="getDuration()"/>
 				</div>
