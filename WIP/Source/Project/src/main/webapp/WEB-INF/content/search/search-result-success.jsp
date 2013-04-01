@@ -211,9 +211,13 @@
 				$('div.map-slider')[0].style.cssFloat = 'right';
 				$('span.map-inactive.onward').show();
 				$('div.return-info').hide();
+				$('#map').customGMap('hideRoute');
+		 		$('#map').customGMap('showRoute', 1);
 			} else {
 				$('span.map-inactive.return').show();
 				$('div.onward-info').hide();
+				$('#map').customGMap('hideRoute');
+		 		$('#map').customGMap('showRoute', 2);
 			}
 		
 		});
@@ -248,6 +252,7 @@
 	    	$('.result-table.return tr.tripDetails').removeClass('choose');
 			 if($(this).is(':checked')){
 				$(this).closest('tr').addClass('choose');
+				getLatitudeList($(this));
 			 } 		
 	    	checkChecked001();
 		});
@@ -305,17 +310,19 @@
 						waypoints.push({latitude : loop[i]['latitude'], longitude : loop[i]['longitude']}); 
 					}
 					if(className == 'chb-out') {
-					$('#map').customGMap('addRoute', {
-				        routeId : 1,
-				        waypoints : waypoints });
+						$('#map').customGMap('addRoute', {
+				       	 	routeId : 1,
+				        	waypoints : waypoints });
 					//console.log($('#map').data('routes')[1].waypoints);
-					 $('#map').customGMap('showRoute', 1);
+							/* $('#map').customGMap('hideRoute');
+					 		$('#map').customGMap('showRoute', 1); */
 					} else {
 						$('#map').customGMap('addRoute', {
 					        routeId : 2,
 					        waypoints : waypoints });
-						//console.log($('#map').data('routes')[1].waypoints);
-						 $('#map').customGMap('showRoute', 2);
+					//console.log($('#map').data('routes')[1].waypoints);
+							$('#map').customGMap('hideRoute');
+							$('#map').customGMap('showRoute', 2);
 					}
 				}
 			});
