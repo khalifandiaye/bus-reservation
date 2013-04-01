@@ -35,7 +35,7 @@ public class AvailBusAction extends BaseAction {
 	public String execute() {
 		try {
 			Date startDate = FormatUtils.deFormatDate(departureTime,
-					"yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US,
+					"HH:mm - dd/MM/yyyy", CommonConstant.LOCALE_US,
 					CommonConstant.DEFAULT_TIME_ZONE);
 
 			RouteBean routeBean = routeDAO.getById(routeId);

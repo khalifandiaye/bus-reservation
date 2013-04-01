@@ -64,7 +64,7 @@
 					$('#CreateScheduleDialog').modal();
 					$('#tripEditDialogLabel').html("Add New Schedule");
 					$("#tripDialogDepartureTimeDiv").datetimepicker({
-						format : "yyyy/mm/dd - hh:ii",
+						format : "hh:ii - dd/mm/yyyy",
 						autoclose : true,
 						todayBtn : true,
 						startDate : new Date(),
