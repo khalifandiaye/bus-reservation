@@ -45,7 +45,7 @@ public class SaveAction extends ActionSupport {
 	public String execute() {
 		try {
 			Date fromDate = FormatUtils.deFormatDate(tripDialogDepartureTime,
-					"yyyy/MM/dd - hh:mm", CommonConstant.LOCALE_US,
+					"hh:mm - dd/MM/yyyy", CommonConstant.LOCALE_US,
 					CommonConstant.DEFAULT_TIME_ZONE);
 			BusBean busBean = busDAO.getById(tripDialogBusPlate);
 			List<RouteDetailsBean> routeDetailsList = routeDAO.getById(
