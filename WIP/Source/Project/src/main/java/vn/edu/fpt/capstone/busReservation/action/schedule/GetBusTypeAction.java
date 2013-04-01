@@ -19,16 +19,18 @@ public class GetBusTypeAction extends BaseAction {
 	private int routeId;
 	private BusTypeDAO busTypeDAO;
 	private List<BusTypeInfo> busTypeInfos = new ArrayList<BusTypeInfo>();
-	
+
 	@Action(value = "/busTypes", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
 		// type of bus which has defined price
 		List<Object[]> busTypeObjects = busTypeDAO.getBusTypesInRoute(routeId);
 		for (Object[] objects : busTypeObjects) {
-		   BusTypeInfo busTypeInfo = new BusTypeInfo();
-		   busTypeInfo.setId((Integer) objects[0]);
-		   busTypeInfo.setType((String) objects[1]);
-		   busTypeInfos.add(busTypeInfo);
+			if (objects[0] != null && objects[1] != null) {
+				BusTypeInfo busTypeInfo = new BusTypeInfo();
+				busTypeInfo.setId((Integer) objects[0]);
+				busTypeInfo.setType((String) objects[1]);
+				busTypeInfos.add(busTypeInfo);
+			}
 		}
 		return SUCCESS;
 	}
@@ -41,12 +43,12 @@ public class GetBusTypeAction extends BaseAction {
 		this.busTypeDAO = busTypeDAO;
 	}
 
-   public List<BusTypeInfo> getBusTypeInfos() {
-      return busTypeInfos;
-   }
+	public List<BusTypeInfo> getBusTypeInfos() {
+		return busTypeInfos;
+	}
 
-   public void setBusTypeInfos(List<BusTypeInfo> busTypeInfos) {
-      this.busTypeInfos = busTypeInfos;
-   }
+	public void setBusTypeInfos(List<BusTypeInfo> busTypeInfos) {
+		this.busTypeInfos = busTypeInfos;
+	}
 
 }
