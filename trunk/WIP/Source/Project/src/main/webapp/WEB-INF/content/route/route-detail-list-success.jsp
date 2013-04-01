@@ -39,9 +39,6 @@ Date.prototype.toMyString = function () {
 	function validate(evt) {
 		var theEvent = evt || window.event;
 		var key = theEvent.keyCode || theEvent.which;
-		if (theEvent.keyCode != 0) {
-			return;
-		}
 		key = String.fromCharCode(key);
 		var regex = /[0-9]/;
 		if (!regex.test(key)) {
@@ -351,7 +348,7 @@ Date.prototype.toMyString = function () {
 			var busType = $("#busType").val();
 			$.ajax({
 				type : "GET",
-				url : 'getBusInRoute.html?routeId='+ routeId+ '&type=1',
+				url : 'getBusInRoute.html?routeId='+ routeId+ '&type=' + busType,
 						contentType : "application/x-www-form-urlencoded; charset=utf-8",
 				success : function(response) {
 					var busInRoute = response.busInRouteBeans;

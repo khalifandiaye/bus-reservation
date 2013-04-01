@@ -68,7 +68,7 @@ public class RouteDetailListAction extends ActionSupport {
 		if (routeBean.getStatus().equals("active")) {
 			active = true;
 		}
-		segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
+		//segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
 		busTypes = busTypeDAO.getAll();
 
 		long delayTime = (long) systemSettingDAO.getStationDelayTime() * 60 * 1000;

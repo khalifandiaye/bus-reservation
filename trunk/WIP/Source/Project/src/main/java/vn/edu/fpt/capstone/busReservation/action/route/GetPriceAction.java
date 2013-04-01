@@ -37,6 +37,7 @@ public class GetPriceAction extends BaseAction {
 					new TypeReference<SegmentAddInfo>() {
 					});
 			List<SegmentInfo> segmentInfos = segmentAddInfo.getSegments();
+
 			Date validDate = FormatUtils.deFormatDate(
 					segmentAddInfo.getValidDate(), "dd/MM/yyyy",
 					CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
@@ -56,7 +57,8 @@ public class GetPriceAction extends BaseAction {
 					tariffInfos.add(tariffInfo);
 				}
 			}
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 		return SUCCESS;
 	}
 
