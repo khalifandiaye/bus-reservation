@@ -299,6 +299,7 @@ $(document).ready(function() {
                 loadAndShowRoute(routeId, true);
             }
         }
+        checkChecked002();
     });
     
     function loadAndShowRoute(routeId, show) {
@@ -404,6 +405,16 @@ $(document).ready(function() {
     function checkChecked001() {
         if ($unique.filter(':checked').size() == 0
                 && $uniqueRet.filter(':checked').size() == 0) {
+            $('#confirm-submit').attr("disabled", "disabled");
+            $('#confirm-submit').removeClass('btn-primary');
+        } else {
+            $('#confirm-submit').removeAttr("disabled");
+            $('#confirm-submit').addClass('btn-primary');
+        }
+    }
+    function checkChecked002() {
+        if ($('form input[name="out_journey"]:checked').size() == 0
+                && $('form input[name="rtn_journey"]:checked').size() == 0) {
             $('#confirm-submit').attr("disabled", "disabled");
             $('#confirm-submit').removeClass('btn-primary');
         } else {
@@ -585,5 +596,5 @@ $(document).ready(function() {
 //        getLatitudeList($($('table.' + headerName
 //                + ' tr.tripDetails #rtn_journey')[0]));
     }
-
+    checkChecked002();
 });
