@@ -328,5 +328,13 @@ public class GenericDAO<K extends Serializable, T extends AbstractBean<K>> {
             log.debug("The database transaction has been comnitted somewhere else");
         }
     }
+    
+    /**
+     * Commit the current transaction and start a new one
+     */
+    public void completeTransaction() {
+        endTransaction();
+        startTransaction();
+    }
 
 }
