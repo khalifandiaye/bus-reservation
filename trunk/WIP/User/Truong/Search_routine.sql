@@ -21,20 +21,23 @@ SELECT  dept.bus_status_id,
 		arrv.station_address 			AS arrival_station_address,
 		arrv.arrival_time,
         SUM(trff.fare) * PSSGR_NO 		AS fare,
-		rmst.number_of_remained_seats 	AS remained_seats
+		rmst.number_of_remained_seats 	AS remained_seats,
+		dept.route_id					AS route	
 FROM   
 	-- departure trip information
 	    (SELECT dtrp.bus_status_id,
 				ddtl.city_name,
 			 	ddtl.station_name, 
 				ddtl.station_address,
-				dtrp.departure_time
+				dtrp.departure_time,
+				ddtl.route_id
          FROM trip dtrp
            INNER JOIN
 			 (SELECT drdt.id      AS route_details_id,
 				     dsta.name    AS station_name,
 			 		 dcty.name    AS city_name,                               			
-					 dsta.address AS station_address
+					 dsta.address AS station_address,
+					 drou.id	  AS route_id
 			  FROM   route_details drdt
 				INNER JOIN route    drou ON drou.id = drdt.route_id
 				INNER JOIN segment  dseg ON dseg.id = drdt.segment_id        			
