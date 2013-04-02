@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="s" uri="/struts-tags" %>
+<thead>
 <tr class="outward head-tbl-inf row">
 	<th class="head outward departs">Giờ đi</th>
 	<th class="head outward arrive">Giờ đến</th>
@@ -9,3 +10,4 @@
 	<th class="head outward remained">Số ghế trống</th>
 	<th class="head outward select bookingHeader"></th>
 </tr>
+</thead>
