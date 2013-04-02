@@ -38,7 +38,7 @@ CREATE TABLE `bus` (
   CONSTRAINT `bus_assigned_route_forward_id` FOREIGN KEY (`assigned_route_forward_id`) REFERENCES `route` (`id`),
   CONSTRAINT `bus_assigned_route_return_id` FOREIGN KEY (`assigned_route_return_id`) REFERENCES `route` (`id`),
   CONSTRAINT `bus_bus_type_id` FOREIGN KEY (`bus_type_id`) REFERENCES `bus_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +47,7 @@ CREATE TABLE `bus` (
 
 LOCK TABLES `bus` WRITE;
 /*!40000 ALTER TABLE `bus` DISABLE KEYS */;
-INSERT INTO `bus` VALUES (1,1,'1111-1111',3,4,'active'),(2,2,'2222-2222',NULL,NULL,'active'),(3,1,'47H1-123.45',3,4,'active'),(4,1,'59F1-123.45',3,4,'active');
+INSERT INTO `bus` VALUES (1,1,'1111-1111',3,4,'active'),(2,2,'2222-2222',NULL,NULL,'inactive'),(3,1,'47H1-123.45',3,4,'active'),(4,1,'59F1-123.45',3,4,'active'),(5,2,'nam1',NULL,NULL,'inactive'),(6,2,'nam2',3,4,'active'),(7,2,'nam3',3,4,'active'),(8,2,'nam4',3,4,'active');
 /*!40000 ALTER TABLE `bus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,7 +88,7 @@ CREATE TABLE `bus_status` (
   KEY `bus_status_end_station_id_idx` (`end_station_id`),
   CONSTRAINT `bus_status_bus_id` FOREIGN KEY (`bus_id`) REFERENCES `bus` (`id`),
   CONSTRAINT `bus_status_end_station_id` FOREIGN KEY (`end_station_id`) REFERENCES `station` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +97,7 @@ CREATE TABLE `bus_status` (
 
 LOCK TABLES `bus_status` WRITE;
 /*!40000 ALTER TABLE `bus_status` DISABLE KEYS */;
-INSERT INTO `bus_status` VALUES (14,1,'initiation','2013-03-30 10:50:26','2013-03-30 10:50:26',8,'active'),(15,3,'initiation','2013-03-30 10:50:26','2013-03-30 10:50:26',8,'active'),(16,4,'initiation','2013-03-30 10:50:26','2013-03-30 10:50:26',8,'active'),(17,1,'ontrip','2013-03-31 11:10:00','2013-04-01 15:20:00',8,'active'),(18,3,'ontrip','2013-04-01 11:10:00','2013-04-02 15:20:00',8,'active');
+INSERT INTO `bus_status` VALUES (14,1,'initiation','2013-03-30 10:50:26','2013-03-30 10:50:26',8,'active'),(15,3,'initiation','2013-03-30 10:50:26','2013-03-30 10:50:26',8,'active'),(16,4,'initiation','2013-03-30 10:50:26','2013-03-30 10:50:26',8,'active'),(17,1,'ontrip','2013-03-31 11:10:00','2013-04-01 15:20:00',8,'active'),(18,3,'ontrip','2013-04-01 11:10:00','2013-04-02 15:20:00',8,'active'),(19,6,'initiation','2013-04-01 07:42:32','2013-04-01 07:42:32',8,'active'),(20,7,'initiation','2013-04-01 07:42:32','2013-04-01 07:42:32',8,'active'),(21,6,'ontrip','2013-04-03 00:00:00','2013-04-04 04:10:00',3,'active'),(22,6,'ontrip','2013-04-07 00:00:00','2013-04-08 02:20:00',8,'active'),(23,6,'ontrip','2013-04-08 04:00:00','2013-04-09 08:10:00',3,'active'),(24,7,'ontrip','2013-04-02 08:10:00','2013-04-03 12:20:00',3,'active'),(25,7,'ontrip','2013-04-03 13:00:00','2013-04-04 15:20:00',8,'active'),(26,7,'ontrip','2013-04-05 09:00:00','2013-04-06 13:10:00',3,'active'),(27,7,'ontrip','2013-04-06 14:00:00','2013-04-07 16:20:00',8,'active'),(28,4,'initiation','2013-04-01 10:02:05','2013-04-01 10:02:05',8,'active'),(29,8,'initiation','2013-04-01 10:03:11','2013-04-01 10:03:11',8,'active'),(30,7,'ontrip','2013-06-01 10:00:00','2013-06-02 21:31:00',3,'active'),(31,8,'ontrip','2013-05-01 01:00:00','2013-05-02 12:31:00',3,'active'),(32,8,'ontrip','2013-05-01 01:00:00','2013-05-02 12:31:00',3,'active');
 /*!40000 ALTER TABLE `bus_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -231,7 +231,7 @@ CREATE TABLE `payment` (
   KEY `payment_payment_method_id_idx` (`payment_method_id`),
   CONSTRAINT `payment_payment_method_id` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_method` (`id`),
   CONSTRAINT `payment_reservation_id` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -306,7 +306,7 @@ CREATE TABLE `reservation` (
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `reservation_booker_id_idx` (`user_id`),
   CONSTRAINT `reservation_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1129 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -387,7 +387,7 @@ CREATE TABLE `route` (
   `name` varchar(45) DEFAULT NULL,
   `status` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -396,7 +396,7 @@ CREATE TABLE `route` (
 
 LOCK TABLES `route` WRITE;
 /*!40000 ALTER TABLE `route` DISABLE KEYS */;
-INSERT INTO `route` VALUES (3,'Hà N?i - TP. H? Chí Minh','active'),(4,'TP. H? Chí Minh - Hà N?i','active'),(5,'Thanh Hoá - Ngh? An','active'),(6,'Ngh? An - Thanh Hoá','active'),(7,'Qu?ng Bình - Th?a Thiên Hu?','active'),(8,'Th?a Thiên Hu? - Qu?ng Bình','active'),(9,'L?ng S?n - Lào Cai','active'),(10,'Lào Cai - L?ng S?n','active');
+INSERT INTO `route` VALUES (3,'Hà Nội - TP. Hồ Chí Minh','active'),(4,'TP. Hồ Chí Minh - Hà Nội','active'),(5,'Thanh Hoá - Ngh? An','inactive'),(6,'Ngh? An - Thanh Hoá','inactive'),(7,'Quảng Bình - Thừa Thiên Huế','active'),(8,'Thừa Thiên Huế - Quảng Bình','active'),(9,'Lạng Sơn - Lào Cai','active'),(10,'Lào Cai - Lạng Sơn','active'),(11,'Thanh Hoá - Th?a Thiên Hu?','active'),(12,'Th?a Thiên Hu? - Thanh Hoá','active'),(13,'Hà N?i - Qu?ng Bình','active'),(14,'Qu?ng Bình - Hà N?i','active');
 /*!40000 ALTER TABLE `route` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -417,7 +417,7 @@ CREATE TABLE `route_details` (
   KEY `segment_in_route_segment_id_idx` (`segment_id`),
   CONSTRAINT `segment_in_route_route_id` FOREIGN KEY (`route_id`) REFERENCES `route` (`id`),
   CONSTRAINT `segment_in_route_segment_id` FOREIGN KEY (`segment_id`) REFERENCES `segment` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -426,7 +426,7 @@ CREATE TABLE `route_details` (
 
 LOCK TABLES `route_details` WRITE;
 /*!40000 ALTER TABLE `route_details` DISABLE KEYS */;
-INSERT INTO `route_details` VALUES (21,22,3),(22,23,3),(23,24,3),(24,25,4),(25,26,4),(26,27,4),(27,28,5),(28,29,6),(29,30,7),(30,31,8),(31,32,9),(32,33,10);
+INSERT INTO `route_details` VALUES (21,22,3),(35,22,13),(22,23,3),(33,23,11),(23,24,3),(24,25,4),(25,26,4),(34,26,12),(26,27,4),(42,27,14),(27,28,5),(36,28,13),(28,29,6),(41,29,14),(29,30,7),(30,31,8),(31,32,9),(32,33,10),(37,34,13),(38,35,13),(39,36,14),(40,37,14);
 /*!40000 ALTER TABLE `route_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -540,7 +540,7 @@ CREATE TABLE `segment` (
   KEY `segment_depart_station_id_idx` (`arrival_station_id`),
   CONSTRAINT `segment_arrive_station_id` FOREIGN KEY (`departure_station_id`) REFERENCES `station` (`id`),
   CONSTRAINT `segment_depart_station_id` FOREIGN KEY (`arrival_station_id`) REFERENCES `station` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -549,7 +549,7 @@ CREATE TABLE `segment` (
 
 LOCK TABLES `segment` WRITE;
 /*!40000 ALTER TABLE `segment` DISABLE KEYS */;
-INSERT INTO `segment` VALUES (25,3,7),(24,7,3),(26,7,29),(31,7,30),(22,8,29),(33,9,10),(32,10,9),(29,28,29),(23,29,7),(27,29,8),(28,29,28),(30,30,7);
+INSERT INTO `segment` VALUES (37,1,28),(35,1,30),(25,3,7),(24,7,3),(26,7,29),(31,7,30),(22,8,29),(33,9,10),(32,10,9),(34,28,1),(29,28,29),(23,29,7),(27,29,8),(28,29,28),(36,30,1),(30,30,7);
 /*!40000 ALTER TABLE `segment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -568,7 +568,7 @@ CREATE TABLE `segment_travel_time` (
   PRIMARY KEY (`id`),
   KEY `segment_travel_time_segment_id_idx` (`segment_id`),
   CONSTRAINT `segment_travel_time_segment_id` FOREIGN KEY (`segment_id`) REFERENCES `segment` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -577,7 +577,7 @@ CREATE TABLE `segment_travel_time` (
 
 LOCK TABLES `segment_travel_time` WRITE;
 /*!40000 ALTER TABLE `segment_travel_time` DISABLE KEYS */;
-INSERT INTO `segment_travel_time` VALUES (1,22,27000000,'2013-03-30 09:57:58'),(2,23,17400000,'2013-03-30 09:57:58'),(3,24,53400000,'2013-03-30 09:57:58'),(4,25,53400000,'2013-03-30 09:57:58'),(5,26,17400000,'2013-03-30 09:57:58'),(6,27,27000000,'2013-03-30 09:57:58'),(7,28,7200000,'2013-03-30 10:46:46'),(8,29,7200000,'2013-03-30 10:46:46'),(9,30,16200000,'2013-03-30 11:12:27'),(10,31,16200000,'2013-03-30 11:12:27'),(11,32,25200000,'2013-03-30 11:19:02'),(12,33,25200000,'2013-03-30 11:19:02');
+INSERT INTO `segment_travel_time` VALUES (1,22,27000000,'2013-03-30 09:57:58'),(2,23,17400000,'2013-03-30 09:57:58'),(3,24,53400000,'2013-03-30 09:57:58'),(4,25,53400000,'2013-03-30 09:57:58'),(5,26,17400000,'2013-03-30 09:57:58'),(6,27,27000000,'2013-03-30 09:57:58'),(7,28,7200000,'2013-03-30 10:46:46'),(8,29,7200000,'2013-03-30 10:46:46'),(9,30,16200000,'2013-03-30 11:12:27'),(10,31,16200000,'2013-03-30 11:12:27'),(11,32,25200000,'2013-03-30 11:19:02'),(12,33,25200000,'2013-03-30 11:19:02'),(13,26,10800000,'2013-04-04 00:00:00'),(14,26,10800000,'2013-04-04 00:00:00'),(15,26,40260000,'2013-04-16 00:00:00'),(16,26,40260000,'2013-04-16 00:00:00'),(17,26,43860000,'2013-04-16 00:00:00'),(18,23,43860000,'2013-04-16 00:00:00'),(19,34,21600000,'2013-04-01 10:31:07'),(20,35,4920000,'2013-04-01 10:31:07'),(21,36,4920000,'2013-04-01 10:31:07'),(22,37,21600000,'2013-04-01 10:31:07'),(23,37,11520000,'2013-04-04 00:00:00'),(24,34,11520000,'2013-04-04 00:00:00'),(25,37,10800000,'2013-04-02 00:00:00'),(26,34,10800000,'2013-04-02 00:00:00');
 /*!40000 ALTER TABLE `segment_travel_time` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -653,7 +653,7 @@ CREATE TABLE `tariff` (
   KEY `tariff_bus_type_id_idx` (`bus_type_id`),
   CONSTRAINT `tariff_bus_type_id` FOREIGN KEY (`bus_type_id`) REFERENCES `bus_type` (`id`),
   CONSTRAINT `tariff_segment_id` FOREIGN KEY (`segment_id`) REFERENCES `segment` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -662,7 +662,7 @@ CREATE TABLE `tariff` (
 
 LOCK TABLES `tariff` WRITE;
 /*!40000 ALTER TABLE `tariff` DISABLE KEYS */;
-INSERT INTO `tariff` VALUES (28,22,1,'2013-03-30 00:00:00',500),(29,23,1,'2013-03-30 00:00:00',300),(30,24,1,'2013-03-30 00:00:00',200),(31,25,1,'2013-03-30 00:00:00',200),(32,26,1,'2013-03-30 00:00:00',300),(33,27,1,'2013-03-30 00:00:00',500),(34,22,2,'2013-03-30 00:00:00',213),(35,23,2,'2013-03-30 00:00:00',344),(36,24,2,'2013-03-30 00:00:00',453),(37,25,2,'2013-03-30 00:00:00',453),(38,26,2,'2013-03-30 00:00:00',344),(39,27,2,'2013-03-30 00:00:00',213);
+INSERT INTO `tariff` VALUES (28,22,1,'2013-03-30 00:00:00',500),(29,23,1,'2013-03-30 00:00:00',300),(30,24,1,'2013-03-30 00:00:00',200),(31,25,1,'2013-03-30 00:00:00',200),(32,26,1,'2013-03-30 00:00:00',300),(33,27,1,'2013-03-30 00:00:00',500),(34,22,2,'2013-03-30 00:00:00',213),(35,23,2,'2013-03-30 00:00:00',344),(36,24,2,'2013-03-30 00:00:00',453),(37,25,2,'2013-03-30 00:00:00',453),(38,26,2,'2013-03-30 00:00:00',344),(39,27,2,'2013-03-30 00:00:00',213),(40,25,1,'2013-04-23 00:00:00',211),(41,26,1,'2013-04-23 00:00:00',322),(42,27,1,'2013-04-23 00:00:00',121),(43,22,1,'2013-04-23 00:00:00',121),(44,23,1,'2013-04-23 00:00:00',322),(45,24,1,'2013-04-23 00:00:00',211),(46,22,1,'2013-04-16 00:00:00',444),(47,23,1,'2013-04-16 00:00:00',444),(48,24,1,'2013-04-16 00:00:00',444),(49,25,1,'2013-04-16 00:00:00',444),(50,26,1,'2013-04-16 00:00:00',444),(51,27,1,'2013-04-16 00:00:00',444);
 /*!40000 ALTER TABLE `tariff` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -698,7 +698,7 @@ CREATE TABLE `ticket` (
   PRIMARY KEY (`id`),
   KEY `ticket_reservation_id_idx` (`reservation_id`),
   CONSTRAINT `ticket_reservation_id` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1430 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -728,7 +728,7 @@ CREATE TABLE `trip` (
   KEY `trip_segment_in_route_id_idx` (`route_details_id`),
   CONSTRAINT `trip_bus_status_id` FOREIGN KEY (`bus_status_id`) REFERENCES `bus_status` (`id`),
   CONSTRAINT `trip_segment_in_route_id` FOREIGN KEY (`route_details_id`) REFERENCES `route_details` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -737,7 +737,7 @@ CREATE TABLE `trip` (
 
 LOCK TABLES `trip` WRITE;
 /*!40000 ALTER TABLE `trip` DISABLE KEYS */;
-INSERT INTO `trip` VALUES (77,17,24,'2013-03-31 11:10:00','2013-04-01 02:00:00'),(78,17,25,'2013-04-01 02:30:00','2013-04-01 07:20:00'),(79,17,26,'2013-04-01 07:50:00','2013-04-01 15:20:00'),(80,18,24,'2013-04-01 11:10:00','2013-04-02 02:00:00'),(81,18,25,'2013-04-02 02:30:00','2013-04-02 07:20:00'),(82,18,26,'2013-04-02 07:50:00','2013-04-02 15:20:00');
+INSERT INTO `trip` VALUES (77,17,24,'2013-03-31 11:10:00','2013-04-01 02:00:00'),(78,17,25,'2013-04-01 02:30:00','2013-04-01 07:20:00'),(79,17,26,'2013-04-01 07:50:00','2013-04-01 15:20:00'),(80,18,24,'2013-04-01 11:10:00','2013-04-02 02:00:00'),(81,18,25,'2013-04-02 02:30:00','2013-04-02 07:20:00'),(82,18,26,'2013-04-02 07:50:00','2013-04-02 15:20:00'),(83,21,21,'2013-04-03 00:00:00','2013-04-03 07:30:00'),(84,21,22,'2013-04-03 08:00:00','2013-04-03 12:50:00'),(85,21,23,'2013-04-03 13:20:00','2013-04-04 04:10:00'),(86,22,24,'2013-04-07 00:00:00','2013-04-07 14:50:00'),(87,22,25,'2013-04-07 15:20:00','2013-04-07 18:20:00'),(88,22,26,'2013-04-07 18:50:00','2013-04-08 02:20:00'),(89,23,21,'2013-04-08 04:00:00','2013-04-08 11:30:00'),(90,23,22,'2013-04-08 12:00:00','2013-04-08 16:50:00'),(91,23,23,'2013-04-08 17:20:00','2013-04-09 08:10:00'),(92,24,21,'2013-04-02 08:10:00','2013-04-02 15:40:00'),(93,24,22,'2013-04-02 16:10:00','2013-04-02 21:00:00'),(94,24,23,'2013-04-02 21:30:00','2013-04-03 12:20:00'),(95,25,24,'2013-04-03 13:00:00','2013-04-04 03:50:00'),(96,25,25,'2013-04-04 04:20:00','2013-04-04 07:20:00'),(97,25,26,'2013-04-04 07:50:00','2013-04-04 15:20:00'),(98,26,21,'2013-04-05 09:00:00','2013-04-05 16:30:00'),(99,26,22,'2013-04-05 17:00:00','2013-04-05 21:50:00'),(100,26,23,'2013-04-05 22:20:00','2013-04-06 13:10:00'),(101,27,24,'2013-04-06 14:00:00','2013-04-07 04:50:00'),(102,27,25,'2013-04-07 05:20:00','2013-04-07 08:20:00'),(103,27,26,'2013-04-07 08:50:00','2013-04-07 16:20:00'),(104,30,21,'2013-06-01 10:00:00','2013-06-01 17:30:00'),(105,30,22,'2013-06-01 18:00:00','2013-06-02 06:11:00'),(106,30,23,'2013-06-02 06:41:00','2013-06-02 21:31:00'),(107,31,21,'2013-05-01 01:00:00','2013-05-01 08:30:00'),(108,31,22,'2013-05-01 09:00:00','2013-05-01 21:11:00'),(109,31,23,'2013-05-01 21:41:00','2013-05-02 12:31:00'),(110,32,21,'2013-05-01 01:00:00','2013-05-01 08:30:00'),(111,32,22,'2013-05-01 09:00:00','2013-05-01 21:11:00'),(112,32,23,'2013-05-01 21:41:00','2013-05-02 12:31:00');
 /*!40000 ALTER TABLE `trip` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1012,18 +1012,20 @@ DELIMITER ;;
 							  IN ARRV_CITY INT,
 							  IN DEPT_DATE VARCHAR(10),
 							  IN PSSGR_NO INT,
-                              IN BUS_TYPE INT)
+                              IN BUS_TYPE INT,
+							  IN MIN_DATE VARCHAR(20))
 BEGIN
 SELECT  dept.bus_status_id,
-		dept.city_name       		AS departure_city,
-	    dept.station_name    		AS departure_station_name,
-	    dept.station_address 		AS departure_station_address,
+		dept.city_name       			AS departure_city,
+	    dept.station_name    			AS departure_station_name,
+	    dept.station_address 			AS departure_station_address,
         dept.departure_time,
-		arrv.city_name       		AS arrival_city,
-        arrv.station_name    		AS arrival_station_name,
-		arrv.station_address 		AS arrival_station_address,
+		arrv.city_name       			AS arrival_city,
+        arrv.station_name    			AS arrival_station_name,
+		arrv.station_address 			AS arrival_station_address,
 		arrv.arrival_time,
-        SUM(trff.fare) * PSSGR_NO 	AS fare
+        SUM(trff.fare) * PSSGR_NO 		AS fare,
+		rmst.number_of_remained_seats 	AS remained_seats
 FROM   
 	-- departure trip information
 	    (SELECT dtrp.bus_status_id,
@@ -1047,7 +1049,8 @@ FROM
 		 WHERE DATE(dtrp.departure_time) >= SUBDATE(DATE(DEPT_DATE), INTERVAL 3 DAY)
 		   AND DATE(dtrp.departure_time) <= ADDDATE(DATE(DEPT_DATE), INTERVAL 3 DAY)
 			-- DATE(dtrp.departure_time) = DATE(DEPT_DATE)
-		   AND DATE(dtrp.departure_time) >= ADDDATE(NOW(), INTERVAL 30 MINUTE)) dept
+		    -- AND DATE(dtrp.departure_time) >= ADDDATE(NOW(), INTERVAL 30 MINUTE)
+		   AND dtrp.departure_time >= cast(MIN_DATE as datetime)) dept
 	INNER JOIN	 
 	-- arrival trip information
         (SELECT atrp.bus_status_id,
@@ -1094,7 +1097,7 @@ WHERE   -- departure date is in range of valid fare dates
 								   ttrf.segment_id = trff.segment_id) AND
         rmst.number_of_remained_seats >= PSSGR_NO
 GROUP BY ftrp.bus_status_id
-ORDER BY dept.departure_time ASC;
+ORDER BY dept.departure_time ASC, rmst.number_of_remained_seats ASC;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1282,4 +1285,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-03-30 11:23:28
+-- Dump completed on 2013-04-02 19:57:51
