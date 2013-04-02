@@ -127,7 +127,7 @@ public class Pay01030Action extends BaseAction {
         try {
             paymentLogic.sendReservationCompleteMail(reservationInfo.getId(),
                     servletRequest.getContextPath());
-        } catch (CommonException e) {
+        } catch (Exception e) {
             errorProcessing(new CommonException("msgerrcm003", e), false);
         }
 
