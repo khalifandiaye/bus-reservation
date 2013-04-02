@@ -394,6 +394,12 @@ public class PaymentLogic extends BaseLogic {
         }
     }
 
+    public void doRefund(int reservationId, int userId) throws HibernateException, CommonException {
+        savePayment(reservationId, doPaypalRefund(reservationId), 0,
+                PaymentType.REFUND);
+        paymentDAO.completeTransaction();
+    }
+
     /**
      * @param reservation
      *            reservation information
@@ -642,6 +648,7 @@ public class PaymentLogic extends BaseLogic {
             // unimplemented payment method
             throw new CommonException("msgerrrs007");
         }
+        paymentDAO.completeTransaction();
     }
 
     public GetExpressCheckoutDetailsResponseType getPaypalExpressCheckoutDetails(
