@@ -9,10 +9,9 @@ import org.apache.struts2.convention.annotation.Result;
 import org.hibernate.HibernateException;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
-import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean.PaymentType;
-import vn.edu.fpt.capstone.busReservation.displayModel.PaymentDetails;
 import vn.edu.fpt.capstone.busReservation.displayModel.RefundInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
+import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
@@ -186,7 +185,7 @@ public class PayJSONAction extends BaseAction {
             "excludeProperties", "reservationInfo", "callbackParameter",
             "callback" }) })
     public String cancelReservation() {
-        PaymentDetails refundDetails = null;
+        int userId = 0;
         if (CheckUtils.isNullOrBlank(reservationId)) {
             // TODO handle error
             errorMessage = getText("msgerrcm000");
@@ -198,20 +197,24 @@ public class PayJSONAction extends BaseAction {
             LOG.error("msgerrcm000");
             return SUCCESS;
         }
+        Object user = null;
+        if (session != null
+                && session.containsKey(CommonConstant.SESSION_KEY_USER)) {
+            user = session.get(CommonConstant.SESSION_KEY_USER);
+            if (User.class.isAssignableFrom(user.getClass())) {
+                userId = ((User) user).getUserId();
+            } else {
+                // wrong object on session
+                session.remove(CommonConstant.SESSION_KEY_USER);
+            }
+        }
         try {
-            refundDetails = paymentLogic.doPaypalRefund(Integer
-                    .parseInt(reservationId));
-            paymentLogic.savePayment(Integer.parseInt(reservationId),
-                    refundDetails, 0, PaymentType.REFUND);
+            paymentLogic.doRefund(Integer.parseInt(reservationId), userId);
             cancelConfirmMessage = getText("message.cancelSuccess");
-        } catch (CommonException e) {
-            errorProcessing(e);
+        } catch (Exception e) {
+            errorProcessing(e, true);
             errorMessage = getActionErrors().iterator().next();
             return SUCCESS;
-        } catch (HibernateException e) {
-            // TODO error processing
-            genericDatabaseErrorProcess(e);
-            return ERROR;
         }
         try {
             paymentLogic.sendCancelReservationMail(
