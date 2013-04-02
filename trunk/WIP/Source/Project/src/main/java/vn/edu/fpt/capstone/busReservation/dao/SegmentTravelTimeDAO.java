@@ -50,5 +50,25 @@ public class SegmentTravelTimeDAO extends
 		}
 		return result;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<SegmentTravelTimeBean> getExistDuration(int segmentId, Date validDate) {
+		List<SegmentTravelTimeBean> result = new ArrayList<SegmentTravelTimeBean>();
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			String queryString = "FROM SegmentTravelTimeBean t WHERE t.segment.id = :segmentId AND " +
+					"t.validFrom = :validDate";
+			Query query = session.createQuery(queryString);
+			query.setParameter("segmentId", segmentId);
+			query.setParameter("validDate", validDate);
+			result = query.list();
+			// commit transaction
+			// session.getTransaction().commit();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		// return result, if needed
+		return result;
+	}
 
 }

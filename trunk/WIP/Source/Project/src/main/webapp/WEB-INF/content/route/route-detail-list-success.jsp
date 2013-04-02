@@ -716,6 +716,7 @@ Date.prototype.toMyString = function () {
          <button id="editPriceSave" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Save</button>
       </div>
    </div>
+   
    <!-- Modal add new schedule-->
    <div id="CreateScheduleDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true">

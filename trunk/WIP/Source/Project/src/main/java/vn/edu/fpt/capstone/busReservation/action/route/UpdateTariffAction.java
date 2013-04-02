@@ -55,8 +55,7 @@ public class UpdateTariffAction extends BaseAction {
 	public String execute() {
 		try {
 			TariffUpdateInfo tariffUpdateInfo = mapper.readValue(data,
-					new TypeReference<TariffUpdateInfo>() {
-					});
+					new TypeReference<TariffUpdateInfo>() {});
 			List<TariffInfo> tariffInfos = tariffUpdateInfo.getTariffs();
 			
 			int routeId = tariffUpdateInfo.getRouteId();
