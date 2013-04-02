@@ -35,35 +35,61 @@ public class SaveSegmentAction extends BaseAction {
 	@Action(value = "/saveSegment", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
 		try {
+			Date validDate = DateUtils.string2Date(validFromTime, "dd/MM/yyyy",
+					CommonConstant.LOCALE_VN, CommonConstant.DEFAULT_TIME_ZONE);
+			String[] travelTime = duration.split(":");
+			long dtravelTime = DateUtils.getTime(
+					Integer.parseInt(travelTime[0]),
+					Integer.parseInt(travelTime[1]), 0);
 			SegmentBean segmentForward = segmentDAO.getById(segmentId);
-			
-			List<SegmentTravelTimeBean> segmentTravelTimeBeans = new ArrayList<SegmentTravelTimeBean>();
-			SegmentTravelTimeBean segmentTravelTimeBeanForward = new SegmentTravelTimeBean();
-			segmentTravelTimeBeanForward.setSegment(segmentForward);
-			segmentTravelTimeBeans.add(segmentTravelTimeBeanForward);
-			//Add new duration for return segment
 			SegmentBean segmentReturn = (segmentDAO.getDuplicatedSegment(
-					segmentForward.getStartAt().getId(), segmentForward
-							.getEndAt().getId())).get(0);
-			SegmentTravelTimeBean segmentTravelTimeBeanReturn = new SegmentTravelTimeBean();
-			segmentTravelTimeBeanReturn.setSegment(segmentReturn);
-			segmentTravelTimeBeans.add(segmentTravelTimeBeanReturn);
-			
-			for (SegmentTravelTimeBean segmentTravelTimeBean : segmentTravelTimeBeans) {
-				Date validDate = DateUtils.string2Date(validFromTime,
-						"dd/MM/yyyy", CommonConstant.LOCALE_VN,
-						CommonConstant.DEFAULT_TIME_ZONE);
-				segmentTravelTimeBean.setValidFrom(validDate);
+					segmentForward.getEndAt().getId(), segmentForward
+							.getStartAt().getId())).get(0);
+			List<SegmentTravelTimeBean> segmentTravelTimeBeans = new ArrayList<SegmentTravelTimeBean>();
 
-				String[] travelTime = duration.split(":");
-				long dtravelTime = DateUtils.getTime(
-						Integer.parseInt(travelTime[0]),
-						Integer.parseInt(travelTime[1]), 0);
-				segmentTravelTimeBean.setTravelTime(dtravelTime);
-				segmentTravelTimeDAO.insert(segmentTravelTimeBean);
+			List<SegmentTravelTimeBean> dupTimeForwardBeans = segmentTravelTimeDAO
+					.getExistDuration(segmentId, validDate);
+
+			// update existed segment travel time with new duration
+			if (dupTimeForwardBeans.size() != 0) {
+				if (dupTimeForwardBeans.get(0).getTravelTime() != dtravelTime) {
+					// get duplicated duration for return travel time
+					List<SegmentTravelTimeBean> dupTimeReturnBeans = segmentTravelTimeDAO
+							.getExistDuration(segmentReturn.getId(), validDate);
+					segmentTravelTimeBeans.add(dupTimeForwardBeans.get(0));
+					segmentTravelTimeBeans.add(dupTimeReturnBeans.get(0));
+					for (SegmentTravelTimeBean segmentTravelTimeBean : segmentTravelTimeBeans) {
+						segmentTravelTimeBean.setTravelTime(dtravelTime);
+						segmentTravelTimeDAO.update(segmentTravelTimeBean);
+					}
+				}
 			}
+
+			// create new segment travel time bean
+			else {
+				SegmentTravelTimeBean segmentTravelTimeBeanForward = new SegmentTravelTimeBean();
+				segmentTravelTimeBeanForward.setSegment(segmentForward);				
+				// select return segment
+				SegmentTravelTimeBean segmentTravelTimeBeanReturn = new SegmentTravelTimeBean();
+				segmentTravelTimeBeanReturn.setSegment(segmentReturn);
+				
+				segmentTravelTimeBeans.add(segmentTravelTimeBeanForward);
+				segmentTravelTimeBeans.add(segmentTravelTimeBeanReturn);
+
+				for (SegmentTravelTimeBean segmentTravelTimeBean : segmentTravelTimeBeans) {
+					segmentTravelTimeBean.setValidFrom(validDate);
+					segmentTravelTimeBean.setTravelTime(dtravelTime);
+					segmentTravelTimeDAO.insert(segmentTravelTimeBean);
+				}
+			}
+			
+			setMessage("Update travel time for Segment"
+					+ segmentForward.getStartAt().getName() + " - "
+					+ segmentForward.getEndAt().getName() 
+					+ " success!");
+			
 		} catch (Exception ex) {
-			setMessage("Save saveSegment failed!");
+			setMessage("Save travel time for segment failed!");
 		}
 		return SUCCESS;
 	}

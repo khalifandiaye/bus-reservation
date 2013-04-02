@@ -102,59 +102,11 @@ public class SaveSegmentAction extends BaseAction {
 				Collections.reverse(segmentInfosFoward);
 				insertSegment(segmentInfosFoward, true);
 			}
-
-			// if (!isRouteExist(segmentInfosFoward)) {
-			// if (!segmentInfosFoward.isEmpty()) {
-			// insertSegment(segmentInfosFoward, false);
-			// Collections.reverse(segmentInfosFoward);
-			// insertSegment(segmentInfosFoward, true);
-			// }
-			// } else {
-			// message = "Route existed! Please verify again!";
-			// }
 		} catch (Exception e) {
 			message = "Error! Please contact admin!";
 		}
 		return SUCCESS;
 	}
-
-	// private boolean isRouteExist(List<SegmentInfo> segmentInfos) {
-	// Set<Integer> newStations = new HashSet<Integer>();
-	//
-	// for (SegmentInfo segmentInfo : segmentInfos) {
-	// newStations.add(segmentInfo.getStartAt());
-	// newStations.add(segmentInfo.getEndAt());
-	// }
-	//
-	// List<RouteBean> routeBeans = routeDAO.getAll();
-	// for (RouteBean routeBean : routeBeans) {
-	// List<RouteDetailsBean> segmentBeans = routeBean.getRouteDetails();
-	// Set<Integer> stations = new HashSet<Integer>();
-	// for (RouteDetailsBean routeDetailsBean : segmentBeans) {
-	// SegmentBean segmentBean = routeDetailsBean.getSegment();
-	// stations.add(segmentBean.getStartAt().getCity().getId());
-	// stations.add(segmentBean.getEndAt().getCity().getId());
-	// }
-	// if (stations.size() == newStations.size()
-	// && stations.containsAll(newStations)) {
-	// return true;
-	// }
-	// }
-	//
-	// return false;
-	// }
-
-	// private int getExistRoute(List<SegmentInfo> segmentInfos) {
-	// for (SegmentInfo segmentInfo : segmentInfos) {
-	// List<SegmentBean> segmentBeans = segmentDAO.getDuplicatedSegment(
-	// segmentInfo.getStartAt(), segmentInfo.getEndAt());
-	// if (segmentBeans.size() != 0){
-	//
-	// }
-	// }
-	//
-	// return 0;
-	// }
 
 	private void insertSegment(List<SegmentInfo> segmentInfos,
 			boolean isReturnRoute) throws ParseException {
