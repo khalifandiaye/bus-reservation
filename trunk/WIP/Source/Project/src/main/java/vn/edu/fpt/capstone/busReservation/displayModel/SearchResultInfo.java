@@ -23,6 +23,7 @@ public class SearchResultInfo implements Serializable{
 		private Date arrivalTime;
 		private double fare;
 		private int remainedSeats;
+		private int route;
 		/**
 		 * @return the busStatusId
 		 */
@@ -154,6 +155,18 @@ public class SearchResultInfo implements Serializable{
 		 */
 		public void setRemainedSeats(int remainedSeats) {
 			this.remainedSeats = remainedSeats;
+		}
+		/**
+		 * @return the route
+		 */
+		public int getRoute() {
+			return route;
+		}
+		/**
+		 * @param route the route to set
+		 */
+		public void setRoute(int route) {
+			this.route = route;
 		}
 		
 }
