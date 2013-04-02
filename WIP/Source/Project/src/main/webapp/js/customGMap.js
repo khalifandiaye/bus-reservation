@@ -516,15 +516,10 @@
         hideRoute : function(options) {
             return this.each(function() {
                 var map = $(this).data('map');
-                var markers = $(this).data('markers');
                 var directionsDisplay = $(this).data('directionsDisplay');
                 var routes = $(this).data('routes');
                 if (!map) {
                     logger.logError('No map');
-                    return;
-                }
-                if (!markers) {
-                    logger.logError('No markers');
                     return;
                 }
                 if (directionsDisplay) {
