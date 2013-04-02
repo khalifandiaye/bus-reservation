@@ -484,6 +484,7 @@
 		<property name="fare" column="fare" type="double" not-null="true" />
 		<property name="remainedSeats" column="remained_seats" type="int"
 			not-null="true" />
+		<property name="route" column="route" type="int" not-null="true" />
 	</class>
 	<sql-query name="callSearchTripsProcedure">
 		<return alias="searchResult"
@@ -500,6 +501,7 @@
 			<return-property name="arrivalTime" column="arrival_time" />
 			<return-property name="fare" column="fare" />
 			<return-property name="remainedSeats" column="remained_seats" />
+			<return-property name="route" column="route" />
 		</return>
 		<![CDATA[CALL search_trips(:deptCity, :arrvCity, :deptDate, :pssgrNo, :busType, :minDate);]]>
 	</sql-query>
