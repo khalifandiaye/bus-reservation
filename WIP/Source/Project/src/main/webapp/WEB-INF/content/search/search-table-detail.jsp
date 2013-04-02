@@ -25,7 +25,7 @@
 	<s:property value="remainedSeats"/>
 </td>	
 <td class="cell out-journey-rdo choose-item">
-		<input class="hidden" title="Chọn chuyến này" type="checkbox" name="out_journey"
+		<input class="" title="Chọn chuyến này" type="checkbox" name="out_journey"
 			id="out_journey" class="chb-out" />		
 	<input type="hidden" class="out_status" value="${sr.busStatusId}" />
 	<input type="hidden" class="out_deptTime" value="${sr.departureTime}" />
