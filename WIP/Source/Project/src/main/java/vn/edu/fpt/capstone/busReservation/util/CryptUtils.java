@@ -3,9 +3,7 @@ package vn.edu.fpt.capstone.busReservation.util;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 public class CryptUtils {
@@ -222,34 +220,5 @@ public class CryptUtils {
         random.nextBytes(bytes);
         bigInteger = new BigInteger(shortenBytes(bytes, byteLength));
         return bigInteger.toString(36).toUpperCase().substring(0, length);
-    }
-
-    public static void main(String[] args) {
-        String generatedCode = null;
-        List<String> codes = null;
-        try {
-            codes = new ArrayList<String>();
-            for (int i = 0; i < 30000; i++) {
-                generatedCode = CryptUtils.generateCode(i, 6);
-                if (codes.contains(generatedCode)) {
-                    System.out.println("Duplicate at " + i + "!!");
-                    generatedCode = CryptUtils
-                            .generateCode(i, 6, generatedCode);
-                    if (codes.contains(generatedCode)) {
-                        System.out.println("Duplicate againt at " + i + "!!");
-                        break;
-                    } else {
-                        codes.add(generatedCode);
-                    }
-                } else {
-                    codes.add(generatedCode);
-                }
-                System.out.println(generatedCode);
-            }
-            System.out.println("Finish!");
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 }
