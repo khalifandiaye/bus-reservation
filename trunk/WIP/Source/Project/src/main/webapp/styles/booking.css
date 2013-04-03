@@ -58,7 +58,7 @@
     float:left;
 }
 .bed-row{
-	padding-top: 31px;
+	
 }
 .seat-map-inner .bed-row:first-child{
 	padding-top: 0px;
@@ -71,7 +71,8 @@
 }
 .bed-seat{
 	width: 90px;
-	height: 38px; 
+	height: 35px; 
+	padding-right: 15px; 
 }
 .seat img{
 	float:left;
