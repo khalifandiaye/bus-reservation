@@ -93,7 +93,8 @@ WHERE   -- departure date is in range of valid fare dates
         trff.valid_from IN (SELECT MAX(ttrf.valid_from) 
                             FROM   tariff ttrf 
                             WHERE  ttrf.valid_from <= ftrp.departure_time AND
-								   ttrf.segment_id = trff.segment_id) AND
+								   ttrf.segment_id = trff.segment_id AND
+								   ttrf.bus_type_id = trff.bus_type_id) AND
         rmst.number_of_remained_seats >= PSSGR_NO
 GROUP BY ftrp.bus_status_id
 ORDER BY dept.departure_time ASC, rmst.number_of_remained_seats ASC;
