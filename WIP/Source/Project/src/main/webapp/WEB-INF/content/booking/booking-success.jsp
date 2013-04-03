@@ -94,10 +94,16 @@
 					</div>
 				</s:if>
 				<s:else>
-					<s:iterator value="seatMapOut">
+					<s:iterator value="seatMapOut" status="sta" >
 						<div class="seat-map ">
+						<s:if test="#sta.index == 0">
+						<h4>Tầng trên</h4>
+						</s:if>
+						<s:else>
+						<h4>Tầng dưới</h4>
+						</s:else>
 							<div class="seat-map-wrapper">
-								<div class="seat-map-inner" style="">
+								<div class="seat-map-inner"> 
 									<s:iterator>
 										<s:div cssClass="seat-map-row bed-row">
 											<s:iterator>
@@ -107,13 +113,13 @@
 															<span class="seat-name"><s:property value="name" /></span>
 															<img class="seat-img" src="../img/bed-seat-available.png"
 																alt="" data-seat="<s:property value="name" />"
-																data-status="<s:property value="status" />">
+																data-status="<s:property value="status" />" data-type="out">
 														</s:if>
 														<s:else>
 															<span class="seat-name"><s:property value="name" /></span>
 															<img class="seat-img" src="../img/bed-seat-sold.png"
 																alt="" data-seat="<s:property value="name" />"
-																data-status="<s:property value="status" />">
+																data-status="<s:property value="status" />" data-type="out">
 														</s:else>
 													</s:div>
 												</s:if>
@@ -183,20 +189,20 @@
 															<span class="seat-name"><s:property value="name" /></span>
 															<img class="seat-img" src="../img/bed-seat-available.png"
 																alt="" data-seat="<s:property value="name" />"
-																data-status="<s:property value="status" />">
+																data-status="<s:property value="status" />" data-type="return">
 														</s:if>
 														<s:else>
 															<span class="seat-name"><s:property value="name" /></span>
 															<img class="seat-img" src="../img/bed-seat-sold.png"
 																alt="" data-seat="<s:property value="name" />"
-																data-status="<s:property value="status" />">
+																data-status="<s:property value="status" />" data-type="return">
 														</s:else>
 													</s:div>
 												</s:if>
 												<s:else>
 													<!--  no  seat  here -->
 												</s:else>
-											</s:iterator>
+											</s:iterator> 
 										</s:div>
 									</s:iterator>
 								</div>
