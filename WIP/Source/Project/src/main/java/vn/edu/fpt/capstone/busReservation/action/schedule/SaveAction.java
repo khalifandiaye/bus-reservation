@@ -93,8 +93,7 @@ public class SaveAction extends ActionSupport {
 				traTime = segmentTravelTimeDAO
 						.getTravelTimebyDate(
 								routeDetailsBean.getSegment().getId(),
-								startDateOfSegment.get(i)).get(0)
-						.getTravelTime();
+								startDateOfSegment.get(i)).get(0).getTravelTime();
 			   List<SegmentTravelTimeBean> segmentTravelTimeBeans = segmentTravelTimeDAO.getTravelTimebyDate(
                   routeDetailsBean.getSegment().getId(),
                   startDateOfSegment.get(i));

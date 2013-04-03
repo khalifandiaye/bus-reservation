@@ -38,7 +38,7 @@
 </script>
 
 <script type="text/javascript">
-   function getStation(el, des) {
+   function getStation(el, des, stationEndAtKey) {
       cityId = $('#' + el).val();
          if (cityId != -1) {
          $.ajax({url: "getStation.html?cityId=" + cityId }).done(
@@ -47,8 +47,8 @@
                 $.each(data.stationInfos, function() {
                   $('#' + des).append('<option value="'+this.id+'">'+this.name+'</option>');
                 });
-                if (el == 'startAt') {
-                  $("#stationStartAt").val($("#stationEndAt").val());
+                if (el == 'startAt' && stationEndAtKey) {
+                  $("#stationStartAt").val(stationEndAtKey);
                 }
                 getDuration();
             });
@@ -157,6 +157,11 @@
          checkAdd();
       });
       
+      $('#stationEndAt').change(function() {
+    	   getDuration();
+          checkAdd();
+      });
+      
       $('#duration').change(function(){
     	   checkAdd();
       });
@@ -213,8 +218,8 @@
             $("#startAt").prop("disabled", true);
             $("#stationStartAt").prop("disabled", true);
             $("#stationEndAt").empty();
-            getStation('startAt', 'stationStartAt');
-                           
+            getStation('startAt', 'stationStartAt', stationEndAtKey);
+                          
             $("#endAt option[value=" + endAtKey + "]").hide();
             $("#endAt").val(-1);
             $("#duration").val('01:00');
