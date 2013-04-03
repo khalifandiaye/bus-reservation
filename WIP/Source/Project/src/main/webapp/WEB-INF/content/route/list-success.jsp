@@ -80,8 +80,10 @@
 	   var startAt = $('#startAt').val();
 	   var endAt = $("#endAt").val();
 	   var duration = $('#duration').val();
+	   
+	   duration = parseInt(duration.replace(":",""), 10);
 
-	   if(startAt != -1 && endAt != -1 && duration != ''){
+	   if(startAt != -1 && endAt != -1 && duration != '' && duration >= parseInt('100', 10)){
 		   $("#add").removeAttr("disabled"); 
 	   } else { 
 		   $("#add").attr("disabled","disabled");
@@ -101,7 +103,7 @@
     	   $("#stationStartAt").prop("disabled", false);
     	   $("#startAt").val(-1);
     	   $("#endAt").val(-1);
-    	   $("#duration").val('');
+    	   $("#duration").val('01:00');
     	   $('#stationStartAt').empty();
     	   $('#stationEndAt').empty();
     	   $("#endAt option").show();
@@ -211,12 +213,11 @@
             $("#startAt").prop("disabled", true);
             $("#stationStartAt").prop("disabled", true);
             $("#stationEndAt").empty();
-            $("#duration").val('');
             getStation('startAt', 'stationStartAt');
                            
             $("#endAt option[value=" + endAtKey + "]").hide();
             $("#endAt").val(-1);
-            $("#duration").val('');
+            $("#duration").val('01:00');
             $('#stationEndAt').empty();
             $("#duration").prop("disabled", false);
 
