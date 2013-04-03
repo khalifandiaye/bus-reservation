@@ -37,7 +37,20 @@ Date.prototype.toMyString = function () {
 
    function changeDuration(id) {
 	   $("#segmentId").val(id);
-      $("#deleteBusDialog").modal();
+      $.ajax({
+    	    type : "POST",
+          url : $('#contextPath').val()
+                + "/route/getPreUpdateTariffAction.html",
+          data : form.serialize(),
+          success : function(response) {
+             $('#editDurationDialog').modal('hide');
+             alert(response.message);
+             var url = $('#contextPath').val()
+             + "/segment/list.html";
+              window.location = url;
+          }
+       });
+      $("#editDurationDialog").modal();
    };
 
    var d = new Date();
@@ -75,7 +88,7 @@ Date.prototype.toMyString = function () {
 	               url : "saveSegment.html",
 	               data : form.serialize(),
 	               success : function(response) {
-	                  $('#deleteBusDialog').modal('hide');
+	                  $('#editDurationDialog').modal('hide');
 	                  alert(response.message);
 	                  var url = $('#contextPath').val()
 	                  + "/segment/list.html";
@@ -163,8 +176,8 @@ Date.prototype.toMyString = function () {
          </table>
       </div>
    </div>
-   <!-- Modal Delete Dialog -->
-   <div id="deleteBusDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+   <!-- Modal edit Duration Dialog -->
+   <div id="editDurationDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true">
       <div class="modal-header">
          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -188,6 +201,7 @@ Date.prototype.toMyString = function () {
                   <td><input type="text" id="duration" name="duration"></td>
                </tr>
             </table>
+            <label id="preUpdateDuration"></label>
          </form>
       </div>
       <div class="modal-footer">

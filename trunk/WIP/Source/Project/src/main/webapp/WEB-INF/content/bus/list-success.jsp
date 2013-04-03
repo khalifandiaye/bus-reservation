@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Test page</title>
+<title>VinaBus - Manage bus</title>
 <jsp:include page="../common/xheader.jsp" />
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/styles/custom-data-table.css" />
