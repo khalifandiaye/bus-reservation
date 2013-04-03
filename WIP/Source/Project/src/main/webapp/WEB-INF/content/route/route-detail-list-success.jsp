@@ -82,11 +82,11 @@ Date.prototype.toMyString = function () {
 	      
 	      $('#validDate').datepicker({
 	            dateFormat : 'dd/mm/yy',
-	            minDate : '+1D',
+	            minDate : '0',
 	            maxDate : '+3M',
 	            regional : 'vi'
 	         });
-	         $('#validDate').val(d.toMyString());
+	         $('#validDate').val(now);
 	});
 	
 	$(document).ready(function() {
@@ -471,10 +471,12 @@ Date.prototype.toMyString = function () {
 			segments.push(segment);
 		});
 
+		validateBusType();
 		$('#busType').bind('change', function() {
 			var busType = $('#busType').val();
 			var date = $('#validDateSelect').val();
 			getPrice(busType, segments, date);
+			validateBusType();
 		});
 
 	    $('#validDateSelect').bind('change', function() {
@@ -487,6 +489,17 @@ Date.prototype.toMyString = function () {
 		getPrice(busType, segments, $('#validDateSelect').val());
 	});
 
+	function validateBusType(){
+		var busType = $("#busType").val();
+		if (busType == null || busType == -1) {
+			$("#assignBus").attr("disabled","disabled");
+			$("#busStatusInsertBtn").attr("disabled","disabled");
+		} else {
+			$("#assignBus").removeAttr("disabled"); 
+			$("#busStatusInsertBtn").removeAttr("disabled"); 
+		}
+	}
+	
 	function getPrice(busType, segments, date) {
 		var info = {};
 		info['busType'] = busType;
