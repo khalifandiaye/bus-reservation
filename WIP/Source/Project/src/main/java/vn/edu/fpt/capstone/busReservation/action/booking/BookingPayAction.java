@@ -202,8 +202,8 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 		reservationBean.setPhone(inputMobile);
 
 		reservationBean.setBookTime(new Date());
-		reservationBean.setCode(null);// String Code
-		reservationBean.setPayments(null);// List<PaymentBean>
+//		reservationBean.setCode(null);// String Code
+//		reservationBean.setPayments(null);// List<PaymentBean>
 		reservationBean.setStatus("unpaid");
 
 		List<TicketBean> listTicket = new ArrayList<TicketBean>();
