@@ -382,7 +382,7 @@ public class ReservationLogic extends BaseLogic {
             info.setTransactionFeeInUSD(converter.convert(fee));
             if (refundedAmount > 0) {
                 info.setRefundedAmount(refundedAmount);
-                info.setRefundedAmountInUSD(converter.convert(paidAmount));
+                info.setRefundedAmountInUSD(converter.convert(refundedAmount));
                 info.setRefundRate((int) (refundedAmount * 100 / paidAmount));
             }
         } else {
