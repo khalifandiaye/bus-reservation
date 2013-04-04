@@ -359,7 +359,7 @@
                      </s:select><select
                   id="stationEndAt" headerKey="-1"
                   headerValue="--- Select End Station ---" style="margin-top:10px;"></select></td>
-               <td><input type="text" id="duration" /></td>
+               <td><input type="text" id="duration" value="01:00"/></td>
                <td><input class="btn btn-primary" type="button" id="add" value="Add" disabled="disabled" 
                   style="margin-top: 10px;;margin-bottom: 10px; margin-left: 10px; margin-right: 0; width: 75px;"/></td>
             </tr>
