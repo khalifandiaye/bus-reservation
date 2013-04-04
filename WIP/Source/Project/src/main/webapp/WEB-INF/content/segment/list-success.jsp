@@ -37,10 +37,10 @@ Date.prototype.toMyString = function () {
 
    function changeDuration(id) {
 	   $("#segmentId").val(id);
-      $.ajax({
+/*       $.ajax({
     	    type : "POST",
           url : $('#contextPath').val()
-                + "/route/getPreUpdateTariffAction.html",
+                + "/route/getPreUpdateTariffAction.html";
           data : form.serialize(),
           success : function(response) {
              $('#editDurationDialog').modal('hide');
@@ -49,7 +49,7 @@ Date.prototype.toMyString = function () {
              + "/segment/list.html";
               window.location = url;
           }
-       });
+       }); */
       $("#editDurationDialog").modal();
    };
 
@@ -198,7 +198,7 @@ Date.prototype.toMyString = function () {
                </tr>
                <tr>
                   <td>Duration (hh:mm)</td>
-                  <td><input type="text" id="duration" name="duration"></td>
+                  <td><input type="text" id="duration" name="duration" value="01:00"></td>
                </tr>
             </table>
             <label id="preUpdateDuration"></label>
