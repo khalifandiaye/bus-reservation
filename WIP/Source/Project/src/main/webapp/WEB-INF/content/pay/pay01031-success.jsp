@@ -8,13 +8,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Payment Success</title>
+<title>Payment Cancelled</title>
 <jsp:include page="../common/xheader.jsp" />
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
 	<div class="container">
-		<h4>Payment canceled</h4>
+		<h4>Payment cancelled</h4>
 	</div>
 	<jsp:include page="../common/footer.jsp" />
 </body>

@@ -72,16 +72,16 @@ public class AuthorizationInterceptor implements Interceptor {
         if (user == null || user.getRoleId() != 4 || !CommonConstant.DEBUG_MODE) {
             namespace = ServletActionContext.getActionMapping().getNamespace();
 
-            if ("/admin".equals(namespace)) {
+            if (namespace.startsWith("/admin")) {
                 allowOp = false;
                 allowCus = false;
-            } else if ("/route".equals(namespace) || "/bus".equals(namespace)
-                    || "/schedule".equals(namespace)) {
+            } else if (namespace.startsWith("/route") || namespace.startsWith("/bus")
+                    || namespace.startsWith("/schedule")) {
                 allowCus = false;
                 allowAdmin = false;
-            } else if (!"/".equals(namespace) && !"/user".equals(namespace)) {
+            } else if (!"/".equals(namespace) && !namespace.startsWith("/user")) {
                 allowAdmin = false;
-            } else if ("/debug".equals(namespace)) {
+            } else if (namespace.startsWith("/debug")) {
                 allowCus = false;
                 allowOp = false;
                 allowAdmin = false;

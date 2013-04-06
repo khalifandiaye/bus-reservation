@@ -15,7 +15,7 @@ public class PaymentBean extends AbstractBean<Integer> {
 	 * 
 	 */
     private static final long serialVersionUID = 5879391215552789234L;
-    private ReservationBean reservation;
+    private TicketBean ticket;
     private double payAmount;
     private double serviceFee;
     private PaymentMethodBean paymentMethod;
@@ -23,18 +23,17 @@ public class PaymentBean extends AbstractBean<Integer> {
     private PaymentType type;
 
     /**
-     * @return the reservation
+     * @return the ticket
      */
-    public ReservationBean getReservation() {
-        return reservation;
+    public TicketBean getTicket() {
+        return ticket;
     }
 
     /**
-     * @param reservation
-     *            the reservation to set
+     * @param ticket the ticket to set
      */
-    public void setReservation(ReservationBean reservation) {
-        this.reservation = reservation;
+    public void setTicket(TicketBean ticket) {
+        this.ticket = ticket;
     }
 
     /**

@@ -14,9 +14,22 @@ public class PaymentDetails implements Serializable {
      * 
      */
     private static final long serialVersionUID = 1L;
+    private int ticketId;
     private String grossAmount;
     private String feeAmount;
     private String transactionID;
+    /**
+     * @return the ticketId
+     */
+    public int getTicketId() {
+        return ticketId;
+    }
+    /**
+     * @param ticketId the ticketId to set
+     */
+    public void setTicketId(int ticketId) {
+        this.ticketId = ticketId;
+    }
     /**
      * @return the grossAmount
      */

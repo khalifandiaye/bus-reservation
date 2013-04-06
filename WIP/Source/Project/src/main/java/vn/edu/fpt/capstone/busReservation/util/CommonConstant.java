@@ -29,6 +29,10 @@ public interface CommonConstant {
      */
     public final static String SESSION_KEY_PAYMENT_TOKEN = "paymentToken";
     /**
+     * <b>Class<b> {@link java.lang.Integer}
+     */
+    public final static String SESSION_KEY_RESERVATION_ID = "reservationId";
+    /**
      * In minutes
      */
     public final static int RESERVATION_TIMEOUT = 15;
@@ -90,6 +94,8 @@ public interface CommonConstant {
      */
     // TODO remove localhost:8443 when deploy on real server
     public final static String URL_HTTPS = "https://localhost:8443";
+    public final static String PATTERN_DATE_TIME_FULL = "EEEEE dd/MM/yyyy kk:mm";
+    public final static String PATTERN_DATE_TIME_LONG = "dd/MM/yyyy kk:mm";
     /**
      * Switch to enable/disable debug mode
      */

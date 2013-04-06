@@ -4,6 +4,7 @@
 package vn.edu.fpt.capstone.busReservation.util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -180,7 +181,6 @@ public abstract class ReservationUtils {
             for (Map.Entry<Integer, List<TripBean>> entry : tripMap.entrySet()) {
                 ticket = createTicket(info, entry, quantity, returnTrip,
                         tariffViewDAO, converter);
-                info.getTickets().add(ticket);
                 ticket.setSeats(new String[quantity]);
                 basePrice += quantity * ticket.getTicketPriceValue();
             }
@@ -197,15 +197,15 @@ public abstract class ReservationUtils {
         double ticketPrice = 0;
         subTripList = entry.getValue();
         ticket = info.new Ticket();
-        ticket.setId(entry.getKey());
+        info.getTickets().add(ticket);
         ticket.setDepartureDateInMilisec(subTripList.get(0).getDepartureTime()
                 .getTime());
         ticket.setDepartureDate(FormatUtils.formatDate(subTripList.get(0)
-                .getDepartureTime(), "EEEEE dd/MM/yyyy hh:mm aa",
+                .getDepartureTime(), CommonConstant.PATTERN_DATE_TIME_FULL,
                 CommonConstant.LOCALE_VN, CommonConstant.DEFAULT_TIME_ZONE));
         ticket.setArrivalDate(FormatUtils.formatDate(
                 subTripList.get(subTripList.size() - 1).getArrivalTime(),
-                "EEEEE dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
+                CommonConstant.PATTERN_DATE_TIME_FULL, CommonConstant.LOCALE_VN,
                 CommonConstant.DEFAULT_TIME_ZONE));
         ticket.setDepartureStation(subTripList.get(0).getRouteDetails()
                 .getSegment().getStartAt().getName());
@@ -242,7 +242,7 @@ public abstract class ReservationUtils {
                 quantity = ticketBean.getSeatPositions().size();
                 ticket = createTicket(info, entry, quantity, returnTrip,
                         tariffViewDAO, converter);
-                info.getTickets().add(ticket);
+                ticket.setId(ticketBean.getId());
                 ticket.setSeats(new String[quantity]);
                 count = 0;
                 for (SeatPositionBean seat : ticketBean.getSeatPositions()) {
@@ -260,6 +260,43 @@ public abstract class ReservationUtils {
             }
         }
         return basePrice;
+    }
+
+    public static BigDecimal roundingVND(final BigDecimal number,
+            RoundingMode roundingMode) {
+        return number.divide(BigDecimal.valueOf(500), 0, roundingMode)
+                .multiply(BigDecimal.valueOf(500));
+    }
+
+    public static Double roundingVND(final Double number, RoundingMode roundingMode) {
+        if (number == null) {
+            return null;
+        } else if (roundingMode == null
+                || RoundingMode.CEILING.equals(roundingMode)) {
+            return Math.ceil(number / 500) * 500;
+        } else if (RoundingMode.FLOOR.equals(roundingMode)) {
+            return Math.floor(number / 500) * 500;
+        } else if (RoundingMode.DOWN.equals(roundingMode)) {
+            if (number > 0) {
+                return Math.floor(number / 500) * 500;
+            } else {
+                return Math.ceil(number / 500) * 500;
+            }
+        } else if (RoundingMode.UP.equals(roundingMode)) {
+            if (number > 0) {
+                return Math.ceil(number / 500) * 500;
+            } else {
+                return Math.floor(number / 500) * 500;
+            }
+        } else if (RoundingMode.UNNECESSARY.equals(roundingMode)) {
+            return number;
+        } else if (RoundingMode.HALF_UP.equals(roundingMode)) {
+            return (double) Math.round(number / 500) * 500;
+        } else if (RoundingMode.HALF_DOWN.equals(roundingMode)) {
+            return (double) Math.ceil(number / 500 - 0.5) * 500;
+        } else {
+            throw new UnsupportedOperationException();
+        }
     }
 
 }

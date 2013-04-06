@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean;
 
+@Deprecated
 public class ReservationInfoDAO extends
         GenericDAO<ReservationBean, ReservationInfoBean> {
 

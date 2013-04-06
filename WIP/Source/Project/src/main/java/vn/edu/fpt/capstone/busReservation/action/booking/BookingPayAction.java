@@ -249,6 +249,8 @@ public class BookingPayAction extends BaseAction implements SessionAware {
             }
             session.put(CommonConstant.SESSION_KEY_PAYMENT_METHOD_ID,
                     paymentMethodId);
+            session.put(CommonConstant.SESSION_KEY_RESERVATION_ID,
+                    reservationId);
 			
 			session.remove("listOutTripBean");
 			session.remove("listReturnTripBean");

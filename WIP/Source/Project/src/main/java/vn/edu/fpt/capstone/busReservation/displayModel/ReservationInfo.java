@@ -25,8 +25,6 @@ public class ReservationInfo implements Serializable {
     private String phone;
     private String email;
     private List<Ticket> tickets;
-    private Double basePrice;
-    private Double basePriceInUSD;
     private Double transactionFee;
     private Double transactionFeeInUSD;
     private Double totalAmount;
@@ -140,44 +138,48 @@ public class ReservationInfo implements Serializable {
      * @return the basePrice
      */
     public String getBasePrice() {
-        return FormatUtils.formatNumber(basePrice, 0, locale);
+        return FormatUtils.formatNumber(getBasePriceValue(), 0, locale);
     }
 
     /**
      * @return the basePrice
      */
     public Double getBasePriceValue() {
+        double basePrice = 0;
+        if (transactionFee != null && transactionFee != 0 && totalAmount != 0 && totalAmount != null) {
+            basePrice = totalAmount - transactionFee;
+        } else if (tickets != null) {
+            for (Ticket ticket : tickets) {
+                if (ticket != null) {
+                    basePrice += ticket.ticketPrice;
+                }
+            }
+        }
         return basePrice;
-    }
-
-    /**
-     * @param basePrice
-     *            the basePrice to set
-     */
-    public void setBasePrice(Double basePrice) {
-        this.basePrice = basePrice;
     }
 
     /**
      * @return the basePriceInUSD
      */
     public String getBasePriceInUSD() {
-        return FormatUtils.formatNumber(basePriceInUSD, 2, locale);
+        return FormatUtils.formatNumber(getBasePriceInUSDValue(), 2, locale);
     }
 
     /**
      * @return the basePriceInUSD
      */
     public Double getBasePriceInUSDValue() {
+        double basePriceInUSD = 0;
+        if (transactionFeeInUSD != null && transactionFeeInUSD != 0 && totalAmountInUSD != 0 && totalAmountInUSD != null) {
+            basePriceInUSD = totalAmountInUSD - transactionFeeInUSD;
+        } else if (tickets != null) {
+            for (Ticket ticket : tickets) {
+                if (ticket != null) {
+                    basePriceInUSD += ticket.ticketPriceInUSD;
+                }
+            }
+        }
         return basePriceInUSD;
-    }
-
-    /**
-     * @param basePriceInUSD
-     *            the basePriceInUSD to set
-     */
-    public void setBasePriceInUSD(Double basePriceInUSD) {
-        this.basePriceInUSD = basePriceInUSD;
     }
 
     /**

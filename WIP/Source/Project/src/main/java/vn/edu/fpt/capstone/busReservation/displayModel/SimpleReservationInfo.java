@@ -97,7 +97,7 @@ public class SimpleReservationInfo implements Serializable, Comparable<SimpleRes
      * @return the departureDate
      */
     public String getDepartureDateStr() {
-        return DateUtils.date2String(departureDate, "dd/MM/yyyy hh:mm aa",
+        return DateUtils.date2String(departureDate, CommonConstant.PATTERN_DATE_TIME_LONG,
                 CommonConstant.LOCALE_VN, CommonConstant.DEFAULT_TIME_ZONE);
     }
 
@@ -105,7 +105,7 @@ public class SimpleReservationInfo implements Serializable, Comparable<SimpleRes
      * @return the bookTime
      */
     public String getBookTime() {
-        return DateUtils.date2String(bookTime, "dd/MM/yyyy hh:mm aa",
+        return DateUtils.date2String(bookTime, CommonConstant.PATTERN_DATE_TIME_LONG,
                 CommonConstant.LOCALE_VN, CommonConstant.DEFAULT_TIME_ZONE);
     }
 
