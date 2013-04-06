@@ -11,7 +11,7 @@
 <title>VinaBus - Chọn ghế</title>
 <jsp:include page="../common/xheader.jsp" />
 <link href="<%=request.getContextPath()%>/styles/booking.css"
-	rel="stylesheet"> 
+	rel="stylesheet">
 <script src="<%=request.getContextPath()%>/js/booking/booking.js"></script>
 </head>
 <body>
@@ -54,170 +54,176 @@
 			</s:if>
 		</ul>
 		<div class="tab-content">
-		<s:if test="seatMapOut != null">
-			<div id="seat-map-out" class="tab-pane" style="overflow: hidden;">
-				<s:if test="seatMapOut.size == 1">
-					<div class="seat-map">
-						<div class="seat-map-wrapper">
-							<div class="seat-map-inner" style="">
-								<s:iterator value="seatMapOut">
-									<s:iterator>
-										<s:div cssClass="seat-map-row">
-											<s:iterator>
-												<s:if test="status != null">
-													<s:div cssClass="seat">
-														<s:if test="status != 1">
-															<span class="seat-name"><s:property value="name" /></span>
-															<img class="seat-img" src="../images/seat-available.png"
-																alt="" data-seat="<s:property value="name" />"
-																data-status="<s:property value="status"/>"
-																data-type="out">
-														</s:if>
-														<s:else>
-															<span class="seat-name"><s:property value="name" /></span>
-															<img class="seat-img" src="../images/seat-sold.png"
-																alt="" data-seat="<s:property value="name" />"
-																data-status="<s:property value="status"/>"
-																data-type="out">
-														</s:else>
-													</s:div>
-												</s:if>
-												<s:else>
-													<!--  no  seat  here -->
-												</s:else>
-											</s:iterator>
-										</s:div>
-									</s:iterator>
-								</s:iterator>
-							</div>
-						</div>
-					</div>
-				</s:if>
-				<s:else>
-					<s:iterator value="seatMapOut" status="sta" >
-						<div class="seat-map ">
-						<s:if test="#sta.index == 0">
-						<h4>Tầng trên</h4>
-						</s:if>
-						<s:else> 
-						<h4>Tầng dưới</h4>
-						</s:else>
+			<s:if test="seatMapOut != null">
+				<div id="seat-map-out" class="tab-pane" style="overflow: hidden;">
+					<s:if test="seatMapOut.size == 1">
+						<div class="seat-map">
 							<div class="seat-map-wrapper">
-								<div class="seat-map-inner"> 
-									<s:iterator>
-										<s:div cssClass="seat-map-row bed-row">
-											<s:iterator>
-												<s:if test="status != null">
-													<s:div cssClass="seat bed-seat">
-														<s:if test="status != 1">
-															<span class="seat-name"><s:property value="name" /></span>
-															<img class="seat-img" src="../img/bed-seat-available.png"
-																alt="" data-seat="<s:property value="name" />"
-																data-status="<s:property value="status" />" data-type="out">
-														</s:if>
-														<s:else>
-															<span class="seat-name"><s:property value="name" /></span>
-															<img class="seat-img" src="../img/bed-seat-sold.png"
-																alt="" data-seat="<s:property value="name" />"
-																data-status="<s:property value="status" />" data-type="out">
-														</s:else>
-													</s:div>
-												</s:if>
-												<s:else>
-													<!--  no  seat  here -->
-												</s:else>
-											</s:iterator>
-										</s:div>
+								<div class="seat-map-inner" style="">
+									<s:iterator value="seatMapOut">
+										<s:iterator>
+											<s:div cssClass="seat-map-row">
+												<s:iterator>
+													<s:if test="status != null">
+														<s:div cssClass="seat">
+															<s:if test="status != 1">
+																<span class="seat-name"><s:property value="name" /></span>
+																<img class="seat-img" src="../images/seat-available.png"
+																	alt="" data-seat="<s:property value="name" />"
+																	data-status="<s:property value="status"/>"
+																	data-type="out">
+															</s:if>
+															<s:else>
+																<span class="seat-name"><s:property value="name" /></span>
+																<img class="seat-img" src="../images/seat-sold.png"
+																	alt="" data-seat="<s:property value="name" />"
+																	data-status="<s:property value="status"/>"
+																	data-type="out">
+															</s:else>
+														</s:div>
+													</s:if>
+													<s:else>
+														<!--  no  seat  here -->
+													</s:else>
+												</s:iterator>
+											</s:div>
+										</s:iterator>
 									</s:iterator>
 								</div>
 							</div>
 						</div>
-					</s:iterator>
-				</s:else>
-			</div>
-		</s:if> 
-		<s:if test="seatMapReturn != null">
-			<div id="seat-map-return" class="tab-pane" style="overflow: hidden;">
-				<s:if test="seatMapReturn.size == 1">
-					<div class="seat-map ">
-						<div class="seat-map-wrapper">
-							<div class="seat-map-inner" style="">
-								<s:iterator value="seatMapReturn">
-									<s:iterator>
-										<s:div cssClass="seat-map-row">
-											<s:iterator>
-												<s:if test="status != null">
-													<s:div cssClass="seat">
-														<s:if test="status != 1">
-															<span class="seat-name"><s:property value="name" /></span>
-															<img class="seat-img" src="../images/seat-available.png"
-																alt="" data-seat="<s:property value="name" />"
-																data-status="<s:property value="status"/>"
-																data-type="return">
-														</s:if>
-														<s:else>
-															<span class="seat-name"><s:property value="name" /></span>
-															<img class="seat-img" src="../images/seat-sold.png"
-																alt="" data-seat="<s:property value="name" />"
-																data-status="<s:property value="status"/>"
-																data-type="return">
-														</s:else>
-													</s:div>
-												</s:if>
-												<s:else>
-													<!--  no  seat  here -->
-												</s:else>
-											</s:iterator>
-										</s:div>
-									</s:iterator>
-								</s:iterator>
+					</s:if>
+					<s:else>
+						<s:iterator value="seatMapOut" status="sta">
+							<div class="seat-map ">
+								<s:if test="#sta.index == 0">
+									<h4>Tầng trên</h4>
+								</s:if>
+								<s:else>
+									<h4>Tầng dưới</h4>
+								</s:else>
+								<div class="seat-map-wrapper">
+									<div class="seat-map-inner">
+										<s:iterator>
+											<s:div cssClass="seat-map-row bed-row">
+												<s:iterator>
+													<s:if test="status != null">
+														<s:div cssClass="seat bed-seat">
+															<s:if test="status != 1">
+																<span class="seat-name"><s:property value="name" /></span>
+																<img class="seat-img"
+																	src="../img/bed-seat-available.png" alt=""
+																	data-seat="<s:property value="name" />"
+																	data-status="<s:property value="status" />"
+																	data-type="out">
+															</s:if>
+															<s:else>
+																<span class="seat-name"><s:property value="name" /></span>
+																<img class="seat-img" src="../img/bed-seat-sold.png"
+																	alt="" data-seat="<s:property value="name" />"
+																	data-status="<s:property value="status" />"
+																	data-type="out">
+															</s:else>
+														</s:div>
+													</s:if>
+													<s:else>
+														<!--  no  seat  here -->
+													</s:else>
+												</s:iterator>
+											</s:div>
+										</s:iterator>
+									</div>
+								</div>
 							</div>
-						</div>
-					</div>
-				</s:if>
-				<s:else>
-					<s:iterator value="seatMapReturn" status="sta"> 
-						<s:if test="#sta.index == 0">
-						<h4>Tầng trên</h4>
-						</s:if>
-						<s:else>
-						<h4>Tầng dưới</h4>
-						</s:else>
+						</s:iterator>
+					</s:else>
+				</div>
+			</s:if>
+			<s:if test="seatMapReturn != null">
+				<div id="seat-map-return" class="tab-pane" style="overflow: hidden;">
+					<s:if test="seatMapReturn.size == 1">
 						<div class="seat-map ">
 							<div class="seat-map-wrapper">
 								<div class="seat-map-inner" style="">
-									<s:iterator>
-										<s:div cssClass="seat-map-row bed-row">
-											<s:iterator>
-												<s:if test="status != null">
-													<s:div cssClass="seat bed-seat">
-														<s:if test="status != 1">
-															<span class="seat-name"><s:property value="name" /></span>
-															<img class="seat-img" src="../img/bed-seat-available.png"
-																alt="" data-seat="<s:property value="name" />"
-																data-status="<s:property value="status" />" data-type="return">
-														</s:if>
-														<s:else>
-															<span class="seat-name"><s:property value="name" /></span>
-															<img class="seat-img" src="../img/bed-seat-sold.png"
-																alt="" data-seat="<s:property value="name" />"
-																data-status="<s:property value="status" />" data-type="return">
-														</s:else>
-													</s:div>
-												</s:if>
-												<s:else>
-													<!--  no  seat  here -->
-												</s:else>
-											</s:iterator> 
-										</s:div>
+									<s:iterator value="seatMapReturn">
+										<s:iterator>
+											<s:div cssClass="seat-map-row">
+												<s:iterator>
+													<s:if test="status != null">
+														<s:div cssClass="seat">
+															<s:if test="status != 1">
+																<span class="seat-name"><s:property value="name" /></span>
+																<img class="seat-img" src="../images/seat-available.png"
+																	alt="" data-seat="<s:property value="name" />"
+																	data-status="<s:property value="status"/>"
+																	data-type="return">
+															</s:if>
+															<s:else>
+																<span class="seat-name"><s:property value="name" /></span>
+																<img class="seat-img" src="../images/seat-sold.png"
+																	alt="" data-seat="<s:property value="name" />"
+																	data-status="<s:property value="status"/>"
+																	data-type="return">
+															</s:else>
+														</s:div>
+													</s:if>
+													<s:else>
+														<!--  no  seat  here -->
+													</s:else>
+												</s:iterator>
+											</s:div>
+										</s:iterator>
 									</s:iterator>
 								</div>
 							</div>
 						</div>
-					</s:iterator>
-				</s:else>
-			</div>
-		</s:if>
+					</s:if>
+					<s:else>
+						<s:iterator value="seatMapReturn" status="sta">
+							<s:if test="#sta.index == 0">
+								<h4>Tầng trên</h4>
+							</s:if>
+							<s:else>
+								<h4>Tầng dưới</h4>
+							</s:else>
+							<div class="seat-map ">
+								<div class="seat-map-wrapper">
+									<div class="seat-map-inner" style="">
+										<s:iterator>
+											<s:div cssClass="seat-map-row bed-row">
+												<s:iterator>
+													<s:if test="status != null">
+														<s:div cssClass="seat bed-seat">
+															<s:if test="status != 1">
+																<span class="seat-name"><s:property value="name" /></span>
+																<img class="seat-img"
+																	src="../img/bed-seat-available.png" alt=""
+																	data-seat="<s:property value="name" />"
+																	data-status="<s:property value="status" />"
+																	data-type="return">
+															</s:if>
+															<s:else>
+																<span class="seat-name"><s:property value="name" /></span>
+																<img class="seat-img" src="../img/bed-seat-sold.png"
+																	alt="" data-seat="<s:property value="name" />"
+																	data-status="<s:property value="status" />"
+																	data-type="return">
+															</s:else>
+														</s:div>
+													</s:if>
+													<s:else>
+														<!--  no  seat  here -->
+													</s:else>
+												</s:iterator>
+											</s:div>
+										</s:iterator>
+									</div>
+								</div>
+							</div>
+						</s:iterator>
+					</s:else>
+				</div>
+			</s:if>
 		</div>
 		<div class="seat-description"
 			style="overflow: hidden; padding-left: 20px;">
