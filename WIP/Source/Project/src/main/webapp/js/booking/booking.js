@@ -240,19 +240,23 @@ function showPopup(message){
 
 function updateSeatNum(seatType){
     $(".seat-number").text(getSeatsToAllocate(seatType) - getSeatsNotAllocatedCount(seatType));
-    
+    if(seatType == 'out'){
+    	$(".seat-number-selected").text(parseInt($("#passengerNoOut").val()) > 5 ? 5 : parseInt($("#passengerNoOut").val()));
+    }else{
+    	$(".seat-number-selected").text(parseInt($("#passengerNoReturn").val()) > 5 ? 5 : parseInt($("#passengerNoReturn").val()));
+    }
 }
 
 $(function(){
-	SeatsOutToAllocate = parseInt($("#passengerNo").val());
-	SeatsReturnToAllocate = parseInt($("#passengerNo").val());
-	$(".seat-number-selected").text($("#passengerNo").val()); 
+	SeatsOutToAllocate = parseInt($("#passengerNoOut").val()) > 5 ? 5 : parseInt($("#passengerNoOut").val());
+	SeatsReturnToAllocate = parseInt($("#passengerNoReturn").val()) > 5 ? 5 : parseInt($("#passengerNoReturn").val());
+	$(".seat-number-selected").text(parseInt($("#passengerNoOut").val()) > 5 ? 5 : parseInt($("#passengerNoOut").val()));
 	
-	SeatsOutNotAllocatedCount = parseInt($("#passengerNo").val());
-	SeatsReturnNotAllocatedCount = parseInt($("#passengerNo").val());
+	SeatsOutNotAllocatedCount = parseInt($("#passengerNoOut").val()) > 5 ? 5 : parseInt($("#passengerNoOut").val());
+	SeatsReturnNotAllocatedCount = parseInt($("#passengerNoReturn").val()) > 5 ? 5 : parseInt($("#passengerNoReturn").val());
 	
     $(".seat").bind("click",function(event){
-
+ 
         var seatImage,targetTagName,message;
 
         targetTagName = event.target.tagName.toLowerCase();
@@ -287,10 +291,13 @@ $(function(){
 	$("#booking-submit").bind("click",function(){
 		if(((SeatsOutToAllocate - SeatsOutNotAllocatedCount == 0) && $('#seat-map-out').length > 0) 
 				|| ((SeatsReturnToAllocate - SeatsReturnNotAllocatedCount == 0) && $('#seat-map-return').length > 0)){
-			showPopup("Bạn phải chọn ít nhất 1 ghế cho để tiếp tục.");
+			if(((SeatsOutToAllocate - SeatsOutNotAllocatedCount == 0) && $('#seat-map-out').length > 0)){
+				showPopup("Bạn phải chọn ít nhất 1 ghế cho chuyến đi để tiếp tục.");
+			}else if(((SeatsReturnToAllocate - SeatsReturnNotAllocatedCount == 0) && $('#seat-map-return').length > 0)){
+				showPopup("Bạn phải chọn ít nhất 1 ghế cho chuyến về để tiếp tục.");
+			}
 			return;
 		}
-		
 		sessionStorage.setItem("selectedOutSeat", getSelectedOutSeatString());
 		sessionStorage.setItem("selectedReturnSeat", getSelectedReturnSeatString());
 		

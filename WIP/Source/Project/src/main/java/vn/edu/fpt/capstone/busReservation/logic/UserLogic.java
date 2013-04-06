@@ -193,7 +193,7 @@ public class UserLogic extends BaseLogic {
         } catch (IOException e) {
             throw new CommonException(e);
         }
-        templateName = (String) globalProps.get("mail.template.regConfirm");
+        templateName = (String) globalProps.get("mail.template.resetPass");
         mailTemplateBean = mailTemplateDAO.getByName(templateName);
         subject = new StringBuilder(mailTemplateBean.getSubject());
         content = new StringBuilder(mailTemplateBean.getText());
@@ -307,6 +307,79 @@ public class UserLogic extends BaseLogic {
             throw new CommonException("msgerrau001");
         }
         return user;
+    }
+    
+    public void sendResetMailPub(String newPass, String firstName,
+            String lastName, String email, String contextPath)
+            throws CommonException {
+    	sendResetMail(newPass, firstName, lastName, email, contextPath);
+    }
+    
+    private void sendResetMail(String newPass, String firstName,
+            String lastName, String email, String contextPath)
+            throws CommonException {
+        Properties globalProps = null;
+        Properties props = null;
+        String templateName = null;
+        MailTemplateBean mailTemplateBean = null;
+        StringBuilder subject = null;
+        StringBuilder content = null;
+        StringBuilder url = null;
+        Session session = null;
+        Message message = null;
+        // build subject and content
+        globalProps = new Properties();
+        try {
+            globalProps.load(getClass().getResourceAsStream(
+                    "/global.properties"));
+        } catch (IOException e) {
+            throw new CommonException(e);
+        }
+        templateName = (String) globalProps.get("mail.template.resetPassword");
+        mailTemplateBean = mailTemplateDAO.getByName(templateName);
+        subject = new StringBuilder(mailTemplateBean.getSubject());
+        content = new StringBuilder(mailTemplateBean.getText());
+        MailUtils.replace(subject, ":companyName:",
+                globalProps.getProperty("company.fullName"));
+        MailUtils.replace(content, ":siteName:",
+                globalProps.getProperty("company.siteName"));
+        MailUtils.replace(content, ":fullName:", lastName + " " + firstName);
+        MailUtils.replace(content, ":newPass:", newPass);
+        try {
+            mailTemplateDAO.endTransaction();
+        } catch (HibernateException e) {
+            throw new CommonException(e.getMessage(), e);
+        }
+        // prepare mail object
+        props = new Properties();
+        props.put("mail.smtp.auth", globalProps.get("mail.smtp.auth"));
+        props.put("mail.smtp.starttls.enable",
+                globalProps.get("mail.smtp.starttls.enable"));
+        props.put("mail.smtp.host", globalProps.get("mail.smtp.host"));
+        props.put("mail.smtp.port", globalProps.get("mail.smtp.port"));
+        session = Session.getInstance(
+                props,
+                new MailPasswordAuthenticator(globalProps
+                        .getProperty("mail.auth.username"), globalProps
+                        .getProperty("mail.auth.password")));
+        try {
+            message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(globalProps
+                    .getProperty("mail.info.from")));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(email));
+            try {
+                message.setSubject(MimeUtility.encodeText(subject.toString(),
+                        "utf-8", "Q"));
+            } catch (UnsupportedEncodingException e) {
+                throw new CommonException(e);
+            }
+            message.setContent(content.toString(), "text/html;charset=utf-8");
+
+            Transport.send(message);
+        } catch (MessagingException e) {
+            throw new CommonException(e);
+        }
     }
 
 }

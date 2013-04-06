@@ -3,15 +3,37 @@
  */
 package vn.edu.fpt.capstone.busReservation.action.admin;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
+import org.hibernate.HibernateException;
 
+import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.RoleDAO;
 import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
+import vn.edu.fpt.capstone.busReservation.dao.bean.MailTemplateBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RoleBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
+import vn.edu.fpt.capstone.busReservation.exception.CommonException;
+import vn.edu.fpt.capstone.busReservation.logic.UserLogic;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.CryptUtils;
+import vn.edu.fpt.capstone.busReservation.util.MailUtils;
+import vn.edu.fpt.capstone.busReservation.util.MailUtils.MailPasswordAuthenticator;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -20,7 +42,7 @@ import com.opensymphony.xwork2.ActionSupport;
  *
  */
 @ParentPackage("jsonPackage")
-public class AdminAction extends ActionSupport {
+public class AdminAction extends BaseAction{
 	private static final long serialVersionUID = 1L;
 
     // ===========================DAO Object===========================
@@ -50,8 +72,17 @@ public class AdminAction extends ActionSupport {
     private boolean checkboxActive;
     private boolean resultJSON;
     private String errorMessage;
+    private UserLogic ul;
     
-    
+	/**
+	 * @param ul the ul to set
+	 */
+	public void setUl(UserLogic ul) {
+		this.ul = ul;
+	}
+
+
+
 	/**
 	 * @return the inputLastname
 	 */
@@ -288,7 +319,7 @@ public class AdminAction extends ActionSupport {
         	userBean.setMobileNumber(inputMobilephone);
         	
         	if(optionsRole.equals("operator")){
-        		roleID = 2;
+        		roleID = 2; 
         	}
         	RoleBean role = roleDAO.getById(roleID);
         	userBean.setRole(role);
@@ -314,7 +345,7 @@ public class AdminAction extends ActionSupport {
 	public String resetPassword(){
 		resultJSON = false;
 		errorMessage = "Can not reset password.";
-		
+		String newPass = "";
 		try {
         	UserBean userBean = userDAO.getByUsername(inputUsername);
         	if(userBean == null){
@@ -322,11 +353,16 @@ public class AdminAction extends ActionSupport {
     			resultJSON = false;
     			return SUCCESS;
         	}
-        	userBean.setPassword(CryptUtils.encrypt2String(inputPassword));
+        	newPass = CryptUtils.generateCode(6);
+        	//Send mail.
+        	ul = new UserLogic();
+        	ul.sendResetMailPub(newPass,userBean.getFirstName(),userBean.getLastName(),userBean.getEmail(),servletRequest.getContextPath());
+        	userBean.setPassword(CryptUtils.encrypt2String(newPass));
 			errorMessage = "Reset password successful";
 			resultJSON = true;
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return SUCCESS;
 	}

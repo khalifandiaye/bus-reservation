@@ -28,8 +28,6 @@
 			<a href="#modalAddUser" role="button"
 				data-toggle="modal" class="btn btn-primary pull-right">Thêm
 				thành viên</a>
-			<a href="#modalResetPassword" role="button"
-			data-toggle="modal" class="btn btn-primary pull-right" style="margin-right: 20px;">Phục hồi mật khẩu</a>
 		</h3>
 		<table cellpadding="0" cellspacing="0" border="0"
 			class="table table-striped table-bordered" id="userList"
@@ -41,6 +39,7 @@
 					<th>Họ Tên</th>
 					<th>Chức vụ</th>
 					<th>Trạng thái</th>
+					<th>Phục hồi mật khẩu</th>
 					<th>Chi tiết</th>
 					<th>Xóa</th>
 				</tr>
@@ -56,11 +55,12 @@
 							<td class="td-username"><s:property value="%{username}" /></td>
 							<td><s:property value="%{lastName}" /> <s:property
 									value="%{firstName}" /></td>
-							<td><s:property value="%{role.name}" /></td>
-							<td><s:property value="%{status}" /></td>
+							<td><s:property value="%{role.name}" /></td> 
+							<td><s:property value="%{status}" /></td> 
+							<td><a class="resetPassword" href="javascript:void(0);">Phục hồi</a></td> 
 							<td><a class="detailUser" href="javascript:void(0);">Chi
-									tiết</a></td>
-							<td><a class="deleteUser" href="javascript:void(0);">Xóa</a></td>
+									tiết</a></td>  
+							<td><s:if test="%{status.equals('banned')}"><a class="activeUser" href="javascript:void(0);">Phục hồi</a></s:if><s:else><a class="deleteUser" href="javascript:void(0);">Xóa</a></s:else></td>
 						</tr>
 					</s:iterator>
 				</s:else>
@@ -224,49 +224,13 @@
 	</div>
 	</section>
 	<!-- End section modal edit user -->
-	<!-- Start section modal reset user -->
-	<section> 
-		<div id="modalResetPassword" class="modal hide fade" tabindex="-1"
-			role="dialog" aria-labelledby="modalResetPasswordLabel"
-			aria-hidden="true">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true">×</button>
-				<h3 id="modalResetPasswordLabel">Phục hồi mật khẩu</h3>
-			</div>
-			<div class="modal-body">
-				<form class="form-horizontal" id="resetPasswordForm">
-					<div class="control-group">
-						<label class="control-label" for="inputUsername">Tài khoản</label>
-						<div class="controls">
-							<input type="text" id="inputUsername" name="inputUsername"
-								placeholder="Tài khoản">
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="inputPassword">Mật khẩu mới</label>
-						<div class="controls">
-							<input type="password" id="inputPassword" name="inputPassword"
-								placeholder="Mật khẩu">
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="inputRePassword">Nhập lại
-							mật khẩu</label>
-						<div class="controls">
-							<input type="password" id="inputRePassword" name="inputRePassword"
-								placeholder="Mật khẩu">
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-				<button class="btn btn-primary " id="resetPasswordButton">Thay đổi mật khẩu</button>
-			</div>
-		</div>
-	</section>
-	<!-- End section modal reset user -->
+	<div style="width:100%;">
+	  <p style="color:rgb(255,132,0);font-weight:bold;font-size:16px;text-align:center;" >Thông báo thay đổi mật khẩu :companyName:</p>
+	  <p>Chào :fullName:</p>
+	  <p>Mật khẩu mới 
+	  của quý khách tại <a href=":siteurl:">:siteName:</a> là: :newPass:</P>
+	 Hân hạnh được phục vụ quý khách.
+	  </div>
 	<!-- End information content -->
 	<jsp:include page="../common/footer.jsp" />
 </body>

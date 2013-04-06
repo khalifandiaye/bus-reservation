@@ -99,7 +99,7 @@
 						<s:if test="#sta.index == 0">
 						<h4>Tầng trên</h4>
 						</s:if>
-						<s:else>
+						<s:else> 
 						<h4>Tầng dưới</h4>
 						</s:else>
 							<div class="seat-map-wrapper">
@@ -176,7 +176,13 @@
 					</div>
 				</s:if>
 				<s:else>
-					<s:iterator value="seatMapReturn">
+					<s:iterator value="seatMapReturn" status="sta"> 
+						<s:if test="#sta.index == 0">
+						<h4>Tầng trên</h4>
+						</s:if>
+						<s:else>
+						<h4>Tầng dưới</h4>
+						</s:else>
 						<div class="seat-map ">
 							<div class="seat-map-wrapper">
 								<div class="seat-map-inner" style="">
@@ -253,7 +259,8 @@
 			<s:hidden id="message" name="message"></s:hidden>
 			<s:hidden id="selectedOutSeat" name="selectedOutSeat"></s:hidden>
 			<s:hidden id="selectedReturnSeat" name="selectedReturnSeat"></s:hidden>
-			<s:hidden id="passengerNo" name="passengerNo"></s:hidden>
+			<s:hidden id="passengerNoOut" name="passengerNoOut"></s:hidden>
+			<s:hidden id="passengerNoReturn" name="passengerNoReturn"></s:hidden>
 		</div>
 	</div>
 	</setion>

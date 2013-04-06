@@ -303,7 +303,7 @@ $(function(){
 		"sDom": "<'row'<'span6 pull-left'l><'span5 pull-right'f>r>t<'row'<'span6'i><'span6'p>>",
 		"sPaginationType": "bootstrap", 
 		"aoColumnDefs": [
-             { 'bSortable': false, 'aTargets': [ 5,6 ] } 
+             { 'bSortable': false, 'aTargets': [ 5,6,7 ] } 
           ]
 	});
 	
@@ -385,6 +385,29 @@ $(function(){
                 		$('#modalEditUser input[name="checkboxActive"]').attr('checked',true)
                 	}
                 	$('#modalEditUser').modal('show');
+                    return;
+                } else {
+                	alert(data.errorMessage);
+                }
+            },
+            error : function() {
+            	alert("Why me god? error cmnr");
+            }
+        });
+	});
+	
+	$(".resetPassword").bind("click",function(event){
+		var parent = $(this).parent();
+		var username = parent.parent().find(".td-username").html();
+		$.ajax({ 
+            type : "POST",
+            url : $('#contextPath').val() + "/admin/resetPassword.html",
+            data : {
+            	inputUsername : username
+            },
+            success : function(data) {
+                if (data.resultJSON) {
+                	alert(data.errorMessage);
                     return;
                 } else {
                 	alert(data.errorMessage);
