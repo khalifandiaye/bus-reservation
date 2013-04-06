@@ -141,15 +141,13 @@ public class UserDAO extends GenericDAO<Integer, UserBean> {
         String queryString = null;
         Session session = null;
         String[] role = {"Customer","Operator"};
-        String[] status = {"new","active","inactive"};
         // get the current session
         session = sessionFactory.getCurrentSession();
         try {
             // perform database access (query, insert, update, etc) here
-            queryString = "SELECT user FROM UserBean AS user INNER JOIN user.role AS rol WHERE rol.name IN (:role) AND user.status IN (:status)";
+            queryString = "SELECT user FROM UserBean AS user INNER JOIN user.role AS rol WHERE rol.name IN (:role)";
             query = session.createQuery(queryString); 
             query.setParameterList("role", role);
-            query.setParameterList("status", status);
             result = query.list();
             // commit transaction
             // session.getTransaction().commit();

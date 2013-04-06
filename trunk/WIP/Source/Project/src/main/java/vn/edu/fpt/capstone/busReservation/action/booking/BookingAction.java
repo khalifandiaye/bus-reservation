@@ -31,7 +31,8 @@ public class BookingAction extends BaseAction implements SessionAware {
 	// =============================input parameter====================
 	private String tripData;
 	private String outBusStatus;
-	private String passengerNo;
+	private String passengerNoOut;
+	private String passengerNoReturn;
 	private String outDepartTime;
 	private String outArriveTime;
 	private String outFare;
@@ -47,6 +48,20 @@ public class BookingAction extends BaseAction implements SessionAware {
 	private String rtnDepartTime;
 	private String rtnArriveTime;
 	private String rtnBusStatus;
+	
+	/**
+	 * @return the passengerNoOut
+	 */
+	public String getPassengerNoOut() {
+		return passengerNoOut;
+	}
+
+	/**
+	 * @return the passengerNoReturn
+	 */
+	public String getPassengerNoReturn() {
+		return passengerNoReturn;
+	}
 
 	/**
 	 * @param rtnBusStatus
@@ -124,13 +139,6 @@ public class BookingAction extends BaseAction implements SessionAware {
 	}
 
 	/**
-	 * @return the passengerNo
-	 */
-	public String getPassengerNo() {
-		return passengerNo;
-	}
-
-	/**
 	 * @param outDepartTime
 	 *            the outDepartTime to set
 	 */
@@ -152,14 +160,6 @@ public class BookingAction extends BaseAction implements SessionAware {
 	 */
 	public void setOutFare(String outFare) {
 		this.outFare = outFare;
-	}
-
-	/**
-	 * @param passengerNo
-	 *            the passengerNo to set
-	 */
-	public void setPassengerNo(String passengerNo) {
-		this.passengerNo = passengerNo;
 	}
 
 	/**
@@ -239,8 +239,8 @@ public class BookingAction extends BaseAction implements SessionAware {
 			}
 			listSeatMap.add(tmpSeatMap);
 		} else {
-			SeatInfo[][] tmpSeatMapUp = new SeatInfo[6][6];
-			SeatInfo[][] tmpSeatMapDown = new SeatInfo[6][6];
+			SeatInfo[][] tmpSeatMapUp = new SeatInfo[5][6];
+			SeatInfo[][] tmpSeatMapDown = new SeatInfo[5][6];
 			for (int i = 0; i < 5; i++) {
 				if (i != 1 && i != 3) {
 					for (int j = 0; j < 12; j++) {
@@ -302,6 +302,10 @@ public class BookingAction extends BaseAction implements SessionAware {
 				listOutTripBean = tripDAO.getBookingTrips(busStatus,
 						outDepartTime, outArriveTime);
 				session.put("listOutTripBean", listOutTripBean);
+				
+				List<String> listSoldSeat = seatPositionDAO.getSoldSeats(listOutTripBean);
+				this.passengerNoOut = (listOutTripBean.get(0).getBusStatus().getBus().getBusType().getNumberOfSeats() - listSoldSeat.size())+"";
+				session.put("passengerNoOut", passengerNoOut);
 			} else if (!CheckUtils.isNullOrBlank(rtn_journey)
 					&& rtn_journey.equalsIgnoreCase("on")
 					&& CheckUtils.isNullOrBlank(out_journey)) {
@@ -309,6 +313,10 @@ public class BookingAction extends BaseAction implements SessionAware {
 				listOutTripBean = tripDAO.getBookingTrips(busStatus,
 						rtnDepartTime, rtnArriveTime);
 				session.put("listOutTripBean", listOutTripBean);
+				
+				List<String> listSoldSeat = seatPositionDAO.getSoldSeats(listOutTripBean);
+				this.passengerNoOut = (listOutTripBean.get(0).getBusStatus().getBus().getBusType().getNumberOfSeats() - listSoldSeat.size())+"";
+				session.put("passengerNoOut", passengerNoOut);
 			} else if (!CheckUtils.isNullOrBlank(rtn_journey)
 					&& rtn_journey.equalsIgnoreCase("on")
 					&& !CheckUtils.isNullOrBlank(out_journey)
@@ -321,8 +329,15 @@ public class BookingAction extends BaseAction implements SessionAware {
 				listReturnTripBean = tripDAO.getBookingTrips(busStatusRtn,
 						rtnDepartTime, rtnArriveTime);
 				session.put("listReturnTripBean", listReturnTripBean);
+				
+				List<String> listSoldSeatOut = seatPositionDAO.getSoldSeats(listOutTripBean);
+				List<String> listSoldSeatReturn = seatPositionDAO.getSoldSeats(listReturnTripBean);
+				//Set remain seat for 2 trips
+				this.passengerNoOut = (listOutTripBean.get(0).getBusStatus().getBus().getBusType().getNumberOfSeats() - listSoldSeatOut.size())+"";
+				this.passengerNoReturn = (listReturnTripBean.get(0).getBusStatus().getBus().getBusType().getNumberOfSeats() - listSoldSeatReturn.size())+"";
+				session.put("passengerNoOut", passengerNoOut);
+				session.put("passengerNoReturn", passengerNoReturn);
 			}
-			session.put("passengerNo", passengerNo);
 		} else if (session.containsKey("listOutTripBean")
 				|| session.containsKey("listReturnTripBean")) {
 			// redirect from some where
@@ -331,12 +346,15 @@ public class BookingAction extends BaseAction implements SessionAware {
 					if (session.containsKey("listOutTripBean")) {
 						listOutTripBean = (List<TripBean>) session
 								.get("listOutTripBean");
+						List<String> listSoldSeatOut = seatPositionDAO.getSoldSeats(listOutTripBean);
+						this.passengerNoOut = (listOutTripBean.get(0).getBusStatus().getBus().getBusType().getNumberOfSeats() - listSoldSeatOut.size())+"";
 					}
 					if (session.containsKey("listReturnTripBean")) {
 						listReturnTripBean = (List<TripBean>) session
 								.get("listReturnTripBean");
+						List<String> listSoldSeatReturn = seatPositionDAO.getSoldSeats(listReturnTripBean);
+						this.passengerNoReturn = (listReturnTripBean.get(0).getBusStatus().getBus().getBusType().getNumberOfSeats() - listSoldSeatReturn.size())+"";
 					}
-					this.passengerNo = (String) session.get("passengerNo");
 					session.remove("redirectFrom");
 				}
 			} else {

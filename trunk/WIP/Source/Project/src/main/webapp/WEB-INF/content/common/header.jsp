@@ -39,7 +39,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="container">
+	<div class="container" style="min-height: 500px">
 		<!-- Start header -->
 		<input type="hidden" id="contextPath"
 			value="<%=request.getContextPath()%>">
