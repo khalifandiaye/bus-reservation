@@ -4,7 +4,6 @@
 package vn.edu.fpt.capstone.busReservation.logic;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -291,7 +290,7 @@ public class ReservationLogic extends BaseLogic {
                 // unauthenticated access
                 throw new CommonException("msgerrrs006");
             } else if (tickets.get(0).getReservation().getBooker() == null
-                    && email.equals(tickets.get(0).getReservation().getEmail())) {
+                    && !email.equalsIgnoreCase(tickets.get(0).getReservation().getEmail())) {
                 // unauthorized access
                 throw new CommonException("msgerrrs004");
             }
@@ -307,7 +306,6 @@ public class ReservationLogic extends BaseLogic {
         ReservationInfo info = null;
         ReservationBean reservationBean = null;
         CurrencyConverter converter = null;
-        double basePrice = 0;
         double paidAmount = 0;
         double fee = 0;
         double refundedAmount = 0;
@@ -333,7 +331,7 @@ public class ReservationLogic extends BaseLogic {
         }
         info.setTickets(new ArrayList<ReservationInfo.Ticket>());
         for (TicketBean ticket : tickets) {
-            basePrice += ReservationUtils.addTickets(
+            ReservationUtils.addTickets(
                     info,
                     ticket,
                     (tickets.size() > 1 && ticket
@@ -345,6 +343,16 @@ public class ReservationLogic extends BaseLogic {
                                             - tickets.indexOf(ticket) - 1)
                                     .getTrips().get(0).getDepartureTime())),
                     tariffViewDAO, ticketDAO, converter);
+            if (ticket.getPayments() != null && ticket.getPayments().size() > 0) {
+                for (PaymentBean payment : ticket.getPayments()) {
+                    if (PaymentType.PAY.getValue().equals(payment.getType())) {
+                        paidAmount += payment.getPayAmount();
+                        fee += payment.getServiceFee();
+                    } else {
+                        refundedAmount += payment.getPayAmount();
+                    }
+                }
+            }
         }
         if (ReservationStatus.CANCELLED.getValue().equals(
                 reservationBean.getStatus())
@@ -357,39 +365,19 @@ public class ReservationLogic extends BaseLogic {
                 }
             }
         }
-        Collections.sort(info.getTickets());
-        info.setBasePrice(basePrice);
-        info.setBasePriceInUSD(converter.convert(basePrice));
-        if (reservationBean.getPayments() != null
-                && reservationBean.getPayments().size() > 0) {
-            for (PaymentBean payment : reservationBean.getPayments()) {
-                if (PaymentType.PAY.getValue().equals(payment.getType())) {
-                    paidAmount += payment.getPayAmount();
-                    fee += payment.getServiceFee();
-                } else {
-                    refundedAmount += payment.getPayAmount();
-                }
-            }
-            paidAmount *= 1000;
-            fee *= 1000;
-            refundedAmount *= 1000;
-            info.setBasePrice(paidAmount - fee);
-            info.setBasePriceInUSD(converter.convert(paidAmount - fee)
-                    .doubleValue());
-            info.setTotalAmount(paidAmount);
-            info.setTotalAmountInUSD(converter.convert(paidAmount));
-            info.setTransactionFee(fee);
-            info.setTransactionFeeInUSD(converter.convert(fee));
-            if (refundedAmount > 0) {
-                info.setRefundedAmount(refundedAmount);
-                info.setRefundedAmountInUSD(converter.convert(refundedAmount));
-                info.setRefundRate((int) (refundedAmount * 100 / paidAmount));
-            }
-        } else {
-            info.setBasePrice(basePrice);
-            info.setBasePriceInUSD(converter.convert(
-                    BigDecimal.valueOf(basePrice)).doubleValue());
+        paidAmount *= 1000;
+        fee *= 1000;
+        refundedAmount *= 1000;
+        info.setTotalAmount(paidAmount);
+        info.setTotalAmountInUSD(converter.convert(paidAmount));
+        info.setTransactionFee(fee);
+        info.setTransactionFeeInUSD(converter.convert(fee));
+        if (refundedAmount > 0) {
+            info.setRefundedAmount(refundedAmount);
+            info.setRefundedAmountInUSD(converter.convert(refundedAmount));
+            info.setRefundRate((int) (refundedAmount * 100 / paidAmount));
         }
+        Collections.sort(info.getTickets());
         return info;
     }
 
@@ -400,7 +388,6 @@ public class ReservationLogic extends BaseLogic {
         ReservationInfo info = null;
         CurrencyConverter converter = null;
         List<Ticket> tickets = null;
-        double basePrice = 0;
         info = new ReservationInfo();
         info.setId(0);
         try {
@@ -416,16 +403,14 @@ public class ReservationLogic extends BaseLogic {
         tickets = new ArrayList<ReservationInfo.Ticket>();
         info.setTickets(tickets);
         tripDAO.refresh(forwardTrips);
-        basePrice += ReservationUtils.addTickets(info, forwardTrips,
-                fowardQuantity, false, tariffViewDAO, converter);
+        ReservationUtils.addTickets(info, forwardTrips, fowardQuantity, false,
+                tariffViewDAO, converter);
         if (returnTrips != null) {
             tripDAO.refresh(returnTrips);
-            basePrice += ReservationUtils.addTickets(info, returnTrips,
-                    returnQuantity, true, tariffViewDAO, converter);
+            ReservationUtils.addTickets(info, returnTrips, returnQuantity,
+                    true, tariffViewDAO, converter);
         }
         Collections.sort(info.getTickets());
-        info.setBasePrice(basePrice);
-        info.setBasePriceInUSD(converter.convert(basePrice));
         return info;
     }
 }

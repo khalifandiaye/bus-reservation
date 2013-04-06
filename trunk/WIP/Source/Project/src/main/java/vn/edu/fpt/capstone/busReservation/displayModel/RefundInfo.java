@@ -1,70 +1,133 @@
 package vn.edu.fpt.capstone.busReservation.displayModel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
 /**
  * @author Yoshimi
- *
+ * 
  */
 public class RefundInfo implements Serializable {
+
+    public final class RefundInfoPerTicket {
+
+        /**
+         * @param refundAmount
+         * @param refundAmountInUSD
+         */
+        public RefundInfoPerTicket(int ticketId, double refundAmount,
+                double refundAmountInUSD) {
+            this.ticketId = ticketId;
+            this.refundAmount = refundAmount;
+            this.refundAmountInUSD = refundAmountInUSD;
+        }
+
+        private final int ticketId;
+        private final double refundAmount;
+        private final double refundAmountInUSD;
+
+        /**
+         * @return the ticketId
+         */
+        public int getTicketId() {
+            return ticketId;
+        }
+
+        /**
+         * @return the refundAmount
+         */
+        public double getRefundAmount() {
+            return refundAmount;
+        }
+
+        /**
+         * @return the refundAmountInUSD
+         */
+        public double getRefundAmountInUSD() {
+            return refundAmountInUSD;
+        }
+    }
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-    private double refundAmount;
-    private double refundAmountInUSD;
+    private List<RefundInfoPerTicket> tickets;
     private int refundRate;
+
+    /**
+     * 
+     */
+    public RefundInfo() {
+        tickets = new ArrayList<RefundInfo.RefundInfoPerTicket>();
+    }
+
+    /**
+     * @return the tickets
+     */
+    public List<RefundInfoPerTicket> getTickets() {
+        return tickets;
+    }
+
     /**
      * @return the refundAmount
      */
     public double getRefundAmount() {
+        double refundAmount = 0;
+        if (tickets != null) {
+            for (RefundInfoPerTicket ticket : tickets) {
+                if (ticket != null) {
+                    refundAmount += ticket.refundAmount;
+                }
+            }
+        }
         return refundAmount;
     }
-    /**
-     * @param refundAmount the refundAmount to set
-     */
-    public void setRefundAmount(double refundAmount) {
-        this.refundAmount = refundAmount;
-    }
+
     /**
      * @return the refundAmountInUSD
      */
     public double getRefundAmountInUSD() {
+        double refundAmountInUSD = 0;
+        if (tickets != null) {
+            for (RefundInfoPerTicket ticket : tickets) {
+                if (ticket != null) {
+                    refundAmountInUSD += ticket.refundAmountInUSD;
+                }
+            }
+        }
         return refundAmountInUSD;
     }
-    /**
-     * @param refundAmountInUSD the refundAmountInUSD to set
-     */
-    public void setRefundAmountInUSD(double refundAmountInUSD) {
-        this.refundAmountInUSD = refundAmountInUSD;
-    }
-    
+
     /**
      * @return the refundRate
      */
     public int getRefundRate() {
         return refundRate;
     }
+
     /**
-     * @param refundRate the refundRate to set
+     * @param refundRate
+     *            the refundRate to set
      */
     public void setRefundRate(int refundRate) {
         this.refundRate = refundRate;
     }
+
     public String getRefundAmountString() {
-        return FormatUtils.formatNumber(this.refundAmount,
-                0, CommonConstant.LOCALE_VN);
+        return FormatUtils.formatNumber(getRefundAmount(), 0,
+                CommonConstant.LOCALE_VN);
     }
-    
+
     public String getRefundAmountInUSDString() {
-        return FormatUtils.formatNumber(this.refundAmountInUSD,
-                2, CommonConstant.LOCALE_VN);
+        return FormatUtils.formatNumber(getRefundAmountInUSD(), 2,
+                CommonConstant.LOCALE_VN);
     }
-    
+
     public String getRefundRateString() {
         return Integer.toString(refundRate);
     }

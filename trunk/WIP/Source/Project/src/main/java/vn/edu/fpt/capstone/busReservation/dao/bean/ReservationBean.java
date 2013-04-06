@@ -25,7 +25,6 @@ public class ReservationBean extends AbstractBean<Integer> {
     private String phone;
     private String email;
     private List<TicketBean> tickets;
-    private List<PaymentBean> payments;
 
     /**
      * @return the booker
@@ -159,21 +158,6 @@ public class ReservationBean extends AbstractBean<Integer> {
      */
     public void setTickets(List<TicketBean> tickets) {
         this.tickets = tickets;
-    }
-
-    /**
-     * @return the payments
-     */
-    public List<PaymentBean> getPayments() {
-        return payments;
-    }
-
-    /**
-     * @param payments
-     *            the payments to set
-     */
-    public void setPayments(List<PaymentBean> payments) {
-        this.payments = payments;
     }
 
     /**

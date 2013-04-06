@@ -298,11 +298,6 @@
 			<key column="reservation_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean" />
 		</bag>
-		<bag name="payments" inverse="true" order-by="id">
-			<key column="reservation_id" />
-			<one-to-many
-				class="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean" />
-		</bag>
 	</class>
 	<!-- TICKET -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean"
@@ -322,6 +317,11 @@
 			<key column="ticket_id" />
 			<many-to-many column="trip_id"
 				class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
+		</bag>
+		<bag name="payments" inverse="true" order-by="id">
+			<key column="ticket_id" />
+			<one-to-many
+				class="vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean" />
 		</bag>
 		<property name="status" type="string" insert="false" />
 	</class>
@@ -350,7 +350,7 @@
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
-		<many-to-one name="reservation" column="reservation_id" />
+		<many-to-one name="ticket" column="ticket_id" />
 		<property name="payAmount" column="pay_amount" type="double"
 			not-null="true" />
 		<property name="serviceFee" column="service_fee" type="double"
@@ -379,23 +379,23 @@
 		<property name="text" column="content" type="text" />
 	</class>
 	<!-- RESERVATION_INFO VIEW -->
-	<class
-		name="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean"
-		table="reservation_view">
-		<composite-id>
-			<key-many-to-one name="id" column="reservation_id"
-				class="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean" />
-		</composite-id>
-		<many-to-one name="startTrip" column="start_trip_id"
-			class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
-		<many-to-one name="endTrip" column="end_trip_id"
-			class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" />
-		<property name="ticketPrice" column="ticket_price" type="double" />
-		<property name="paidAmount" column="paid_amount" type="double"
-			not-null="false" />
-		<property name="refundAmount" column="refund_amount" type="double"
-			not-null="false" />
-	</class>
+<!-- 	<class -->
+<!-- 		name="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean" -->
+<!-- 		table="reservation_view"> -->
+<!-- 		<composite-id> -->
+<!-- 			<key-many-to-one name="id" column="reservation_id" -->
+<!-- 				class="vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean" /> -->
+<!-- 		</composite-id> -->
+<!-- 		<many-to-one name="startTrip" column="start_trip_id" -->
+<!-- 			class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" /> -->
+<!-- 		<many-to-one name="endTrip" column="end_trip_id" -->
+<!-- 			class="vn.edu.fpt.capstone.busReservation.dao.bean.TripBean" /> -->
+<!-- 		<property name="ticketPrice" column="ticket_price" type="double" /> -->
+<!-- 		<property name="paidAmount" column="paid_amount" type="double" -->
+<!-- 			not-null="false" /> -->
+<!-- 		<property name="refundAmount" column="refund_amount" type="double" -->
+<!-- 			not-null="false" /> -->
+<!-- 	</class> -->
 	<!-- TARIFF VIEW -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.TariffViewBean"
 		table="tariff_view">

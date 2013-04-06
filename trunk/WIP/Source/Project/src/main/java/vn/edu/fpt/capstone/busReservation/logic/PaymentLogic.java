@@ -13,8 +13,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -57,7 +60,6 @@ import vn.edu.fpt.capstone.busReservation.dao.MailTemplateDAO;
 import vn.edu.fpt.capstone.busReservation.dao.PaymentDAO;
 import vn.edu.fpt.capstone.busReservation.dao.PaymentMethodDAO;
 import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
-import vn.edu.fpt.capstone.busReservation.dao.ReservationInfoDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TicketDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.MailTemplateBean;
@@ -69,10 +71,13 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationSt
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SystemSettingBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean.TicketStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.PaymentDetails;
 import vn.edu.fpt.capstone.busReservation.displayModel.PaymentSetupDetails;
 import vn.edu.fpt.capstone.busReservation.displayModel.RefundInfo;
+import vn.edu.fpt.capstone.busReservation.displayModel.RefundInfo.RefundInfoPerTicket;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo.Ticket;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
@@ -84,6 +89,7 @@ import vn.edu.fpt.capstone.busReservation.util.DateUtils;
 import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 import vn.edu.fpt.capstone.busReservation.util.MailUtils;
 import vn.edu.fpt.capstone.busReservation.util.MailUtils.MailPasswordAuthenticator;
+import vn.edu.fpt.capstone.busReservation.util.ReservationUtils;
 
 import com.paypal.exception.ClientActionRequiredException;
 import com.paypal.exception.HttpErrorException;
@@ -105,7 +111,6 @@ public class PaymentLogic extends BaseLogic {
     private static final long serialVersionUID = -8459183174212009486L;
     // =====================Database Access Object=====================
     private ReservationDAO reservationDAO;
-    private ReservationInfoDAO reservationInfoDAO;
     private PaymentMethodDAO paymentMethodDAO;
     private PaymentDAO paymentDAO;
     private SystemSettingDAO systemSettingDAO;
@@ -119,15 +124,6 @@ public class PaymentLogic extends BaseLogic {
     @Autowired
     public void setReservationDAO(ReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
-    }
-
-    /**
-     * @param reservationInfoDAO
-     *            the reservationInfoDAO to set
-     */
-    @Autowired
-    public void setReservationInfoDAO(ReservationInfoDAO reservationInfoDAO) {
-        this.reservationInfoDAO = reservationInfoDAO;
     }
 
     /**
@@ -220,11 +216,11 @@ public class PaymentLogic extends BaseLogic {
     // .getRouteDetails().getSegment().getStartAt().getAddress());
     // reservationInfo.setDepartureDate(FormatUtils.formatDate(
     // startEndTrips[0].getDepartureTime(),
-    // "EEEEE dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN));
+    // CommonConstant.PATTERN_DATE_TIME_FULL, CommonConstant.LOCALE_VN));
     // reservationInfo.setArrivalStationAddress(startEndTrips[1]
     // .getRouteDetails().getSegment().getEndAt().getAddress());
     // reservationInfo.setArrivalDate(FormatUtils.formatDate(
-    // startEndTrips[1].getArrivalTime(), "EEEEE dd/MM/yyyy hh:mm aa",
+    // startEndTrips[1].getArrivalTime(), CommonConstant.PATTERN_DATE_TIME_FULL,
     // CommonConstant.LOCALE_VN));
     // reservationInfo.setSeatNumbers(getSeatNumbers(reservationBean
     // .getSeatPositions()));
@@ -276,16 +272,17 @@ public class PaymentLogic extends BaseLogic {
         }
         for (Ticket ticket : info.getTickets()) {
             if (ticket.isReturnTrip()) {
-                ticket.setSeats(returnSeats);
-                basePrice += (ticket.getTicketPriceValue() == null ? 0 : ticket
-                        .getTicketPriceValue())
-                        * (returnSeats == null ? 0 : returnSeats.length);
-            } else {
-                ticket.setSeats(forwardSeats);
-                basePrice += (ticket.getTicketPriceValue() == null ? 0 : ticket
-                        .getTicketPriceValue())
-                        * (forwardSeats == null ? 0 : forwardSeats.length);
+                if (returnSeats != null) {
+                    ticket.setSeats(returnSeats);
+                }
+            } else if (!ticket.isReturnTrip()) {
+                if (forwardSeats != null) {
+                    ticket.setSeats(forwardSeats);
+                }
             }
+            basePrice += (ticket.getTicketPriceValue() == null ? 0 : ticket
+                    .getTicketPriceValue())
+                    * (ticket.getSeats() == null ? 0 : ticket.getSeats().length);
         }
         paymentMethod = paymentMethodDAO.getById(paymentMethodId);
         try {
@@ -300,8 +297,6 @@ public class PaymentLogic extends BaseLogic {
             // TODO handle error
             throw new CommonException(e);
         }
-        info.setBasePrice(basePrice);
-        info.setBasePriceInUSD(converter.convert(basePrice).doubleValue());
         info.setTransactionFee(fee.doubleValue());
         info.setTransactionFeeInUSD(converter.convert(fee).doubleValue());
         info.setTotalAmount(totalAmount.doubleValue());
@@ -311,7 +306,7 @@ public class PaymentLogic extends BaseLogic {
     public RefundInfo calculateRefundAmount(int reservationId)
             throws CommonException {
         ReservationInfoBean reservation = null;
-        reservation = reservationInfoDAO.getById(reservationId);
+        reservation = reservationDAO.getReservationInfo(reservationId);
         if (!ReservationStatus.PAID.getValue().equals(
                 reservation.getId().getStatus())) {
             return null;
@@ -332,71 +327,91 @@ public class PaymentLogic extends BaseLogic {
         Calendar timelimit = null;
         Date today = null;
         CurrencyConverter converter = null;
-        if (reservation.getId().getPayments() != null
-                && reservation.getId().getPayments().size() > 0) {
-            for (PaymentBean payment : reservation.getId().getPayments()) {
-                amount += payment.getPayAmount();
+        settings = systemSettingDAO.getAllLike("refund%");
+        if (settings == null || settings.size() % 2 != 0) {
+            throw new CommonException();
+        }
+        settingCount = settings.size() / 2;
+        rates = new int[settingCount];
+        limits = new int[settingCount];
+        for (SystemSettingBean setting : settings) {
+            settingKey = setting.getId().split("\\.");
+            if (settingKey[2].equals("rate")) {
+                rates[Integer.parseInt(settingKey[1]) - 1] = Integer
+                        .parseInt(setting.getValue());
+            } else {
+                limits[Integer.parseInt(settingKey[1]) - 1] = Integer
+                        .parseInt(setting.getValue());
             }
         }
-        amount *= 1000;
-        if (amount > 0) {
-            settings = systemSettingDAO.getAllLike("refund%");
-            if (settings == null || settings.size() % 2 != 0) {
-                throw new CommonException();
+        timelimit = Calendar.getInstance();
+        today = new Date();
+        for (int i = 0; i < settingCount; i++) {
+            timelimit.setTime(reservation.getStartTrip().getDepartureTime());
+            timelimit.add(Calendar.DATE, -limits[i]);
+            if (today.before(timelimit.getTime())) {
+                refundRate = rates[i];
+                break;
             }
-            settingCount = settings.size() / 2;
-            rates = new int[settingCount];
-            limits = new int[settingCount];
-            for (SystemSettingBean setting : settings) {
-                settingKey = setting.getId().split("\\.");
-                if (settingKey[2].equals("rate")) {
-                    rates[Integer.parseInt(settingKey[1]) - 1] = Integer
-                            .parseInt(setting.getValue());
-                } else {
-                    limits[Integer.parseInt(settingKey[1]) - 1] = Integer
-                            .parseInt(setting.getValue());
-                }
-            }
-            timelimit = Calendar.getInstance();
-            today = new Date();
-            for (int i = 0; i < settingCount; i++) {
-                timelimit
-                        .setTime(reservation.getStartTrip().getDepartureTime());
-                timelimit.add(Calendar.DATE, -limits[i]);
-                if (today.before(timelimit.getTime())) {
-                    refundRate = rates[i];
-                    break;
-                }
-            }
-            if (refundRate == 0) {
-                // TODO handle error
-                throw new CommonException();
-            }
-            try {
-                converter = CurrencyConverter.getInstance(
-                        Currency.getInstance("VND"),
-                        Currency.getInstance("USD"));
-            } catch (InstantiationException e) {
-                LOG.error("Impossible error", e);
-            } catch (IOException e) {
-                // TODO handle error
-                throw new CommonException(e);
-            }
-            amount = roundingVND(amount, RoundingMode.FLOOR) * refundRate / 100;
-            refundInfo = new RefundInfo();
-            refundInfo.setRefundAmount(amount);
-            refundInfo.setRefundRate(refundRate);
-            refundInfo.setRefundAmountInUSD(converter.convert(amount));
-            return refundInfo;
-        } else {
+        }
+        if (refundRate == 0) {
             // TODO handle error
             throw new CommonException();
         }
+        try {
+            converter = CurrencyConverter.getInstance(
+                    Currency.getInstance("VND"), Currency.getInstance("USD"));
+        } catch (InstantiationException e) {
+            LOG.error("Impossible error", e);
+        } catch (IOException e) {
+            // TODO handle error
+            throw new CommonException(e);
+        }
+        refundInfo = new RefundInfo();
+        refundInfo.setRefundRate(refundRate);
+        for (TicketBean ticket : reservation.getId().getTickets()) {
+            if (TicketStatus.ACTIVE.getValue().equals(ticket.getStatus())
+                    && ticket.getPayments() != null
+                    && ticket.getPayments().size() > 0) {
+                amount = 0;
+                for (PaymentBean payment : ticket.getPayments()) {
+                    if (PaymentType.PAY.getValue().equals(payment.getType())) {
+                        amount += payment.getPayAmount();
+                    } else {
+                        amount -= payment.getPayAmount();
+                    }
+                }
+                amount *= 1000;
+                amount = roundingVND(amount * refundRate / 100,
+                        RoundingMode.FLOOR);
+                refundInfo.getTickets().add(
+                        refundInfo.new RefundInfoPerTicket(ticket.getId(),
+                                amount, converter.convert(amount)));
+            }
+        }
+        return refundInfo;
     }
 
-    public void doRefund(int reservationId, int userId) throws HibernateException, CommonException {
-        savePayment(reservationId, doPaypalRefund(reservationId), 0,
-                PaymentType.REFUND);
+    public void doRefund(int reservationId, int userId)
+            throws HibernateException, CommonException {
+        String transactionId = null;
+        List<PaymentDetails> paymentDetailsList = null;
+        PaymentDetails details = null;
+        RefundInfo refundInfo = null;
+        refundInfo = calculateRefundAmount(reservationId);
+        transactionId = doPaypalRefund(reservationId, refundInfo);
+        paymentDetailsList = new ArrayList<PaymentDetails>();
+        for (RefundInfoPerTicket ticket : refundInfo.getTickets()) {
+            details = new PaymentDetails();
+            paymentDetailsList.add(details);
+            details.setTransactionID(transactionId);
+            details.setTicketId(ticket.getTicketId());
+            details.setFeeAmount("0");
+            details.setGrossAmount(BigDecimal
+                    .valueOf(ticket.getRefundAmountInUSD())
+                    .setScale(2, RoundingMode.FLOOR).toPlainString());
+        }
+        savePayment(reservationId, paymentDetailsList, 0, PaymentType.REFUND);
         paymentDAO.completeTransaction();
     }
 
@@ -408,23 +423,21 @@ public class PaymentLogic extends BaseLogic {
      *         VND, and the transaction id
      * @throws CommonException
      */
-    public PaymentDetails doPaypalRefund(int reservationId)
+    public String doPaypalRefund(int reservationId, RefundInfo refundInfo)
             throws CommonException {
-        PaymentDetails result = null;
         PayPalAPIInterfaceServiceService service = null;
         RefundTransactionResponseType response = null;
         RefundTransactionReq request = null;
         RefundTransactionRequestType requestDetails = null;
         BasicAmountType amount = null;
         ReservationInfoBean reservation = null;
-        RefundInfo refundInfo = null;
         PaymentBean payment = null;
 
-        reservation = reservationInfoDAO.getById(reservationId);
+        reservation = reservationDAO.getReservationInfo(reservationId);
         if (ReservationStatus.PAID.getValue().equals(
                 reservation.getId().getStatus())) {
-            refundInfo = calculateRefundAmount(reservation);
-            payment = reservation.getId().getPayments().get(0);
+            payment = reservation.getId().getTickets().get(0).getPayments()
+                    .get(0);
             request = new RefundTransactionReq();
             requestDetails = new RefundTransactionRequestType();
             request.setRefundTransactionRequest(requestDetails);
@@ -446,12 +459,7 @@ public class PaymentLogic extends BaseLogic {
             }
             if (response != null) {
                 if (response.getAck().toString().equalsIgnoreCase("SUCCESS")) {
-                    result = new PaymentDetails();
-                    result.setGrossAmount(response.getGrossRefundAmount()
-                            .getValue());
-                    result.setFeeAmount(response.getFeeRefundAmount()
-                            .getValue());
-                    result.setTransactionID(response.getRefundTransactionID());
+                    // do nothing
                 } else {
                     for (ErrorType error : response.getErrors()) {
                         LOG.error("PAYPAL error: " + error.getErrorCode() + ":"
@@ -469,7 +477,7 @@ public class PaymentLogic extends BaseLogic {
             // TODO handle error
             throw new CommonException();
         }
-        return result;
+        return response.getRefundTransactionID();
     }
 
     public PaymentSetupDetails setupPayment(ReservationInfo reservationInfo,
@@ -623,31 +631,57 @@ public class PaymentLogic extends BaseLogic {
 
     public void doPayment(ReservationInfo reservationInfo, int paymentMethodId,
             String token) throws CommonException {
+        List<PaymentDetails> paymentDetailsList = null;
+        Map<Integer, double[]> map = null;
+        double[] mapValue = null;
         PaymentDetails paymentDetails = null;
         PaymentType paymentType = null;
-        paymentType = PaymentType.PAY;
+        String transactionId = null;
+
+        // perform the transaction and get transaction id
         if (1 == paymentMethodId) {
-            paymentDetails = new PaymentDetails();
-            paymentDetails.setFeeAmount(BigDecimal
-                    .valueOf(reservationInfo.getTransactionFeeInUSDValue())
-                    .setScale(2).toString());
-            paymentDetails.setGrossAmount(BigDecimal
-                    .valueOf(reservationInfo.getTotalAmountInUSDValue())
-                    .setScale(2).toString());
-            paymentDetails.setTransactionID("");
-            savePayment(reservationInfo.getId(), paymentDetails,
-                    paymentMethodId, paymentType);
+            transactionId = token;
         } else if (2 == paymentMethodId) {
-            paymentDetails = doPaypalExpressCheckoutPayment(getPaypalExpressCheckoutDetails(token));
-            paymentDetails.setFeeAmount(BigDecimal
-                    .valueOf(reservationInfo.getTransactionFeeInUSDValue())
-                    .setScale(2, RoundingMode.CEILING).toString());
-            savePayment(reservationInfo.getId(), paymentDetails,
-                    paymentMethodId, paymentType);
+            transactionId = doPaypalExpressCheckoutPayment(getPaypalExpressCheckoutDetails(token));
         } else {
             // unimplemented payment method
             throw new CommonException("msgerrrs007");
         }
+
+        // calculate the amount paid and fee for each ticket
+        paymentType = PaymentType.PAY;
+        map = new HashMap<Integer, double[]>();
+        paymentDetailsList = new ArrayList<PaymentDetails>();
+        for (Ticket ticket : reservationInfo.getTickets()) {
+            if (map.containsKey(ticket.getId())) {
+                mapValue = map.get(ticket.getId());
+            } else {
+                mapValue = new double[2];
+                map.put(ticket.getId(), mapValue);
+            }
+            mapValue[0] += reservationInfo.getTransactionFeeInUSDValue()
+                    * ticket.getTicketPriceInUSDValue() * ticket.getSeats().length
+                    / reservationInfo.getBasePriceInUSDValue();
+            mapValue[1] += reservationInfo.getTotalAmountInUSDValue()
+                    * ticket.getTicketPriceInUSDValue() * ticket.getSeats().length
+                    / reservationInfo.getBasePriceInUSDValue();
+        }
+        for (Entry<Integer, double[]> entry : map.entrySet()) {
+            paymentDetails = new PaymentDetails();
+            paymentDetailsList.add(paymentDetails);
+            paymentDetails.setFeeAmount(BigDecimal.valueOf(entry.getValue()[0])
+                    .setScale(2, RoundingMode.CEILING).toString());
+            paymentDetails.setGrossAmount(BigDecimal
+                    .valueOf(entry.getValue()[1])
+                    .setScale(2, RoundingMode.CEILING).toString());
+            paymentDetails.setTicketId(entry.getKey());
+            paymentDetails.setTransactionID(transactionId);
+        }
+
+        // save the payment to database
+        savePayment(reservationInfo.getId(), paymentDetailsList,
+                paymentMethodId, paymentType);
+
         paymentDAO.completeTransaction();
     }
 
@@ -728,7 +762,7 @@ public class PaymentLogic extends BaseLogic {
         return checkoutDetailsResponse;
     }
 
-    public PaymentDetails doPaypalExpressCheckoutPayment(
+    public String doPaypalExpressCheckoutPayment(
             GetExpressCheckoutDetailsResponseType checkoutDetailsResponse)
             throws CommonException {
         PayPalAPIInterfaceServiceService service = null;
@@ -736,7 +770,6 @@ public class PaymentLogic extends BaseLogic {
         DoExpressCheckoutPaymentRequestType doRequest = null;
         DoExpressCheckoutPaymentRequestDetailsType details = null;
         DoExpressCheckoutPaymentResponseType doResponse = null;
-        PaymentDetails result = null;
         details = new DoExpressCheckoutPaymentRequestDetailsType();
         details.setToken(checkoutDetailsResponse
                 .getGetExpressCheckoutDetailsResponseDetails().getToken());
@@ -817,18 +850,8 @@ public class PaymentLogic extends BaseLogic {
         }
         doResponse.getDoExpressCheckoutPaymentResponseDetails()
                 .getPaymentInfo().get(0).getTransactionID();
-        result = new PaymentDetails();
-        result.setGrossAmount(doResponse
-                .getDoExpressCheckoutPaymentResponseDetails().getPaymentInfo()
-                .get(0).getGrossAmount().getValue());
-        result.setFeeAmount(doResponse
-                .getDoExpressCheckoutPaymentResponseDetails().getPaymentInfo()
-                .get(0).getFeeAmount().getValue());
-        result.setTransactionID(doResponse
-                .getDoExpressCheckoutPaymentResponseDetails().getPaymentInfo()
-                .get(0).getTransactionID());
-        paymentDAO.startTransaction();
-        return result;
+        return doResponse.getDoExpressCheckoutPaymentResponseDetails()
+                .getPaymentInfo().get(0).getTransactionID();
     }
 
     /**
@@ -845,29 +868,21 @@ public class PaymentLogic extends BaseLogic {
      * @throws CommonException
      * @throws HibernateException
      */
-    public String savePayment(int reservationId, PaymentDetails paymentDetails,
-            int paymentMethodId, PaymentType paymentType)
-            throws CommonException, HibernateException {
+    public String savePayment(int reservationId,
+            List<PaymentDetails> paymentDetails, int paymentMethodId,
+            PaymentType paymentType) throws CommonException, HibernateException {
         ReservationBean reservation = null;
         PaymentBean payment = null;
         int maxTry = CommonConstant.MAX_REGENERATE_CODE_TRY;
         String reservationCode = null;
         CurrencyConverter converter = null;
+        paymentDAO.startTransaction();
         // Update database
         reservation = reservationDAO.getById(reservationId);
-        payment = new PaymentBean();
-        payment.setReservation(reservation);
-        // Payment method
-        if (paymentMethodId == 0 && PaymentType.REFUND.equals(paymentType)) {
-            // try to get payment method from payment
-            payment.setPaymentMethod(reservation.getPayments().get(0)
-                    .getPaymentMethod());
-        } else {
-            payment.setPaymentMethod(paymentMethodDAO.getById(paymentMethodId));
-        }
         try {
             converter = CurrencyConverter.getInstance(
-                    Currency.getInstance("USD"), Currency.getInstance("VND"));
+                    Currency.getInstance("USD"),
+                    Currency.getInstance("VND"));
         } catch (InstantiationException e) {
             LOG.error("Impossible error", e);
             throw new CommonException(e);
@@ -875,20 +890,42 @@ public class PaymentLogic extends BaseLogic {
             // TODO handle error
             throw new CommonException(e);
         }
-        payment.setPayAmount(roundingVND(
-                converter.convert(new BigDecimal(paymentDetails
-                        .getGrossAmount())), RoundingMode.FLOOR).divide(
-                BigDecimal.valueOf(1000), 1, RoundingMode.CEILING)
-                .doubleValue());
-        payment.setServiceFee(roundingVND(
-                converter
-                        .convert(new BigDecimal(paymentDetails.getFeeAmount())),
-                RoundingMode.FLOOR).divide(BigDecimal.valueOf(1000), 1,
-                RoundingMode.CEILING).doubleValue());
-        payment.setTransactionId(paymentDetails.getTransactionID());
-        // Payment type
-        payment.setType(paymentType.getValue());
-        paymentDAO.insert(payment);
+        for (TicketBean ticket : reservation.getTickets()) {
+            for (PaymentDetails details : paymentDetails) {
+                if (details != null && ticket.getId() == details.getTicketId()) {
+                    payment = new PaymentBean();
+                    payment.setTicket(ticket);
+                    // Payment method
+                    if (paymentMethodId == 0
+                            && PaymentType.REFUND.equals(paymentType)) {
+                        // try to get payment method from payment
+                        payment.setPaymentMethod(reservation.getTickets()
+                                .get(0).getPayments().get(0).getPaymentMethod());
+                    } else {
+                        payment.setPaymentMethod(paymentMethodDAO
+                                .getById(paymentMethodId));
+                    }
+                    payment.setPayAmount(roundingVND(
+                            converter.convert(new BigDecimal(details
+                                    .getGrossAmount())), RoundingMode.FLOOR)
+                            .divide(BigDecimal.valueOf(1000), 1,
+                                    RoundingMode.CEILING).doubleValue());
+                    payment.setServiceFee(roundingVND(
+                            converter.convert(new BigDecimal(details
+                                    .getFeeAmount())), RoundingMode.FLOOR)
+                            .divide(BigDecimal.valueOf(1000), 1,
+                                    RoundingMode.CEILING).doubleValue());
+                    payment.setTransactionId(details.getTransactionID());
+                    // Payment type
+                    payment.setType(paymentType.getValue());
+                    break;
+                }
+            }
+            if (payment == null) {
+                throw new CommonException();
+            }
+            paymentDAO.insert(payment);
+        }
         // Generate reservation code
         if (CheckUtils.isNullOrBlank(reservation.getCode())) {
             try {
@@ -966,39 +1003,11 @@ public class PaymentLogic extends BaseLogic {
 
     private BigDecimal roundingVND(final BigDecimal number,
             RoundingMode roundingMode) {
-        return number.divide(BigDecimal.valueOf(500), 0, roundingMode)
-                .multiply(BigDecimal.valueOf(500));
+        return ReservationUtils.roundingVND(number, roundingMode);
     }
 
     private Double roundingVND(final Double number, RoundingMode roundingMode) {
-        if (number == null) {
-            return null;
-        } else if (roundingMode == null
-                || RoundingMode.CEILING.equals(roundingMode)) {
-            return Math.ceil(number / 500) * 500;
-        } else if (RoundingMode.FLOOR.equals(roundingMode)) {
-            return Math.floor(number / 500) * 500;
-        } else if (RoundingMode.DOWN.equals(roundingMode)) {
-            if (number > 0) {
-                return Math.floor(number / 500) * 500;
-            } else {
-                return Math.ceil(number / 500) * 500;
-            }
-        } else if (RoundingMode.UP.equals(roundingMode)) {
-            if (number > 0) {
-                return Math.ceil(number / 500) * 500;
-            } else {
-                return Math.floor(number / 500) * 500;
-            }
-        } else if (RoundingMode.UNNECESSARY.equals(roundingMode)) {
-            return number;
-        } else if (RoundingMode.HALF_UP.equals(roundingMode)) {
-            return (double) Math.round(number / 500) * 500;
-        } else if (RoundingMode.HALF_DOWN.equals(roundingMode)) {
-            return (double) Math.ceil(number / 500 - 0.5) * 500;
-        } else {
-            throw new UnsupportedOperationException();
-        }
+        return ReservationUtils.roundingVND(number, roundingMode);
     }
 
     public void sendCancelReservationMail(int reservationId, String contextPath)
@@ -1046,8 +1055,8 @@ public class PaymentLogic extends BaseLogic {
                 .getId().getReservation().getCode());
         MailUtils.replace(content, ":bookTime:", DateUtils.date2String(
                 ticketInfos.get(0).getId().getReservation().getBookTime(),
-                "dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
-                CommonConstant.DEFAULT_TIME_ZONE));
+                CommonConstant.PATTERN_DATE_TIME_LONG,
+                CommonConstant.LOCALE_VN, CommonConstant.DEFAULT_TIME_ZONE));
         MailUtils.replaceLoop(content, "loopTicket", ticketInfos.size());
         seatNumbers = new StringBuilder();
         for (TicketInfoBean bean : ticketInfos) {
@@ -1060,11 +1069,13 @@ public class PaymentLogic extends BaseLogic {
                     .getName());
             MailUtils.replace(content, ":fromDate_" + count + ":", DateUtils
                     .date2String(bean.getStartTrip().getDepartureTime(),
-                            "dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
+                            CommonConstant.PATTERN_DATE_TIME_LONG,
+                            CommonConstant.LOCALE_VN,
                             CommonConstant.DEFAULT_TIME_ZONE));
             MailUtils.replace(content, ":toDate_" + count + ":", DateUtils
                     .date2String(bean.getEndTrip().getArrivalTime(),
-                            "dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
+                            CommonConstant.PATTERN_DATE_TIME_LONG,
+                            CommonConstant.LOCALE_VN,
                             CommonConstant.DEFAULT_TIME_ZONE));
             // clean string builder
             seatNumbers.setLength(0);
@@ -1090,13 +1101,14 @@ public class PaymentLogic extends BaseLogic {
                 FormatUtils.formatNumber(
                         roundingVND(total * 1000, RoundingMode.CEILING), 0,
                         CommonConstant.LOCALE_VN) + " VND");
-        if (ticketInfos.get(0).getId().getReservation().getPayments() != null) {
-            for (PaymentBean payment : ticketInfos.get(0).getId()
-                    .getReservation().getPayments()) {
-                if (PaymentType.PAY.getValue().equals(payment.getType())) {
-                    paidAmount += payment.getPayAmount();
-                } else {
-                    refundAmount += payment.getPayAmount();
+        for (TicketInfoBean ticket : ticketInfos) {
+            if (ticket.getId().getPayments() != null) {
+                for (PaymentBean payment : ticket.getId().getPayments()) {
+                    if (PaymentType.PAY.getValue().equals(payment.getType())) {
+                        paidAmount += payment.getPayAmount();
+                    } else {
+                        refundAmount += payment.getPayAmount();
+                    }
                 }
             }
         }
@@ -1209,8 +1221,8 @@ public class PaymentLogic extends BaseLogic {
                 .getId().getReservation().getCode());
         MailUtils.replace(content, ":bookTime:", DateUtils.date2String(
                 ticketInfos.get(0).getId().getReservation().getBookTime(),
-                "dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
-                CommonConstant.DEFAULT_TIME_ZONE));
+                CommonConstant.PATTERN_DATE_TIME_LONG,
+                CommonConstant.LOCALE_VN, CommonConstant.DEFAULT_TIME_ZONE));
         MailUtils.replaceLoop(content, "loopTicket", ticketInfos.size());
         seatNumbers = new StringBuilder();
         for (TicketInfoBean bean : ticketInfos) {
@@ -1223,11 +1235,13 @@ public class PaymentLogic extends BaseLogic {
                     .getName());
             MailUtils.replace(content, ":fromDate_" + count + ":", DateUtils
                     .date2String(bean.getStartTrip().getDepartureTime(),
-                            "dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
+                            CommonConstant.PATTERN_DATE_TIME_LONG,
+                            CommonConstant.LOCALE_VN,
                             CommonConstant.DEFAULT_TIME_ZONE));
             MailUtils.replace(content, ":toDate_" + count + ":", DateUtils
                     .date2String(bean.getEndTrip().getArrivalTime(),
-                            "dd/MM/yyyy hh:mm aa", CommonConstant.LOCALE_VN,
+                            CommonConstant.PATTERN_DATE_TIME_LONG,
+                            CommonConstant.LOCALE_VN,
                             CommonConstant.DEFAULT_TIME_ZONE));
             // clean string builder
             seatNumbers.setLength(0);
@@ -1253,13 +1267,14 @@ public class PaymentLogic extends BaseLogic {
                 FormatUtils.formatNumber(
                         roundingVND(total * 1000, RoundingMode.CEILING), 0,
                         CommonConstant.LOCALE_VN) + " VND");
-        if (ticketInfos.get(0).getId().getReservation().getPayments() != null) {
-            for (PaymentBean payment : ticketInfos.get(0).getId()
-                    .getReservation().getPayments()) {
-                if (PaymentType.PAY.getValue().equals(payment.getType())) {
-                    paidAmount += payment.getPayAmount();
-                } else {
-                    refundAmount += payment.getPayAmount();
+        for (TicketInfoBean ticket : ticketInfos) {
+            if (ticket.getId().getPayments() != null) {
+                for (PaymentBean payment : ticket.getId().getPayments()) {
+                    if (PaymentType.PAY.getValue().equals(payment.getType())) {
+                        paidAmount += payment.getPayAmount();
+                    } else {
+                        refundAmount += payment.getPayAmount();
+                    }
                 }
             }
         }

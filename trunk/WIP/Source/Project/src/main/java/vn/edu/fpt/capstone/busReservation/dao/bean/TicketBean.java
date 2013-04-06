@@ -81,6 +81,29 @@ public class TicketBean extends AbstractBean<Integer> {
         public String getValue() {
             return value;
         }
+
+        /* (non-Javadoc)
+         * @see java.lang.Object#hashCode()
+         */
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((value == null) ? 0 : value.hashCode());
+            return result;
+        }
+
+        /* (non-Javadoc)
+         * @see java.lang.Object#equals(java.lang.Object)
+         */
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            return value.equals(obj);
+        }
     }
 
     /**
@@ -91,6 +114,7 @@ public class TicketBean extends AbstractBean<Integer> {
     private TicketStatus status;
     private List<TripBean> trips;
     private List<SeatPositionBean> seatPositions;
+    private List<PaymentBean> payments;
 
     /**
      * @return the reservation
@@ -150,5 +174,19 @@ public class TicketBean extends AbstractBean<Integer> {
      */
     public void setSeatPositions(List<SeatPositionBean> seatPositions) {
         this.seatPositions = seatPositions;
+    }
+
+    /**
+     * @return the payments
+     */
+    public List<PaymentBean> getPayments() {
+        return payments;
+    }
+
+    /**
+     * @param payments the payments to set
+     */
+    public void setPayments(List<PaymentBean> payments) {
+        this.payments = payments;
     }
 }

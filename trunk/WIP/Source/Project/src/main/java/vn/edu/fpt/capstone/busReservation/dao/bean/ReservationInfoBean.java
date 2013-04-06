@@ -16,9 +16,30 @@ public class ReservationInfoBean extends AbstractBean<ReservationBean> {
     private static final long serialVersionUID = 1L;
     private TripBean startTrip;
     private TripBean endTrip;
-    private Double ticketPrice;
-    private Double paidAmount;
-    private Double refundAmount;
+
+    /**
+     * 
+     */
+    public ReservationInfoBean() {
+    }
+
+    /**
+     * @param id
+     */
+    public ReservationInfoBean(ReservationBean id) {
+        super(id);
+    }
+
+    /**
+     * @param id
+     * @param startTrip
+     * @param endTrip
+     */
+    public ReservationInfoBean(ReservationBean id, TripBean startTrip, TripBean endTrip) {
+        super(id);
+        this.startTrip = startTrip;
+        this.endTrip = endTrip;
+    }
 
     /**
      * @return the startTrip
@@ -48,48 +69,6 @@ public class ReservationInfoBean extends AbstractBean<ReservationBean> {
      */
     public void setEndTrip(TripBean endTrip) {
         this.endTrip = endTrip;
-    }
-
-    /**
-     * @return the ticketPrice
-     */
-    public Double getTicketPrice() {
-        return ticketPrice;
-    }
-
-    /**
-     * @param ticketPrice the ticketPrice to set
-     */
-    public void setTicketPrice(Double ticketPrice) {
-        this.ticketPrice = ticketPrice;
-    }
-
-    /**
-     * @return the paidAmount
-     */
-    public Double getPaidAmount() {
-        return paidAmount;
-    }
-
-    /**
-     * @param paidAmount the paidAmount to set
-     */
-    public void setPaidAmount(Double paidAmount) {
-        this.paidAmount = paidAmount;
-    }
-
-    /**
-     * @return the refundAmount
-     */
-    public Double getRefundAmount() {
-        return refundAmount;
-    }
-
-    /**
-     * @param refundAmount the refundAmount to set
-     */
-    public void setRefundAmount(Double refundAmount) {
-        this.refundAmount = refundAmount;
     }
 
 }
