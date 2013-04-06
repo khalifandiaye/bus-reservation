@@ -202,7 +202,7 @@ public class BookingAction extends BaseAction implements SessionAware {
 	private List<SeatInfo[][]> buildSeatMap(List<TripBean> listTripBean) {
 		if (listTripBean == null) {
 			return null;
-		}
+		} 
 		List<SeatInfo> seats = getSeatsList(listTripBean);
 		int tmpBustType = listTripBean.get(0).getBusStatus().getBus()
 				.getBusType().getId();
