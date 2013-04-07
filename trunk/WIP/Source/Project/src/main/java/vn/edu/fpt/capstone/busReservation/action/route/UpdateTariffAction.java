@@ -93,37 +93,26 @@ public class UpdateTariffAction extends BaseAction {
 		for (TariffInfo tariffInfo : tariffInfos) {
 			SegmentBean segmentBean = segmentDAO.getById(tariffInfo
 					.getSegmentId());
-			SegmentBean segmentBeanRevert = segmentDAO.getDuplicatedSegment(
-					segmentBean.getEndAt().getId(),
-					segmentBean.getStartAt().getId()).get(0);
 
 			// get exist tariff
 			List<TariffBean> tariffBeans = tariffDAO.getExistTariff(
 					segmentBean.getId(), busTypeBean.getId(), validDate);
 
-			List<TariffBean> tariffBeansRevert = tariffDAO.getExistTariff(
-					segmentBeanRevert.getId(), busTypeBean.getId(), validDate);
 
-			if (tariffBeans.size() != 0 && tariffBeansRevert.size() != 0) {
+			if (tariffBeans.size() != 0) {
 				TariffBean tariffBean = tariffBeans.get(0);
-				TariffBean revertTariffBean = tariffBeansRevert.get(0);
-				// update current segment
 				tariffBean.setFare(tariffInfo.getFare());
-				// update revert segment
-				revertTariffBean.setFare(tariffInfo.getFare());
 				tariffDAO.update(tariffBean);
-				tariffDAO.update(revertTariffBean);
 			} else {
 				List<SegmentBean> segments = new ArrayList<SegmentBean>();
 				if (!isRevertRoute) {
-					segments = segmentDAO.getSegmentInRouteTerminal(routeId,
-							segmentBean.getStartAt().getId(), segmentBean
-									.getEndAt().getId());
+					segments.add(segmentBean);
 				} else {
 					segments = segmentDAO.getSegmentInRouteTerminal(routeId,
 							segmentBean.getEndAt().getId(), segmentBean
 									.getStartAt().getId());
 				}
+				
 				if (segments.size() != 0) {
 					TariffBean tariffBean = new TariffBean();
 					tariffBean.setFare(tariffInfo.getFare());
