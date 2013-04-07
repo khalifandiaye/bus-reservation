@@ -95,7 +95,7 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 				+ "OR  bs.bus.returnRoute.id = :routeId) "
 				+ "AND bs.busStatus = :busStatus "
 				+ "AND bs.fromDate >= :date AND bs.status != :status " 
-				+ "AND bs.endStation = :endStation ";
+				+ "AND bs.endStation = :endStation ORDER BY bs.fromDate";
 		Session session = sessionFactory.getCurrentSession();
 		List<BusStatusBean> result = new ArrayList<BusStatusBean>();
 		try {

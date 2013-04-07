@@ -36,14 +36,16 @@ public class PreUpdateTariffAction extends BaseAction {
 			segmentBean = segmentDAO.getById(segmentId);
 		}
 		if (segmentBeans.size() != 0) {
-			message = "Affected route";
+			
 			for (SegmentBean segment : segmentBeans) {
+				message = "Affected route";
+				
 				List<RouteBean> routeBeans = routeDetailsDAO
 						.getAllRoutesBySegmentId(segment.getId());
 
 				for (RouteBean routeBean : routeBeans) {
 					if (routeBean.getId() != routeId) {
-						message = routeBean.getName() + " (affected segment: "
+						message += routeBean.getName() + " (affected segment: "
 								+ segment.getStartAt().getName() + " - "
 								+ segment.getEndAt().getName() + " ) \n";
 					}
@@ -54,14 +56,12 @@ public class PreUpdateTariffAction extends BaseAction {
 					.getAllRoutesBySegmentId(segmentBean.getId());
 
 			for (RouteBean routeBean : routeBeans) {
+				message = "Affected route: ";
 				if (routeBean.getId() != routeId) {
-					message = routeBean.getName() + " (affected segment: "
-							+ segmentBean.getStartAt().getName() + " - "
-							+ segmentBean.getEndAt().getName() + " ) \n";
+					message += routeBean.getName() + "\n";
 				}
 			}
 		}
-
 		return SUCCESS;
 	}
 

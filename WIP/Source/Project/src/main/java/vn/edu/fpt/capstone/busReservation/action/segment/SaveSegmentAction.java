@@ -56,7 +56,7 @@ public class SaveSegmentAction extends BaseAction {
 				if (dupTimeForwardBeans.get(0).getTravelTime() != dtravelTime) {
 					// get duplicated duration for return travel time
 					segmentTravelTimeBeans.add(dupTimeForwardBeans.get(0));
-					if (addPriceRevRoute.equals("on")) {
+					if ("on".equals(addPriceRevRoute)) {
 						List<SegmentTravelTimeBean> dupTimeReturnBeans = segmentTravelTimeDAO
 								.getExistDuration(segmentReturn.getId(),
 										validDate);
@@ -76,7 +76,7 @@ public class SaveSegmentAction extends BaseAction {
 				segmentTravelTimeBeans.add(segmentTravelTimeBeanForward);
 
 				// select return segment
-				if (addPriceRevRoute.equals("on")) {
+				if ("on".equals(addPriceRevRoute)) {
 					SegmentTravelTimeBean segmentTravelTimeBeanReturn = new SegmentTravelTimeBean();
 					segmentTravelTimeBeanReturn.setSegment(segmentReturn);
 					segmentTravelTimeBeans.add(segmentTravelTimeBeanReturn);
@@ -89,7 +89,7 @@ public class SaveSegmentAction extends BaseAction {
 				}
 			}
 
-			setMessage("Update travel time for Segment"
+			setMessage("Update travel time for Segment "
 					+ segmentForward.getStartAt().getName() + " - "
 					+ segmentForward.getEndAt().getName() + " success!");
 

@@ -70,11 +70,11 @@ Date.prototype.toMyString = function () {
        
        $('#validFromTime').datepicker({
              dateFormat : 'dd/mm/yy',
-             minDate : '+1D',
+             minDate : '0',
              maxDate : '+3M',
              regional : 'vi'
           });
-          $('#validFromTime').val(d.toMyString());
+          $('#validFromTime').val(now);
  });
     
 	$(document).ready(function() {

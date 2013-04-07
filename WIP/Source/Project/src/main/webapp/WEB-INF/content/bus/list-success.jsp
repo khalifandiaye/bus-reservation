@@ -22,11 +22,11 @@
 	$(document).ready(function() {		
 		
 		var busTable = $("#busTable").dataTable({
-			"sDom": "<'row'<'span6 pull-left'l><'span5 pull-right'f>r>t<'row'<'span6'i><'span6'p>>",
+			/* "sDom": "<'row'<'span6 pull-left'l><'span5 pull-right'f>r>t<'row'<'span6'i><'span6'p>>",
 			"sPaginationType": "bootstrap", 
 			"aoColumnDefs": [ 
 			                 { 'bSortable': false, 'aTargets': [5] } 
-			              ]			
+			              ] */			
 		}); 
 		
 		$('#addBus').bind().bind('click', function(event) {

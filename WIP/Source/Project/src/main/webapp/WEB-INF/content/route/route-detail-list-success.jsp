@@ -171,9 +171,9 @@ Date.prototype.toMyString = function () {
 							'#tripDialogBusPlate')
 							.append('<option value="' + this.id + '">'+ this.plateNumber+ '</option>');
 						});
+						checkButton();
 					});
 			} 
-			checkButton();
 		};
 
 		function getArrivalTime() {
@@ -198,20 +198,22 @@ Date.prototype.toMyString = function () {
             var busPlate = $('#tripDialogBusPlate').val();
             var addNewSchedule = $("#addNewSchedule");
 
-            if(departureTime != "" && busPlate != null && busPlate != ''){
+            if(busPlate != '' && busPlate != null){
+            	addNewSchedule.addClass("btn-primary");
             	addNewSchedule.removeAttr("disabled"); 
             } else { 
+            	addNewSchedule.removeClass('btn-primary');
             	addNewSchedule.attr("disabled","disabled");
             }
 		}
 		
 		$("#tripDialogBusType").change(function(){
 			getAvailBus();
-	      checkButton();
+	      /* checkButton(); */
 	   });
 		
 		$("#tripDialogBusPlate").change(function(){
-	      checkButton(); 
+	      /* checkButton();  */
       });
 		
 		$('#cancelAdd').bind('click', function() {
@@ -280,9 +282,7 @@ Date.prototype.toMyString = function () {
 			"bSort" : false
 		});
 		
-		var scheduleTable = $('#scheduleTable').dataTable({
-	         "bSort" : false
-	      });
+		var scheduleTable = $('#scheduleTable').dataTable();
 
 		var priceTable = $('#priceTable').dataTable({
 			"bSort" : false
@@ -333,7 +333,7 @@ Date.prototype.toMyString = function () {
 			info['validDate'] = $('#validDate').val();
 			info['tariffs'] = tariffs;
 			info['busTypeId'] = $('#busTypes').val();
-			info['addRevert'] = $("#addTariffRevRoute").attr('checked');
+			info['addRevert'] = $("#addTariffRevRoute").is(':checked');
 			$.ajax({
 				type : "GET",
 				url : 'getPreUpdateTariffAction.html?routeId=' + $("#routeId").val(),
@@ -363,6 +363,10 @@ Date.prototype.toMyString = function () {
 		});
 
 		$("#assignBus").click(function() {
+	         if (!$("#busDetailbusPlate").val() || $("#busDetailbusPlate").val() == '') {
+	        	 $("#busDetailAdd").removeClass("btn-primary");
+	                  $("#busDetailAdd").attr("disabled","disabled");
+	         }
 			var routeId = $("#routeId").val();
 			var busType = $("#busType").val();
 			$.ajax({
@@ -388,7 +392,9 @@ Date.prototype.toMyString = function () {
    							var data = busDetailTable.fnGetData(tr);
    							$('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
    								busDetailTable.dataTable().fnDeleteRow(aPos[0]);
-   							});
+   								$("#busDetailAdd").addClass("btn-primary");    
+   			               $("#busDetailAdd").removeAttr("disabled");
+   						});
    					} else {
    		            busDetailTable.dataTable().fnAddData([
    		               this.id,
@@ -424,6 +430,7 @@ Date.prototype.toMyString = function () {
 					var data = busDetailTable.fnGetData(tr);
 					$('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
 					busDetailTable.dataTable().fnDeleteRow(aPos[0]);
+					$("#busDetailAdd").addClass("btn-primary");
 					$("#busDetailAdd").removeAttr("disabled"); 
 				});
 		});
@@ -431,7 +438,8 @@ Date.prototype.toMyString = function () {
 		$("#busDetailAdd").bind('click', function(){
 			var busId = $("#busDetailbusPlate").val();
 			if (!busId || busId == '') {
-	               $("#busDetailAdd").attr("disabled","disabled");
+				$("#busDetailAdd").removeClass("btn-primary");
+	         $("#busDetailAdd").attr("disabled","disabled");
 	      }
 		});
 
@@ -635,7 +643,7 @@ Date.prototype.toMyString = function () {
                   <td style="text-align: right; font-weight:bold;">Total : </td>
                   <td style="text-align: center; font-weight:bold;"><s:property value='sumaryTime'/></td>
                   <td style="text-align: right;padding-right:100px; font-weight:bold;">
-                     <label id="totalMoney"></label>
+                     <label id="totalMoney" style="font-weight:bold;"></label>
                   </td>
                </tr>
             </tfoot>
