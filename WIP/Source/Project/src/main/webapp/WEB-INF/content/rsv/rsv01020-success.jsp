@@ -73,7 +73,7 @@
 								<th class="datetime"><s:text name="reservation.ticket.departureTime" /> / <s:text name="reservation.ticket.arrivalTime" /></th>
 								<th><s:text name="reservation.ticket.seatNumbers" /></th>
 								<th><s:text name="reservation.ticket.busType" /></th>
-								<th><s:text name="reservation.status" /></th>
+								<th><s:text name="cancel" /></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -91,7 +91,14 @@
 										<s:iterator value="seats" ><s:property/> </s:iterator>
 									</td>
 									<td rowspan="2"><s:property value="busType" /></td>
-									<td rowspan="2"><s:text name="%{status}" /> <s:if test="%{status == 'cancelled' || status == 'refunded2'}" ><span title='<s:text name="message.cancelReason.companySide"><s:param><s:property value="cancelReason" /></s:param></s:text>'>?</span></s:if></td>
+									<td rowspan="2">
+										<s:if test="%{status == 'active' && reservationInfo.status != unpaid}" >
+											<a id="<s:property value="%{'cancel_' + id}"/>" href="#">
+												<s:text name="cancel" />
+											</a>
+										</s:if>
+										<s:else ><s:text name="%{status}" /></s:else> <s:if test="%{status == 'cancelled' || status == 'refunded2'}" ><span title='<s:text name="message.cancelReason.companySide"><s:param><s:property value="cancelReason" /></s:param></s:text>'>?</span></s:if>
+									</td>
 								</tr>
 							<s:if test="returnTrip">
 								<tr class="return">
@@ -141,6 +148,22 @@
 		</div>
 	</div>
 	<jsp:include page="../common/footer.jsp" />
+	<!-- Cancel modal -->
+	<div id="cancelModal" class="modal hide fade">
+		<input type="hidden" name="cancelReservationId" />
+		<div class="modal-header">
+			<button type="button" class="close close-model-btn">×</button>
+			<h3 id="myModalLabel"><s:text name="header.cancelReservation" /></h3>
+		</div>
+		<div class="modal-body">
+			<p id="cancelConfirmMessage"></p>
+		</div>
+		<div class="modal-footer">
+			<button id="btnClose" class="btn close-model-btn btn-primary hidden"><s:text name="button.close" /></button>
+			<button id="btnNo" class="btn close-model-btn"><s:text name="button.no" /></button>
+			<button id="btnCancel" class="btn btn-primary"><s:text name="button.yes" /></button>
+		</div>
+	</div>
 	</div>
 	<div class="printable">
 		<h3><s:text name="reservationInfo" /> <img id="btnPrint" class="click-able" src="<%=request.getContextPath()%>/images/print.png" alt="<s:text name="label.print" />" /><img id="btnPrintPDF" class="click-able" src="<%=request.getContextPath()%>/images/print-pdf.png" alt="<s:text name="label.print-pdf" />" /></h3>
@@ -196,7 +219,7 @@
 						<th class="datetime"><s:text name="reservation.ticket.departureTime" /> / <s:text name="reservation.ticket.arrivalTime" /></th>
 						<th><s:text name="reservation.ticket.seatNumbers" /></th>
 						<th><s:text name="reservation.ticket.busType" /></th>
-						<th><s:text name="reservation.status" /></th>
+						<th><s:text name="cancel" /></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -214,7 +237,8 @@
 								<s:iterator value="seats" ><s:property/> </s:iterator>
 							</td>
 							<td rowspan="2"><s:property value="busType" /></td>
-							<td rowspan="2"><s:text name="%{status}" /> <s:if test="%{status == 'cancelled' || status == 'refunded2'}" ><span title='<s:text name="message.cancelReason.companySide"><s:param><s:property value="cancelReason" /></s:param></s:text>'>?</span></s:if></td>
+							<td rowspan="2"><s:text name="%{status}" /> <s:if test="%{status == 'cancelled' || status == 'refunded2'}" ><span title='<s:text name="message.cancelReason.companySide"><s:param><s:property value="cancelReason" /></s:param></s:text>'>?</span></s:if>
+							</td>
 						</tr>
 					<s:if test="returnTrip">
 						<tr class="return">

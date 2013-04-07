@@ -42,7 +42,7 @@ public class PayJSONAction extends BaseAction {
 
     // ==========================Action Input==========================
     private Integer paymentMethodId;
-    private String reservationId;
+    private String ticketId;
     private String forwardSeats;
     private String returnSeats;
 
@@ -55,11 +55,11 @@ public class PayJSONAction extends BaseAction {
     }
 
     /**
-     * @param reservationId
-     *            the reservationId to set
+     * @param ticketId
+     *            the ticketId to set
      */
-    public void setReservationId(String reservationId) {
-        this.reservationId = reservationId;
+    public void setTicketId(String ticketId) {
+        this.ticketId = ticketId;
     }
 
     /**
@@ -151,12 +151,12 @@ public class PayJSONAction extends BaseAction {
     public String calculateRefund() {
         String args[] = null;
         RefundInfo refundInfo = null;
-        if (CheckUtils.isNullOrBlank(reservationId)) {
+        if (CheckUtils.isNullOrBlank(ticketId)) {
             // TODO handle error
             errorMessage = getText("msgerrcm000");
             LOG.error("msgerrcm000");
             return SUCCESS;
-        } else if (!CheckUtils.isPositiveInteger(reservationId)) {
+        } else if (!CheckUtils.isPositiveInteger(ticketId)) {
             // TODO handle error
             errorMessage = getText("msgerrcm000");
             LOG.error("msgerrcm000");
@@ -164,7 +164,7 @@ public class PayJSONAction extends BaseAction {
         }
         try {
             refundInfo = paymentLogic.calculateRefundAmount(Integer
-                    .parseInt(reservationId));
+                    .parseInt(ticketId));
             args = new String[3];
             args[0] = refundInfo.getRefundAmountString();
             args[1] = refundInfo.getRefundAmountInUSDString();
@@ -186,12 +186,13 @@ public class PayJSONAction extends BaseAction {
             "callback" }) })
     public String cancelReservation() {
         int userId = 0;
-        if (CheckUtils.isNullOrBlank(reservationId)) {
+        int reservationId = 0;
+        if (CheckUtils.isNullOrBlank(ticketId)) {
             // TODO handle error
             errorMessage = getText("msgerrcm000");
             LOG.error("msgerrcm000");
             return SUCCESS;
-        } else if (!CheckUtils.isPositiveInteger(reservationId)) {
+        } else if (!CheckUtils.isPositiveInteger(ticketId)) {
             // TODO handle error
             errorMessage = getText("msgerrcm000");
             LOG.error("msgerrcm000");
@@ -209,7 +210,8 @@ public class PayJSONAction extends BaseAction {
             }
         }
         try {
-            paymentLogic.doRefund(Integer.parseInt(reservationId), userId);
+            reservationId = paymentLogic.doRefund(Integer.parseInt(ticketId),
+                    userId);
             cancelConfirmMessage = getText("message.cancelSuccess");
         } catch (Exception e) {
             errorProcessing(e, true);
@@ -217,11 +219,10 @@ public class PayJSONAction extends BaseAction {
             return SUCCESS;
         }
         try {
-            paymentLogic.sendCancelReservationMail(
-                    Integer.parseInt(reservationId),
+            paymentLogic.sendCancelReservationMail(reservationId,
                     servletRequest.getContextPath());
         } catch (Exception e) {
-            errorProcessing(e, false);
+            errorProcessing(new CommonException("msgerrcm003", e), false);
             errorMessage = getActionErrors().iterator().next();
             return SUCCESS;
         }

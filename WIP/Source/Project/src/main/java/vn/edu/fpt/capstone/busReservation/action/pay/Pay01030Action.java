@@ -7,6 +7,7 @@ import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.User;
+import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.logic.ReservationLogic;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
@@ -120,7 +121,7 @@ public class Pay01030Action extends BaseAction {
             paymentLogic.sendReservationCompleteMail(reservationInfo.getId(),
                     servletRequest.getContextPath());
         } catch (Exception e) {
-            errorProcessing(e, false);
+            errorProcessing(new CommonException("msgerrcm003", e), false);
         }
 
         session.remove(ReservationInfo.class.getName());

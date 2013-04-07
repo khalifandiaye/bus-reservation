@@ -29,14 +29,14 @@ public class CommonException extends Exception {
         }
         this.messageId = messageId;
         this.parameters = parameters;
-        log.error(messageId);
+        log.error(messageId, this);
     }
 
     public CommonException() {
         super();
         this.messageId = "msgerrcm000";
         parameters = new String[0];
-        log.error(messageId);
+        log.error(messageId, this);
     }
 
     public CommonException(String messageId) {
@@ -46,7 +46,7 @@ public class CommonException extends Exception {
         }
         this.messageId = messageId;
         parameters = new String[0];
-        log.error(messageId);
+        log.error(messageId, this);
     }
 
     public CommonException(String messageId, Throwable cause) {
@@ -56,14 +56,14 @@ public class CommonException extends Exception {
         }
         this.messageId = messageId;
         parameters = new String[0];
-        log.error(messageId, cause);
+        log.error(messageId, this);
     }
 
     public CommonException(Throwable cause) {
         super(cause);
         this.messageId = "msgerrcm000";
         parameters = new String[0];
-        log.error(messageId, cause);
+        log.error(messageId, this);
     }
 
     public CommonException(String messageId, String[] parameters,
@@ -74,7 +74,7 @@ public class CommonException extends Exception {
         }
         this.messageId = messageId;
         this.parameters = parameters;
-        log.error(messageId, cause);
+        log.error(messageId, this);
     }
 
     /**

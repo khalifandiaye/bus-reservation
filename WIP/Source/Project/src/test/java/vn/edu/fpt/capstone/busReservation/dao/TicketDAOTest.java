@@ -30,7 +30,7 @@ public class TicketDAOTest extends DAOTest {
     @Test
     public void testGetTicketInfo001() {
         TicketDAO ticketDAO = (TicketDAO) getBean("ticketDAO");
-        List<TicketInfoBean> list = ticketDAO.getTicketInfo(1115);
+        List<TicketInfoBean> list = ticketDAO.getTicketInfoByReservationId(1115);
         assertNotNull(list);
         assertEquals(111, list.size());
     }

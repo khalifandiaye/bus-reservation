@@ -138,7 +138,7 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<TicketBean> getTicketsByCode(String reservationCode) {
+    public List<TicketBean> getTicketsByCode(String reservationCode, String email) {
         List<TicketBean> result = null;
         Query query = null;
         String queryString = null;
@@ -151,11 +151,13 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
                     + " INNER JOIN tkt.reservation rsv"
                     + " INNER JOIN tkt.trips trps"
                     + " WHERE rsv.code = :reservationCode"
+                    + "     AND rsv.email = :email"
                     + "     AND rsv.status != :rsvStatusMoved"
                     + "     AND tkt.status != :ticketStatusMoved"
                     + " ORDER BY trps.departureTime";
             query = session.createQuery(queryString);
             query.setString("reservationCode", reservationCode);
+            query.setString("email", email);
             query.setString("rsvStatusMoved",
                     ReservationStatus.MOVED.getValue());
             query.setString("ticketStatusMoved", TicketStatus.MOVED.getValue());
@@ -168,7 +170,59 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<TicketInfoBean> getTicketInfo(int reservationId) {
+    public TicketInfoBean getTicketInfoById(int ticketId) {
+        List<TicketInfoBean> result = null;
+        Query query = null;
+        String queryString = null;
+        Session session = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            queryString = "SELECT DISTINCT new vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean(tkt, trps, trpe, SUM(tar.fare))"
+                    + " FROM TicketBean tkt"
+                    + " INNER JOIN tkt.trips trps"
+                    + " INNER JOIN tkt.trips trpe"
+                    + " INNER JOIN tkt.trips trp"
+                    + " INNER JOIN trp.routeDetails.segment.tariffs tar"
+                    + " INNER JOIN tkt.reservation rsv"
+                    + " WHERE tkt.id = :ticketId"
+                    + "     AND rsv.status != :rsvStatusMoved"
+                    + "     AND tkt.status != :ticketStatusMoved"
+                    + "     AND trps.departureTime = ("
+                    + "         SELECT MIN(trp1.departureTime)"
+                    + "         FROM TicketBean tkt1"
+                    + "         INNER JOIN tkt1.trips trp1"
+                    + "         WHERE tkt1 = tkt)"
+                    + "     AND trpe.departureTime = ("
+                    + "         SELECT MAX(trp2.departureTime)"
+                    + "         FROM TicketBean tkt2"
+                    + "         INNER JOIN tkt2.trips trp2"
+                    + "         WHERE tkt2 = tkt)"
+                    + "     AND tar.busType = trp.busStatus.bus.busType"
+                    + "     AND tar.validFrom = ("
+                    + "         SELECT MAX(tar.validFrom)"
+                    + "         FROM TariffBean tar1"
+                    + "         WHERE tar1.segment = trp.routeDetails.segment"
+                    + "             AND tar1.busType = trp.busStatus.bus.busType"
+                    + "             AND tar1.validFrom <= rsv.bookTime)"
+                    + " GROUP BY tkt,trps,trps.busStatus,trps.departureTime,trpe"
+                    + " ORDER BY trps.departureTime";
+            query = session.createQuery(queryString);
+            query.setInteger("ticketId", ticketId);
+            query.setString("rsvStatusMoved",
+                    ReservationStatus.MOVED.getValue());
+            query.setString("ticketStatusMoved", TicketStatus.MOVED.getValue());
+            result = query.list();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+        // return result, if needed
+        return result == null || result.size() <= 0 ? null : result.get(0);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<TicketInfoBean> getTicketInfoByReservationId(int reservationId) {
         List<TicketInfoBean> result = null;
         Query query = null;
         String queryString = null;

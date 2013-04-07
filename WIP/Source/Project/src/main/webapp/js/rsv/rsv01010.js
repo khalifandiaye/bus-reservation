@@ -9,6 +9,7 @@ $(document).ready(function(){
             aTargets : [ "details" ]
         },
         {
+            "bVisible": false,
             "sClass": "text_center",
             "sWidth": "20px",
             "aTargets" : [ "index" ]
@@ -81,7 +82,7 @@ $(document).ready(function(){
             dataType: 'jsonp',
             crossDomain: true,
             data : {
-                reservationId : id
+                ticketId : id
             },
             beforeSend : function() {
                 // display confirm modal
@@ -125,7 +126,7 @@ $(document).ready(function(){
             crossDomain: true,
             data : {
                 // get id from hidden input
-                reservationId : $('input[name="cancelReservationId"]').val()
+                ticketId : $('input[name="cancelReservationId"]').val()
             },
             beforeSend : function() {
                 $('.modal-body').addClass("loading");

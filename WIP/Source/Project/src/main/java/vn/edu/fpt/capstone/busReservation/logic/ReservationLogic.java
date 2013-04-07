@@ -284,7 +284,7 @@ public class ReservationLogic extends BaseLogic {
             throws CommonException {
         ReservationInfo info = null;
         List<TicketBean> tickets = null;
-        tickets = ticketDAO.getTicketsByCode(reservationCode);
+        tickets = ticketDAO.getTicketsByCode(reservationCode, email);
         if (tickets != null && tickets.size() > 0) {
             if (tickets.get(0).getReservation().getBooker() != null) {
                 // unauthenticated access

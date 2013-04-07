@@ -296,7 +296,7 @@ public class ReservationInfo implements Serializable {
      * @return the refundedAmountInUSD
      */
     public String getRefundedAmountInUSD() {
-        return FormatUtils.formatNumber(refundedAmountInUSD, 0, locale);
+        return FormatUtils.formatNumber(refundedAmountInUSD, 2, locale);
     }
 
     /**
