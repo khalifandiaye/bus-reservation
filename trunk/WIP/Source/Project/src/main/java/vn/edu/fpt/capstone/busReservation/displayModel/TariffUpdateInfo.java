@@ -8,6 +8,7 @@ public class TariffUpdateInfo {
 	private String validDate;
 	private int busTypeId;
 	private List<TariffInfo> tariffs;
+	private boolean addRevert;
 
 	public String getValidDate() {
 		return validDate;
@@ -40,5 +41,13 @@ public class TariffUpdateInfo {
 	public void setRouteId(int routeId) {
 		this.routeId = routeId;
 	}
+
+   public boolean isAddRevert() {
+      return addRevert;
+   }
+
+   public void setAddRevert(boolean addRevert) {
+      this.addRevert = addRevert;
+   }
 
 }

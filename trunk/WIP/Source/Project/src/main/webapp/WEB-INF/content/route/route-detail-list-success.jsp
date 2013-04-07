@@ -317,6 +317,7 @@ Date.prototype.toMyString = function () {
 			info['validDate'] = $('#validDate').val();
 			info['tariffs'] = tariffs;
 			info['busTypeId'] = $('#busTypes').val();
+			info['addRevert'] = $("#addTariffRevRoute").attr('checked');
 			$.ajax({
 				type : "GET",
 				url : 'getPreUpdateTariffAction.html?routeId=' + $("#routeId").val(),
@@ -722,6 +723,7 @@ Date.prototype.toMyString = function () {
                   </s:iterator>
                </tbody>
             </table>
+            <div><input type="checkbox" id="addTariffRevRoute" style="margin-top: -4px;"/> Add price for reverse route too?</div>
          </div>
       </div>
       <div class="modal-footer">
