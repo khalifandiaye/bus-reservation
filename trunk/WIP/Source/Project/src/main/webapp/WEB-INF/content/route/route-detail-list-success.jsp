@@ -334,24 +334,7 @@ Date.prototype.toMyString = function () {
 			info['tariffs'] = tariffs;
 			info['busTypeId'] = $('#busTypes').val();
 			info['addRevert'] = $("#addTariffRevRoute").is(':checked');
-			$.ajax({
-				type : "GET",
-				url : 'getPreUpdateTariffAction.html?routeId=' + $("#routeId").val(),
-				contentType : "application/x-www-form-urlencoded; charset=utf-8",
-				success : function(response) {
-					$("#preUpdateTariffMessage").html(response.message);
-					$("#preUpdateTariff").modal();
-					/* if (response.message.trim() != '') {
-						var result = confirm(response.message);
-						if (result == true) {
-							updateTarrif(info);
-						}
-					} */
-				},
-				error : function() {
-					alert("Save new route failed!");
-				}
-			});
+			updateTarrif(info);
 		});
 
 		$("#addBusPrice").click(function() {
@@ -359,7 +342,24 @@ Date.prototype.toMyString = function () {
 			function() {$(this).val('');});
 			$('#busTypes').val('-1');
 			$('#validDateDiv').datetimepicker('setDate', (new Date()));
-			$("#editPriceDialog").modal();
+			$.ajax({
+	            type : "GET",
+	            url : 'getPreUpdateTariffAction.html?routeId=' + $("#routeId").val(),
+	            contentType : "application/x-www-form-urlencoded; charset=utf-8",
+	            success : function(response) {
+	               $("#preUpdateTariffMessage").html(response.message);
+	               $("#editPriceDialog").modal();
+	               /* if (response.message.trim() != '') {
+	                  var result = confirm(response.message);
+	                  if (result == true) {
+	                     updateTarrif(info);
+	                  }
+	               } */
+	            },
+	            error : function() {
+	               alert("Save new route failed!");
+	            }
+	         });
 		});
 
 		$("#assignBus").click(function() {
@@ -749,6 +749,7 @@ Date.prototype.toMyString = function () {
                   </s:iterator>
                </tbody>
             </table>
+            <p id="preUpdateTariffMessage"></p>
             <div><input type="checkbox" id="addTariffRevRoute" style="margin-top: -4px;"/> Add price for reverse route too?</div>
          </div>
       </div>
@@ -800,21 +801,6 @@ Date.prototype.toMyString = function () {
       </form>
    </div>
    
-   <div id="preUpdateTariff" class="modal hide fade" tabindex="-1"
-      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-header">
-         <button type="button" class="close" data-dismiss="modal"
-            aria-hidden="true">×</button>
-         <h3 id="preUpdateTariffLabel">Warning Message</h3>
-      </div>
-      <div class="modal-body">
-         <p id="preUpdateTariffMessage"></p>
-      </div>
-      <div class="modal-footer">
-         <button class="btn" id="cancelAdd" data-dismiss="modal" aria-hidden="true">Cancel</button>
-         <input type="button" id="preUpdateTariffOk" class="btn btn-primary" value='Ok' />
-      </div>
-   </div>
    <jsp:include page="../common/footer.jsp" />
 </body>
 </html>
