@@ -55,22 +55,27 @@ public class UpdateTariffAction extends BaseAction {
 	public String execute() {
 		try {
 			TariffUpdateInfo tariffUpdateInfo = mapper.readValue(data,
-					new TypeReference<TariffUpdateInfo>() {});
+					new TypeReference<TariffUpdateInfo>() {
+					});
 			List<TariffInfo> tariffInfos = tariffUpdateInfo.getTariffs();
-			
+
 			int routeId = tariffUpdateInfo.getRouteId();
 			updateTarrif(tariffInfos, tariffUpdateInfo, routeId, false);
-			//create tariff for reverse route
-			Collections.reverse(tariffInfos);
-			List<Integer> rt = routeDAO.getRouteTerminal(routeId);
-			int revertRouteId = 0;
-			if (rt.size() != 0) {
-				if (routeId == rt.get(0)) {
-					revertRouteId = rt.get(1);
-				} else {
-					revertRouteId = rt.get(0);
+			
+			// create tariff for reverse route
+			if (tariffUpdateInfo.isAddRevert()) {
+				Collections.reverse(tariffInfos);
+				List<Integer> rt = routeDAO.getRouteTerminal(routeId);
+				int revertRouteId = 0;
+				if (rt.size() != 0) {
+					if (routeId == rt.get(0)) {
+						revertRouteId = rt.get(1);
+					} else {
+						revertRouteId = rt.get(0);
+					}
+					updateTarrif(tariffInfos, tariffUpdateInfo, revertRouteId,
+							true);
 				}
-				updateTarrif(tariffInfos, tariffUpdateInfo, revertRouteId, true);
 			}
 		} catch (Exception e) {
 		}
@@ -83,13 +88,15 @@ public class UpdateTariffAction extends BaseAction {
 		Date validDate = FormatUtils.deFormatDate(
 				tariffUpdateInfo.getValidDate(), "dd/MM/yyyy",
 				CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
-		BusTypeBean busTypeBean = busTypeDAO.getById(tariffUpdateInfo.getBusTypeId());
+		BusTypeBean busTypeBean = busTypeDAO.getById(tariffUpdateInfo
+				.getBusTypeId());
 		for (TariffInfo tariffInfo : tariffInfos) {
-			SegmentBean segmentBean = segmentDAO.getById(tariffInfo.getSegmentId());
+			SegmentBean segmentBean = segmentDAO.getById(tariffInfo
+					.getSegmentId());
 			SegmentBean segmentBeanRevert = segmentDAO.getDuplicatedSegment(
 					segmentBean.getEndAt().getId(),
 					segmentBean.getStartAt().getId()).get(0);
-			
+
 			// get exist tariff
 			List<TariffBean> tariffBeans = tariffDAO.getExistTariff(
 					segmentBean.getId(), busTypeBean.getId(), validDate);
