@@ -91,7 +91,6 @@
 			<table id="busTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
 				<thead>
 					<tr>
-					<th>ID</th>
 					<th>Bus Type</th>
 					<th>Plate Number</th>
 					<th>Assigned route</th>
@@ -102,7 +101,6 @@
 				<tbody>
 					<s:iterator value="busBeans">
 						<tr id="route_<s:property value='id'/>">
-							<td><s:property value="id" /></td>
 							<td><s:property value="busType.name" /></td>
 							<td><s:property value="plateNumber" /></td>
 							<td><s:property value="forwardRoute.name" /></td>
