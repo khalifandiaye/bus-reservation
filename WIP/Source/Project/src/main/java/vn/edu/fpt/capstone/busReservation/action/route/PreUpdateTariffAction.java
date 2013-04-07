@@ -49,7 +49,7 @@ public class PreUpdateTariffAction extends BaseAction {
 					}
 				}
 			}
-		} else if (segmentBean != null){
+		} else if (segmentBean != null) {
 			List<RouteBean> routeBeans = routeDetailsDAO
 					.getAllRoutesBySegmentId(segmentBean.getId());
 
@@ -58,6 +58,8 @@ public class PreUpdateTariffAction extends BaseAction {
 					message = routeBean.getName() + " (affected segment: "
 							+ segmentBean.getStartAt().getName() + " - "
 							+ segmentBean.getEndAt().getName() + " ) \n";
+				}
+			}
 		}
 
 		return SUCCESS;
