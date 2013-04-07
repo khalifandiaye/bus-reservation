@@ -54,6 +54,9 @@
 		      });
 		      
 				$('#busStatusInsertBtn').click(function() {
+					var date = new Date();
+			      date.setDate(date.getDate() + 1);
+			         
 					$('#tripDialogRoutes').val(-1);
 					$('#tripDialogDepartureTime').val('');
 					$('#tripDialogArrivalTime').val('');
@@ -67,13 +70,15 @@
 						format : "hh:ii - dd/mm/yyyy",
 						autoclose : true,
 						todayBtn : true,
-						startDate : new Date(),
+						startDate : date,
 						minuteStep : 10
 					}).on('changeDate', function(ev) {
 						getAvailBus();
 						getArrivalTime();
 						checkButton();
 					});
+					
+					$("#tripDialogDepartureTimeDiv").datetimepicker("setDate", date);
 				});
 				
 				$('#tripDeleteDialogOk').click(function() {

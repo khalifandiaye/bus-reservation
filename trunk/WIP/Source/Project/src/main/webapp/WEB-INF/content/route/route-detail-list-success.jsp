@@ -36,6 +36,15 @@ Date.prototype.toMyString = function () {
     return output; 
 };
 
+   function checkBusType() {
+	   var optionCount = $("#busType option").length;
+	   if(optionCount != 0){
+		   $("#busType").removeAttr("disabled"); 
+        } else { 
+        	$("#busType").attr("disabled","disabled");
+        }
+   }
+
 	function validate(evt) {
 		var theEvent = evt || window.event;
 		var key = theEvent.keyCode || theEvent.which;
@@ -90,7 +99,7 @@ Date.prototype.toMyString = function () {
 	});
 	
 	$(document).ready(function() {
-		
+		checkBusType();
 		var active = $("#active").val();
 		if (active == 'false') {
 			$("#addBusPrice").attr("disabled","disabled");
@@ -136,7 +145,9 @@ Date.prototype.toMyString = function () {
 				checkButton();
 			});
 			
-			$("#tripDialogDepartureTimeDiv").datetimepicker("setDate", new Date());
+			$("#tripDialogDepartureTimeDiv").datetimepicker("setDate", date);
+			getArrivalTime();
+			getAvailBus();
 		});
 
 		function getAvailBus() {
@@ -333,7 +344,7 @@ Date.prototype.toMyString = function () {
 				error : function() {
 					alert("Save new route failed!");
 				}
-			})
+			});
 		});
 
 		$("#addBusPrice").click(function() {
