@@ -27,6 +27,7 @@ public class SaveSegmentAction extends BaseAction {
 	private int segmentId;
 	private String validFromTime;
 	private String duration;
+	private String addPriceRevRoute;
 	private String message = "Save Segment Success!";
 
 	private SegmentTravelTimeDAO segmentTravelTimeDAO;
@@ -134,5 +135,13 @@ public class SaveSegmentAction extends BaseAction {
 	public void setSegmentDAO(SegmentDAO segmentDAO) {
 		this.segmentDAO = segmentDAO;
 	}
+
+   public String getAddPriceRevRoute() {
+      return addPriceRevRoute;
+   }
+
+   public void setAddPriceRevRoute(String addPriceRevRoute) {
+      this.addPriceRevRoute = addPriceRevRoute;
+   }
 
 }

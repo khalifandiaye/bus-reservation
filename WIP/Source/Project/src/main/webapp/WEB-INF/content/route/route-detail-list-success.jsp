@@ -600,7 +600,7 @@ Date.prototype.toMyString = function () {
                <tr>
                   <th style="text-align: center">Name</th>  
                   <th style="text-align: center">Travel Time</th>
-                  <th style="text-align: center">Price (VND)</th>
+                  <th style="text-align: center">Price (VNĐ)</th>
                </tr>
             </thead>
             <tbody>
