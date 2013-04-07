@@ -100,7 +100,6 @@
 					getBusTypesInRoute();
 					getAvailBus();
 					getArrivalTime();
-					checkButton();
 		      });
 				
 				$('#tripDialogBusPlate').change(function() {
@@ -219,7 +218,7 @@
 							<td><s:property value="bus.plateNumber" /></td>
 							<td><s:date name="fromDate" format="hh:mm - dd/MM/yyyy" /></td>
 							<td><s:date name="toDate" format="hh:mm - dd/MM/yyyy" /></td>
-							<td style="width: 6%"><input class="btn btn-info btn-small"
+							<td style="width:6%"><input class="btn btn-info btn-small"
 								type="button" value="View Details" 
 								onclick='javascript: loadDetails(<s:property value='id'/>)' /></td>
 							<td><input data-delete="<s:property value='id'/>"

@@ -19,6 +19,7 @@
 <script src="<%=request.getContextPath()%>/js/jquery-ui.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.ui.datepicker-vi.js"></script>
 <script type="text/javascript">
+var info = {};
 Date.prototype.toMyString = function () {
 
     function padZero(obj) {
@@ -122,6 +123,10 @@ Date.prototype.toMyString = function () {
 			});
 		};
 
+		$("#preUpdateTariffOk").click(function(){
+			 updateTarrif(info);
+		});
+		
 		$('#busStatusInsertBtn').click(function() {
 			var date = new Date();
 			date.setDate(date.getDate() + 1);
@@ -315,7 +320,7 @@ Date.prototype.toMyString = function () {
 		$('#validDateSelectDiv').datetimepicker("setDate", new Date() ); */
 
 		$("#editPriceSave").bind('click',function() {
-			var info = {};
+			info = {};
 			var tariffs = [];
 			$.each($("#editSegmentTable input"),
 			function() {
@@ -334,12 +339,14 @@ Date.prototype.toMyString = function () {
 				url : 'getPreUpdateTariffAction.html?routeId=' + $("#routeId").val(),
 				contentType : "application/x-www-form-urlencoded; charset=utf-8",
 				success : function(response) {
-					if (response.message.trim() != '') {
+					$("#preUpdateTariffMessage").html(response.message);
+					$("#preUpdateTariff").modal();
+					/* if (response.message.trim() != '') {
 						var result = confirm(response.message);
 						if (result == true) {
 							updateTarrif(info);
 						}
-					}
+					} */
 				},
 				error : function() {
 					alert("Save new route failed!");
@@ -783,6 +790,22 @@ Date.prototype.toMyString = function () {
             <input disabled="disabled" type="button" id="addNewSchedule" class="btn btn-primary" value='Save changes' />
          </div>
       </form>
+   </div>
+   
+   <div id="preUpdateTariff" class="modal hide fade" tabindex="-1"
+      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true">×</button>
+         <h3 id="preUpdateTariffLabel">Warning Message</h3>
+      </div>
+      <div class="modal-body">
+         <p id="preUpdateTariffMessage"></p>
+      </div>
+      <div class="modal-footer">
+         <button class="btn" id="cancelAdd" data-dismiss="modal" aria-hidden="true">Cancel</button>
+         <input type="button" id="preUpdateTariffOk" class="btn btn-primary" value='Ok' />
+      </div>
    </div>
    <jsp:include page="../common/footer.jsp" />
 </body>
