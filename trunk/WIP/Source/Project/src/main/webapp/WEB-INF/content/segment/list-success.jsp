@@ -37,15 +37,19 @@ Date.prototype.toMyString = function () {
 
    function changeDuration(id) {
 	   $("#segmentId").val(id);
-	   $.ajax({
-		   type : "GET",
-	       url : $('#contextPath').val()
-	             + '/route/getPreUpdateTariffAction.html?routeId=0&segmentId=' + $("#segmentId").val(),
-       contentType : "application/x-www-form-urlencoded; charset=utf-8",
-	       success : function(response) {
-	    	   $('#preUpdateDuration').html(response.message);
-	       }
-	   });
+/*       $.ajax({
+    	    type : "POST",
+          url : $('#contextPath').val()
+                + "/route/getPreUpdateTariffAction.html";
+          data : form.serialize(),
+          success : function(response) {
+             $('#editDurationDialog').modal('hide');
+             alert(response.message);
+             var url = $('#contextPath').val()
+             + "/segment/list.html";
+              window.location = url;
+          }
+       }); */
       $("#editDurationDialog").modal();
    };
 
@@ -66,11 +70,11 @@ Date.prototype.toMyString = function () {
        
        $('#validFromTime').datepicker({
              dateFormat : 'dd/mm/yy',
-             minDate : '0',
+             minDate : '+1D',
              maxDate : '+3M',
              regional : 'vi'
           });
-       $('#validFromTime').val(d.toMyString());
+          $('#validFromTime').val(d.toMyString());
  });
     
 	$(document).ready(function() {
@@ -150,6 +154,7 @@ Date.prototype.toMyString = function () {
          <table id="segmentTable"  align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
+                  <th>ID</th>
                   <th>Start At</th>
                   <th>End At</th>
                   <th>Duration</th>
@@ -159,6 +164,7 @@ Date.prototype.toMyString = function () {
             <tbody>
                <s:iterator value="segmentInfos">
                   <tr id="segment_<s:property value='id'/>">
+                     <td><s:property value="id" /></td>
                      <td><s:property value="startAtName" /></td>
                      <td><s:property value="endAtName" /></td>
                      <td><s:property value="duration" /></td>
@@ -183,11 +189,8 @@ Date.prototype.toMyString = function () {
             <table>
                <tr>
                   <td>Valid from </td>
-                  <td><%-- <div id="validFromDiv" class="input-append date form_datetime" data-date="">
-                        <input id="validFromTime" size="16" type="text" value="" readonly name="validFromTime">
-                        <span class="add-on"><i class="icon-calendar"></i></span>
-                     </div> --%>
-                  <input id="validFromTime" type="text" value="" readonly name="validFromTime">   
+                  <td>
+                     <input id="validFromTime" type="text" value="" readonly name="validFromTime">   
                   </td>
                </tr>
                <tr>
@@ -195,7 +198,8 @@ Date.prototype.toMyString = function () {
                   <td><input type="text" id="duration" name="duration" value="01:00"></td>
                </tr>
             </table>
-            <label id="preUpdateDuration" ></label>
+            <div><input type="checkbox" id="addPriceRevRoute" name="addPriceRevRoute" style="margin-top: -4px;"/> Add price for reverse route too?</div>
+            <label id="preUpdateDuration"></label>
          </form>
       </div>
       <div class="modal-footer">
