@@ -44,8 +44,8 @@ public class Reg01021 extends BaseAction {
     public String execute() {
         try {
             userLogic.sendActivationMail(username, servletRequest.getContextPath());
-        } catch (CommonException e) {
-            errorProcessing(e, false);
+        } catch (Exception e) {
+            errorProcessing(new CommonException("msgerrcm003", e), false);
             return ERROR;
         }
         return SUCCESS;

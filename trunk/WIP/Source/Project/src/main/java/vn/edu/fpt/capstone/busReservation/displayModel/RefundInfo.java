@@ -58,6 +58,8 @@ public class RefundInfo implements Serializable {
     private static final long serialVersionUID = 1L;
     private List<RefundInfoPerTicket> tickets;
     private int refundRate;
+    private int paymentMethodId;
+    private int reservationId;
 
     /**
      * 
@@ -130,6 +132,34 @@ public class RefundInfo implements Serializable {
 
     public String getRefundRateString() {
         return Integer.toString(refundRate);
+    }
+
+    /**
+     * @return the paymentMethodId
+     */
+    public int getPaymentMethodId() {
+        return paymentMethodId;
+    }
+
+    /**
+     * @param paymentMethodId the paymentMethodId to set
+     */
+    public void setPaymentMethodId(int paymentMethodId) {
+        this.paymentMethodId = paymentMethodId;
+    }
+
+    /**
+     * @return the reservationId
+     */
+    public int getReservationId() {
+        return reservationId;
+    }
+
+    /**
+     * @param reservationId the reservationId to set
+     */
+    public void setReservationId(int reservationId) {
+        this.reservationId = reservationId;
     }
 
 }
