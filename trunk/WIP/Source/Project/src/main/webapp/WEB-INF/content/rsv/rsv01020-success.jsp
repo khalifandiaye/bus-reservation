@@ -97,7 +97,8 @@
 												<s:text name="cancel" />
 											</a>
 										</s:if>
-										<s:else ><s:text name="%{status}" /></s:else> <s:if test="%{status == 'cancelled' || status == 'refunded2'}" ><span title='<s:text name="message.cancelReason.companySide"><s:param><s:property value="cancelReason" /></s:param></s:text>'>?</span></s:if>
+										<s:else ><s:text name="%{status}" /></s:else> <s:if test="%{status == 'cancelled' || status == 'refunded2'}" ><span class="icon-question-sign" title='<s:text name="message.cancelReason.companySide"><s:param><s:property value="cancelReason" /></s:param></s:text>'></span></s:if>
+										<s:elseif test="%{status == 'refunded'}" ><span class="icon-question-sign" title='<s:text name="message.cancelReason.customerSide" />'></span></s:elseif>
 									</td>
 								</tr>
 							<s:if test="returnTrip">
@@ -143,7 +144,7 @@
 					</s:if>
 				</div>
 				<s:url action="rsv01010.html" var="urlBack"></s:url>
-	  			<s:a href="%{#urlBack}"><s:text name="button.back" /></s:a>
+	  			<s:a cssClass="btn btn-large" href="%{#urlBack}"><s:text name="button.back" /></s:a>
 			</div>
 		</div>
 	</div>
