@@ -408,23 +408,31 @@ public class PaymentLogic extends BaseLogic {
 
     public int doRefund(int ticketId, int userId) throws HibernateException,
             CommonException {
-        String transactionId = null;
+        String[] refundReturn = null;
         List<PaymentDetails> paymentDetailsList = null;
         PaymentDetails details = null;
         RefundInfo refundInfo = null;
         UserBean user = null;
+        double serviceFee = 0;
+        double grossRefundAmount = 0;
         refundInfo = calculateRefundAmount(ticketId);
         // perform the transaction and get transaction id
         if (1 == refundInfo.getPaymentMethodId()) {
             user = userDAO.getById(userId);
             if (user != null && user.getRole().getId() == 2) {
-                transactionId = user.getUsername();
+                refundReturn = new String[3];
+                refundReturn[0] = user.getUsername();
+                refundReturn[1] = null;
+                refundReturn[2] = "0.00";
             } else {
                 // unauthorized action
                 throw new CommonException("msgerrau008");
             }
         } else if (2 == refundInfo.getPaymentMethodId()) {
-            transactionId = doPaypalRefund(ticketId, refundInfo);
+            refundReturn = doPaypalRefund(ticketId, refundInfo);
+            grossRefundAmount = refundReturn[1] != null ? new BigDecimal(
+                    refundReturn[1]).doubleValue() : 0;
+            serviceFee = new BigDecimal(refundReturn[2]).doubleValue();
         } else {
             // unimplemented payment method
             throw new CommonException("msgerrrs008");
@@ -433,9 +441,17 @@ public class PaymentLogic extends BaseLogic {
         for (RefundInfoPerTicket ticket : refundInfo.getTickets()) {
             details = new PaymentDetails();
             paymentDetailsList.add(details);
-            details.setTransactionID(transactionId);
+            details.setTransactionID(refundReturn[0]);
             details.setTicketId(ticket.getTicketId());
-            details.setFeeAmount("0");
+            if (refundReturn[1] != null) {
+                details.setFeeAmount(BigDecimal
+                        .valueOf(
+                                serviceFee * ticket.getRefundAmountInUSD()
+                                        / grossRefundAmount)
+                        .setScale(2, RoundingMode.FLOOR).toPlainString());
+            } else {
+                details.setFeeAmount("0.00");
+            }
             details.setGrossAmount(BigDecimal
                     .valueOf(ticket.getRefundAmountInUSD())
                     .setScale(2, RoundingMode.FLOOR).toPlainString());
@@ -454,7 +470,7 @@ public class PaymentLogic extends BaseLogic {
      *         VND, and the transaction id
      * @throws CommonException
      */
-    public String doPaypalRefund(int ticketId, RefundInfo refundInfo)
+    public String[] doPaypalRefund(int ticketId, RefundInfo refundInfo)
             throws CommonException {
         PayPalAPIInterfaceServiceService service = null;
         RefundTransactionResponseType response = null;
@@ -463,6 +479,7 @@ public class PaymentLogic extends BaseLogic {
         BasicAmountType amount = null;
         TicketInfoBean ticket = null;
         PaymentBean payment = null;
+        String[] returnVal = null;
 
         ticket = ticketDAO.getTicketInfoById(ticketId);
         if (TicketStatus.ACTIVE.getValue().equals(ticket.getId().getStatus())
@@ -507,7 +524,11 @@ public class PaymentLogic extends BaseLogic {
             // TODO handle error
             throw new CommonException("msgerrrs008");
         }
-        return response.getRefundTransactionID();
+        returnVal = new String[3];
+        returnVal[0] = response.getRefundTransactionID();
+        returnVal[1] = response.getGrossRefundAmount().getValue();
+        returnVal[1] = response.getFeeRefundAmount().getValue();
+        return returnVal;
     }
 
     public PaymentSetupDetails setupPayment(ReservationInfo reservationInfo,

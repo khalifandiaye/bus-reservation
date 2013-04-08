@@ -8,11 +8,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
+import vn.edu.fpt.capstone.busReservation.dao.TicketDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean.PaymentType;
-import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
@@ -24,15 +23,14 @@ import vn.edu.fpt.capstone.busReservation.util.ReservationUtils;
  */
 public class ScheduleLogic extends BaseLogic {
 
-    private ReservationDAO reservationDAO;
+    private TicketDAO ticketDAO;
 
     /**
-     * @param reservationDAO
-     *            the reservationDAO to set
+     * @param ticketDAO the ticketDAO to set
      */
     @Autowired
-    public void setReservationDAO(ReservationDAO reservationDAO) {
-        this.reservationDAO = reservationDAO;
+    public void setTicketDAO(TicketDAO ticketDAO) {
+        this.ticketDAO = ticketDAO;
     }
 
     /**
@@ -44,12 +42,25 @@ public class ScheduleLogic extends BaseLogic {
             throws CommonException {
     }
 
-    public String[] getDeleteInfo(int id, int userId) throws CommonException {
+    public String[] getDeleteInfo(int busStatusId, int userId) throws CommonException {
         // TODO Auto-generated method stub
         String[] params = null;
         double paidAmount = 0;
         int count = 0;
-        List<ReservationBean> reservations = null;
+        List<TicketBean> tickets = null;
+        tickets = ticketDAO.getTicketByBusStatusId(busStatusId);
+        if (tickets != null && tickets.size() > 0) {
+            count = tickets.size();
+            for (TicketBean ticket : tickets) {
+                for (PaymentBean payment : ticket.getPayments()) {
+                    if (PaymentType.PAY.equals(payment.getType())) {
+                        paidAmount += payment.getPayAmount() - payment.getServiceFee();
+                    } else {
+                        paidAmount -= payment.getPayAmount() - payment.getServiceFee();
+                    }
+                }
+            }
+        }
         paidAmount *= 1000;
         paidAmount = ReservationUtils.roundingVND(paidAmount, RoundingMode.CEILING);
         params = new String[2];
