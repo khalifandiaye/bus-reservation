@@ -41,9 +41,9 @@
             	url: "deleteBus.html?busId=" + busId,
             }).done(function(data) {
             	$('#deleteBusDialog').modal('hide');
-            	alert(data.message);
                var url = $('#contextPath').val() + "/bus/list.html";
                window.location = url;
+               $('#addResult').text((data.message));
             });
       });
 		
@@ -57,9 +57,9 @@
                url: "saveBus.html?plateNumber=" + plateNumber + "&busTypeBeans=" + busType,
             }).done(function(data) {
             	$('#addBusDialog').modal('hide');
-               alert(data.message);
                var url = $('#contextPath').val() + "/bus/list.html";
                window.location = url;
+               $('#addResult').text((data.message));
             });
 		});
 	});
@@ -88,6 +88,7 @@
 				<input class="btn btn-primary pull-right" id="addBus" type="button"
 					value="Add New Bus" />
 			</h3>  
+			<p id="addResult" style="color: red"></p>
 			<table id="busTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
 				<thead>
 					<tr>

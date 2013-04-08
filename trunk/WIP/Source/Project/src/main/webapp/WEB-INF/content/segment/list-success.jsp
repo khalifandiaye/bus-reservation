@@ -89,10 +89,10 @@ Date.prototype.toMyString = function () {
 	               data : form.serialize(),
 	               success : function(response) {
 	                  $('#editDurationDialog').modal('hide');
-	                  alert(response.message);
 	                  var url = $('#contextPath').val()
 	                  + "/segment/list.html";
 	                   window.location = url;
+	                   $("#addResult").html(response.message);
 	               }
 	            });
 		});
@@ -143,6 +143,7 @@ Date.prototype.toMyString = function () {
 		</h3>  
       <div class="post">
       <div class=row>
+      <p id="addResult" style="color: red"></p>
       	<table class="pull-right row"> 
             <tr>
                <td style="font-size: 14px;font-weight: normal;vertical-align: middle">Valid Date :</td>
@@ -154,7 +155,6 @@ Date.prototype.toMyString = function () {
          <table id="segmentTable"  align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
-                  <th>ID</th>
                   <th>Start At</th>
                   <th>End At</th>
                   <th>Duration</th>
@@ -164,7 +164,6 @@ Date.prototype.toMyString = function () {
             <tbody>
                <s:iterator value="segmentInfos">
                   <tr id="segment_<s:property value='id'/>">
-                     <td><s:property value="id" /></td>
                      <td><s:property value="startAtName" /></td>
                      <td><s:property value="endAtName" /></td>
                      <td><s:property value="duration" /></td>
