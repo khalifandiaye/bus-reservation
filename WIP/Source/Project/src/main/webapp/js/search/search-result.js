@@ -14,7 +14,7 @@ function showPopup(message) {
     }
     $(".notify-message")
             .append(
-                    '<div class="alert fade in"><button type="button" class="close" data-dismiss="alert">Ã—</button>'
+                    '<div class="alert fade in"><button type="button" class="close" data-dismiss="alert">×</button>'
                             + message + '</div>');
 }
 
@@ -58,8 +58,8 @@ $(document).ready(function() {
                 $(".notify-message")
                         .append(
                                 '<div class="alert fade in">'
-                                        + '<button type="button" class="close" data-dismiss="alert">Ã—</button>'
-                                        + 'Vui lÃ²ng chá»�n chuyáº¿n vá»� cÃ³ thá»�i gian khá»Ÿi hÃ nh sau khi chuyáº¿n Ä‘i káº¿t thÃºc.'
+                                        + '<button type="button" class="close" data-dismiss="alert">×</button>'
+                                        + 'Vui lòng chọn chuyến về có thời gian khởi hành sau khi chuyến đi kết thúc.'
                                         + '</div>');
                 return;
             }
