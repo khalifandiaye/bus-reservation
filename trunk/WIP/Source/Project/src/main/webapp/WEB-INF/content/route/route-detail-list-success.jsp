@@ -103,6 +103,9 @@ Date.prototype.toMyString = function () {
 		checkBusType();
 		var active = $("#active").val();
 		if (active == 'false') {
+			$("#addBusPrice").removeClass('btn-primary');
+			$("#assignBus").removeClass('btn-primary');
+			$("#busStatusInsertBtn").removeClass('btn-success');
 			$("#addBusPrice").attr("disabled","disabled");
 			$("#assignBus").attr("disabled","disabled");
 			$("#busStatusInsertBtn").attr("disabled","disabled");
@@ -130,6 +133,7 @@ Date.prototype.toMyString = function () {
 		$('#busStatusInsertBtn').click(function() {
 			var date = new Date();
 			date.setDate(date.getDate() + 1);
+			$("#addNewSchedule").removeClass('btn-success');
 			$("#addNewSchedule").attr("disabled","disabled");
 			$('#tripDialogRoutes').val(-1);
 			$('#tripDialogDepartureTime').val('');
@@ -364,8 +368,8 @@ Date.prototype.toMyString = function () {
 
 		$("#assignBus").click(function() {
 	         if (!$("#busDetailbusPlate").val() || $("#busDetailbusPlate").val() == '') {
-	        	 $("#busDetailAdd").removeClass("btn-primary");
-	                  $("#busDetailAdd").attr("disabled","disabled");
+		        	 $("#busDetailAdd").removeClass("btn-primary");
+		        	 $("#busDetailAdd").attr("disabled","disabled");
 	         }
 			var routeId = $("#routeId").val();
 			var busType = $("#busType").val();
@@ -399,7 +403,7 @@ Date.prototype.toMyString = function () {
    		            busDetailTable.dataTable().fnAddData([
    		               this.id,
    		               this.plateNumber,
-   		               '<button type="button" data-id="'+ this.id +'" class="btn btn-danger" disabled="disabled">Delete</button>' ]);
+   		               '<button type="button" data-id="'+ this.id +'" disabled="disabled">Delete</button>' ]);
    		         };
    				});
 
@@ -519,10 +523,14 @@ Date.prototype.toMyString = function () {
 	function validateBusType(){
 		var busType = $("#busType").val();
 		if (busType == null || busType == -1) {
+			$("#assignBus").removeClass('btn-primary');
 			$("#assignBus").attr("disabled","disabled");
+			$("#busStatusInsertBtn").removeClass('btn-success');
 			$("#busStatusInsertBtn").attr("disabled","disabled");
 		} else {
+			$("#assignBus").addClass('btn-primary');
 			$("#assignBus").removeAttr("disabled"); 
+			$("#busStatusInsertBtn").addClass('btn-success');
 			$("#busStatusInsertBtn").removeAttr("disabled"); 
 		}
 	}
@@ -749,8 +757,8 @@ Date.prototype.toMyString = function () {
                   </s:iterator>
                </tbody>
             </table>
-            <p id="preUpdateTariffMessage"></p>
             <div><input type="checkbox" id="addTariffRevRoute" style="margin-top: -4px;"/> Add price for reverse route too?</div>
+            <p id="preUpdateTariffMessage" style="color: red"></p>
          </div>
       </div>
       <div class="modal-footer">

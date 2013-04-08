@@ -38,7 +38,7 @@ public class PreUpdateTariffAction extends BaseAction {
 		if (segmentBeans.size() != 0) {
 			
 			for (SegmentBean segment : segmentBeans) {
-				message = "Affected route";
+				message = "Affected route ";
 				
 				List<RouteBean> routeBeans = routeDetailsDAO
 						.getAllRoutesBySegmentId(segment.getId());
