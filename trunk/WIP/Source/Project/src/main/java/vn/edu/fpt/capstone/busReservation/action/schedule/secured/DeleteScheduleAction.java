@@ -6,7 +6,6 @@ import org.apache.struts2.convention.annotation.Result;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.displayModel.User;
-import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.ScheduleLogic;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
@@ -33,14 +32,16 @@ public class DeleteScheduleAction extends BaseAction {
     private String reason;
 
     /**
-     * @param id the id to set
+     * @param id
+     *            the id to set
      */
     public void setId(String id) {
         this.id = id;
     }
 
     /**
-     * @param reason the reason to set
+     * @param reason
+     *            the reason to set
      */
     public void setReason(String reason) {
         this.reason = reason;
@@ -64,9 +65,9 @@ public class DeleteScheduleAction extends BaseAction {
         return messages;
     }
 
-    @Action(value = "/confirmDelete", results = { @Result(type = "json", name = SUCCESS, params = {
+    @Action(value = "/confirmCancel", results = { @Result(type = "json", name = SUCCESS, params = {
             "callbackParameter", "callback" }) })
-    public String confirmDelete() {
+    public String confirmCancel() {
         Object user = null;
         int userId = 0;
         if (session != null
@@ -83,13 +84,15 @@ public class DeleteScheduleAction extends BaseAction {
             session.remove(CommonConstant.SESSION_KEY_USER);
         }
         try {
-            scheduleLogic.getDeleteInfo(Integer.parseInt(id), userId);
-        } catch (CommonException e) {
+            messages = new String[1];
+            messages[0] = getText("message.schedule.cancel.confirm",
+                    scheduleLogic.getDeleteInfo(Integer.parseInt(id), userId));
+            success = true;
+        } catch (Exception e) {
             errorProcessing(e);
             messages = new String[getActionErrors().size()];
             getActionErrors().toArray(messages);
         }
-        success = true;
         return SUCCESS;
     }
 
@@ -113,7 +116,7 @@ public class DeleteScheduleAction extends BaseAction {
         }
         try {
             scheduleLogic.deleteBusStatus(Integer.parseInt(id), reason, userId);
-        } catch (CommonException e) {
+        } catch (Exception e) {
             errorProcessing(e);
             messages = new String[getActionErrors().size()];
             getActionErrors().toArray(messages);
