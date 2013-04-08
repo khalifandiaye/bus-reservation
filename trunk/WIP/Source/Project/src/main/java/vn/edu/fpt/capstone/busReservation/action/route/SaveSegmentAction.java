@@ -74,7 +74,8 @@ public class SaveSegmentAction extends BaseAction {
 				}
 			}
 
-			if (segmentBeans.size() != 0) {
+			if (segmentBeans.size() != 0 && segmentBeans.size()==segmentInfosFoward.size()) {
+				
 				List<RouteBean> routeBeans = routeDAO
 						.getExistRoute(segmentBeans);
 				if (routeBeans.size() != 0) {
