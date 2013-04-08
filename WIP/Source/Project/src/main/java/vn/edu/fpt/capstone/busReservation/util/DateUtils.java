@@ -46,8 +46,11 @@ public class DateUtils {
      */
     public static String date2String(Date date, String pattern, Locale locale,
             TimeZone timeZone) {
+    	long offset = 0;
         SimpleDateFormat formatter = new SimpleDateFormat(pattern, locale);
-        formatter.setTimeZone(timeZone);
+//        formatter.setTimeZone(timeZone);
+        offset = timeZone.getOffset(date.getTime());
+        date.setTime(date.getTime() + offset);
         return formatter.format(date);
     }
 
