@@ -223,7 +223,7 @@ public class PayJSONAction extends BaseAction {
                     servletRequest.getContextPath());
         } catch (Exception e) {
             errorProcessing(new CommonException("msgerrcm003", e), false);
-            errorMessage = getActionErrors().iterator().next();
+//            errorMessage = getActionErrors().iterator().next();
             return SUCCESS;
         }
         return SUCCESS;

@@ -48,4 +48,15 @@ public class CrypUtilTest {
         assertNotNull(string2);
         assertEquals(string1, string2);
     }
+
+    @Test
+    public void testEncrypt2String005() throws NoSuchAlgorithmException {
+        String string1 = CryptUtils.encrypt2String("customer1");
+        String string2 = CryptUtils.encrypt2String("truong");
+        String string3 = CryptUtils.encrypt2String("tram");
+        System.out.println(string1);
+        System.out.println(string2);
+        System.out.println(string3);
+        assertNotNull(string1);
+    }
 }
