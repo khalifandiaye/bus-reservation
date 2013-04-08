@@ -25,13 +25,17 @@ public class CryptUtils {
         return encrypt(str.getBytes());
     }
 
-    public static byte[] encrypt(int i) throws NoSuchAlgorithmException {
+    public static byte[] encrypt(long i) throws NoSuchAlgorithmException {
         byte[] bytes = null;
-        bytes = new byte[4];
-        bytes[0] = (byte) (i >> 24);
-        bytes[1] = (byte) (i >> 16);
-        bytes[2] = (byte) (i >> 8);
-        bytes[3] = (byte) (i /* >> 0 */);
+        bytes = new byte[8];
+        bytes[0] = (byte) (i >> 56);
+        bytes[1] = (byte) (i >> 48);
+        bytes[2] = (byte) (i >> 40);
+        bytes[3] = (byte) (i >> 32);
+        bytes[4] = (byte) (i >> 24);
+        bytes[5] = (byte) (i >> 16);
+        bytes[6] = (byte) (i >> 8);
+        bytes[7] = (byte) (i /* >> 0 */);
         return encrypt(bytes);
     }
 
@@ -145,7 +149,7 @@ public class CryptUtils {
      * @throws NoSuchAlgorithmException
      *             when java cannot find encoding method
      */
-    public static String generateCode(int seed, int length)
+    public static String generateCode(long seed, int length)
             throws NoSuchAlgorithmException {
         return generateCode(seed, length, null);
     }
@@ -167,7 +171,7 @@ public class CryptUtils {
      * @throws NoSuchAlgorithmException
      *             when java cannot find encoding method
      */
-    public static String generateCode(int seed, int length, String previousCode)
+    public static String generateCode(long seed, int length, String previousCode)
             throws NoSuchAlgorithmException {
         byte[] bytes = null;
         Random random = null;
