@@ -16,7 +16,6 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentTravelTimeBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.BusInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentInfo;
 
@@ -46,22 +45,20 @@ public class RouteDetailListAction extends ActionSupport {
 	private RouteDAO routeDAO;
 
 	public String execute() {
-		// routeDetailsList.get(routeDetailsList.size() -
-		// 1).getSegment().getEndAt()
 		segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
 		busStatusBeans = busStatusDAO.getAllAvailTripByRouteId(routeId,
 				Calendar.getInstance().getTime());
 
-		// WORK AROUND
-		for (BusStatusBean busStatusBean : busStatusBeans) {
-			BusInfo busInfo = new BusInfo();
-			busInfo.setId(busStatusBean.getId());
-			busInfo.setPlateNumber(busStatusBean.getBus().getPlateNumber());
-			busInfo.setFromDate(busStatusBean.getFromDate());
-			busInfo.setToDate(busStatusBean.getToDate());
-			busInfo.setDelete(busStatusBean.getStatus());
-			busInfos.add(busInfo);
-		}
+//		// WORK AROUND
+//		for (BusStatusBean busStatusBean : busStatusBeans) {
+//			BusInfo busInfo = new BusInfo();
+//			busInfo.setId(busStatusBean.getId());
+//			busInfo.setPlateNumber(busStatusBean.getBus().getPlateNumber());
+//			busInfo.setFromDate(busStatusBean.getFromDate());
+//			busInfo.setToDate(busStatusBean.getToDate());
+//			busInfo.setDelete(busStatusBean.getStatus());
+//			busInfos.add(busInfo);
+//		}
 
 		RouteBean routeBean = routeDAO.getById(routeId);
 		if (routeBean.getStatus().equals("active")) {

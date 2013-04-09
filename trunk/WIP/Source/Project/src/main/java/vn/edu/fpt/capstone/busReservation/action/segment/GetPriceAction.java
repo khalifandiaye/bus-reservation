@@ -1,4 +1,4 @@
-package vn.edu.fpt.capstone.busReservation.action.route;
+package vn.edu.fpt.capstone.busReservation.action.segment;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,10 +11,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
+import vn.edu.fpt.capstone.busReservation.dao.SegmentDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TariffDAO;
+import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentAddInfo;
-import vn.edu.fpt.capstone.busReservation.displayModel.SegmentInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.TariffInfo;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
@@ -29,6 +30,8 @@ public class GetPriceAction extends BaseAction {
 	private List<TariffInfo> tariffInfos = new ArrayList<TariffInfo>();
 
 	private TariffDAO tariffDAO;
+	private SegmentDAO segmentDAO;
+
 
 	@Action(value = "getPrice", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
@@ -36,19 +39,19 @@ public class GetPriceAction extends BaseAction {
 			SegmentAddInfo segmentAddInfo = mapper.readValue(data,
 					new TypeReference<SegmentAddInfo>() {
 					});
-			List<SegmentInfo> segmentInfos = segmentAddInfo.getSegments();
+			List<SegmentBean> segmentBeans = segmentDAO.getAll();
 
 			Date validDate = FormatUtils.deFormatDate(
 					segmentAddInfo.getValidDate(), "dd/MM/yyyy",
 					CommonConstant.LOCALE_US, CommonConstant.DEFAULT_TIME_ZONE);
-			for (SegmentInfo segmentInfo : segmentInfos) {
+			for (SegmentBean segmentBean : segmentBeans) {
 				TariffInfo tariffInfo = new TariffInfo();
-				tariffInfo.setId(segmentInfo.getId());
+				tariffInfo.setId(segmentBean.getId());
 				List<TariffBean> resultList = tariffDAO.getPrice(
-						segmentInfo.getId(), segmentAddInfo.getBusType(),
+						segmentBean.getId(), segmentAddInfo.getBusType(),
 						validDate);
 				if (!resultList.isEmpty()) {
-					TariffBean tariffBean = resultList.get(0);
+					TariffBean tariffBean = resultList.get(0);					
 					tariffInfo.setFare(tariffBean.getFare());
 				} else {
 					tariffInfo.setFare(0.0);
@@ -60,6 +63,9 @@ public class GetPriceAction extends BaseAction {
 		return SUCCESS;
 	}
 
+	public void setSegmentDAO(SegmentDAO segmentDAO) {
+		this.segmentDAO = segmentDAO;
+	}
 	public void setData(String data) {
 		this.data = data;
 	}
