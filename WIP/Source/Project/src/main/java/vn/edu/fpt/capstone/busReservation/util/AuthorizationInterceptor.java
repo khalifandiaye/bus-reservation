@@ -76,7 +76,7 @@ public class AuthorizationInterceptor implements Interceptor {
                 allowOp = false;
                 allowCus = false;
             } else if (namespace.startsWith("/route") || namespace.startsWith("/bus")
-                    || namespace.startsWith("/schedule")) {
+                    || namespace.startsWith("/schedule") || namespace.startsWith("/segment")) {
                 allowCus = false;
                 allowAdmin = false;
             } else if (!"/".equals(namespace) && !namespace.startsWith("/user")) {
