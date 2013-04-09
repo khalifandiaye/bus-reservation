@@ -70,7 +70,7 @@ $(document).ready(function(){
             },
             success : function(data) {
                 if (data.success) {
-                    location.reload();
+                	window.location.replace($('#contextPath').val() + "/");
                 } else {
                     $("#loginErrorMessage").html(data.errorMessage);
                 }
