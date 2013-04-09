@@ -1,5 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/main/java/vn/edu/fpt/capstone/busReservation/action/search/SearchResultAction.java=UTF-8
 encoding//src/main/webapp/WEB-INF/content/search/search-table-detail.jsp=UTF-8
+encoding//src/main/webapp/js/booking/booking-info.js=UTF-8
 encoding//src/main/webapp/js/jquery.ui.datepicker-vi.js=UTF-8
 encoding//src/main/webapp/js/search/search-result.js=UTF-8
+encoding/<project>=UTF-8

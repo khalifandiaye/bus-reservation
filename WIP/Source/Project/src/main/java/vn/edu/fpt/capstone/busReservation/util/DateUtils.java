@@ -99,4 +99,24 @@ public class DateUtils {
 		cal.add(Calendar.DAY_OF_MONTH, amount);
 		return formatter.format(cal.getTime());
 	}
+	
+	public static boolean isDateEqual(Date date1, Date date2) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+		if(formatter.format(date1) == formatter.format(date2)){
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Get MM-dd String from Date
+	 * @param inputDate 
+	 * 			the date to get String 
+	 * @return
+	 * 			MM-dd String
+	 */
+	public static String getMonthDay(Date inputDate) {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM", Locale.US);
+		return formatter.format(inputDate);
+	}
 }

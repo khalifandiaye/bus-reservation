@@ -85,7 +85,7 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 
 	@SuppressWarnings("unchecked")
 	public List<SearchResultInfo> searchAvailableTrips(int deptCity,
-			int arrvCity, String deptDate, int pssgrNo, int busType, String minDate) {
+			int arrvCity, String deptDate, int pssgrNo, String minDate) {
 		List<SearchResultInfo> returnVal = new ArrayList<SearchResultInfo>();
 		Session session = sessionFactory.getCurrentSession();
 		//String strQuery = "CALL search_trips(:deptCity, :arrvCity, :deptDate, :pssgrNo, :busType);";
@@ -96,7 +96,7 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 			 .setInteger("arrvCity", arrvCity)
 			 .setString("deptDate", deptDate)
 			 .setInteger("pssgrNo", pssgrNo)
-			 .setInteger("busType", busType)
+			 //.setInteger("busType", busType)
 			 .setString("minDate", minDate);
 			 returnVal = query.list();
 /*			Query query = session.createSQLQuery(strQuery)

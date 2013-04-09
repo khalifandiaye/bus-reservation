@@ -485,6 +485,8 @@
 		<property name="remainedSeats" column="remained_seats" type="int"
 			not-null="true" />
 		<property name="route" column="route" type="int" not-null="true" />
+		<property name="busType" column="bus_type" type="string" not-null="true" />
+		<property name="busTypeId" column="bus_type_id" type="int" not-null="true" />
 	</class>
 	<sql-query name="callSearchTripsProcedure">
 		<return alias="searchResult"
@@ -502,8 +504,10 @@
 			<return-property name="fare" column="fare" />
 			<return-property name="remainedSeats" column="remained_seats" />
 			<return-property name="route" column="route" />
+			<return-property name="busType" column="bus_type"/>
+			<return-property name="busTypeId" column="bus_type_id"/>
 		</return>
-		<![CDATA[CALL search_trips(:deptCity, :arrvCity, :deptDate, :pssgrNo, :busType, :minDate);]]>
+		<![CDATA[CALL search_trips(:deptCity, :arrvCity, :deptDate, :pssgrNo, :minDate);]]>
 	</sql-query>
 
 </hibernate-mapping>
