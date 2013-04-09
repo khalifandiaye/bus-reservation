@@ -11,12 +11,9 @@ import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
-import vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 
 @ParentPackage("jsonPackage")
 public class DeleteRouteAction extends BaseAction {
@@ -26,7 +23,6 @@ public class DeleteRouteAction extends BaseAction {
 	private BusStatusDAO busStatusDAO;
 	private RouteDAO routeDAO;
 	private BusDAO busDAO;
-	private RouteDetailsDAO routeDetailsDAO;
 
 	private int routeId;
 
@@ -34,19 +30,13 @@ public class DeleteRouteAction extends BaseAction {
 
 	@Action(value = "/deleteRoute", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
-		List<SegmentBean> segmentBeans = routeDetailsDAO
-				.getAllSegmemtsByRouteId(routeId);
-		StationBean startStationBeans = segmentBeans.get(0).getStartAt();
-		StationBean endStationBeans = segmentBeans.get(segmentBeans.size() - 1)
-				.getEndAt();
-
 		List<Integer> routeTerminals = routeDAO.getRouteTerminal(routeId);
 		List<BusStatusBean> busStatusBeansForward = busStatusDAO
 				.getAllAvailTripByRouteId(routeTerminals.get(0), Calendar
-						.getInstance().getTime(), endStationBeans);
+						.getInstance().getTime());
 		List<BusStatusBean> busStatusBeansReturn = busStatusDAO
 				.getAllAvailTripByRouteId(routeTerminals.get(1), Calendar
-						.getInstance().getTime(), startStationBeans);
+						.getInstance().getTime());
 		if ((busStatusBeansForward.size() + busStatusBeansReturn.size()) == 0) {
 
 			// unassigned buses
@@ -79,10 +69,6 @@ public class DeleteRouteAction extends BaseAction {
 							.size()) + " available trip(s) depend on it";
 		}
 		return SUCCESS;
-	}
-
-	public void setRouteDetailsDAO(RouteDetailsDAO routeDetailsDAO) {
-		this.routeDetailsDAO = routeDetailsDAO;
 	}
 
 	public void setBusDAO(BusDAO busDAO) {
