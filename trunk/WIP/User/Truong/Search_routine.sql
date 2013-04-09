@@ -8,7 +8,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `search_trips`(IN DEPT_CITY INT,
 							  IN ARRV_CITY INT,
 							  IN DEPT_DATE VARCHAR(10),
 							  IN PSSGR_NO INT,
-                              IN BUS_TYPE INT,
+                           -- IN BUS_TYPE INT,
 							  IN MIN_DATE VARCHAR(20))
 BEGIN
 SELECT  dept.bus_status_id,
@@ -20,11 +20,15 @@ SELECT  dept.bus_status_id,
         arrv.station_name    			AS arrival_station_name,
 		arrv.station_address 			AS arrival_station_address,
 		arrv.arrival_time,
-        SUM(trff.fare) * PSSGR_NO 		AS fare,
+--      SUM(trff.fare) * PSSGR_NO 		AS fare,
+-- 		get fare for each person
+		trff.fare						AS fare,
 		rmst.number_of_remained_seats 	AS remained_seats,
-		dept.route_id					AS route	
+		dept.route_id					AS route,
+		btyp.name					    AS bus_type
+		
 FROM   
-	-- departure trip information
+	-- departure trip information (first trip in journey)
 	    (SELECT dtrp.bus_status_id,
 				ddtl.city_name,
 			 	ddtl.station_name, 
@@ -51,7 +55,7 @@ FROM
 		    -- AND DATE(dtrp.departure_time) >= ADDDATE(NOW(), INTERVAL 30 MINUTE)
 		   AND dtrp.departure_time >= cast(MIN_DATE as datetime)) dept
 	INNER JOIN	 
-	-- arrival trip information
+	-- arrival trip information (last trip in journey)
         (SELECT atrp.bus_status_id,
                 adtl.city_name,
 				adtl.station_name, 
@@ -73,8 +77,11 @@ FROM
 	INNER JOIN bus_status bstt
 	  ON bstt.id = arrv.bus_status_id AND
 		 bstt.status = 'active'
-	INNER JOIN bus
-	  ON bus.id = bstt.bus_id AND bus.bus_type_id = BUS_TYPE
+-- bus type information
+    INNER JOIN bus
+      ON bus.id = bstt.bus_id  -- AND bus.bus_type_id = BUS_TYPE
+	INNER JOIN bus_type btyp
+	  ON bus.bus_type_id =  btyp.id
 -- fare information
 	INNER JOIN trip ftrp
       ON dept.bus_status_id = ftrp.bus_status_id
@@ -85,6 +92,7 @@ FROM
     INNER JOIN tariff trff 
 	  ON frdt.segment_id = trff.segment_id 
         AND trff.bus_type_id = bus.bus_type_id -- BUS_TYPE
+-- remained seat view
 	INNER JOIN remained_seats rmst
 	  ON rmst.start_location_id = DEPT_CITY AND 
 		 rmst.end_location_id = ARRV_CITY AND 
@@ -95,6 +103,7 @@ WHERE   -- departure date is in range of valid fare dates
                             WHERE  ttrf.valid_from <= ftrp.departure_time AND
 								   ttrf.segment_id = trff.segment_id AND
 								   ttrf.bus_type_id = trff.bus_type_id) AND
+		-- remained seat >= min number of passenger allowed
         rmst.number_of_remained_seats >= PSSGR_NO
 GROUP BY ftrp.bus_status_id
 ORDER BY dept.departure_time ASC, rmst.number_of_remained_seats ASC;
