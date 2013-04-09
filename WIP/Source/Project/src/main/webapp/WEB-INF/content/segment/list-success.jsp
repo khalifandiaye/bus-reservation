@@ -21,10 +21,10 @@
 Date.prototype.toMyString = function () {
 
     function padZero(obj) {
-          obj = obj + '';
-          if (obj.length == 1)
-              obj = "0" + obj
-          return obj;
+       obj = obj + '';
+       if (obj.length == 1)
+           obj = "0" + obj
+       return obj;
     }
 
     var output = "";
@@ -33,29 +33,17 @@ Date.prototype.toMyString = function () {
     output += this.getFullYear();
 
     return output; 
-};
+	};
 
    function changeDuration(id) {
 	   $("#segmentId").val(id);
-/*       $.ajax({
-    	    type : "POST",
-          url : $('#contextPath').val()
-                + "/route/getPreUpdateTariffAction.html";
-          data : form.serialize(),
-          success : function(response) {
-             $('#editDurationDialog').modal('hide');
-             alert(response.message);
-             var url = $('#contextPath').val()
-             + "/segment/list.html";
-              window.location = url;
-          }
-       }); */
-      $("#editDurationDialog").modal();
+       $("#editDurationDialog").modal();
    };
 
    var d = new Date();
    var now = d.toMyString();
    d.setDate(d.getDate() + 1);
+   
    $(function() {
        $('#validDateSelect').datepicker({
           dateFormat : 'dd/mm/yy',
@@ -63,10 +51,35 @@ Date.prototype.toMyString = function () {
           maxDate : '+3M',
           regional : 'vi'
        });
+   	
+	   	accounting.settings = {
+   			currency : {
+   				symbol : ".000", // default currency symbol is '$'
+   				format : "%v%s", // controls output: %s = symbol, %v = value/number (can be object: see below)
+   				decimal : ",", // decimal point separator
+   				thousand : ".", // thousands separator
+   				precision : 0
+   			// decimal places
+   			},
+   			number : {
+   				precision : 0, // default precision on numbers is 0
+   				thousand : ",",
+   				decimal : "."
+   			}
+	   	};
+       
        $('#validDateSelect').val(now);
        $("#validDateSelect").change(function() {
     	   getSegmentDuration($("#validDateSelect").val());
+    	   getPrice($('#busType').val(), $("#validDateSelect").val());
         });
+       
+		$('#busType').bind('change', function() {
+			var busType = $('#busType').val();
+			var date = $('#validDateSelect').val();
+			getPrice(busType, date);
+			validateBusType();
+		});
        
        $('#validFromTime').datepicker({
              dateFormat : 'dd/mm/yy',
@@ -75,63 +88,70 @@ Date.prototype.toMyString = function () {
              regional : 'vi'
           });
           $('#validFromTime').val(now);
- });
+ 	});
     
 	$(document).ready(function() {
 		var busTable = $('#segmentTable').dataTable({bSort : false});
 		$("#duration").mask("99:99");
-
+		
 		$('#editSegmentDialogOk').click(function(){
 			var form = $('#editSegmentForm');
 			$.ajax({
-	               type : "POST",
-	               url : "saveSegment.html",
-	               data : form.serialize(),
-	               success : function(response) {
-	                  $('#editDurationDialog').modal('hide');
-	                  var url = $('#contextPath').val()
-	                  + "/segment/list.html";
-	                   window.location = url;
-	                   $("#addResult").html(response.message);
-	               }
-	            });
+               type : "POST",
+               url : "saveSegment.html",
+               data : form.serialize(),
+               success : function(response) {
+                  $('#editDurationDialog').modal('hide');
+                  var url = $('#contextPath').val()
+                  + "/segment/list.html";
+                  window.location = url;
+                  $("#addResult").html(response.message);
+               }
+	        });
 		});
 		
-		/* $("#validFromDiv").datetimepicker({
-	         format : "dd/mm/yyyy - hh:ii",
-	         autoclose : true,
-	         todayBtn : true,
-	         startDate : date,
-	         minuteStep : 10
-	   });
-		
-		$("#validDateSelectDiv").datetimepicker({
-	         format : "dd/mm/yyyy - hh:ii",
-	         autoclose : true,
-	         todayBtn : true,
-	         minuteStep : 10
-	   }).change(function(){
-	    	  getSegmentDuration($("#validDateSelect").val());
-	   }); */
+		var busType = $('#busType').val();
+		getPrice(busType, $('#validDateSelect').val());
 	});
 	
 	function getSegmentDuration(date) {
-	      var info = {};
-	      info['validDate'] = date;
-	      $.ajax({
-	         type : "POST",
-	         url : 'getSegmentDur.html',
-	         contentType : "application/x-www-form-urlencoded; charset=utf-8",
-	         data : {data : JSON.stringify(info)},
-	         success : function(response) {
-	            var data = response.segmentInfos;
-	            for ( var i = 0; i < data.length; i++) {
-	               element = data[i].duration;
-	               $('#segmentTable').dataTable().fnUpdate(element,i,3);
-	            };
-	         }
-	      });
-	   };
+      var info = {};
+      info['validDate'] = date;
+      $.ajax({
+         type : "POST",
+         url : 'getSegmentDur.html',
+         contentType : "application/x-www-form-urlencoded; charset=utf-8",
+         data : {data : JSON.stringify(info)},
+         success : function(response) {
+            var data = response.segmentInfos;
+            for ( var i = 0; i < data.length; i++) {
+               element = data[i].duration;
+               $('#segmentTable').dataTable().fnUpdate(element,i,2);
+            };
+         }
+      });
+   };
+   
+	function getPrice(busType, date) {
+		var info = {};
+		info['busType'] = busType;
+		info['validDate'] = date;
+		$.ajax({
+			type : "POST",
+			url : 'getPrice.html',
+			contentType : "application/x-www-form-urlencoded; charset=utf-8",
+			data : {data : JSON.stringify(info)},
+			success : function(response) {
+				var data = response.tariffInfos;
+				for ( var i = 0; i < data.length; i++) {
+					element = data[i];
+					$('#segmentTable').dataTable().fnUpdate(accounting.formatMoney(element.fare),i,3);
+				};
+			}
+		});
+	};
+
+	var segments = [];
 </script>
 </head>
 <body>
@@ -146,6 +166,8 @@ Date.prototype.toMyString = function () {
       <p id="addResult" style="color: red"></p>
       	<table class="pull-right row"> 
             <tr>
+               <td><s:select id="busType" list="busTypeBeans" name="busTypeBeans" listKey="id"
+                           listValue="name" /></td>
                <td style="font-size: 14px;font-weight: normal;vertical-align: middle">Valid Date :</td>
                <td><input id="validDateSelect" type="text" value="" readonly/>
                </td>
@@ -155,9 +177,10 @@ Date.prototype.toMyString = function () {
          <table id="segmentTable"  align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
-                  <th>Start At</th>
-                  <th>End At</th>
-                  <th>Duration</th>
+                  <th style="text-align: center">Start At</th>
+                  <th style="text-align: center">End At</th>
+                  <th style="text-align: center">Duration</th>
+                  <th style="text-align: center">Price (VNĐ)</th>
                   <th></th>
                </tr>
             </thead>
@@ -166,7 +189,8 @@ Date.prototype.toMyString = function () {
                   <tr id="segment_<s:property value='id'/>">
                      <td><s:property value="startAtName" /></td>
                      <td><s:property value="endAtName" /></td>
-                     <td><s:property value="duration" /></td>
+                     <td style="text-align: center;"><s:property value="duration"/></td>
+                     <td style="padding-right:100px; text-align: right"><s:property value="price"/></td>
                      <td style="width: 6%"><input class="btn btn-danger btn-small" type="button" value="Edit"
                         onclick='javascript: changeDuration(<s:property value='id'/>)' /></td>
                   </tr>
