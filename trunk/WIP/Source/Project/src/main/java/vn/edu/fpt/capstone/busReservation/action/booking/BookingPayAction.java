@@ -14,6 +14,7 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.SessionAware;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
+import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SeatPositionDAO;
 import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
@@ -85,6 +86,14 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 	private UserDAO userDAO = null;
 	private String selectedOutSeat;
 	private String selectedReturnSeat;
+	private BusStatusDAO busStatusDAO;
+	
+	/**
+	 * @param busStatusDAO the busStatusDAO to set
+	 */
+	public void setBusStatusDAO(BusStatusDAO busStatusDAO) {
+		this.busStatusDAO = busStatusDAO;
+	}
 
 	/**
 	 * @param selectedOutSeat the selectedOutSeat to set
@@ -150,6 +159,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 		if(!session.containsKey("listOutTripBean") && !session.containsKey("listReturnTripBean")){
 			return ERROR;
 		}
+		
 		List<TripBean> listOutTripBean = null;
 		List<TripBean> listReturnTripBean = null;
 		int reservationId;
@@ -172,20 +182,65 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 		
 		if(session.containsKey("listOutTripBean")){
 			listOutTripBean = (List<TripBean>) session.get("listOutTripBean");
-			if(selectedOutSeat!=""){
-				tmpOut = selectedOutSeat.split(";");
-				for (String string : tmpOut) {
-					listOutSeat.add(string);
+			
+			if("active".equalsIgnoreCase(busStatusDAO.getById(listOutTripBean.get(0).getBusStatus().getId()).getStatus())){
+				if(selectedOutSeat!=""){
+					tmpOut = selectedOutSeat.split(";");
+					for (String string : tmpOut) {
+						listOutSeat.add(string);
+					}
 				}
+			}else{
+				SimpleDateFormat fromFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+				SearchParamsInfo searchParams = new SearchParamsInfo();
+				searchParams.setDepartureCity(listOutTripBean.get(0).getRouteDetails().getSegment().getStartAt().getCity().getId());
+				searchParams.setArrivalCity(listOutTripBean.get(listOutTripBean.size()-1).getRouteDetails().getSegment().getEndAt().getCity().getId());
+				searchParams.setDepartureDate(fromFormat.format(listOutTripBean.get(0).getDepartureTime()));
+				searchParams.setReturnDate(fromFormat.format(listOutTripBean.get(0).getArrivalTime()));
+				searchParams.setBusType(listOutTripBean.get(0).getBusStatus().getBus().getBusType().getId());
+				searchParams.setPassengerNo(1);
+				
+				if(session.containsKey("listReturnTripBean")){
+					searchParams.setTicketType("roundtrip");
+				}else{
+					searchParams.setTicketType("oneway");
+				}
+				
+				session.put("searchAnother", searchParams);
+				session.put("message", getText("msg_booking004"));
+				
+				session.remove("listOutTripBean");
+				session.remove("listReturnTripBean");
+				return "full";
 			}
 		}
 		if(session.containsKey("listReturnTripBean")){
 			listReturnTripBean = (List<TripBean>) session.get("listReturnTripBean");
-			if(selectedReturnSeat!=""){
-				tmpReturn = selectedReturnSeat.split(";");
-				for (String string : tmpReturn) {
-					listReturnSeat.add(string);
+			if("active".equalsIgnoreCase(busStatusDAO.getById(listReturnTripBean.get(0).getBusStatus().getId()).getStatus())){
+				if(selectedReturnSeat!=""){
+					tmpReturn = selectedReturnSeat.split(";");
+					for (String string : tmpReturn) {
+						listReturnSeat.add(string);
+					}
 				}
+			}else{
+				SimpleDateFormat fromFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+				SearchParamsInfo searchParams = new SearchParamsInfo();
+				searchParams.setDepartureCity(listReturnTripBean.get(0).getRouteDetails().getSegment().getStartAt().getCity().getId());
+				searchParams.setArrivalCity(listReturnTripBean.get(listReturnTripBean.size()-1).getRouteDetails().getSegment().getEndAt().getCity().getId());
+				searchParams.setDepartureDate(fromFormat.format(listReturnTripBean.get(0).getDepartureTime()));
+				searchParams.setReturnDate(fromFormat.format(listReturnTripBean.get(0).getArrivalTime()));
+				searchParams.setBusType(listReturnTripBean.get(0).getBusStatus().getBus().getBusType().getId());
+				searchParams.setPassengerNo(1);
+				
+				searchParams.setTicketType("roundtrip");
+				
+				session.put("searchAnother", searchParams);
+				session.put("message", getText("msg_booking004"));
+				
+				session.remove("listOutTripBean");
+				session.remove("listReturnTripBean");
+				return "full";
 			}
 		}
 		
