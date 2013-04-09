@@ -68,7 +68,7 @@ public class BaseAction extends ActionSupport implements SessionAware,
     protected void genericDatabaseErrorProcess(HibernateException e) {
         rollback();
         LOG.error("Database error", e);
-        addActionError(getText("msgerrdb001"));
+        addActionError(getText(e.getMessage()));
     }
 
     /**
@@ -76,27 +76,7 @@ public class BaseAction extends ActionSupport implements SessionAware,
      * @param e
      */
     protected void errorProcessing(Exception ex) {
-        String[] parameters;
-        String[] paramKeys;
-        CommonException e = null;
-        int length = 0;
-        if (CommonException.class.isAssignableFrom(ex.getClass())) {
-            e = (CommonException) ex;
-        } else {
-            e = new CommonException(ex);
-        }
-        rollback();
-        paramKeys = e.getParameters();
-        if (paramKeys != null && paramKeys.length > 0) {
-            length = paramKeys.length;
-            parameters = new String[length];
-            for (int i = 0; i < length; i++) {
-                parameters[i] = getText(paramKeys[i]);
-            }
-        } else {
-            parameters = new String[0];
-        }
-        addActionError(getText(e.getMessageId(), parameters));
+    	errorProcessing(ex, true);
     }
 
     /**
@@ -126,7 +106,7 @@ public class BaseAction extends ActionSupport implements SessionAware,
         } else {
             parameters = new String[0];
         }
-        addActionError(getText(e.getMessageId(), parameters));
+        addActionError(getText(e.getMessageId(), getText("msgerrcm000"), parameters));
     }
 
     /**

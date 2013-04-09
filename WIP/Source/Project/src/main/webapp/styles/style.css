@@ -153,7 +153,7 @@ fieldset {
 
 .search input[type="text"] {
 	width: 100%;
-	width: -webkit-calc(100% -     14px);
+	width: -webkit-calc(100% -       14px);
 }
 
 .carousel-control i {
@@ -264,13 +264,18 @@ label.success {
 	height: 30px;
 	line-height: 30px;
 	font-size: 20px;
-	text-align: center;
+	text-align: left;
 	color: white;
 	opacity: 0.8;
 }
 
 .alert .button {
 	opacity: 0.7;
+}
+
+.loading {
+	background: rgba(255, 255, 255, .8) url('../images/loading.gif') 50% 50%
+		no-repeat;
 }
 
 .printable {

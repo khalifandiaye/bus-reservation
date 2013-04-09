@@ -54,10 +54,6 @@
 	.reservation_info th {
 		width: 190px;
 	}
-	.loading {
-		background: rgba(255, 255, 255, .8) url('../images/loading.gif') 50% 50%
-			no-repeat;
-	}
 	.reservation-details label {
 		font-weight: bold;
 		font-size: 14px;

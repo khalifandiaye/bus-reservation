@@ -80,7 +80,7 @@ public class ExceptionInterceptor implements Interceptor {
                 parameters = new String[0];
             }
             if (action != null) {
-                action.addActionError(action.getText(e.getMessageId(), parameters));
+                action.addActionError(action.getText(e.getMessageId(), action.getText("msgerrcm000"), parameters));
             } else {
                 throw ex;
             }

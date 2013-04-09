@@ -49,10 +49,8 @@ public class RouteDetailListAction extends ActionSupport {
 		// routeDetailsList.get(routeDetailsList.size() -
 		// 1).getSegment().getEndAt()
 		segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
-		StationBean endStationBeans = segmentBeans.get(segmentBeans.size() -1).getEndAt();
 		busStatusBeans = busStatusDAO.getAllAvailTripByRouteId(routeId,
-				Calendar.getInstance().getTime(), 
-					endStationBeans);
+				Calendar.getInstance().getTime());
 
 		// WORK AROUND
 		for (BusStatusBean busStatusBean : busStatusBeans) {
@@ -61,6 +59,7 @@ public class RouteDetailListAction extends ActionSupport {
 			busInfo.setPlateNumber(busStatusBean.getBus().getPlateNumber());
 			busInfo.setFromDate(busStatusBean.getFromDate());
 			busInfo.setToDate(busStatusBean.getToDate());
+			busInfo.setDelete(busStatusBean.getStatus());
 			busInfos.add(busInfo);
 		}
 

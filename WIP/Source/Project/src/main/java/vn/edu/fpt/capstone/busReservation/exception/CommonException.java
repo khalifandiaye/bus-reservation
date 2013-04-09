@@ -61,7 +61,7 @@ public class CommonException extends Exception {
 
     public CommonException(Throwable cause) {
         super(cause);
-        this.messageId = "msgerrcm000";
+        this.messageId = cause.getMessage();
         parameters = new String[0];
         log.error(messageId, this);
     }

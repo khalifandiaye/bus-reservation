@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/styles/jquery-ui.css" />
 <script src="<%=request.getContextPath()%>/js/jquery-ui.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.ui.datepicker-vi.js"></script>
+<script src="<%=request.getContextPath()%>/js/route/route-detail-list.js"></script>
 <script type="text/javascript">
 var info = {};
 Date.prototype.toMyString = function () {
@@ -663,17 +664,21 @@ Date.prototype.toMyString = function () {
          <table id="scheduleTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
-                  <th>Bus Number</th>
+                  <th>Bus Plate Number</th>
+                  <th>Bus Type</th>
                   <th>From Date</th>
                   <th>To Date</th>
+                  <th>Cancel</th>
                </tr>
             </thead>
             <tbody>
-               <s:iterator value="busInfos">
+               <s:iterator value="busStatusBeans">
                   <tr>
-                     <td><s:property value="plateNumber" /></td>
+                     <td><s:property value="bus.plateNumber" /></td>
+                     <td><s:property value="bus.busType.name" /></td>
                      <td><s:date name="fromDate" format="hh:mm - dd/MM/yyyy" /></td>
                      <td><s:date name="toDate" format="hh:mm - dd/MM/yyyy" /></td>
+                     <td><s:if test="%{status == 'active'}"><s:hidden name="id" value="id" /><a class="btn btn-danger btn-small btn-cancel" >Cancel</a></s:if><s:elseif test="status == 'cancelled'">Cancelled</s:elseif></td>
                   </tr>
                </s:iterator>
             </tbody>
@@ -810,5 +815,23 @@ Date.prototype.toMyString = function () {
    </div>
    
    <jsp:include page="../common/footer.jsp" />
+	<!-- Cancel modal -->
+	<div id="cancelModal" class="modal hide fade">
+		<input type="hidden" name="cancelBusStatusId" />
+		<div class="modal-header">
+			<button type="button" class="close close-model-btn">×</button>
+			<h3 id="myModalLabel"><s:text name="header.cancelReservation" /></h3>
+		</div>
+		<div class="modal-body">
+			Reason <s:textfield label="Reason" name="reason" value="" />
+			<div id="message"></div>
+		</div>
+		<div class="modal-footer">
+			<button id="btnClose" class="btn close-model-btn">Close</button>
+			<button id="btnRetry" class="btn close-model-btn btn-danger">Retry</button>
+			<button id="btnNo" class="btn close-model-btn">No</button>
+			<button id="btnCancel" class="btn btn-danger">Yes</button>
+		</div>
+	</div>
 </body>
 </html>
