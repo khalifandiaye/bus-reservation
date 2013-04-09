@@ -5,6 +5,9 @@ package vn.edu.fpt.capstone.busReservation.displayModel;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
+import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 /**
  * @author Monkey
  *
@@ -24,6 +27,9 @@ public class SearchResultInfo implements Serializable{
 		private double fare;
 		private int remainedSeats;
 		private int route;
+		private int busTypeId;
+		private String busType;
+		
 		/**
 		 * @return the busStatusId
 		 */
@@ -138,6 +144,9 @@ public class SearchResultInfo implements Serializable{
 		public double getFare() {
 			return fare;
 		}
+		public String getFareStr() {
+			return FormatUtils.formatNumber(fare, 0, CommonConstant.LOCALE_VN);
+		}
 		/**
 		 * @param fare the fare to set
 		 */
@@ -167,6 +176,30 @@ public class SearchResultInfo implements Serializable{
 		 */
 		public void setRoute(int route) {
 			this.route = route;
+		}
+		/**
+		 * @return the busTypeId
+		 */
+		public int getBusTypeId() {
+			return busTypeId;
+		}
+		/**
+		 * @param busTypeId the busTypeId to set
+		 */
+		public void setBusTypeId(int busTypeId) {
+			this.busTypeId = busTypeId;
+		}
+		/**
+		 * @return the busType
+		 */
+		public String getBusType() {
+			return busType;
+		}
+		/**
+		 * @param busType the busType to set
+		 */
+		public void setBusType(String busType) {
+			this.busType = busType;
 		}
 		
 }

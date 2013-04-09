@@ -100,4 +100,8 @@ public interface CommonConstant {
      * Switch to enable/disable debug mode
      */
     public final static boolean DEBUG_MODE = true;
+    /**
+     * Minimum number of passenger for each trip
+     */
+    public final static int PASSENGER_MIN_NO = 1;
 }

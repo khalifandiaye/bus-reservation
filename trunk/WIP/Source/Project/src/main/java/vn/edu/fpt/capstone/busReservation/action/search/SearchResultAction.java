@@ -339,7 +339,7 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 			now.add(Calendar.MINUTE, CommonConstant.MIN_TIME_BEFORE_DEPART);
 			String minDate = dateTimeFormat.format(now.getTime());
 			searchResult = tripDAO.searchAvailableTrips(departureCity,
-					arrivalCity, deptDate, passengerNo, busType, minDate);
+					arrivalCity, deptDate, passengerNo, minDate);
 			if (searchResult.size() != 0) {
 				// searchResultMap = filterByDate(searchResult);
 				filterResultByDate(searchResult);
@@ -359,7 +359,7 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 				// return journey
 				String retDate = toFormat.format(fromFormat.parse(returnDate));
 				searchResult = tripDAO.searchAvailableTrips(arrivalCity,
-						departureCity, retDate, passengerNo, busType, minDate);
+						departureCity, retDate, passengerNo, minDate);
 				if (searchResult.size() != 0) {
 					// searchResultMap = filterByDate(searchResult);
 					filterReturnResultByDate(searchResult);

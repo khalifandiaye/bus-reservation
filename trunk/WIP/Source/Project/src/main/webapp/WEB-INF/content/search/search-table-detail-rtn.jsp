@@ -18,7 +18,7 @@
 <td class="cell"><a href="#trip-details" role="button"
 	data-toggle="modal" class="trip-details return">Xem</a></td>
 <td class="cell">
-		<strong><s:property value="getText('{0,number,#,##0}',{fare})" />,000</strong>
+		<strong><s:property value="fareStr" />,000</strong>
 		<s:if test="%{#pssgrNo > 1}"><br/><span style="font-size:10pt"><s:property value="getText('{0,number,#,##0}',{fare/passengerNo})" />,000/1 người</span></s:if>
 	</td>
 <td class="cell">
