@@ -6,7 +6,9 @@ import org.apache.struts2.convention.annotation.Result;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.displayModel.User;
+import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.ScheduleLogic;
+import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 @ParentPackage("jsonPackage")
@@ -68,25 +70,10 @@ public class DeleteScheduleAction extends BaseAction {
     @Action(value = "/confirmCancel", results = { @Result(type = "json", name = SUCCESS, params = {
             "callbackParameter", "callback" }) })
     public String confirmCancel() {
-        Object user = null;
-        int userId = 0;
-        if (session != null
-                && session.containsKey(CommonConstant.SESSION_KEY_USER)) {
-            user = session.get(CommonConstant.SESSION_KEY_USER);
-            if (User.class.isAssignableFrom(user.getClass())) {
-                userId = ((User) user).getUserId();
-            } else {
-                // wrong object on session
-                session.remove(CommonConstant.SESSION_KEY_USER);
-            }
-        } else {
-            // wrong object on session
-            session.remove(CommonConstant.SESSION_KEY_USER);
-        }
         try {
             messages = new String[1];
             messages[0] = getText("message.schedule.cancel.confirm",
-                    scheduleLogic.getDeleteInfo(Integer.parseInt(id), userId));
+                    scheduleLogic.getDeleteInfo(Integer.parseInt(id)));
             success = true;
         } catch (Exception e) {
             errorProcessing(e);
@@ -101,6 +88,12 @@ public class DeleteScheduleAction extends BaseAction {
     public String executeDelete() {
         Object user = null;
         int userId = 0;
+        String[] params = null;
+        if (CheckUtils.isNullOrBlank(reason)) {
+        	params = new String[1];
+        	params[0] = "field.cancelReason";
+        	errorProcessing(new CommonException("msgerrcm001", params), false);
+        }
         if (session != null
                 && session.containsKey(CommonConstant.SESSION_KEY_USER)) {
             user = session.get(CommonConstant.SESSION_KEY_USER);
@@ -114,14 +107,31 @@ public class DeleteScheduleAction extends BaseAction {
             // wrong object on session
             session.remove(CommonConstant.SESSION_KEY_USER);
         }
+        if (hasActionErrors()) {
+        	return SUCCESS;
+        }
         try {
-            scheduleLogic.deleteBusStatus(Integer.parseInt(id), reason, userId);
+            scheduleLogic.cancelBusStatus(Integer.parseInt(id), reason, userId);
+            success = true;
         } catch (Exception e) {
             errorProcessing(e);
             messages = new String[getActionErrors().size()];
             getActionErrors().toArray(messages);
         }
-        success = true;
+        return SUCCESS;
+    }
+
+    @Action(value = "/executeRefund", results = { @Result(type = "json", name = SUCCESS, params = {
+            "callbackParameter", "callback" }) })
+    public String executeRefund() {
+        try {
+            scheduleLogic.refundBusStatus(Integer.parseInt(id));
+            success = true;
+        } catch (Exception e) {
+            errorProcessing(e);
+            messages = new String[getActionErrors().size()];
+            getActionErrors().toArray(messages);
+        }
         return SUCCESS;
     }
 

@@ -275,35 +275,6 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<TicketBean> getTicketByBusStatusId(int busStatusId) {
-        List<TicketBean> result = null;
-        Query query = null;
-        String queryString = null;
-        Session session = null;
-        List<String> stati = null;
-        // get the current session
-        session = sessionFactory.getCurrentSession();
-        try {
-            // perform database access (query, insert, update, etc) here
-            queryString = "SELECT tkt FROM TicketBean tkt INNER JOIN tkt.trips trp INNER JOIN trp.busStatus bst INNER JOIN FETCH tkt.payments INNER JOIN FETCH tkt.reservation rsv WHERE bst.id = :busStatusId AND tkt.status IN (:statusTicketValidStati) AND rsv.status IN (:statusReservationValidStati)";
-            query = session.createQuery(queryString);
-            query.setInteger("busStatusId", busStatusId);
-            stati = new ArrayList<String>();
-            stati.add(TicketStatus.ACTIVE.getValue());
-            stati.add(TicketStatus.PENDING.getValue());
-            query.setParameterList("statusTicketValidStati", stati);
-            stati = new ArrayList<String>();
-            stati.add(ReservationStatus.PAID.getValue());
-            stati.add(ReservationStatus.PENDING.getValue());
-            query.setParameterList("statusReservationValidStati", stati);
-            result = query.list();
-        } catch (HibernateException e) {
-            exceptionHandling(e, session);
-        }
-        return result;
-    }
-
-    @SuppressWarnings("unchecked")
     public String getChangeReason(int ticketId, int changeTypeId) {
         List<String> result = null;
         Query query = null;

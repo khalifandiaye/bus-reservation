@@ -24,26 +24,26 @@ public class DeleteScheduleAction extends BaseAction {
 
 	@Action(value = "/deleteSchedule", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
-		List<TicketBean> reservationBeans = ticketDAO.getTicketByBusStatusId(busStatusId);
-		boolean isHaveReservation = false;
-		int countReservation = 0;
-		for (TicketBean ticketBean : reservationBeans) {
-			if (ticketBean.getReservation() != null
-					&& ticketBean.getReservation().getStatus().equals("paid")) {
-				isHaveReservation = false;
-				countReservation++;
-			}
-		}
-
-		if (!isHaveReservation) {
-			BusStatusBean busStatusBean = busStatusDAO.getById(busStatusId);
-			busStatusBean.setStatus("inactive");
-			busStatusDAO.update(busStatusBean);
-			message = "Delete trip successfully!";
-		} else {
-			message = "Cannot delete trip. This trip has " + countReservation
-					+ "reservation on it";
-		}
+//		List<TicketBean> reservationBeans = ticketDAO.getTicketByBusStatusId(busStatusId);
+//		boolean isHaveReservation = false;
+//		int countReservation = 0;
+//		for (TicketBean ticketBean : reservationBeans) {
+//			if (ticketBean.getReservation() != null
+//					&& ticketBean.getReservation().getStatus().equals("paid")) {
+//				isHaveReservation = false;
+//				countReservation++;
+//			}
+//		}
+//
+//		if (!isHaveReservation) {
+//			BusStatusBean busStatusBean = busStatusDAO.getById(busStatusId);
+//			busStatusBean.setStatus("inactive");
+//			busStatusDAO.update(busStatusBean);
+//			message = "Delete trip successfully!";
+//		} else {
+//			message = "Cannot delete trip. This trip has " + countReservation
+//					+ "reservation on it";
+//		}
 		return SUCCESS;
 	}
 
