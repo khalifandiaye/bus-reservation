@@ -92,8 +92,8 @@
    
    $(document).ready(function() {
       
-	   var routeTable = $('#routeTable').dataTable({ bSort : false });
-	   var segmentTable = $('#segmentTable').dataTable({ bSort : false , bPaginate : false });
+   var routeTable = $('#routeTable').dataTable({ bSort : false });
+   var segmentTable = $('#segmentTable').dataTable({ bSort : false , bPaginate : false });
       	   
       $('#addRoute').bind('click', function(event) {
     	   giCount = 0;
