@@ -759,7 +759,7 @@ Date.prototype.toMyString = function () {
                      <td><s:property value="bus.busType.name" /></td>
                      <td><s:date name="fromDate" format="hh:mm - dd/MM/yyyy" /></td>
                      <td><s:date name="toDate" format="hh:mm - dd/MM/yyyy" /></td>
-                     <td><s:if test="%{status == 'active'}"><s:hidden name="id" value="id" /><a class="btn btn-danger btn-small btn-cancel" >Cancel</a></s:if><s:elseif test="status == 'cancelled'">Cancelled</s:elseif></td>
+                     <td><s:if test="%{status == 'active'}"><s:hidden name="id" value="%{id}" /><a class="btn btn-danger btn-small btn-cancel" >Cancel</a></s:if><s:elseif test="status == 'cancelled'">Cancelled</s:elseif></td>
                   </tr>
                </s:iterator>
             </tbody>
@@ -907,7 +907,7 @@ Date.prototype.toMyString = function () {
 			<h3 id="myModalLabel"><s:text name="header.cancelReservation" /></h3>
 		</div>
 		<div class="modal-body">
-			Reason <s:textfield label="Reason" name="reason" value="" />
+			Reason <s:textfield label="Reason" name="reason" value="" /><span style="padding-left: 3px; color: red; font-size: 22px;">*</span>
 			<div id="message"></div>
 		</div>
 		<div class="modal-footer">

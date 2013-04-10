@@ -10,11 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.UserDAO;
-import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusChangeBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusChangeTypeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean.PaymentType;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
@@ -33,7 +29,6 @@ public class ScheduleLogic extends BaseLogic {
      */
 	private static final long serialVersionUID = 1L;
 	private BusStatusDAO busStatusDAO;
-	private UserDAO userDAO;
 
 	/**
 	 * @param busStatusDAO
@@ -42,14 +37,6 @@ public class ScheduleLogic extends BaseLogic {
 	@Autowired
 	public void setBusStatusDAO(BusStatusDAO busStatusDAO) {
 		this.busStatusDAO = busStatusDAO;
-	}
-
-	/**
-	 * @param userDAO the userDAO to set
-	 */
-	@Autowired
-	public void setUserDAO(UserDAO userDAO) {
-		this.userDAO = userDAO;
 	}
 
 	public void cancelBusStatus(int i, String reason, int userId)
@@ -87,11 +74,6 @@ public class ScheduleLogic extends BaseLogic {
 		params[1] = FormatUtils.formatNumber(paidAmount, 0,
 				CommonConstant.LOCALE_VN);
 		return params;
-	}
-
-	public void refundBusStatus(int parseInt) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

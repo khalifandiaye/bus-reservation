@@ -318,14 +318,16 @@ public class PaymentLogic extends BaseLogic {
             throws CommonException {
         TicketInfoBean ticket = null;
         ticket = ticketDAO.getTicketInfoById(ticketId);
-        if (!TicketStatus.ACTIVE.getValue().equals(ticket.getId().getStatus())) {
-            return null;
-        }
         return calculateRefundAmount(ticket);
     }
 
     private RefundInfo calculateRefundAmount(TicketInfoBean ticketInfo)
             throws CommonException {
+        return calculateRefundAmount(ticketInfo, false);
+    }
+
+    private RefundInfo calculateRefundAmount(TicketInfoBean ticketInfo,
+            boolean fullRefund) throws CommonException {
         RefundInfo refundInfo = null;
         double amount = 0;
         List<SystemSettingBean> settings = null;
@@ -337,36 +339,41 @@ public class PaymentLogic extends BaseLogic {
         Calendar timelimit = null;
         Date today = null;
         CurrencyConverter converter = null;
-        settings = systemSettingDAO.getAllLike("refund%");
-        if (settings == null || settings.size() % 2 != 0) {
-            throw new CommonException();
-        }
-        settingCount = settings.size() / 2;
-        rates = new int[settingCount];
-        limits = new int[settingCount];
-        for (SystemSettingBean setting : settings) {
-            settingKey = setting.getId().split("\\.");
-            if (settingKey[2].equals("rate")) {
-                rates[Integer.parseInt(settingKey[1]) - 1] = Integer
-                        .parseInt(setting.getValue());
-            } else {
-                limits[Integer.parseInt(settingKey[1]) - 1] = Integer
-                        .parseInt(setting.getValue());
+        // calculate refund rate
+        if (fullRefund) {
+            refundRate = 100;
+        } else {
+            settings = systemSettingDAO.getAllLike("refund%");
+            if (settings == null || settings.size() % 2 != 0) {
+                throw new CommonException();
             }
-        }
-        timelimit = Calendar.getInstance();
-        today = new Date();
-        for (int i = 0; i < settingCount; i++) {
-            timelimit.setTime(ticketInfo.getStartTrip().getDepartureTime());
-            timelimit.add(Calendar.DATE, -limits[i]);
-            if (today.before(timelimit.getTime())) {
-                refundRate = rates[i];
-                break;
+            settingCount = settings.size() / 2;
+            rates = new int[settingCount];
+            limits = new int[settingCount];
+            for (SystemSettingBean setting : settings) {
+                settingKey = setting.getId().split("\\.");
+                if (settingKey[2].equals("rate")) {
+                    rates[Integer.parseInt(settingKey[1]) - 1] = Integer
+                            .parseInt(setting.getValue());
+                } else {
+                    limits[Integer.parseInt(settingKey[1]) - 1] = Integer
+                            .parseInt(setting.getValue());
+                }
             }
-        }
-        if (refundRate == 0) {
-            // TODO handle error
-            throw new CommonException();
+            timelimit = Calendar.getInstance();
+            today = new Date();
+            for (int i = 0; i < settingCount; i++) {
+                timelimit.setTime(ticketInfo.getStartTrip().getDepartureTime());
+                timelimit.add(Calendar.DATE, -limits[i]);
+                if (today.before(timelimit.getTime())) {
+                    refundRate = rates[i];
+                    break;
+                }
+            }
+            if (refundRate == 0) {
+                // TODO handle error
+                throw new CommonException();
+            }
         }
         try {
             converter = CurrencyConverter.getInstance(
@@ -381,9 +388,7 @@ public class PaymentLogic extends BaseLogic {
         refundInfo.setRefundRate(refundRate);
         refundInfo
                 .setReservationId(ticketInfo.getId().getReservation().getId());
-        if (TicketStatus.ACTIVE.getValue().equals(
-                ticketInfo.getId().getStatus())
-                && ticketInfo.getId().getPayments() != null
+        if (ticketInfo.getId().getPayments() != null
                 && ticketInfo.getId().getPayments().size() > 0) {
             amount = 0;
             for (PaymentBean payment : ticketInfo.getId().getPayments()) {
@@ -402,6 +407,8 @@ public class PaymentLogic extends BaseLogic {
             refundInfo.getTickets().add(
                     refundInfo.new RefundInfoPerTicket(ticketInfo.getId()
                             .getId(), amount, converter.convert(amount)));
+        } else {
+            throw new CommonException();
         }
         return refundInfo;
     }
@@ -415,7 +422,13 @@ public class PaymentLogic extends BaseLogic {
         UserBean user = null;
         double serviceFee = 0;
         double grossRefundAmount = 0;
-        refundInfo = calculateRefundAmount(ticketId);
+        TicketInfoBean ticketBean = null;
+        ticketBean = ticketDAO.getTicketInfoById(ticketId);
+        if (!TicketStatus.ACTIVE.getValue().equals(
+                ticketBean.getId().getStatus())) {
+            throw new CommonException("msgerrrs008");
+        }
+        refundInfo = calculateRefundAmount(ticketBean);
         // perform the transaction and get transaction id
         if (1 == refundInfo.getPaymentMethodId()) {
             user = userDAO.getById(userId);
@@ -429,7 +442,7 @@ public class PaymentLogic extends BaseLogic {
                 throw new CommonException("msgerrau008");
             }
         } else if (2 == refundInfo.getPaymentMethodId()) {
-            refundReturn = doPaypalRefund(ticketId, refundInfo);
+            refundReturn = doPaypalRefund(ticketBean, refundInfo);
             grossRefundAmount = refundReturn[1] != null ? new BigDecimal(
                     refundReturn[1]).doubleValue() : 0;
             serviceFee = new BigDecimal(refundReturn[2]).doubleValue();
@@ -443,6 +456,7 @@ public class PaymentLogic extends BaseLogic {
             paymentDetailsList.add(details);
             details.setTransactionID(refundReturn[0]);
             details.setTicketId(ticket.getTicketId());
+            details.setFullRefund(false);
             if (refundReturn[1] != null) {
                 details.setFeeAmount(BigDecimal
                         .valueOf(
@@ -470,64 +484,55 @@ public class PaymentLogic extends BaseLogic {
      *         VND, and the transaction id
      * @throws CommonException
      */
-    public String[] doPaypalRefund(int ticketId, RefundInfo refundInfo)
+    private String[] doPaypalRefund(TicketInfoBean ticket, RefundInfo refundInfo)
             throws CommonException {
         PayPalAPIInterfaceServiceService service = null;
         RefundTransactionResponseType response = null;
         RefundTransactionReq request = null;
         RefundTransactionRequestType requestDetails = null;
         BasicAmountType amount = null;
-        TicketInfoBean ticket = null;
         PaymentBean payment = null;
         String[] returnVal = null;
 
-        ticket = ticketDAO.getTicketInfoById(ticketId);
-        if (TicketStatus.ACTIVE.getValue().equals(ticket.getId().getStatus())
-                && ticket.getId().getPayments() != null) {
-            payment = ticket.getId().getPayments().get(0);
-            request = new RefundTransactionReq();
-            requestDetails = new RefundTransactionRequestType();
-            request.setRefundTransactionRequest(requestDetails);
-            requestDetails.setTransactionID(payment.getTransactionId());
-            requestDetails.setRefundType(RefundType.PARTIAL);
-            amount = new BasicAmountType();
-            requestDetails.setAmount(amount);
-            amount.setCurrencyID(CurrencyCodeType.USD);
-            amount.setValue(BigDecimal
-                    .valueOf(refundInfo.getRefundAmountInUSD())
-                    .setScale(2, RoundingMode.FLOOR).toPlainString());
-            try {
-                service = new PayPalAPIInterfaceServiceService(this.getClass()
-                        .getResourceAsStream("/paypal/sdk_config.properties"));
-                response = service.refundTransaction(request);
-            } catch (Exception e) {
-                // TODO handle error
-                throw new CommonException(e);
-            }
-            if (response != null) {
-                if (response.getAck().toString().equalsIgnoreCase("SUCCESS")) {
-                    // do nothing
-                } else {
-                    for (ErrorType error : response.getErrors()) {
-                        LOG.error("PAYPAL error: " + error.getErrorCode() + ":"
-                                + error.getLongMessage());
-                    }
-                    // TODO handle error
-                    throw new CommonException();
-                }
+        payment = ticket.getId().getPayments().get(0);
+        request = new RefundTransactionReq();
+        requestDetails = new RefundTransactionRequestType();
+        request.setRefundTransactionRequest(requestDetails);
+        requestDetails.setTransactionID(payment.getTransactionId());
+        requestDetails.setRefundType(RefundType.PARTIAL);
+        amount = new BasicAmountType();
+        requestDetails.setAmount(amount);
+        amount.setCurrencyID(CurrencyCodeType.USD);
+        amount.setValue(BigDecimal.valueOf(refundInfo.getRefundAmountInUSD())
+                .setScale(2, RoundingMode.FLOOR).toPlainString());
+        try {
+            service = new PayPalAPIInterfaceServiceService(this.getClass()
+                    .getResourceAsStream("/paypal/sdk_config.properties"));
+            response = service.refundTransaction(request);
+        } catch (Exception e) {
+            // TODO handle error
+            throw new CommonException(e);
+        }
+        if (response != null) {
+            if (response.getAck().toString().equalsIgnoreCase("SUCCESS")) {
+                // do nothing
             } else {
+                for (ErrorType error : response.getErrors()) {
+                    LOG.error("PAYPAL error: " + error.getErrorCode() + ":"
+                            + error.getLongMessage());
+                }
                 // TODO handle error
-                LOG.error("Null response from paypal");
                 throw new CommonException();
             }
         } else {
             // TODO handle error
-            throw new CommonException("msgerrrs008");
+            LOG.error("Null response from paypal");
+            throw new CommonException();
         }
         returnVal = new String[3];
         returnVal[0] = response.getRefundTransactionID();
         returnVal[1] = response.getGrossRefundAmount().getValue();
-        returnVal[1] = response.getFeeRefundAmount().getValue();
+        returnVal[2] = response.getFeeRefundAmount().getValue();
         return returnVal;
     }
 
@@ -1019,7 +1024,11 @@ public class PaymentLogic extends BaseLogic {
             for (PaymentDetails details : paymentDetails) {
                 for (TicketBean ticket : reservation.getTickets()) {
                     if (ticket.getId() == details.getTicketId()) {
-                        ticket.setStatus(TicketStatus.REFUNDED.getValue());
+                        if (details.isFullRefund()) {
+                            ticket.setStatus(TicketStatus.REFUNDED2.getValue());
+                        } else {
+                            ticket.setStatus(TicketStatus.REFUNDED.getValue());
+                        }
                     }
                     // check if all ticket(s) has been invalidated
                     if (TicketStatus.ACTIVE.equals(ticket.getStatus())
@@ -1403,6 +1412,67 @@ public class PaymentLogic extends BaseLogic {
             throw new CommonException("msgerrcm003", e);
         } catch (UnsupportedEncodingException e) {
             throw new CommonException("msgerrcm003", e);
+        }
+    }
+
+    public void refundBusStatus(int busStatusId) {
+        List<TicketInfoBean> ticketInfos = null;
+        RefundInfo refundInfo = null;
+        int paymentMethodId = 0;
+        String[] refundReturn = null;
+        double grossRefundAmount = 0;
+        double serviceFee = 0;
+        List<PaymentDetails> paymentDetailsList = null;
+        PaymentDetails details = null;
+        ticketInfos = ticketDAO.getCancelledTicketInfos(busStatusId);
+        LOG.debug("Prepare to refund " + ticketInfos.size() + " tickets");
+        for (TicketInfoBean ticketInfo : ticketInfos) {
+            try {
+                if (ticketInfo.getId().getPayments() != null && ticketInfo.getId().getPayments().size() > 0)
+                paymentMethodId = ticketInfo.getId().getPayments().get(0)
+                        .getPaymentMethod().getId();
+                if (2 == paymentMethodId) {
+                    refundInfo = calculateRefundAmount(ticketInfo, true);
+                    refundReturn = doPaypalRefund(ticketInfo, refundInfo);
+                    grossRefundAmount = refundReturn[1] != null ? new BigDecimal(
+                            refundReturn[1]).doubleValue() : 0;
+                    serviceFee = new BigDecimal(refundReturn[2]).doubleValue();
+                    paymentDetailsList = new ArrayList<PaymentDetails>();
+                    for (RefundInfoPerTicket ticket : refundInfo.getTickets()) {
+                        details = new PaymentDetails();
+                        paymentDetailsList.add(details);
+                        details.setTransactionID(refundReturn[0]);
+                        details.setTicketId(ticket.getTicketId());
+                        details.setFullRefund(true);
+                        if (refundReturn[1] != null) {
+                            details.setFeeAmount(BigDecimal
+                                    .valueOf(
+                                            serviceFee
+                                                    * ticket.getRefundAmountInUSD()
+                                                    / grossRefundAmount)
+                                    .setScale(2, RoundingMode.FLOOR)
+                                    .toPlainString());
+                        } else {
+                            details.setFeeAmount("0.00");
+                        }
+                        details.setGrossAmount(BigDecimal
+                                .valueOf(ticket.getRefundAmountInUSD())
+                                .setScale(2, RoundingMode.FLOOR)
+                                .toPlainString());
+                    }
+                    savePayment(refundInfo.getReservationId(),
+                            paymentDetailsList, 0, PaymentType.REFUND);
+                    paymentDAO.completeTransaction();
+                    LOG.debug("Ticket " + ticketInfo.getId().getId()
+                            + " successfully refunded.");
+                } else {
+                    // cannot refund automatically
+                    // do nothing
+                }
+            } catch (Exception e) {
+                // log error and continue
+                LOG.error("Mass refund error", e);
+            }
         }
     }
 

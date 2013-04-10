@@ -259,7 +259,7 @@
 		<id name="id" unsaved-value="0" type="integer">
 			<generator class="native" />
 		</id>
-		<property name="description" column="reason" type="string"
+		<property name="description" column="description" type="string"
 			not-null="true" />
 	</class>
 	<!-- BUS_STATUS_CHANGE -->

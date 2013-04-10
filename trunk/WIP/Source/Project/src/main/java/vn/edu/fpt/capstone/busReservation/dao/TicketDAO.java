@@ -3,7 +3,6 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -266,6 +265,64 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
             query.setString("rsvStatusMoved",
                     ReservationStatus.MOVED.getValue());
             query.setString("ticketStatusMoved", TicketStatus.MOVED.getValue());
+            result = query.list();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+        // return result, if needed
+        return result;
+    }
+
+    /**
+     * Get paid ticket for a bus status
+     * @param busStatusId
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<TicketInfoBean> getCancelledTicketInfos(int busStatusId) {
+        List<TicketInfoBean> result = null;
+        Query query = null;
+        String queryString = null;
+        Session session = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            queryString = "SELECT DISTINCT new vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean(tkt, trps, trpe, SUM(tar.fare))"
+                    + " FROM TicketBean tkt"
+                    + " INNER JOIN tkt.trips trps"
+                    + " INNER JOIN tkt.trips trpe"
+                    + " INNER JOIN tkt.trips trp"
+                    + " INNER JOIN trp.routeDetails.segment.tariffs tar"
+                    + " INNER JOIN tkt.reservation rsv"
+                    + " INNER JOIN trps.busStatus bst"
+                    + " WHERE bst.id = :busStatusId"
+//                    + "     AND rsv.status = :rsvStatusPaid"
+                    + "     AND tkt.status = :ticketStatusCancelled"
+                    + "     AND trps.departureTime = ("
+                    + "         SELECT MIN(trp1.departureTime)"
+                    + "         FROM TicketBean tkt1"
+                    + "         INNER JOIN tkt1.trips trp1"
+                    + "         WHERE tkt1 = tkt)"
+                    + "     AND trpe.departureTime = ("
+                    + "         SELECT MAX(trp2.departureTime)"
+                    + "         FROM TicketBean tkt2"
+                    + "         INNER JOIN tkt2.trips trp2"
+                    + "         WHERE tkt2 = tkt)"
+                    + "     AND tar.busType = trp.busStatus.bus.busType"
+                    + "     AND tar.validFrom = ("
+                    + "         SELECT MAX(tar.validFrom)"
+                    + "         FROM TariffBean tar1"
+                    + "         WHERE tar1.segment = trp.routeDetails.segment"
+                    + "             AND tar1.busType = trp.busStatus.bus.busType"
+                    + "             AND tar1.validFrom <= rsv.bookTime)"
+                    + " GROUP BY tkt,trps,trps.busStatus,trps.departureTime,trpe"
+                    + " ORDER BY trps.departureTime";
+            query = session.createQuery(queryString);
+            query.setInteger("busStatusId", busStatusId);
+//            query.setString("rsvStatusPaid",
+//                    ReservationStatus.PAID.getValue());
+            query.setString("ticketStatusCancelled", TicketStatus.CANCELLED.getValue());
             result = query.list();
         } catch (HibernateException e) {
             exceptionHandling(e, session);
