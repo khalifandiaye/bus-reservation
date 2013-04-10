@@ -60,7 +60,7 @@ function initSelectedSeat(){
 	}
 	if(selectedReturnSeat != ""){ 
 		arraySelectedReturnSeat = selectedReturnSeat.split(";");
-	}else if(sessionStorage.getItem("selectedReturnSeat") != null){
+	}else if(sessionStorage.getItem("selectedReturnSeat") != null && $("#seat-map-return").length > 0){
 		arraySelectedReturnSeat = sessionStorage.getItem("selectedReturnSeat").split(";");
 	}
 	if(arraySelectedReturnSeat != null){

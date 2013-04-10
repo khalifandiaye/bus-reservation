@@ -268,7 +268,10 @@ label.success {
 	color: white;
 	opacity: 0.8;
 }
-
+.alert.fade.in .errorMessage{
+	list-style: none;
+	padding-top: 3px; 
+}
 .alert .button {
 	opacity: 0.7;
 }
