@@ -96,7 +96,7 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<BusStatusBean> getAllAvailTripByRouteId(int routeId, Date date) {
-		String hql = "Select distinct bs FROM BusStatusBean bs INNER JOIN bs.trips trp INNER JOIN trp.routeDetails.route rte WHERE rte.id = :routeId "
+		String hql = "Select distinct bs FROM BusStatusBean bs INNER JOIN FETCH bs.bus bus INNER JOIN FETCH bus.busType INNER JOIN bs.trips trp INNER JOIN trp.routeDetails.route rte WHERE rte.id = :routeId "
 				+ "AND bs.busStatus = :busStatus "
 				+ "AND bs.fromDate >= :date AND bs.status = :status "
 				+ "ORDER BY bs.fromDate";
@@ -347,12 +347,14 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 		return result;
 	}
 
-	public void cancel(int busStatusId, String reason, int userId) {
+	@SuppressWarnings("unchecked")
+    public void cancel(int busStatusId, String reason, int userId) {
 		Query query = null;
 		String queryString = null;
 		Session session = null;
 		List<String> stati = null;
 		BusStatusChangeBean change = null;
+		List<Integer> ids = null;
 		// get the current session
 		session = sessionFactory.getCurrentSession();
 		try {
@@ -362,33 +364,40 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 			query = session.createQuery(queryString);
 			query.setInteger("busStatusId", busStatusId);
 			query.executeUpdate();
+			// select related tickets
+			queryString = "SELECT tkts.id"
+                    + " FROM BusStatusBean bst"
+                    + " INNER JOIN bst.trips trp"
+                    + " INNER JOIN trp.tickets tkts"
+                    + " INNER JOIN tkts.reservation rsv"
+                    + " WHERE bst.id = :busStatusId"
+                    + " AND tkts.status IN (:tktStati)"
+                    + " AND rsv.status IN (:rsvStati)";
+            query = session.createQuery(queryString);
+            query.setInteger("busStatusId", busStatusId);
+            stati = new ArrayList<String>();
+            stati.add(TicketStatus.ACTIVE.getValue());
+            stati.add(TicketStatus.PENDING.getValue());
+            query.setParameterList("tktStati", stati);
+            stati = new ArrayList<String>();
+            stati.add(ReservationStatus.PAID.getValue());
+            stati.add(ReservationStatus.PENDING.getValue());
+            query.setParameterList("rsvStati", stati);
+            ids = query.list();
 			// set related tickets to 'cancelled'
-			queryString = "UPDATE TicketBean tkt"
-					+ " SET tkt.status = :cancelled"
-					+ " WHERE tkt IN (SELECT tkts"
-					+ " FROM BusStatusBean bst"
-					+ " INNER JOIN bst.trips trp"
-					+ " INNER JOIN trp.tickets tkts"
-					+ " INNER JOIN tkts.reservation rsv"
-					+ " WHERE bst.id = :busStatusId"
-					+ " AND tkt.status IN (:tktStati)"
-					+ " AND rsv.status IN (:rsvStati))";
-			query = session.createQuery(queryString);
-			query.setString("cancelled", TicketStatus.CANCELLED.getValue());
-			query.setInteger("busStatusId", busStatusId);
-			stati = new ArrayList<String>();
-			stati.add(TicketStatus.ACTIVE.getValue());
-			stati.add(TicketStatus.PENDING.getValue());
-			query.setParameterList("tktStati", stati);
-			stati = new ArrayList<String>();
-			stati.add(ReservationStatus.PAID.getValue());
-			stati.add(ReservationStatus.PENDING.getValue());
-			query.setParameterList("rsvStati", stati);
-			query.executeUpdate();
+            if (ids != null && ids.size() > 0) {
+                queryString = "UPDATE TicketBean tkt"
+                        + " SET tkt.status = :cancelled"
+                        + " WHERE tkt.id IN (:ids)";
+                query = session.createQuery(queryString);
+                query.setString("cancelled", TicketStatus.CANCELLED.getValue());
+                query.setParameterList("ids", ids);
+                query.executeUpdate();
+            }
 			// add status change record
 			change = new BusStatusChangeBean();
 			change.setBusStatus((BusStatusBean) session.get(
-					BusStatusChangeTypeBean.class, busStatusId));
+			        BusStatusBean.class, busStatusId));
 			change.setDate(new Date());
 			change.setReason(reason);
 			change.setType((BusStatusChangeTypeBean) session.get(
