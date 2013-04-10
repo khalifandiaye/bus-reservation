@@ -4,7 +4,7 @@ $(document).ready(function(){
     var reservationTable = $('#reservationList').dataTable({
         "aoColumnDefs" : [ {
             bSortable : false,
-            sWidth : "40px",
+            sWidth : "70px",
             sClass: "text_center",
             aTargets : [ "details" ]
         },
@@ -34,15 +34,8 @@ $(document).ready(function(){
         "bDeferRender": true,
         "bStateSave": true,
         "iDisplayLength": 10,
-        "sPaginationType": "full_numbers",
         "aLengthMenu": [[-1, 10, 20, 50, 75, 100], [$("span.hidden#sAll").text(), 10, 20, 50, 75, 100]],
         "oLanguage": {
-            "oPaginate": {
-                "sFirst": $("span.hidden#sFirst").text(),
-                "sLast": $("span.hidden#sLast").text(),
-                "sNext": $("span.hidden#sNext").text(),
-                "sPrevious": $("span.hidden#sPrevious").text(),
-            },
             "sEmptyTable" : $("span.hidden#sEmptyTable").text(),
             "sInfo": $("span.hidden#sInfo").text(),
             "sInfoEmpty": $("span.hidden#sInfoEmpty").text(),
