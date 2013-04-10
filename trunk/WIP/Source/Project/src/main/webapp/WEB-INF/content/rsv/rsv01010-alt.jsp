@@ -10,8 +10,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><s:text name="title.rsv01010-alt" /></title>
 <jsp:include page="../common/xheader.jsp" />
-<link href="<%=request.getContextPath()%>/styles/booking.css"
-	rel="stylesheet">
 <link href="<%=request.getContextPath()%>/styles/pay.css"
 	rel="stylesheet">
 </head>

@@ -335,7 +335,7 @@ public class UserLogic extends BaseLogic {
         } catch (IOException e) {
             throw new CommonException(e);
         }
-        templateName = (String) globalProps.get("mail.template.resetPassword");
+        templateName = (String) globalProps.get("mail.template.resetPass");
         mailTemplateBean = mailTemplateDAO.getByName(templateName);
         subject = new StringBuilder(mailTemplateBean.getSubject());
         content = new StringBuilder(mailTemplateBean.getText());
