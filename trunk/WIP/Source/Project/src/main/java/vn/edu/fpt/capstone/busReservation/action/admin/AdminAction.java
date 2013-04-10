@@ -72,13 +72,13 @@ public class AdminAction extends BaseAction{
     private boolean checkboxActive;
     private boolean resultJSON;
     private String errorMessage;
-    private UserLogic ul;
+    private UserLogic userLogic;
     
 	/**
-	 * @param ul the ul to set
+	 * @param userLogic the userLogic to set
 	 */
-	public void setUl(UserLogic ul) {
-		this.ul = ul;
+	public void setUserLogic(UserLogic userLogic) {
+		this.userLogic = userLogic;
 	}
 
 
@@ -345,8 +345,7 @@ public class AdminAction extends BaseAction{
         	}
         	newPass = CryptUtils.generateCode(6);
         	//Send mail.
-        	ul = new UserLogic();
-        	ul.sendResetMailPub(newPass,userBean.getFirstName(),userBean.getLastName(),userBean.getEmail(),servletRequest.getContextPath());
+        	userLogic.sendResetMailPub(newPass,userBean.getFirstName(),userBean.getLastName(),userBean.getEmail(),servletRequest.getContextPath());
         	userBean.setPassword(CryptUtils.encrypt2String(newPass));
 			errorMessage = "Reset password successful";
 			resultJSON = true;
