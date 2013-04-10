@@ -5,12 +5,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.BusTypeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SegmentTravelTimeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
+import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
@@ -36,6 +38,7 @@ public class RouteDetailListAction extends ActionSupport {
 	private boolean active = false;
 	private String routeName = "";
 	private String sumaryTime = "";
+	private boolean haveBus;
 
 	private RouteDetailsDAO routeDetailsDAO;
 	private BusTypeDAO busTypeDAO;
@@ -43,8 +46,14 @@ public class RouteDetailListAction extends ActionSupport {
 	private SystemSettingDAO systemSettingDAO;
 	private BusStatusDAO busStatusDAO;
 	private RouteDAO routeDAO;
+	private BusDAO busDAO;
 
 	public String execute() {
+	   List<BusBean> busBeans = busDAO.getBusByRouteId(routeId);
+	   if (busBeans.size() != 0) {
+	      haveBus = true;
+	   }
+	   
 		segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
 		busStatusBeans = busStatusDAO.getAllAvailTripByRouteId(routeId,
 				Calendar.getInstance().getTime());
@@ -223,4 +232,20 @@ public class RouteDetailListAction extends ActionSupport {
 	public void setBusInfos(List<BusInfo> busInfos) {
 		this.busInfos = busInfos;
 	}
+
+   public boolean isHaveBus() {
+      return haveBus;
+   }
+
+   public void setHaveBus(boolean haveBus) {
+      this.haveBus = haveBus;
+   }
+
+   public BusDAO getBusDAO() {
+      return busDAO;
+   }
+
+   public void setBusDAO(BusDAO busDAO) {
+      this.busDAO = busDAO;
+   }
 }
