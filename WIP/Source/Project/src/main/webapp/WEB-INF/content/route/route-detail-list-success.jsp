@@ -359,12 +359,9 @@ Date.prototype.toMyString = function () {
 		});
 
 		$("#assignBus").click(function() {
-	         if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
-		        	 $("#busDetailAdd").removeClass("btn-primary");
-		        	 $("#busDetailAdd").attr("disabled","disabled");
-	         }
 			var routeId = $("#routeId").val();
 			var busType = $("#busType").val();
+			$("#addBus_BusType").val(busType);
 			$.ajax({
 				type : "GET",
 				url : 'getBusInRoute.html?routeId='+ routeId+ '&type=' + busType,
@@ -403,6 +400,14 @@ Date.prototype.toMyString = function () {
 					$.each(busNotInRoute,function() {$('#busDetailbusPlate').append(
 						'<option value="'+ this.id +'">'+ this.plateNumber + '</option>');
 					});
+					
+					if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
+		                $("#busDetailAdd").removeClass("btn-primary");
+		                $("#busDetailAdd").attr("disabled","disabled");
+		            } else {
+		               $("#busDetailAdd").addClass("btn-primary");    
+		                 $("#busDetailAdd").removeAttr("disabled");
+		            }
 					$("#busDetailDialog").modal();
 				}
 			});
@@ -433,10 +438,10 @@ Date.prototype.toMyString = function () {
 
 		$("#busDetailAdd").bind('click', function(){
 			var busId = $("#busDetailbusPlate").val();
-			if (!busId || busId == '') {
+			if (busId == null || busId == '') {
 				$("#busDetailAdd").removeClass("btn-primary");
 	         $("#busDetailAdd").attr("disabled","disabled");
-	      }
+	      } 
 		});
 
 		$("#busDetailSave").click(
@@ -493,12 +498,73 @@ Date.prototype.toMyString = function () {
 
 		validateBusType();
 		$('#busType').bind('change', function() {
+	         var busType = $('#busType').val();
+	         var date = $('#validDateSelect').val();
+	         getPrice(busType, segments, date);
+	         validateBusType();
+	      });
+		
+		$('#busType').bind('change', function() {
 			var busType = $('#busType').val();
 			var date = $('#validDateSelect').val();
 			getPrice(busType, segments, date);
-			validateBusType();
 		});
+		
+		$("#addBus_BusType").bind('change', function() {
+         var routeId = $("#routeId").val();
+         var busType = $("#addBus_BusType").val();
+         $('#busType').val(busType);
+         var date = $('#validDateSelect').val();
+         getPrice(busType, segments, date);
+         $.ajax({
+            type : "GET",
+            url : 'getBusInRoute.html?routeId='+ routeId+ '&type=' + busType,
+                  contentType : "application/x-www-form-urlencoded; charset=utf-8",
+            success : function(response) {
+               var busInRoute = response.busInRouteBeans;
+               var busNotInRoute = response.busNotInRouteBeans;
+               $('#busDetailTable').dataTable().fnClearTable();
+               
+               $.each(busInRoute, function() {
+                  if (this['delete'] == 'true') {
+                  busDetailTable.dataTable().fnAddData([
+                     this.id,
+                     this.plateNumber,
+                     '<button type="button" data-id="'+ this.id +'" class="btn btn-danger">Delete</button>' ]);
+                     $("#busDetailTable tr button[data-id="+ this.id+ "]").click(
+                     function() {
+                        var td = this.parentNode;
+                        var tr = td.parentNode;
+                        var aPos = busDetailTable.dataTable().fnGetPosition(td);
+                        var data = busDetailTable.fnGetData(tr);
+                        $('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
+                           busDetailTable.dataTable().fnDeleteRow(aPos[0]);
+                           $("#busDetailAdd").addClass("btn-primary");    
+                           $("#busDetailAdd").removeAttr("disabled");
+                     });
+                  } else {
+                     busDetailTable.dataTable().fnAddData([
+                        this.id,
+                        this.plateNumber,
+                        '<button type="button" data-id="'+ this.id +'" disabled="disabled">Delete</button>' ]);
+                  };
+               });
 
+               $('#busDetailbusPlate').empty();
+               $.each(busNotInRoute,function() {$('#busDetailbusPlate').append(
+                  '<option value="'+ this.id +'">'+ this.plateNumber + '</option>');
+               });
+               if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
+                   $("#busDetailAdd").removeClass("btn-primary");
+                   $("#busDetailAdd").attr("disabled","disabled");
+               } else {
+                   $("#busDetailAdd").addClass("btn-primary");    
+                   $("#busDetailAdd").removeAttr("disabled");
+              }
+            }
+         });
+      });
+		
 	    $('#validDateSelect').bind('change', function() {
 	         var busType = $('#busType').val();
 	         var date = $('#validDateSelect').val();
@@ -600,6 +666,11 @@ Date.prototype.toMyString = function () {
 	width: 900px;
 	margin-left: -440px;
 }
+
+#busDetailDialog {
+   width: 700px;
+   margin-left: -360px;
+}
 </style>
 </head>
 <body>
@@ -612,11 +683,10 @@ Date.prototype.toMyString = function () {
 	               <tr>
 	                  <td><input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price"
 	                        style="height: 30px" />
-	<!--                   <input class="btn btn-primary" type="button" id="viewPrice" value="View Price" style="height: 30px"/> -->
 	                  <input class="btn btn-primary" id="assignBus" type="button" value="Assign Bus to Route" style="height: 30px"/>
 	                  <input id="busStatusInsertBtn" type="button" class="btn btn-success" value="Add New Schedule" style="height: 30px"/></td>
 	               </tr>
-	            </table>
+	        </table>
 		</h3>  
       <div class="post">
          <div style="margin-top: 10px;">
@@ -626,10 +696,7 @@ Date.prototype.toMyString = function () {
                <tr>
                   <td><s:select id="busType" list="busTypeBeans" name="busTypeBeans" listKey="id"
                            listValue="name" /></td>
-                  <td><%-- <div id="validDateSelectDiv" class="input-append date form_datetime" data-date="" style="margin-top: -6px;">
-                        <input id="validDateSelect" size="16" type="text" value="" readonly ><span
-                           class="add-on"><i class="icon-calendar"></i></span>
-                     </div> --%>
+                  <td>
                       <input type="text" id="validDateSelect" name="departureDate" readonly>
                   </td>
                </tr>
@@ -706,8 +773,15 @@ Date.prototype.toMyString = function () {
          <h3 id="busDetailDialogLabel">List Bus In Route</h3>
       </div>
       <div class="modal-body">
-         Select bus : <select id='busDetailbusPlate' name='busDetailBusPlate' style='margin-top: -6px;'></select>
-         <button style="margin-top: -10px;" type="button" id="busDetailAdd" class="btn btn-primary">Add</button>
+         <table>
+            <tr>
+               <td>Bus Type : </td>
+               <td><s:select id="addBus_BusType" list="busTypes" name="busTypes" listKey="id" listValue="name"/><br/></td>
+               <td>Select bus : </td>
+               <td><select id='busDetailbusPlate' name='busDetailBusPlate'></select></td>
+               <td><button style="margin-top: -8px;" type="button" id="busDetailAdd" class="btn btn-primary">Add</button></td>
+            </tr>
+         </table>
          <table id="busDetailTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
@@ -738,10 +812,6 @@ Date.prototype.toMyString = function () {
             <table>
                <tr>
                   <td style="width: 65%">Valid date :
-                    <%-- <div id="validDateDiv" class="input-append date form_datetime" data-date="">
-                        <input id="validDate" size="16" type="text" value="" readonly name="tripDialogDepartureTime"><span
-                           class="add-on"><i class="icon-calendar"></i></span>
-                     </div> --%>
                      <input id="validDate" type="text" name="tripDialogDepartureTime" readonly/>
                   </td>
                   <td>Select bus type :
