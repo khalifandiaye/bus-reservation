@@ -93,7 +93,16 @@ public class UpdateTariffAction extends BaseAction {
 		for (TariffInfo tariffInfo : tariffInfos) {
 			SegmentBean segmentBean = segmentDAO.getById(tariffInfo
 					.getSegmentId());
-
+			
+			if (isRevertRoute){
+				List<SegmentBean> segmentBeans = segmentDAO
+						.getDuplicatedSegment(segmentBean.getEndAt().getId(),
+								segmentBean.getStartAt().getId());
+				if (segmentBeans.size() != 0) {
+					segmentBean = segmentBeans.get(0);
+				}
+			}
+			
 			// get exist tariff
 			List<TariffBean> tariffBeans = tariffDAO.getExistTariff(
 					segmentBean.getId(), busTypeBean.getId(), validDate);
@@ -105,13 +114,7 @@ public class UpdateTariffAction extends BaseAction {
 				tariffDAO.update(tariffBean);
 			} else {
 				List<SegmentBean> segments = new ArrayList<SegmentBean>();
-				if (!isRevertRoute) {
-					segments.add(segmentBean);
-				} else {
-					segments = segmentDAO.getSegmentInRouteTerminal(routeId,
-							segmentBean.getEndAt().getId(), segmentBean
-									.getStartAt().getId());
-				}
+				segments.add(segmentBean);
 				
 				if (segments.size() != 0) {
 					TariffBean tariffBean = new TariffBean();
