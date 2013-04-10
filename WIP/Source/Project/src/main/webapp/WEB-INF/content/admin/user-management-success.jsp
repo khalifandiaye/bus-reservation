@@ -41,7 +41,7 @@
 					<th>Trạng thái</th>
 					<th>Phục hồi mật khẩu</th>
 					<th>Chi tiết</th>
-					<th>Xóa</th>
+					<th>Khóa Tài khoản</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -50,7 +50,7 @@
 				</s:if>
 				<s:else>
 					<s:iterator value="listUser" status="status">
-						<tr>
+						<tr> 
 							<td><s:property value="%{#status.count}" /></td>
 							<td class="td-username"><s:property value="%{username}" /></td>
 							<td><s:property value="%{lastName}" /> <s:property
@@ -59,8 +59,8 @@
 							<td><s:property value="%{status}" /></td> 
 							<td><a class="resetPassword" href="javascript:void(0);">Phục hồi</a></td> 
 							<td><a class="detailUser" href="javascript:void(0);">Chi
-									tiết</a></td>  
-							<td><s:if test="%{status.equals('banned')}"><a class="activeUser" href="javascript:void(0);">Phục hồi</a></s:if><s:else><a class="deleteUser" href="javascript:void(0);">Xóa</a></s:else></td>
+									tiết</a></td>    
+							<td style="text-align: center"><s:if test="%{status.equals('banned')}"><a class="activeUser" href="javascript:void(0);">Phục hồi</a></s:if><s:else><a class="deleteUser" href="javascript:void(0);">Khóa</a></s:else></td>
 						</tr>
 					</s:iterator>
 				</s:else>
@@ -130,15 +130,6 @@
 							placeholder="Điện thoại">
 					</div>
 				</div>
-				<div class="control-group" style="padding-left: 160px;">
-					<label class="radio" style="float: left"> <input
-						type="radio" name="optionsRole" id="optionsRole1" value="customer"
-						checked> Customer
-					</label> <label class="radio" style="float: left"> <input
-						type="radio" name="optionsRole" id="optionsRole2" value="operator">
-						Operator
-					</label>
-				</div>
 				<div class="control-group" style="padding-left: 180px;">
 					<label class="checkbox"> <input type="checkbox" value=""
 						name="checkboxActive"> Active
@@ -200,15 +191,6 @@
 							placeholder="Điện thoại">
 					</div>
 				</div>
-				<div class="control-group" style="padding-left: 160px;">
-					<label class="radio" style="float: left"> <input
-						type="radio" name="optionsRole" id="optionsRole1" value="customer"
-						checked> Customer
-					</label> <label class="radio" style="float: left"> <input
-						type="radio" name="optionsRole" id="optionsRole2" value="operator">
-						Operator
-					</label>
-				</div>
 				<div class="control-group" style="padding-left: 180px;">
 					<label class="checkbox"> <input type="checkbox" value=""
 						name="checkboxActive"> Active
@@ -221,16 +203,10 @@
 			<button class="btn btn-primary " id="editUserButton">Lưu
 				thay đổi</button>
 		</div>
-	</div>
-	</section>
+	</div> 
+	</section> 
 	<!-- End section modal edit user -->
-	<div style="width:100%;">
-	  <p style="color:rgb(255,132,0);font-weight:bold;font-size:16px;text-align:center;" >Thông báo thay đổi mật khẩu :companyName:</p>
-	  <p>Chào :fullName:</p>
-	  <p>Mật khẩu mới 
-	  của quý khách tại <a href=":siteurl:">:siteName:</a> là: :newPass:</P>
-	 Hân hạnh được phục vụ quý khách.
-	  </div>
+<!-- 	<div style="width:100%;"><p style="color:rgb(255,132,0);font-weight:bold;font-size:16px;text-align:center;" >Thông báo thay đổi mật khẩu :companyName:</p><p>Chào :fullName:</p><p>Mật khẩu mới của quý khách tại <a href=":siteurl:">:siteName:</a> là: :newPass:</P>Hân hạnh được phục vụ quý khách.</div> -->
 	<!-- End information content -->
 	<jsp:include page="../common/footer.jsp" />
 </body>

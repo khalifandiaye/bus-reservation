@@ -230,20 +230,14 @@ public class AdminAction extends BaseAction{
 	public String addUser() {
 		resultJSON = false;
 		errorMessage = "Can not add user";
-		int roleID = 1;
         try {
         	UserBean userBean = new UserBean();
         	userBean.setUsername(inputUsername);
         	userBean.setPassword(CryptUtils.encrypt2String(inputPassword));
         	userBean.setLastName(inputLastname);
         	userBean.setFirstName(inputFirstname);
-        	userBean.setEmail(inputEmail);
-        	
-        	if(optionsRole.equals("operator")){
-        		roleID = 2;
-        	}
-        	
-        	RoleBean roleBean = roleDAO.getById(roleID);
+        	userBean.setEmail(inputEmail);        	
+        	RoleBean roleBean = roleDAO.getById(2);
         	userBean.setRole(roleBean);
         	
         	userBean.setMobileNumber(inputMobilephone);
@@ -305,7 +299,6 @@ public class AdminAction extends BaseAction{
 	public String updateUser(){
 		resultJSON = false;
 		errorMessage = "Can not update user";
-		int roleID = 1;
 		try {
         	UserBean userBean = userDAO.getByUsername(inputUsername);
         	if(userBean == null){
@@ -318,10 +311,7 @@ public class AdminAction extends BaseAction{
         	userBean.setLastName(inputLastname);
         	userBean.setMobileNumber(inputMobilephone);
         	
-        	if(optionsRole.equals("operator")){
-        		roleID = 2; 
-        	}
-        	RoleBean role = roleDAO.getById(roleID);
+        	RoleBean role = roleDAO.getById(2);
         	userBean.setRole(role);
         	
         	if(checkboxActive){
