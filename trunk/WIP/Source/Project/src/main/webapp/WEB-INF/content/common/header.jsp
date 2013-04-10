@@ -55,11 +55,11 @@
 			<div class="navbar">
 				<div class="navbar-inner">
 					<ul class="nav pull-left">
-						<li class="active customer operator"><a href="<%=request.getContextPath()%>/">TRANG
+						<li class="customer operator home"><a href="<%=request.getContextPath()%>/">TRANG
 								CHỦ</a></li>
-						<li id="tab_reservationList customer operator"><a
+						<li class="customer operator history" id="tab_reservationList"><a
 							href="<%=request.getContextPath()%>/rsv/rsv01010.html">VÉ CỦA
-								TÔI</a></li>
+								TÔI</a></li>   
 						<li class="dropdown operator admin hidden"><a href="#" class="dropdown-toggle"
 							data-toggle="dropdown">QUẢN LÝ <b class="caret"></b></a>
 							<ul class="dropdown-menu">

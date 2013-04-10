@@ -84,9 +84,16 @@ body {
 }
 
 .navbar .nav li.dropdown.open>.dropdown-toggle {
-	background-color: #fff;
+	background-color: #fff !important;
 }
-
+.nav li.dropdown.active > .dropdown-toggle{
+	background-color: #fff !important;
+}
+.navbar .nav > .active > a,.navbar .nav > .active > a:focus {
+	-webkit-box-shadow:none;
+	-moz-box-shadow:none;
+	box-shadow:none; 
+}
 .navbar .brand {
 	color: #fff;
 }

@@ -216,7 +216,7 @@ public class BookingAction extends BaseAction implements SessionAware {
 			for (int i = 0; i < 5; i++) {
 				if (i != 2) {
 					for (int j = 0; j < 11; j++) {
-						String seatNum = bigText[i] + Integer.toString(j + 1);
+						String seatNum = bigText[i] + Integer.toString(11 - j);
 						String status = "0";
 						for (int k = 0; k < seats.size(); k++) {
 							if (seats.get(k).getName().equals(seatNum)) {
@@ -244,7 +244,7 @@ public class BookingAction extends BaseAction implements SessionAware {
 			for (int i = 0; i < 5; i++) {
 				if (i != 1 && i != 3) {
 					for (int j = 0; j < 12; j++) {
-						String seatNum = bigText[i] + Integer.toString(j + 1);
+						String seatNum = bigText[i] + Integer.toString(12 - j);
 						String status = "0";
 						for (int k = 0; k < seats.size(); k++) {
 							if (seats.get(k).getName().equals(seatNum)) {
@@ -268,9 +268,9 @@ public class BookingAction extends BaseAction implements SessionAware {
 							}
 						} 
 						if(j==0){
-							tmpSeatMapDown[i][j] = new SeatInfo(seatNum, status);
-						}else{ 
 							tmpSeatMapUp[i][j] = new SeatInfo(seatNum, status);
+						}else{ 
+							tmpSeatMapDown[i][j] = new SeatInfo(seatNum, status);
 						}
 					}
 				}
