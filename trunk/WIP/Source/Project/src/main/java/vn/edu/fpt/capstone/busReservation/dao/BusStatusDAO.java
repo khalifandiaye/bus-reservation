@@ -96,8 +96,7 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<BusStatusBean> getAllAvailTripByRouteId(int routeId, Date date) {
-		String hql = "Select distinct bs FROM BusStatusBean bs INNER JOIN"
-				+ " bs.trips trp INNER JOIN trp.routeDetails.route rte WHERE rte.id = :routeId "
+		String hql = "Select distinct bs FROM BusStatusBean bs INNER JOIN bs.trips trp INNER JOIN trp.routeDetails.route rte WHERE rte.id = :routeId "
 				+ "AND bs.busStatus = :busStatus "
 				+ "AND bs.fromDate >= :date AND bs.status = :status "
 				+ "ORDER BY bs.fromDate";
@@ -110,33 +109,6 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 			query.setParameter("busStatus", "ontrip");
 			query.setParameter("date", date);
 			query.setParameter("status", "active");
-			result = query.list();
-		} catch (HibernateException e) {
-			exceptionHandling(e, session);
-		}
-		return result;
-	}
-	
-	/**
-	 * Common database exception handling
-	 * 
-	 * @param e
-	 *            the occurred exception
-	 * @throws HibernateException
-	 *             the occurred exception
-	 */
-	@SuppressWarnings("unchecked")
-	public List<BusStatusBean> getAllTripsByRouteId(int routeId) {
-		String hql = "Select distinct bs FROM BusStatusBean bs INNER JOIN bs.trips trp INNER JOIN "
-				+ "trp.routeDetails.route rte WHERE rte.id = :routeId "
-				+ "AND bs.busStatus = :busStatus " + "ORDER BY bs.fromDate";
-		Session session = sessionFactory.getCurrentSession();
-		List<BusStatusBean> result = new ArrayList<BusStatusBean>();
-		try {
-			// must have to start any transaction
-			Query query = session.createQuery(hql);
-			query.setParameter("routeId", routeId);
-			query.setParameter("busStatus", "ontrip");
 			result = query.list();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);

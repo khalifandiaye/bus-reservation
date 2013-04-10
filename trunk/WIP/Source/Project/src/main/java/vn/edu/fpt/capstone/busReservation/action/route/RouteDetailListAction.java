@@ -31,7 +31,6 @@ public class RouteDetailListAction extends ActionSupport {
 	private List<BusTypeBean> busTypes = new ArrayList<BusTypeBean>();
 	private List<BusStatusBean> busStatusBeans = new ArrayList<BusStatusBean>();
 	private List<BusInfo> busInfos = new ArrayList<BusInfo>();
-	private boolean isEditable;
 
 	private int routeId;
 	private boolean active = false;
@@ -49,7 +48,6 @@ public class RouteDetailListAction extends ActionSupport {
 		segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
 		busStatusBeans = busStatusDAO.getAllAvailTripByRouteId(routeId,
 				Calendar.getInstance().getTime());
-		
 
 //		// WORK AROUND
 //		for (BusStatusBean busStatusBean : busStatusBeans) {
@@ -61,20 +59,12 @@ public class RouteDetailListAction extends ActionSupport {
 //			busInfo.setDelete(busStatusBean.getStatus());
 //			busInfos.add(busInfo);
 //		}
-		
-		//isEditable
-		List<BusStatusBean> busStatusBeansAll = busStatusDAO.getAllTripsByRouteId(routeId);
-		if (busStatusBeansAll.size() == 0) {
-			isEditable = true;
-		} else {
-			isEditable = false;
-		}
-		
+
 		RouteBean routeBean = routeDAO.getById(routeId);
 		if (routeBean.getStatus().equals("active")) {
 			active = true;
 		}
-		
+		//segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
 		busTypes = busTypeDAO.getAll();
 
 		long delayTime = (long) systemSettingDAO.getStationDelayTime() * 60 * 1000;
@@ -119,7 +109,6 @@ public class RouteDetailListAction extends ActionSupport {
 		}
 
 		List<Object[]> busTypeObjects = busTypeDAO.getBusTypesInRoute(routeId);
-		
 		for (Object[] objects : busTypeObjects) {
 			if (objects[0] != null && objects[1] != null && objects[2] != null) {
 				BusTypeBean busTypeBean = new BusTypeBean();
@@ -142,10 +131,6 @@ public class RouteDetailListAction extends ActionSupport {
 		return SUCCESS;
 	}
 
-	public boolean isEditable() {
-		return isEditable;
-	}
-	
 	public void setSystemSettingDAO(SystemSettingDAO systemSettingDAO) {
 		this.systemSettingDAO = systemSettingDAO;
 	}

@@ -345,47 +345,19 @@ Date.prototype.toMyString = function () {
 	            success : function(response) {
 	               $("#preUpdateTariffMessage").html(response.message);
 	               $("#editPriceDialog").modal();
+	               /* if (response.message.trim() != '') {
+	                  var result = confirm(response.message);
+	                  if (result == true) {
+	                     updateTarrif(info);
+	                  }
+	               } */
 	            },
 	            error : function() {
 	               alert("Save new route failed!");
 	            }
 	         });
 		});
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		$("#btEditRoute").click(function() {
-			$.each($("#editSegmentTable input"),
-			function() {$(this).val('');});
-			$.ajax({
-	            type : "GET",
-	            url : 'getPreUpdateTariffAction.html?routeId=' + $("#routeId").val(),
-	            contentType : "application/x-www-form-urlencoded; charset=utf-8",
-	            success : function(response) {
-	               $("#preUpdateTariffMessage").html(response.message);
-	               $("#editRouteDialog").modal();
-	            },
-	            error : function() {
-	               alert("Save new route failed!");
-	            }
-	         });
-		});
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		$("#assignBus").click(function() {
 	         if (!$("#busDetailbusPlate").val() || $("#busDetailbusPlate").val() == '') {
 		        	 $("#busDetailAdd").removeClass("btn-primary");
@@ -640,6 +612,7 @@ Date.prototype.toMyString = function () {
 	               <tr>
 	                  <td><input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price"
 	                        style="height: 30px" />
+	<!--                   <input class="btn btn-primary" type="button" id="viewPrice" value="View Price" style="height: 30px"/> -->
 	                  <input class="btn btn-primary" id="assignBus" type="button" value="Assign Bus to Route" style="height: 30px"/>
 	                  <input id="busStatusInsertBtn" type="button" class="btn btn-success" value="Add New Schedule" style="height: 30px"/></td>
 	               </tr>
@@ -653,7 +626,11 @@ Date.prototype.toMyString = function () {
                <tr>
                   <td><s:select id="busType" list="busTypeBeans" name="busTypeBeans" listKey="id"
                            listValue="name" /></td>
-                  <td><input type="text" id="validDateSelect" name="departureDate" readonly>
+                  <td><%-- <div id="validDateSelectDiv" class="input-append date form_datetime" data-date="" style="margin-top: -6px;">
+                        <input id="validDateSelect" size="16" type="text" value="" readonly ><span
+                           class="add-on"><i class="icon-calendar"></i></span>
+                     </div> --%>
+                      <input type="text" id="validDateSelect" name="departureDate" readonly>
                   </td>
                </tr>
             </table>
@@ -689,11 +666,6 @@ Date.prototype.toMyString = function () {
             </tfoot>
          </table>
          </br>
-         
-         <s:if test="%{isEditable == true}">
-         	<input class="btn btn-info" id="btEditRoute" type="button" value="Edit route details" style="height: 30px"/>
-         </s:if>
-         
          <h3>
             Schedule
          </h3>
@@ -714,8 +686,7 @@ Date.prototype.toMyString = function () {
                      <td><s:property value="bus.busType.name" /></td>
                      <td><s:date name="fromDate" format="hh:mm - dd/MM/yyyy" /></td>
                      <td><s:date name="toDate" format="hh:mm - dd/MM/yyyy" /></td>
-                     <td><s:if test="%{status == 'active'}"><s:hidden name="id" value="id" /><a class="btn btn-danger btn-small btn-cancel" >Cancel</a></s:if>
-                     	 <s:elseif test="status == 'cancelled'">Cancelled</s:elseif></td>
+                     <td><s:if test="%{status == 'active'}"><s:hidden name="id" value="id" /><a class="btn btn-danger btn-small btn-cancel" >Cancel</a></s:if><s:elseif test="status == 'cancelled'">Cancelled</s:elseif></td>
                   </tr>
                </s:iterator>
             </tbody>
@@ -767,6 +738,7 @@ Date.prototype.toMyString = function () {
             <table>
                <tr>
                   <td style="width: 65%">Valid date :
+                    <%-- <div id="validDateDiv" class="input-append date form_datetime" data-date="">
                         <input id="validDate" size="16" type="text" value="" readonly name="tripDialogDepartureTime"><span
                            class="add-on"><i class="icon-calendar"></i></span>
                      </div> --%>
@@ -818,6 +790,12 @@ Date.prototype.toMyString = function () {
             <h3 id="tripEditDialogLabel"></h3>
          </div>
          <div class="modal-body">
+            <%-- <div id="trip-route">
+               <label id="trip-route-label" for="routeSelect">Select Route</label>
+               <s:select id="tripDialogRoutes" headerKey="-1"
+                  headerValue="--- Select Route ---" list="routeBeans"
+                  name="routeBeans" listKey="id" listValue="name" />
+            </div> --%>
             <label for="tripDialogDepartureTimeDiv">From Date: </label>
             <div id="tripDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
                <input id="tripDialogDepartureTime" size="16" type="text" value="" readonly
@@ -843,69 +821,6 @@ Date.prototype.toMyString = function () {
          </div>
       </form>
    </div>
-   
-   
-   
-   
-   
-   
-   
-   
-   	<!-- Modal Edit Route Detail Dialog -->
-   <div id="editRouteDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-header">
-         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-         <h3 id="routeAddDialogLabel">Edit route</h3>
-      </div>
-      <div class="modal-body">
-         <div class="post" style="margin: 0px auto; width: 95%;">
-				<table id="segmentTable">
-            <thead>
-               <tr>
-                  <td>Start At</td>
-                  <td>End At</td>
-                  <td>Duration (hh:mm)</td>
-               </tr>
-            <thead>
-            <tbody>
-            	<s:iterator value="segmentBeans">
-                     <tr>
-                        <td><s:property value="startAt.name" /></td>
-                        <td><s:property value="endAt.name" /></td>
-                        <td style="text-align: center;"><s:property value="duration"/></td>
-                     </tr>
-                </s:iterator>
-            </tbody>
-            <tr style="margin-bottom: 10px;">
-               <td><s:select id="startAt" headerKey="-1"
-                     headerValue="--- Select Route ---" list="cityBeans"
-                     name="routeBeans" listKey="id" listValue="name"></s:select><select
-                  id="stationStartAt" headerKey="-1"
-                  headerValue="--- Select Start Station ---" style="margin-top:10px;"></select></td>
-               <td><s:select id="endAt" headerKey="-1"
-                     headerValue="--- Select Route ---" list="cityBeans"
-                     name="routeBeans" listKey="id" listValue="name">
-                     </s:select><select
-                  id="stationEndAt" headerKey="-1"
-                  headerValue="--- Select End Station ---" style="margin-top:10px;"></select></td>
-               <td><input type="text" id="duration" value="01:00"/></td>
-               <td><input class="btn btn-primary" type="button" id="add" value="AddSegment" disabled="disabled" 
-                  style="margin-top: 10px;;margin-bottom: 10px; margin-left: 10px; margin-right: 0; width: 75px;"/>
-               </td>
-            </tr>
-         </table>
-      </div>
-      </div>
-      <div class="modal-footer">
-         <button class="btn" data-dismiss="modal" id="routeEditDialogCancel" aria-hidden="true">Cancel</button>
-         <button class="btn btn-primary" type="button" id="routeEditDialogOk" disabled="disabled">Save</button>
-      </div>
-   </div>
-   
-   
-   
-   
-   
    
    <jsp:include page="../common/footer.jsp" />
 	<!-- Cancel modal -->
