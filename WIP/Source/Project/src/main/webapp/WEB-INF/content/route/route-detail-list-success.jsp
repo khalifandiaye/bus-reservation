@@ -776,7 +776,7 @@ Date.prototype.toMyString = function () {
          <table>
             <tr>
                <td>Bus Type : </td>
-               <td><s:select id="addBus_BusType" list="busTypes" name="busTypes" listKey="id" listValue="name"/><br/></td>
+               <td><s:select id="addBus_BusType" list="busTypeBeans" name="busTypes" listKey="id" listValue="name"/><br/></td>
                <td>Select bus : </td>
                <td><select id='busDetailbusPlate' name='busDetailBusPlate'></select></td>
                <td><button style="margin-top: -8px;" type="button" id="busDetailAdd" class="btn btn-primary">Add</button></td>
