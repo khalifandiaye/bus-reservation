@@ -376,7 +376,7 @@ Date.prototype.toMyString = function () {
    					busDetailTable.dataTable().fnAddData([
    					   this.id,
    						this.plateNumber,
-   						'<button type="button" data-id="'+ this.id +'" class="btn btn-danger">Delete</button>' ]);
+   						'<button type="button" style="width: 56px !important; height: 24px !important;" data-id="'+ this.id +'" class="btn btn-danger">Delete</button>' ]);
    						$("#busDetailTable tr button[data-id="+ this.id+ "]").click(
    						function() {
    							var td = this.parentNode;
@@ -392,7 +392,7 @@ Date.prototype.toMyString = function () {
    		            busDetailTable.dataTable().fnAddData([
    		               this.id,
    		               this.plateNumber,
-   		               '<button type="button" data-id="'+ this.id +'" disabled="disabled">Delete</button>' ]);
+   		               '<button type="button" style="width: 56px !important; height: 24px !important;" data-id="'+ this.id +'" disabled="disabled">Delete</button>' ]);
    		         };
    				});
 
@@ -714,9 +714,9 @@ Date.prototype.toMyString = function () {
          <table id="segmentTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
-                  <th style="text-align: center">Name</th>  
-                  <th style="text-align: center">Travel Time</th>
-                  <th style="text-align: center">Price (VNĐ)</th>
+                  <th style="text-align: center; width: 391px !important;">Name</th>  
+                  <th style="text-align: center; width: 176px !important;">Travel Time</th>
+                  <th style="text-align: center; width: 209px !important;">Price (VNĐ)</th>
                </tr>
             </thead>
             <tbody>
@@ -771,7 +771,7 @@ Date.prototype.toMyString = function () {
       </div>
    </div>
    
-   <!-- Modal Show Route Details Price By BusType Dialog -->
+   <!-- Modal Assign bus Dialog -->
    <div id="busDetailDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true">
       <div class="modal-header">
