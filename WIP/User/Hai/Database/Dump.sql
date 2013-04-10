@@ -270,6 +270,62 @@ LOCK TABLES `payment` WRITE;
 INSERT INTO `payment` VALUES (2,14,2604291.5,2604166.5,2,'0A820252UA8012206','pay'),(3,15,2604291.5,2604166.5,2,'05X518607J891805V','pay'),(4,16,999.5,499.5,2,'91B61848KM603761D','pay'),(5,17,999.5,499.5,2,'91B61848KM603761D','pay'),(6,20,249.5,124.5,2,'7HP61471AS1963121','pay'),(7,21,131,13,2,'55T492274L438751D','pay'),(8,22,131,6,2,'55T492274L438751D','pay'),(9,25,409.5,34.5,2,'5HR58967WC0106930','pay'),(10,26,392,17,2,'5HR58967WC0106930','pay'),(11,27,784.5,34.5,2,'0E422965AP622194N','pay'),(12,28,392,17,2,'0E422965AP622194N','pay'),(13,29,392,17,2,'2RH59954S0391005M','pay'),(14,30,784.5,34.5,2,'2RH59954S0391005M','pay'),(15,33,392,17,2,'5B0723365G388511Y','pay'),(16,34,784.5,34.5,2,'5B0723365G388511Y','pay');
 /*!40000 ALTER TABLE `payment` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `bus_reservation`.`trigger_payment_insert`
+BEFORE INSERT ON `bus_reservation`.`payment`
+FOR EACH ROW
+begin
+	DECLARE num_rows INTEGER;
+	IF NEW.`type` = 'pay' THEN
+		SELECT 
+			`check_ticket_with_inactive_trip`(NEW.`ticket_id`)
+		INTO num_rows;
+		IF num_rows > 0 THEN
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "msgerrrs009";
+		END IF;
+	END IF;
+end */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `bus_reservation`.`trigger_payment_update`
+BEFORE UPDATE ON `bus_reservation`.`payment`
+FOR EACH ROW
+begin
+	DECLARE num_rows INTEGER;
+	IF NEW.`type` = 'pay' THEN
+		SELECT 
+			`check_ticket_with_inactive_trip`(NEW.`ticket_id`)
+		INTO num_rows;
+		IF num_rows > 0 THEN
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "msgerrrs009";
+		END IF;
+	END IF;
+end */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `payment_method`
@@ -788,6 +844,12 @@ begin
 	IF num_rows > 0 THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "msgerrdb002";
 	END IF;
+	SELECT 
+		`check_inactive_trip`(NEW.`trip_id`)
+	INTO num_rows;
+	IF num_rows > 0 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "msgerrrs009";
+	END IF;
 end */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -813,6 +875,12 @@ begin
 	INTO num_rows;
 	IF num_rows > 0 THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "msgerrdb002";
+	END IF;
+	SELECT 
+		`check_inactive_trip`(NEW.`trip_id`)
+	INTO num_rows;
+	IF num_rows > 0 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "msgerrrs009";
 	END IF;
 end */;;
 DELIMITER ;
@@ -992,6 +1060,68 @@ BEGIN
 			OR (`rsv`.`status` = 'unpaid'
 			AND `rsv`.`book_time` > SUBDATE(NOW(), INTERVAL 15 MINUTE));
 	RETURN `count`;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `check_inactive_trip` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `check_inactive_trip`(trip_id int) RETURNS int(11)
+BEGIN
+	DECLARE `count` INTEGER;
+	SELECT 
+		COUNT(*)
+	INTO `count` FROM
+		`trip` `trp`
+			INNER JOIN
+		`bus_status` `bst` ON `trp`.`bus_status_id` = `bst`.`id`
+			AND
+		`trp`.`id` = `trip_id`
+	WHERE
+		`bst`.`status` <> 'active';
+RETURN `count`;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP FUNCTION IF EXISTS `check_ticket_with_inactive_trip` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `check_ticket_with_inactive_trip`(ticket_id int) RETURNS int(11)
+BEGIN
+	DECLARE `count` INTEGER;
+	SELECT 
+		COUNT(*)
+	INTO `count` FROM
+		`trip_in_ticket` `tit`
+			INNER JOIN
+		`trip` `trp`  ON `tit`.`trip_id` = `trp`.`id`
+			AND
+		`tit`.`ticket_id` = `ticket_id`
+			INNER JOIN
+		`bus_status` `bst` ON `trp`.`bus_status_id` = `bst`.`id`
+	WHERE
+		`bst`.`status` <> 'active';
+RETURN `count`;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1261,4 +1391,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-04-10 23:32:00
+-- Dump completed on 2013-04-11  3:38:52
