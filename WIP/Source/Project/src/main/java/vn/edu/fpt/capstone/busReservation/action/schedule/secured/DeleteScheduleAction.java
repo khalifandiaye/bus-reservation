@@ -7,6 +7,7 @@ import org.apache.struts2.convention.annotation.Result;
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
+import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.logic.ScheduleLogic;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
@@ -20,6 +21,7 @@ public class DeleteScheduleAction extends BaseAction {
     private static final long serialVersionUID = 1L;
     // ==========================Logic Object==========================
     private ScheduleLogic scheduleLogic;
+    private PaymentLogic paymentLogic;
 
     /**
      * @param scheduleLogic
@@ -27,6 +29,13 @@ public class DeleteScheduleAction extends BaseAction {
      */
     public void setScheduleLogic(ScheduleLogic scheduleLogic) {
         this.scheduleLogic = scheduleLogic;
+    }
+
+    /**
+     * @param paymentLogic the paymentLogic to set
+     */
+    public void setPaymentLogic(PaymentLogic paymentLogic) {
+        this.paymentLogic = paymentLogic;
     }
 
     // ==========================Action Input==========================
@@ -93,6 +102,8 @@ public class DeleteScheduleAction extends BaseAction {
         	params = new String[1];
         	params[0] = "field.cancelReason";
         	errorProcessing(new CommonException("msgerrcm001", params), false);
+            messages = new String[getActionErrors().size()];
+            getActionErrors().toArray(messages);
         }
         if (session != null
                 && session.containsKey(CommonConstant.SESSION_KEY_USER)) {
@@ -125,7 +136,7 @@ public class DeleteScheduleAction extends BaseAction {
             "callbackParameter", "callback" }) })
     public String executeRefund() {
         try {
-            scheduleLogic.refundBusStatus(Integer.parseInt(id));
+            paymentLogic.refundBusStatus(Integer.parseInt(id));
             success = true;
         } catch (Exception e) {
             errorProcessing(e);
