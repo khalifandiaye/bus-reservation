@@ -359,7 +359,7 @@ Date.prototype.toMyString = function () {
 		});
 
 		$("#assignBus").click(function() {
-	         if (!$("#busDetailbusPlate").val() || $("#busDetailbusPlate").val() == '') {
+	         if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
 		        	 $("#busDetailAdd").removeClass("btn-primary");
 		        	 $("#busDetailAdd").attr("disabled","disabled");
 	         }
@@ -742,7 +742,7 @@ Date.prototype.toMyString = function () {
                         <input id="validDate" size="16" type="text" value="" readonly name="tripDialogDepartureTime"><span
                            class="add-on"><i class="icon-calendar"></i></span>
                      </div> --%>
-                     <input id="validDate" name="tripDialogDepartureTime" readonly/>
+                     <input id="validDate" type="text" name="tripDialogDepartureTime" readonly/>
                   </td>
                   <td>Select bus type :
                      <div class="input-append date form_datetime">

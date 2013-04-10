@@ -49,16 +49,16 @@ public class RouteDetailListAction extends ActionSupport {
 		busStatusBeans = busStatusDAO.getAllAvailTripByRouteId(routeId,
 				Calendar.getInstance().getTime());
 
-//		// WORK AROUND
-//		for (BusStatusBean busStatusBean : busStatusBeans) {
-//			BusInfo busInfo = new BusInfo();
-//			busInfo.setId(busStatusBean.getId());
-//			busInfo.setPlateNumber(busStatusBean.getBus().getPlateNumber());
-//			busInfo.setFromDate(busStatusBean.getFromDate());
-//			busInfo.setToDate(busStatusBean.getToDate());
-//			busInfo.setDelete(busStatusBean.getStatus());
-//			busInfos.add(busInfo);
-//		}
+		// WORK AROUND
+		for (BusStatusBean busStatusBean : busStatusBeans) {
+			BusInfo busInfo = new BusInfo();
+			busInfo.setId(busStatusBean.getId());
+			busInfo.setPlateNumber(busStatusBean.getBus().getPlateNumber());
+			busInfo.setFromDate(busStatusBean.getFromDate());
+			busInfo.setToDate(busStatusBean.getToDate());
+			busInfo.setDelete(busStatusBean.getStatus());
+			busInfos.add(busInfo);
+		}
 
 		RouteBean routeBean = routeDAO.getById(routeId);
 		if (routeBean.getStatus().equals("active")) {
