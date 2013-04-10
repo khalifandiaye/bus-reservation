@@ -679,15 +679,21 @@ Date.prototype.toMyString = function () {
    <div id="page" class="well">
   		<h3 style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">    
 				Route details
-				<table class="pull-right">
-	               <tr>
-	                  <td><input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price"
-	                        style="height: 30px" />
-	                  <input class="btn btn-primary" id="assignBus" type="button" value="Assign Bus to Route" style="height: 30px"/>
-	                  <input id="busStatusInsertBtn" type="button" class="btn btn-success" value="Add New Schedule" style="height: 30px"/></td>
-	               </tr>
-	        </table>
-		</h3>  
+         <table class="pull-right">
+            <tr>
+               <td><input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price"
+                  style="height: 30px" /> <input class="btn btn-primary" id="assignBus" type="button"
+                  value="Assign Bus to Route" style="height: 30px" /> 
+                  <s:if test="%{haveBus == true}">
+                     <input id="busStatusInsertBtn" type="button" class="btn btn-success" value="Add New Schedule"
+                        style="height: 30px" />
+                  </s:if>
+                  <s:else>
+                     <button class="btn" disabled="disabled" value="Add New Schedule" style="height: 30px">Add New Schedule</button>
+                  </s:else></td>
+            </tr>
+         </table>
+      </h3>  
       <div class="post">
          <div style="margin-top: 10px;">
             <input type="hidden" id="routeId" value="<s:property value='routeId'/>" />
