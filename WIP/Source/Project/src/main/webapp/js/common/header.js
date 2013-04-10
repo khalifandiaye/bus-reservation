@@ -56,6 +56,18 @@ $(document).ready(function(){
         $(".customer").removeClass('hidden');
     }
     
+    function addActiveMenu(){
+    	var locationPath = location.pathname;
+    	if(locationPath == "/bus-reservation/index.html"){
+    		$(".navbar .navbar-inner .nav .home").addClass("active");
+    	}else if(locationPath == "/bus-reservation/rsv/rsv01010.html" || locationPath == "/bus-reservation/rsv/rsv01010.html"){
+    		$(".navbar .navbar-inner .nav .history").addClass("active");
+    	}else if(locationPath == "/bus-reservation/bus/list.html" || locationPath == "/bus-reservation/route/list.html" || locationPath == "/bus-reservation/schedule/list.html" || locationPath == "/bus-reservation/segment/list.html"){
+    		$(".navbar .navbar-inner .nav .admin").addClass("active");
+    	}
+    }
+    
+    addActiveMenu();
     checkUser();
     
 	$('#btn_login').on('click.auth', function(e) {
@@ -125,4 +137,5 @@ $(document).ready(function(){
             $(this).find('#btn_logout').trigger('click');
         }
     });
+    
 });
