@@ -18,6 +18,29 @@ public class RouteDetailsDAO extends GenericDAO<Integer, RouteDetailsBean>{
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * Common database exception handling
+	 * 
+	 * @param e
+	 *            the occurred exception
+	 * @throws HibernateException
+	 *             the occurred exception
+	 */
+	public int deleteRouteDetailByRouteId(int routeId) {
+		String hql = "DELETE FROM RouteDetailsBean rd WHERE rd.route.id = :routeId";
+		Session session = sessionFactory.getCurrentSession();
+		int result = 0;
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameter("routeId", routeId);
+			result = query.executeUpdate();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<SegmentBean> getAllSegmemtsByRouteId(int routeId) {
 		String hql = "select sir.segment from RouteDetailsBean sir where sir.route.id = :routeId";

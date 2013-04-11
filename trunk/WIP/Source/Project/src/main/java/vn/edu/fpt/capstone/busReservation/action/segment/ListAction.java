@@ -36,6 +36,8 @@ public class ListAction extends BaseAction {
 
 			SegmentInfo segmentInfo = new SegmentInfo();
 			segmentInfo.setId(segmentBean.getId());
+			segmentInfo.setStartAtName(segmentBean.getStartAt().getName());
+			segmentInfo.setEndAtName(segmentBean.getEndAt().getName());
 
 			long time = 0;
 			List<SegmentTravelTimeBean> segmentTravelTimeBeans = segmentTravelTimeDAO

@@ -24,6 +24,29 @@ public class RouteDAO extends GenericDAO<Integer, RouteBean> {
 	 * @throws HibernateException
 	 *             the occurred exception
 	 */
+	public int deleteRouteByRouteId(int routeId) {
+		String hql = "DELETE FROM RouteBean r WHERE r.id = :routeId";
+		Session session = sessionFactory.getCurrentSession();
+		int result = 0;
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameter("routeId", routeId);
+			result = query.executeUpdate();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+	
+	/**
+	 * Common database exception handling
+	 * 
+	 * @param e
+	 *            the occurred exception
+	 * @throws HibernateException
+	 *             the occurred exception
+	 */
 	@SuppressWarnings("unchecked")
 	public List<RouteBean> getAllActiveRoute() {
 		String hql = "SELECT r FROM RouteBean r WHERE r.status = :status";
