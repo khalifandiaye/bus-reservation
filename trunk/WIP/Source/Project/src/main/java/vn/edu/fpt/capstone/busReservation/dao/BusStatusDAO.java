@@ -355,7 +355,7 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 		session = sessionFactory.getCurrentSession();
 		try {
 			// perform database access (query, insert, update, etc) here
-			queryString = "SELECT tkt FROM "
+			queryString = "SELECT DISTINCT tkt FROM "
 					+ "TicketBean tkt INNER JOIN tkt.trips trp INNER JOIN trp.busStatus bst INNER JOIN FETCH tkt.payments INNER JOIN FETCH tkt.reservation rsv WHERE bst.id = :busStatusId AND tkt.status IN (:statusTicketValidStati) AND rsv.status IN (:statusReservationValidStati)";
 			query = session.createQuery(queryString);
 			query.setInteger("busStatusId", busStatusId);
