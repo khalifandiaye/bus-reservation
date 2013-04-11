@@ -262,6 +262,7 @@
 					class="btn btn-large pull-right btn-primary"
 					style="margin-top: 15px; margin-right: 30px;">Tiếp Tục</button>
 			</div>
+			<s:hidden id="isNew" name="isNew" value="new"></s:hidden>
 			<s:hidden id="message" name="message"></s:hidden>
 			<s:hidden id="selectedOutSeat" name="selectedOutSeat"></s:hidden>
 			<s:hidden id="selectedReturnSeat" name="selectedReturnSeat"></s:hidden>

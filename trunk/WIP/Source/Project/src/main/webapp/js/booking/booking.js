@@ -255,6 +255,10 @@ $(function(){
 	SeatsOutNotAllocatedCount = parseInt($("#passengerNoOut").val()) > 5 ? 5 : parseInt($("#passengerNoOut").val());
 	SeatsReturnNotAllocatedCount = parseInt($("#passengerNoReturn").val()) > 5 ? 5 : parseInt($("#passengerNoReturn").val());
 	
+	if($("#isNew").val() == "new"){
+		sessionStorage.clear();
+	}
+	
     $(".seat").bind("click",function(event){
  
         var seatImage,targetTagName,message;
@@ -303,6 +307,7 @@ $(function(){
 		
 		$("#selectedOutSeat").val("");
 		$("#selectedReturnSeat").val("");
+		$("#isNew").val("");
 		
 	    $("#forwardSeats").val(getSelectedOutSeatString());
         $("#returnSeats").val(getSelectedReturnSeatString());

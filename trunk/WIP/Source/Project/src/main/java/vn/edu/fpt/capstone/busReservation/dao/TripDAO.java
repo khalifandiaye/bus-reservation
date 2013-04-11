@@ -8,6 +8,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo;
@@ -202,4 +203,43 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
 		}
 		return 0;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<SearchResultInfo> getTop4Trips() {
+//		String hql = "FROM TripBean tripBean INNER JOIN FETCH tripBean.busStatus INNER JOIN FETCH tripBean.routeDetails INNER JOIN FETCH tripBean.routeDetails.route WHERE tripBean.departureTime > CURRENT_TIMESTAMP() ORDER BY tripBean.departureTime ASC";
+//		Session session = sessionFactory.getCurrentSession();
+//		List<TripBean> result = new ArrayList<TripBean>();
+//		Transaction tx = session.beginTransaction();
+//		try {
+//			Query query = session.createQuery(hql).setMaxResults(4);
+//			result = query.list();
+//			tx.commit();
+//		} catch (HibernateException e) {
+//			exceptionHandling(e, session);
+//		}
+//		return result;
+		List<SearchResultInfo> returnVal = new ArrayList<SearchResultInfo>();
+		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = session.beginTransaction();
+		try {
+			//startTransaction();
+			 Query query = session.getNamedQuery("callGetTop4TripsProcedure");
+			 returnVal = query.list();
+			 tx.commit();
+/*			Query query = session.createSQLQuery(strQuery)
+					.setInteger("deptCity", deptCity)
+					.setInteger("arrvCity", arrvCity)
+					.setString("deptDate", deptDate)
+					.setInteger("pssgrNo", pssgrNo)
+					.setInteger("busType", busType);
+			List<Object> result = query.list();
+			for(int i=0; i<result.size(); i++){
+				returnVal.add((SearchResultInfo)result.get(i));
+			}*/
+			//endTransaction();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return returnVal;
+	} 
 }
