@@ -15,6 +15,7 @@
 <script src="<%=request.getContextPath()%>/js/accounting.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/styles/custom-data-table.css" />
+<script src="<%=request.getContextPath()%>/js/common/custom-data-table.js"></script>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/styles/jquery-ui.css" />
 <script src="<%=request.getContextPath()%>/js/jquery-ui.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.ui.datepicker-vi.js"></script>
@@ -648,8 +649,12 @@ Date.prototype.toMyString = function () {
 	display: none;
 }
 
-.dataTables_paginate {
-	display: none;
+#scheduleTable_filter {
+   display: table-header-group !important;  
+}
+
+#scheduleTable_info {
+   display: table !important;
 }
 
 #editPriceDialog {
