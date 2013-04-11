@@ -148,19 +148,6 @@
 					<s:select list="arrCity" listKey="id" listValue="name"
 						name="arrivalCity" onchange="getDuration()"/>
 				</div>
-				<div class="controls controls-row" id="select-pas"
-					style="margin-bottom: 10px; border-bottom: 1px #fff dashed; padding-bottom: 5px;">
-					<div class="custom-select">
-						<span class="passenger-img">Số lượng hành khách</span> <select
-							name="passengerNo">
-							<option>1</option>
-							<option>2</option>
-							<option>3</option>
-							<option>4</option>
-							<option>5</option>
-						</select>
-					</div>
-				</div>
 				<div class="controls controls-row" id="input-depart">
 					<label>Ngày đi</label> <input type="text" id="dp1"
 						name="departureDate">
@@ -168,11 +155,6 @@
 				<div class="controls controls-row" id="input-return">
 					<label>Ngày về</label> <input type="text" id="dp2"
 						name="returnDate">
-				</div>
-				<div class="controls controls-row" id="select-bus-type">
-					<label>Loại xe bus</label>
-					<s:select list="busType" listKey="id" listValue="name"
-						name="busType" />
 				</div>
 				<input type="submit" class="pull-right btn btn-large"
 					style="width: 100%; margin-top: 9px;" value="Đặt Vé" />
@@ -203,24 +185,24 @@
 				href="#myCarousel" data-slide="next"><i
 				class="icon-chevron-right"></i></a>
 		</div>
-		
-		<div class="news" style="margin-top: 40px;">    
-			<div class="well well-small pull-left" style="width: 250px;"> 
-				<h5>Biên Hòa - TP.Hồ Chí Minh chỉ còn 5.000 VNĐ</h5>
-				<a class="btn btn-mini pull-right btn-primary">Chi Tiết</a>    
-			</div> 
-			<div class="well well-small pull-right" style="width: 250px;">
-				<h5>Biên Hòa - TP.Hồ Chí Minh chỉ còn 5.000 VNĐ</h5>
-				<a class="btn btn-mini pull-right btn-primary">Chi Tiết</a>      
-			</div>
-			<div class="well well-small pull-left" style="width: 250px;"> 
-				<h5>Biên Hòa - TP.Hồ Chí Minh chỉ còn 5.000 VNĐ</h5>
-				<a class="btn btn-mini pull-right btn-primary">Chi Tiết</a>    
-			</div>  
-			<div class="well well-small pull-right" style="width: 250px;">
-				<h5>Biên Hòa - TP.Hồ Chí Minh chỉ còn 5.000 VNĐ</h5>
-				<a class="btn btn-mini pull-right btn-primary">Chi Tiết</a>      
-			</div>
+		 
+		<div class="news" style="margin-top: 20px;">
+			<h4>Vé sắp khởi hành</h4>
+			<table width="100%">    
+			<s:iterator value="list4Info">
+				<tr height="35px;"> 
+					<td style="padding-left: 15px;">  
+						<s:property value="name"/>
+					</td>
+					<td>
+						<s:property value="departureTime"/>
+					</td>
+					<td>
+						<a href="booking/booking.html?out_journey=on&outBusStatus=<s:property value="busStatusId"/>&outDepartTime=<s:property value="departureTimeFull"/>&outArriveTime=<s:property value="arrivalTimeFull"/>" class="btn btn-primary btn-mini">Đặt vé ngay</a>
+					</td>
+				</tr>
+			</s:iterator>
+			</table>
 		</div> 
 	</div>
 	</section>

@@ -509,5 +509,25 @@
 		</return>
 		<![CDATA[CALL search_trips(:deptCity, :arrvCity, :deptDate, :pssgrNo, :minDate);]]>
 	</sql-query>
-
+	<sql-query name="callGetTop4TripsProcedure">
+		<return alias="searchResult"
+			class="vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo">
+			<return-property name="busStatusId" column="bus_status_id" />
+			<return-property name="departureCity" column="departure_city" />
+			<return-property name="departureStation" column="departure_station_name" />
+			<return-property name="departureStationAddress"
+				column="departure_station_address" />
+			<return-property name="departureTime" column="departure_time" />
+			<return-property name="arrivalCity" column="arrival_city" />
+			<return-property name="arrivalStation" column="arrival_station_name" />
+			<return-property name="arrivalStationAddress" column="arrival_station_address" />
+			<return-property name="arrivalTime" column="arrival_time" />
+			<return-property name="fare" column="fare" />
+			<return-property name="remainedSeats" column="remained_seats" />
+			<return-property name="route" column="route" />
+			<return-property name="busType" column="bus_type"/>
+			<return-property name="busTypeId" column="bus_type_id"/>
+		</return>
+		<![CDATA[CALL get_top_four_trips();]]>
+	</sql-query>
 </hibernate-mapping>
