@@ -68,7 +68,6 @@ Date.prototype.toMyString = function () {
 				data : JSON.stringify(info)
 			},
 			success : function(response) {
-				alert(response);
 				var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId="
 						+ $('#routeId').val();
 				window.location = url;
@@ -126,10 +125,6 @@ Date.prototype.toMyString = function () {
 				});
 			});
 		};
-
-		$("#preUpdateTariffOk").click(function(){
-			 updateTarrif(info);
-		});
 		
 		$('#busStatusInsertBtn').click(function() {
 			var date = new Date();
@@ -254,7 +249,6 @@ Date.prototype.toMyString = function () {
 					data : form.serialize(),
 					success : function(response) {
 						$('#CreateScheduleDialog').modal('hide');
-						alert(response);
 						var url = window.location.toString();
 	                     window.location = url;
 					}
@@ -345,12 +339,6 @@ Date.prototype.toMyString = function () {
 	            success : function(response) {
 	               $("#preUpdateTariffMessage").html(response.message);
 	               $("#editPriceDialog").modal();
-	               /* if (response.message.trim() != '') {
-	                  var result = confirm(response.message);
-	                  if (result == true) {
-	                     updateTarrif(info);
-	                  }
-	               } */
 	            },
 	            error : function() {
 	               alert("Save new route failed!");
@@ -478,7 +466,9 @@ Date.prototype.toMyString = function () {
 					data : {data : JSON.stringify(busDetailInfo)
 					},
 					success : function(response) {
-						alert(response);
+						var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId="
+						+ $('#routeId').val();
+						window.location = url;
 					}
 				});
 			});
@@ -815,6 +805,7 @@ Date.prototype.toMyString = function () {
       </div>
       <div class="modal-body">
          <div class="post" style="margin: 0px auto; width: 95%;">
+         <label id="preUpdateTariffMessage" style="width: 65%"></label>
             <table>
                <tr>
                   <td style="width: 65%">Valid date :
@@ -866,12 +857,6 @@ Date.prototype.toMyString = function () {
             <h3 id="tripEditDialogLabel"></h3>
          </div>
          <div class="modal-body">
-            <%-- <div id="trip-route">
-               <label id="trip-route-label" for="routeSelect">Select Route</label>
-               <s:select id="tripDialogRoutes" headerKey="-1"
-                  headerValue="--- Select Route ---" list="routeBeans"
-                  name="routeBeans" listKey="id" listValue="name" />
-            </div> --%>
             <label for="tripDialogDepartureTimeDiv">From Date: </label>
             <div id="tripDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
                <input id="tripDialogDepartureTime" size="16" type="text" value="" readonly

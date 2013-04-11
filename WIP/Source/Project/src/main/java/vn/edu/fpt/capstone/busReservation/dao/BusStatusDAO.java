@@ -115,6 +115,33 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 		}
 		return result;
 	}
+	
+	/**
+	 * Common database exception handling
+	 * 
+	 * @param e
+	 *            the occurred exception
+	 * @throws HibernateException
+	 *             the occurred exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<BusStatusBean> getAllTripsByRouteId(int routeId) {
+		String hql = "Select distinct bs FROM BusStatusBean bs INNER JOIN bs.trips trp INNER JOIN "
+				+ "trp.routeDetails.route rte WHERE rte.id = :routeId "
+				+ "AND bs.busStatus = :busStatus " + "ORDER BY bs.fromDate";
+		Session session = sessionFactory.getCurrentSession();
+		List<BusStatusBean> result = new ArrayList<BusStatusBean>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameter("routeId", routeId);
+			query.setParameter("busStatus", "ontrip");
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<BusStatusBean> getAllAvailTripByBusId(int busId, Date date) {
