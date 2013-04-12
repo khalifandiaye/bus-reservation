@@ -1381,7 +1381,7 @@ public class PaymentLogic extends BaseLogic {
         try {
             mailTemplateDAO.endTransaction();
         } catch (HibernateException e) {
-            throw new CommonException("msgerrcm003", e);
+            throw new CommonException(e);
         }
         // prepare mail object
         props = new Properties();

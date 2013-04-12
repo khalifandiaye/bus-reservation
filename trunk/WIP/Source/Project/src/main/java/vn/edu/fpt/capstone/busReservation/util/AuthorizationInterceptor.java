@@ -75,25 +75,27 @@ public class AuthorizationInterceptor implements Interceptor {
             if (namespace.startsWith("/admin")) {
                 allowOp = false;
                 allowCus = false;
-                ServletActionContext.getContext().setLocale(CommonConstant.LOCALE_US);
             } else if (namespace.startsWith("/route") || namespace.startsWith("/bus")
                     || namespace.startsWith("/schedule") || namespace.startsWith("/segment")) {
                 allowCus = false;
                 allowAdmin = false;
-                ServletActionContext.getContext().setLocale(CommonConstant.LOCALE_US);
             } else if (!"/".equals(namespace) && !namespace.startsWith("/user")) {
                 allowAdmin = false;
-                ServletActionContext.getContext().setLocale(CommonConstant.LOCALE_VN);
             } else if (namespace.startsWith("/debug")) {
                 allowCus = false;
                 allowOp = false;
                 allowAdmin = false;
-                ServletActionContext.getContext().setLocale(CommonConstant.LOCALE_VN);
             }
             if ((!allowCus && (user == null || user.getRoleId() == 1))
                     || (!allowOp && user != null && user.getRoleId() == 2)
                     || (!allowAdmin && user != null && user.getRoleId() == 3)) {
                 return "unauthorized";
+            }
+            // set locale
+            if (user != null && (user.getRoleId() == 2 || user.getRoleId() == 3)) {
+                ServletActionContext.getContext().setLocale(CommonConstant.LOCALE_US);
+            } else {
+                ServletActionContext.getContext().setLocale(CommonConstant.LOCALE_VN);
             }
         }
         // Call the next interceptor (continue request processing)

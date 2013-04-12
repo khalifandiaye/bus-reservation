@@ -7,7 +7,6 @@ import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.User;
-import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.logic.ReservationLogic;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;

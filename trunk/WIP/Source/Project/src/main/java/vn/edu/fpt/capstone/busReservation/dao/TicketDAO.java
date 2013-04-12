@@ -8,11 +8,13 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.transform.ResultTransformer;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean.TicketStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SimpleReservationInfo;
 
 /**
@@ -20,6 +22,30 @@ import vn.edu.fpt.capstone.busReservation.displayModel.SimpleReservationInfo;
  * 
  */
 public class TicketDAO extends GenericDAO<Integer, TicketBean> {
+
+    public static final ResultTransformer TICKET_INFO_BEAN_TRANSFORMER = new ResultTransformer() {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public Object transformTuple(Object[] tuple, String[] aliases) {
+//            ((TicketBean) tuple[0]).getSeatPositions().size();
+//            ((TicketBean) tuple[0]).getPayments().size();
+            return tuple == null ? null : new TicketInfoBean(
+                    (TicketBean) tuple[0], (TripBean) tuple[1],
+                    (TripBean) tuple[2], (Double) tuple[3]);
+        }
+
+        @SuppressWarnings("rawtypes")
+        @Override
+        public List transformList(List collection) {
+            // TODO Auto-generated method stub
+            return collection;
+        }
+    };
 
     public TicketDAO(Class<TicketBean> clazz) {
         super(clazz);
@@ -221,6 +247,10 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
         return result == null || result.size() <= 0 ? null : result.get(0);
     }
 
+    /**
+     * @param reservationId
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public List<TicketInfoBean> getTicketInfoByReservationId(int reservationId) {
         List<TicketInfoBean> result = null;
@@ -231,7 +261,7 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
         session = sessionFactory.getCurrentSession();
         try {
             // perform database access (query, insert, update, etc) here
-            queryString = "SELECT DISTINCT new vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean(tkt, trps, trpe, SUM(tar.fare))"
+            queryString = "SELECT DISTINCT tkt, trps, trpe, SUM(tar.fare)"
                     + " FROM TicketBean tkt"
                     + " INNER JOIN tkt.trips trps"
                     + " INNER JOIN tkt.trips trpe"
@@ -265,6 +295,7 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
             query.setString("rsvStatusMoved",
                     ReservationStatus.MOVED.getValue());
             query.setString("ticketStatusMoved", TicketStatus.MOVED.getValue());
+            query.setResultTransformer(TICKET_INFO_BEAN_TRANSFORMER);
             result = query.list();
         } catch (HibernateException e) {
             exceptionHandling(e, session);
@@ -275,6 +306,7 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
 
     /**
      * Get paid ticket for a bus status
+     * 
      * @param busStatusId
      * @return
      */
@@ -288,7 +320,7 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
         session = sessionFactory.getCurrentSession();
         try {
             // perform database access (query, insert, update, etc) here
-            queryString = "SELECT DISTINCT new vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean(tkt, trps, trpe, SUM(tar.fare))"
+            queryString = "SELECT DISTINCT tkt, trps, trpe, SUM(tar.fare)"
                     + " FROM TicketBean tkt"
                     + " INNER JOIN tkt.trips trps"
                     + " INNER JOIN tkt.trips trpe"
@@ -297,7 +329,7 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
                     + " INNER JOIN tkt.reservation rsv"
                     + " INNER JOIN trps.busStatus bst"
                     + " WHERE bst.id = :busStatusId"
-//                    + "     AND rsv.status = :rsvStatusPaid"
+                    // + "     AND rsv.status = :rsvStatusPaid"
                     + "     AND tkt.status = :ticketStatusCancelled"
                     + "     AND trps.departureTime = ("
                     + "         SELECT MIN(trp1.departureTime)"
@@ -320,9 +352,11 @@ public class TicketDAO extends GenericDAO<Integer, TicketBean> {
                     + " ORDER BY trps.departureTime";
             query = session.createQuery(queryString);
             query.setInteger("busStatusId", busStatusId);
-//            query.setString("rsvStatusPaid",
-//                    ReservationStatus.PAID.getValue());
-            query.setString("ticketStatusCancelled", TicketStatus.CANCELLED.getValue());
+            // query.setString("rsvStatusPaid",
+            // ReservationStatus.PAID.getValue());
+            query.setString("ticketStatusCancelled",
+                    TicketStatus.CANCELLED.getValue());
+            query.setResultTransformer(TICKET_INFO_BEAN_TRANSFORMER);
             result = query.list();
         } catch (HibernateException e) {
             exceptionHandling(e, session);

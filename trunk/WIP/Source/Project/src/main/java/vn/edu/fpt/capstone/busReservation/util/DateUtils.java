@@ -44,14 +44,13 @@ public class DateUtils {
      * @return the formatted time string
      * @throws ParseException
      */
-    public static String date2String(Date date, String pattern, Locale locale,
+    public static String date2String(final Date date, String pattern, Locale locale,
             TimeZone timeZone) {
     	long offset = 0;
         SimpleDateFormat formatter = new SimpleDateFormat(pattern, locale);
 //        formatter.setTimeZone(timeZone);
         offset = timeZone.getOffset(date.getTime());
-        date.setTime(date.getTime() + offset);
-        return formatter.format(date);
+        return formatter.format(new Date(date.getTime() + offset));
     }
 
     /**
@@ -100,7 +99,7 @@ public class DateUtils {
 		return formatter.format(cal.getTime());
 	}
 	
-	public static boolean isDateEqual(Date date1, Date date2) {
+	public static boolean isDateEqual(final Date date1, final Date date2) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
 		if(formatter.format(date1) == formatter.format(date2)){
 			return true;
@@ -115,7 +114,7 @@ public class DateUtils {
 	 * @return
 	 * 			MM-dd String
 	 */
-	public static String getMonthDay(Date inputDate) {
+	public static String getMonthDay(final Date inputDate) {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM", Locale.US);
 		return formatter.format(inputDate);
 	}
