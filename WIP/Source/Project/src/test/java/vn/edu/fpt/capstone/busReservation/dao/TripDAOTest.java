@@ -5,10 +5,18 @@ package vn.edu.fpt.capstone.busReservation.dao;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.Test;
 
+import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.testUtil.DAOTest;
 
@@ -83,80 +91,81 @@ public class TripDAOTest extends DAOTest {
     // tripDAO.update(trips);
     // }
 
-    // @Test
-    // public void testInsert001() {
-    // TripDAO tripDAO = (TripDAO) getBean("tripDAO");
-    // BusStatusDAO busStatusDAO = (BusStatusDAO) getBean("busStatusDAO");
-    // RouteDAO routeDAO = (RouteDAO) getBean("routeDAO");
-    // RouteBean forwardRoute = routeDAO.getById(1);
-    // RouteBean returnRoute = routeDAO.getById(2);
-    // BusDAO busDAO = (BusDAO) getBean("busDAO");
-    // BusBean bus = busDAO.getById(3);
-    // List<TripBean> tripBeans = null;
-    // TripBean tripBean = null;
-    // BusStatusBean busStatusBean = null;
-    // Calendar calendar = Calendar.getInstance();
-    // long travelTimeTotal = 0;
-    // calendar.add(Calendar.DATE, 14);
-    // for (int i = 0; i < 5; i++) {
-    // // insert trip for forward route
-    // travelTimeTotal = 0;
-    // tripBeans = new ArrayList<TripBean>();
-    // busStatusBean = new BusStatusBean();
-    // for (RouteDetailsBean routeDetails : forwardRoute.getRouteDetails()) {
-    // tripBean = new TripBean();
-    // tripBean.setRouteDetails(routeDetails);
-    // tripBean.setStatus("active");
-    // tripBean.setDepartureTime(new Date(calendar.getTime().getTime()
-    // + travelTimeTotal));
-    // travelTimeTotal += routeDetails.getSegment().getTravelTime()
-    // .getTime();
-    // tripBean.setArrivalTime(new Date(calendar.getTime().getTime()
-    // + travelTimeTotal));
-    // tripBean.setBusStatus(busStatusBean);
-    // tripBeans.add(tripBean);
-    // }
-    // busStatusBean.setBus(bus);
-    // busStatusBean.setBusStatus("ontrip");
-    // busStatusBean.setFromDate(tripBeans.get(0).getDepartureTime());
-    // busStatusBean.setToDate(tripBeans.get(tripBeans.size() - 1)
-    // .getArrivalTime());
-    // busStatusBean.setEndStation(tripBeans.get(tripBeans.size() - 1)
-    // .getRouteDetails().getSegment().getEndAt());
-    // busStatusBean.setStatus("active");
-    // busStatusDAO.insert(busStatusBean);
-    // tripDAO.insert(tripBeans);
-    // // forward time
-    // calendar.add(Calendar.HOUR, 48);
-    // // insert trip for return route
-    // travelTimeTotal = 0;
-    // tripBeans = new ArrayList<TripBean>();
-    // busStatusBean = new BusStatusBean();
-    // for (RouteDetailsBean routeDetails : returnRoute.getRouteDetails()) {
-    // tripBean = new TripBean();
-    // tripBean.setRouteDetails(routeDetails);
-    // tripBean.setStatus("active");
-    // tripBean.setDepartureTime(new Date(calendar.getTime().getTime()
-    // + travelTimeTotal));
-    // travelTimeTotal += routeDetails.getSegment().getTravelTime()
-    // .getTime();
-    // tripBean.setArrivalTime(new Date(calendar.getTime().getTime()
-    // + travelTimeTotal));
-    // tripBean.setBusStatus(busStatusBean);
-    // tripBeans.add(tripBean);
-    // }
-    // busStatusBean.setBus(bus);
-    // busStatusBean.setBusStatus("ontrip");
-    // busStatusBean.setFromDate(tripBeans.get(0).getDepartureTime());
-    // busStatusBean.setToDate(tripBeans.get(tripBeans.size() - 1)
-    // .getArrivalTime());
-    // busStatusBean.setEndStation(tripBeans.get(tripBeans.size() - 1)
-    // .getRouteDetails().getSegment().getEndAt());
-    // busStatusBean.setStatus("active");
-    // busStatusDAO.insert(busStatusBean);
-    // tripDAO.insert(tripBeans);
-    // // forward time
-    // calendar.add(Calendar.HOUR, 48);
-    // }
-    // }
+    @Test
+    public void testInsert001() {
+        TripDAO tripDAO = (TripDAO) getBean("tripDAO");
+        BusStatusDAO busStatusDAO = (BusStatusDAO) getBean("busStatusDAO");
+        RouteDAO routeDAO = (RouteDAO) getBean("routeDAO");
+        RouteBean forwardRoute = routeDAO.getById(1);
+        RouteBean returnRoute = routeDAO.getById(2);
+        BusDAO busDAO = (BusDAO) getBean("busDAO");
+        BusBean bus = busDAO.getById(10);
+        List<TripBean> tripBeans = null;
+        TripBean tripBean = null;
+        BusStatusBean busStatusBean = null;
+        Calendar calendar = Calendar.getInstance();
+        long travelTimeTotal = 0;
+        Random random = new Random();
+        calendar.add(Calendar.HOUR, random.nextInt(11));
+        for (int i = 0; i < 20; i++) {
+            // insert trip for forward route
+            travelTimeTotal = 0;
+            tripBeans = new ArrayList<TripBean>();
+            busStatusBean = new BusStatusBean();
+            for (RouteDetailsBean routeDetails : forwardRoute.getRouteDetails()) {
+                tripBean = new TripBean();
+                tripBean.setRouteDetails(routeDetails);
+                tripBean.setDepartureTime(new Date(calendar.getTimeInMillis()
+                        + travelTimeTotal));
+                travelTimeTotal += routeDetails.getSegment()
+                        .getSegmentTravelTimes().get(0).getTravelTime();
+                tripBean.setArrivalTime(new Date(calendar.getTimeInMillis()
+                        + travelTimeTotal));
+                tripBean.setBusStatus(busStatusBean);
+                tripBeans.add(tripBean);
+            }
+            busStatusBean.setBus(bus);
+            busStatusBean.setBusStatus("ontrip");
+            busStatusBean.setFromDate(tripBeans.get(0).getDepartureTime());
+            busStatusBean.setToDate(tripBeans.get(tripBeans.size() - 1)
+                    .getArrivalTime());
+            busStatusBean.setEndStation(tripBeans.get(tripBeans.size() - 1)
+                    .getRouteDetails().getSegment().getEndAt());
+            busStatusBean.setStatus("active");
+            busStatusDAO.insert(busStatusBean);
+            tripDAO.insert(tripBeans);
+            // forward time
+            calendar.setTimeInMillis(calendar.getTimeInMillis() + travelTimeTotal);
+            calendar.add(Calendar.HOUR, 24);
+            // insert trip for return route
+            travelTimeTotal = 0;
+            tripBeans = new ArrayList<TripBean>();
+            busStatusBean = new BusStatusBean();
+            for (RouteDetailsBean routeDetails : returnRoute.getRouteDetails()) {
+                tripBean = new TripBean();
+                tripBean.setRouteDetails(routeDetails);
+                tripBean.setDepartureTime(new Date(calendar.getTimeInMillis()
+                        + travelTimeTotal));
+                travelTimeTotal += routeDetails.getSegment()
+                        .getSegmentTravelTimes().get(0).getTravelTime();
+                tripBean.setArrivalTime(new Date(calendar.getTimeInMillis()
+                        + travelTimeTotal));
+                tripBean.setBusStatus(busStatusBean);
+                tripBeans.add(tripBean);
+            }
+            busStatusBean.setBus(bus);
+            busStatusBean.setBusStatus("ontrip");
+            busStatusBean.setFromDate(tripBeans.get(0).getDepartureTime());
+            busStatusBean.setToDate(tripBeans.get(tripBeans.size() - 1)
+                    .getArrivalTime());
+            busStatusBean.setEndStation(tripBeans.get(tripBeans.size() - 1)
+                    .getRouteDetails().getSegment().getEndAt());
+            busStatusBean.setStatus("active");
+            busStatusDAO.insert(busStatusBean);
+            tripDAO.insert(tripBeans);
+            // forward time
+            calendar.setTimeInMillis(calendar.getTimeInMillis() + travelTimeTotal);
+            calendar.add(Calendar.HOUR, 24);
+        }
+    }
 }

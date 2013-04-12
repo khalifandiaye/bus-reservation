@@ -102,7 +102,6 @@
 			<key column="assigned_route_return_id" />
 			<one-to-many class="vn.edu.fpt.capstone.busReservation.dao.bean.BusBean" />
 		</bag>
-		<one-to-one name="routeTerminal" property-ref="id" />
 	</class>
 	<!-- ROUTE_DETAILS -->
 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean"
@@ -411,19 +410,19 @@
 		<property name="fare" type="double" not-null="true" />
 	</class>
 	<!-- ROUTE_TERMINAL VIEW -->
-	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.RouteTerminalBean"
-		table="route_terminal">
-		<composite-id>
-			<key-many-to-one name="id" column="id"
-				class="vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean" />
-		</composite-id>
-		<many-to-one name="id" column="id"
-			class="vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean" insert="false"
-			update="false" />
-		<many-to-one name="startTerminal" column="start_terminal_id" />
-		<many-to-one name="endTerminal" column="end_terminal_id"
-			not-null="false" />
-	</class>
+<!-- 	<class name="vn.edu.fpt.capstone.busReservation.dao.bean.RouteTerminalBean" -->
+<!-- 		table="route_terminal"> -->
+<!-- 		<composite-id> -->
+<!-- 			<key-many-to-one name="id" column="id" -->
+<!-- 				class="vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean" /> -->
+<!-- 		</composite-id> -->
+<!-- 		<many-to-one name="id" column="id" -->
+<!-- 			class="vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean" insert="false" -->
+<!-- 			update="false" /> -->
+<!-- 		<many-to-one name="startTerminal" column="start_terminal_id" /> -->
+<!-- 		<many-to-one name="endTerminal" column="end_terminal_id" -->
+<!-- 			not-null="false" /> -->
+<!-- 	</class> -->
 	<!-- BUS_FREE_TIME VIEW -->
 	<!-- <class name="vn.edu.fpt.capstone.busReservation.dao.bean.BusFreeTimeBean" -->
 	<!-- table="bus_free_time"> -->

@@ -4,14 +4,12 @@
 package vn.edu.fpt.capstone.busReservation.dao;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
 import org.junit.Test;
 
-import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketInfoBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SimpleReservationInfo;
 import vn.edu.fpt.capstone.busReservation.testUtil.DAOTest;
@@ -39,7 +37,7 @@ public class TicketDAOTest extends DAOTest {
     
     @Test
     public void testGetTicketByBusStatusId001() {
-        TicketDAO ticketDAO = (TicketDAO) getBean("ticketDAO");
+//        TicketDAO ticketDAO = (TicketDAO) getBean("ticketDAO");
 //        List<TicketBean> list = ticketDAO.getTicketByBusStatusId(6);
 //        assertNotNull(list);
 //        assertEquals(20, list.size());
@@ -55,5 +53,13 @@ public class TicketDAOTest extends DAOTest {
       List<TicketInfoBean> list = ticketDAO.getCancelledTicketInfos(6);
       assertNotNull(list);
       assertEquals(20, list.size());
+    }
+    
+    @Test
+    public void testGetTicketInfoByReservationId001() {
+        TicketDAO ticketDAO = (TicketDAO) getBean("ticketDAO");
+      List<TicketInfoBean> list = ticketDAO.getTicketInfoByReservationId(24);
+      assertNotNull(list);
+      assertEquals(1, list.size());
     }
 }

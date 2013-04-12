@@ -19,5 +19,12 @@ public class PaymentLogicTest extends DAOTest {
         PaymentLogic paymentLogic = (PaymentLogic) getBean("paymentLogic");
         paymentLogic.sendCancelReservationMail(1115, contextPath);
     }
+    
+    @Test
+    public void testsendReservationCompleteMail001() throws CommonException {
+        String contextPath = "/bus-reservation";
+        PaymentLogic paymentLogic = (PaymentLogic) getBean("paymentLogic");
+        paymentLogic.sendReservationCompleteMail(24, contextPath);
+    }
 
 }
