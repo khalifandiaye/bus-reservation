@@ -21,12 +21,10 @@ public class BusTypeDAO extends GenericDAO<Integer, BusTypeBean>{
     public List<BusTypeBean> getAllBusType(){
 		List<BusTypeBean> result = new ArrayList<BusTypeBean>();
 		Session session = sessionFactory.getCurrentSession();
-		Transaction tx = session.beginTransaction();
 		try {
 			String queryString = "SELECT bus FROM BusTypeBean bus";
 			Query query = session.createQuery(queryString);
 			result = query.list();
-			tx.commit();
 		} catch (HibernateException e) {
 			exceptionHandling(e, session);
 		}

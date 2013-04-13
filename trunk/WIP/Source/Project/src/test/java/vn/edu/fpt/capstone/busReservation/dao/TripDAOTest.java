@@ -3,7 +3,7 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,6 +18,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
+import vn.edu.fpt.capstone.busReservation.displayModel.TripDetailInfo;
 import vn.edu.fpt.capstone.busReservation.testUtil.DAOTest;
 
 /**
@@ -135,7 +136,8 @@ public class TripDAOTest extends DAOTest {
             busStatusDAO.insert(busStatusBean);
             tripDAO.insert(tripBeans);
             // forward time
-            calendar.setTimeInMillis(calendar.getTimeInMillis() + travelTimeTotal);
+            calendar.setTimeInMillis(calendar.getTimeInMillis()
+                    + travelTimeTotal);
             calendar.add(Calendar.HOUR, 24);
             // insert trip for return route
             travelTimeTotal = 0;
@@ -164,8 +166,17 @@ public class TripDAOTest extends DAOTest {
             busStatusDAO.insert(busStatusBean);
             tripDAO.insert(tripBeans);
             // forward time
-            calendar.setTimeInMillis(calendar.getTimeInMillis() + travelTimeTotal);
+            calendar.setTimeInMillis(calendar.getTimeInMillis()
+                    + travelTimeTotal);
             calendar.add(Calendar.HOUR, 24);
         }
+    }
+
+    @Test
+    public void testGetInDateTrips001() {
+        TripDAO tripDAO = (TripDAO) getBean("tripDAO");
+        List<TripDetailInfo> list = tripDAO.getInDateTrips(new Date(), 5);
+        assertNotNull(list);
+        assertNotEquals(0, list.size());
     }
 }
