@@ -27,6 +27,7 @@
 		$('#addBus').bind().bind('click', function(event) {
 			  $('#plateNumber').val('');
 			  $('#busType').val(-1);
+			  $('#addResult').text("");
 			  $("#addBusDialog").modal();
 		});
 		
@@ -43,18 +44,22 @@
       });
 		
 		$('#busAddDialogOk').click(function(){
-			   var plateNumber = $('#plateNumber').val();
-			   var busType = $('#busType').val();
-			   if (plateNumber.trim() == '' || busType == -1) {
-				   return;
-			   }
+		   var plateNumber = $('#plateNumber').val();
+		   var busType = $('#busType').val();
+		   if (plateNumber.trim() == '' || busType == -1) {
+			   return;
+		   }
             $.ajax({
                url: "saveBus.html?plateNumber=" + plateNumber + "&busTypeBeans=" + busType,
             }).done(function(data) {
-            	$('#addBusDialog').modal('hide');
+               if (data.resultId == 1 || data.resultId == 2){
+               $('#addResult').text((data.message));
+               }
+               else {
+               $('#addBusDialog').modal('hide');
                var url = $('#contextPath').val() + "/bus/list.html";
                window.location = url;
-               $('#addResult').text((data.message));
+               }
             });
 		});
 	});
@@ -83,7 +88,7 @@
 				<input class="btn btn-primary pull-right" id="addBus" type="button"
 					value="Add New Bus" />
 			</h3>  
-			<p id="addResult" style="color: red"></p>
+			
 			<table id="busTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
 				<thead>
 					<tr>
@@ -160,13 +165,12 @@
 				</table>
 			</form>
 		</div>
+		<p id="addResult" style="color: red; margin-left: 16px;"></p>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 			<button id="busAddDialogOk" class="btn btn-primary" >Save</button>
 		</div>
 	</div>
-   
-   
 	<input id="busId" value="" type="hidden" />
 	<jsp:include page="../common/footer.jsp" />
 </body>

@@ -35,6 +35,8 @@ public class RouteDetailListAction extends ActionSupport {
 	private List<BusInfo> busInfos = new ArrayList<BusInfo>();
 
 	private int routeId;
+	private int reverseRouteId;
+
 	private boolean active = false;
 	private String routeName = "";
 	private String sumaryTime = "";
@@ -49,11 +51,12 @@ public class RouteDetailListAction extends ActionSupport {
 	private BusDAO busDAO;
 
 	public String execute() {
-	   List<BusBean> busBeans = busDAO.getBusByRouteId(routeId);
-	   if (busBeans.size() != 0) {
-	      haveBus = true;
-	   }
-	   
+		List<BusBean> busBeans = busDAO.getBusByRouteId(routeId);
+		if (busBeans.size() != 0) {
+			haveBus = true;
+		}
+		reverseRouteId = routeDAO.getRouteTerminal(routeId).get(1);
+
 		segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
 		busStatusBeans = busStatusDAO.getAllAvailTripByRouteId(routeId,
 				Calendar.getInstance().getTime());
@@ -73,7 +76,7 @@ public class RouteDetailListAction extends ActionSupport {
 		if (routeBean.getStatus().equals("active")) {
 			active = true;
 		}
-		//segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
+		// segmentBeans = routeDetailsDAO.getAllSegmemtsByRouteId(routeId);
 		busTypes = busTypeDAO.getAll();
 
 		long delayTime = (long) systemSettingDAO.getStationDelayTime() * 60 * 1000;
@@ -138,6 +141,10 @@ public class RouteDetailListAction extends ActionSupport {
 				+ (minutes < 10 ? ("0" + minutes.toString()) : minutes);
 
 		return SUCCESS;
+	}
+
+	public int getReverseRouteId() {
+		return reverseRouteId;
 	}
 
 	public void setSystemSettingDAO(SystemSettingDAO systemSettingDAO) {
@@ -233,19 +240,19 @@ public class RouteDetailListAction extends ActionSupport {
 		this.busInfos = busInfos;
 	}
 
-   public boolean isHaveBus() {
-      return haveBus;
-   }
+	public boolean isHaveBus() {
+		return haveBus;
+	}
 
-   public void setHaveBus(boolean haveBus) {
-      this.haveBus = haveBus;
-   }
+	public void setHaveBus(boolean haveBus) {
+		this.haveBus = haveBus;
+	}
 
-   public BusDAO getBusDAO() {
-      return busDAO;
-   }
+	public BusDAO getBusDAO() {
+		return busDAO;
+	}
 
-   public void setBusDAO(BusDAO busDAO) {
-      this.busDAO = busDAO;
-   }
+	public void setBusDAO(BusDAO busDAO) {
+		this.busDAO = busDAO;
+	}
 }
