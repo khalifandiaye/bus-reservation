@@ -53,9 +53,10 @@ public class SystemSettingDAO extends GenericDAO<String, SystemSettingBean> {
         session = sessionFactory.getCurrentSession();
         try {
             // perform database access (query, insert, update, etc) here
-            queryString = "SELECT CAST(ss.value AS integer) FROM SystemSettingBean ss WHERE ss.id LIKE :pattern";
+            queryString = "SELECT CAST(ss.value AS integer) FROM SystemSettingBean ss WHERE ss.id LIKE :pattern ORDER BY ss.id DESC";
             query = session.createQuery(queryString);
             query.setString("pattern", "refund%time");
+            query.setMaxResults(1);
             list = query.list();
         } catch (HibernateException e) {
             exceptionHandling(e, session);
