@@ -37,6 +37,19 @@ Date.prototype.toMyString = function () {
 
    function changeDuration(id) {
 	   $("#segmentId").val(id);
+	   
+		$.ajax({
+           type : "GET",
+           url : $('#contextPath').val() + 'route/getPreUpdateTariffAction.html?segmentId=' +  $("#segmentId").val(id),
+           contentType : "application/x-www-form-urlencoded; charset=utf-8",
+           success : function(response) {
+              $("#preUpdateTariffMessage").html(response.message);
+           },
+           error : function() {
+        	   $("#preUpdateTariffMessage").html(response.message);
+           }
+        });
+	   
        $("#editDurationDialog").modal();
    };
 
@@ -163,7 +176,7 @@ Date.prototype.toMyString = function () {
 		</h3>  
       <div class="post">
       <div class=row>
-      <p id="addResult" style="color: red"></p>
+      <p id="addResult" ></p>
       	<table class="pull-right row"> 
             <tr>
                <td><s:select id="busType" list="busTypeBeans" name="busTypeBeans" listKey="id"
@@ -209,7 +222,10 @@ Date.prototype.toMyString = function () {
       <div class="modal-body">
          <form id="editSegmentForm">
             <input type="hidden" name="segmentId" value="" id="segmentId" />
+            
+            <label id="preUpdateTariffMessage"></label>
             <table>
+            	
                <tr>
                   <td>Valid from </td>
                   <td>

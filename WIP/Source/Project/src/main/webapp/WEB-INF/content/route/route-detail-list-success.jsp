@@ -114,18 +114,18 @@ Date.prototype.toMyString = function () {
 		
 		var selectedRouteId = $("#routeId").val();
 		if (selectedRouteId != '-1') 
-		{$.ajax({url : $('#contextPath').val()
-			+ "/schedule/busTypes.html?&routeId="
-			+ selectedRouteId,}).done(
-			function(data) {
-				$('#tripDialogBusType').empty();
-				$.each(data.busTypeInfos, function() {
-					   $('#tripDialogBusType').append('<option value="' + this.id + '">'
-							+ this.type
-							+ '</option>');
+			{$.ajax({url : $('#contextPath').val()
+				+ "/schedule/busTypes.html?&routeId="
+				+ selectedRouteId,}).done(
+				function(data) {
+					$('#tripDialogBusType').empty();
+					$.each(data.busTypeInfos, function() {
+						   $('#tripDialogBusType').append('<option value="' + this.id + '">'
+								+ this.type
+								+ '</option>');
+					});
 				});
-			});
-		};
+			};
 		
 		$('#busStatusInsertBtn').click(function() {
 			var date = new Date();
@@ -136,6 +136,7 @@ Date.prototype.toMyString = function () {
 			$('#tripDialogDepartureTime').val('');
 			$('#tripDialogArrivalTime').val('');
 			$('#tripDialogBusPlate').empty();
+			$('#addScheduleError').empty();
 			$('#CreateScheduleDialog').modal();
 			$('#tripEditDialogLabel').html("Add New Schedule");
 			
@@ -200,9 +201,11 @@ Date.prototype.toMyString = function () {
             var addNewSchedule = $("#addNewSchedule");
 
             if(busPlate != '' && busPlate != null){
+            	$("#addScheduleError").text("");
             	addNewSchedule.addClass("btn-primary");
             	addNewSchedule.removeAttr("disabled"); 
             } else { 
+            	$("#addScheduleError").text("There're no bus available at this time. Please select other time or click cancel!");
             	addNewSchedule.removeClass('btn-primary');
             	addNewSchedule.attr("disabled","disabled");
             }
@@ -374,6 +377,7 @@ Date.prototype.toMyString = function () {
    							var data = busDetailTable.fnGetData(tr);
    							$('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
    								busDetailTable.dataTable().fnDeleteRow(aPos[0]);
+   								$("#busDetailBusPlate").prop("disabled",false);
    								$("#busDetailAdd").addClass("btn-primary");    
    			               $("#busDetailAdd").removeAttr("disabled");
    						});
@@ -391,11 +395,14 @@ Date.prototype.toMyString = function () {
 					});
 					
 					if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
+						$("#busDetailBusPlate").attr("disabled","disabled");
+						$("#addBusError").text("There're no free bus at the moment!");
 		                $("#busDetailAdd").removeClass("btn-primary");
 		                $("#busDetailAdd").attr("disabled","disabled");
 		            } else {
-		               $("#busDetailAdd").addClass("btn-primary");    
-		                 $("#busDetailAdd").removeAttr("disabled");
+		            	$("#busDetailBusPlate").removeAttr("disabled");
+		                $("#busDetailAdd").addClass("btn-primary");    
+		                $("#busDetailAdd").removeAttr("disabled");
 		            }
 					$("#busDetailDialog").modal();
 				}
@@ -405,6 +412,7 @@ Date.prototype.toMyString = function () {
 		$("#busDetailAdd").click(function() {
 				var busId = $("#busDetailbusPlate").val();
 				if (!busId || busId == '') {
+					$("#busDetailBusPlate").attr("disabled","disabled");
 					return;
 				}
 				var plateNumber = $("#busDetailbusPlate option:selected").text();
@@ -428,6 +436,9 @@ Date.prototype.toMyString = function () {
 		$("#busDetailAdd").bind('click', function(){
 			var busId = $("#busDetailbusPlate").val();
 			if (busId == null || busId == '') {
+				$("#busDetailBusPlate").attr("disabled","disabled");
+				$("#addBusError").text("There're no free bus at the moment!");
+				$("#busDetailBusPlate").attr("disabled","disabled");
 				$("#busDetailAdd").removeClass("btn-primary");
 	         $("#busDetailAdd").attr("disabled","disabled");
 	      } 
@@ -477,6 +488,12 @@ Date.prototype.toMyString = function () {
 
 		$('#return').bind('click', function() {
 			var url = $('#contextPath').val() + "/route/list.html";
+			window.location = url;
+		});
+		
+		$('#reverseRoute').bind('click', function() {
+			var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId="
+			+ $('#reverseRouteId').val();
 			window.location = url;
 		});
 
@@ -530,6 +547,7 @@ Date.prototype.toMyString = function () {
                         var data = busDetailTable.fnGetData(tr);
                         $('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
                            busDetailTable.dataTable().fnDeleteRow(aPos[0]);
+                           $("#busDetailBusPlate").removeAttr("disabled");
                            $("#busDetailAdd").addClass("btn-primary");    
                            $("#busDetailAdd").removeAttr("disabled");
                      });
@@ -546,9 +564,12 @@ Date.prototype.toMyString = function () {
                   '<option value="'+ this.id +'">'+ this.plateNumber + '</option>');
                });
                if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
+            	   $("#busDetailBusPlate").attr("disabled","disabled");
+					$("#addBusError").text("There're no free bus at the moment!");
                    $("#busDetailAdd").removeClass("btn-primary");
                    $("#busDetailAdd").attr("disabled","disabled");
                } else {
+            	   $("#busDetailBusPlate").removeAttr("disabled");
                    $("#busDetailAdd").addClass("btn-primary");    
                    $("#busDetailAdd").removeAttr("disabled");
               }
@@ -762,6 +783,8 @@ Date.prototype.toMyString = function () {
          <br/>
          <div style="margin-bottom: 10px;">
             <input class="btn btn-primary" type="button" id="return" value="Return to Route List" />
+            <input type="hidden" id="reverseRouteId" value="<s:property value='reverseRouteId'/>" />
+            <input class="btn btn-primary" type="button" id="reverseRoute" value="Show the reverse route" />
          </div>
       </div>
    </div>
@@ -783,6 +806,7 @@ Date.prototype.toMyString = function () {
                <td><button style="margin-top: -8px;" type="button" id="busDetailAdd" class="btn btn-primary">Add</button></td>
             </tr>
          </table>
+         <label id="addBusError" style="margin-left: 297px; color: red;"></label>
          <table id="busDetailTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
@@ -881,6 +905,9 @@ Date.prototype.toMyString = function () {
             </div>
             <div id="tripDialogStatus"></div>
          </div>
+         <div>
+         	<label id="addScheduleError" style="color: red; margin-left: 15px;"></label>
+         </div>
          <div class="modal-footer">
             <button class="btn" id="cancelAdd" data-dismiss="modal" aria-hidden="true">Cancel</button> 
             <input disabled="disabled" type="button" id="addNewSchedule" class="btn btn-primary" value='Save changes' />
@@ -889,6 +916,7 @@ Date.prototype.toMyString = function () {
    </div>
    
    <jsp:include page="../common/footer.jsp" />
+   
 	<!-- Cancel modal -->
 	<div id="cancelModal" class="modal hide fade">
 		<input type="hidden" name="cancelBusStatusId" />

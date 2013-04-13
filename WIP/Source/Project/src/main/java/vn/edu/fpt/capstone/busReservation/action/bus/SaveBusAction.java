@@ -23,6 +23,7 @@ public class SaveBusAction extends BaseAction {
 	private String plateNumber;
 	private int busTypeBeans;
 	private String message = "Save Bus Success!";
+	private int resultId = 0;
 
 	private BusTypeDAO busTypeDAO;
 	private BusDAO busDAO;
@@ -45,12 +46,18 @@ public class SaveBusAction extends BaseAction {
 					busDAO.update(busBeans.get(0));
 				} else {
 					setMessage("Bus Plate number is existed!");
+					resultId = 1;
 				}
 			}
 		} catch (Exception ex) {
 			setMessage("Save bus failed!");
+			resultId = 2;
 		}
 		return SUCCESS;
+	}
+
+	public int getResultId() {
+		return resultId;
 	}
 
 	public void setBusTypeDAO(BusTypeDAO busTypeDAO) {
