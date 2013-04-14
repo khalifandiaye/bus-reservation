@@ -64,7 +64,7 @@
 <!-- Alert -->	
 	<div class="alert alert-info alert-block">
               <button type="button" class="close" data-dismiss="alert">&times;</button>
-              <ul>
+              <ul>	
               <s:if test="%{!#onwardMap.containsKey(#departDayMonth) && #onwardMap.size != 0 && !#returnMap.containsKey(#returnDayMonth) && #returnMap.size != 0}">
 				<li>Chuyến đi từ <strong>${deptCity}</strong> đến <strong>${arrCity}</strong> vào ngày <strong>${departureDate}</strong>
 				và chuyến về từ <strong>${arrCity}</strong> đến <strong>${deptCity}</strong> vào ngày <strong>${returnDate}</strong> đều không có hoặc đã hết vé. 
