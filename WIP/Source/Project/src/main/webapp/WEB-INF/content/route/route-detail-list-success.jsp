@@ -660,7 +660,7 @@ Date.prototype.toMyString = function () {
 					$("#busDetailAdd").addClass("btn-primary");
 					$("#busDetailAdd").removeAttr("disabled"); 
 				});
-				if (busId == null || busId == '') {
+				if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
 		               $("#busDetailBusPlate").attr("disabled","disabled");
 		               return;
 		      }
