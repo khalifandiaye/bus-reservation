@@ -5,6 +5,7 @@ import java.util.List;
 public class SegmentAddInfo {
 
    private int busType;
+   private int routeId;
    private List<SegmentInfo> segments;
    private String validDate;
 
@@ -30,6 +31,14 @@ public class SegmentAddInfo {
 
    public void setValidDate(String validDate) {
       this.validDate = validDate;
+   }
+
+   public int getRouteId() {
+      return routeId;
+   }
+
+   public void setRouteId(int routeId) {
+      this.routeId = routeId;
    }
 
 }

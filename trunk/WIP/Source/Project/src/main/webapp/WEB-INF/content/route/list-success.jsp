@@ -238,7 +238,6 @@
      $("#routeAddDialogOk").bind('click', 
     		 function() {
             info['segments'] = segments;
-            info['validDate'] = $('#validDate').val();
                            
             $.ajax({
                type : "POST",

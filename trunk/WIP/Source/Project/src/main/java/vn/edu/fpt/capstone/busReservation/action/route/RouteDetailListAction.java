@@ -8,6 +8,7 @@ import java.util.List;
 import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.BusTypeDAO;
+import vn.edu.fpt.capstone.busReservation.dao.CityDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SegmentTravelTimeDAO;
@@ -15,6 +16,7 @@ import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.CityBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentTravelTimeBean;
@@ -33,6 +35,7 @@ public class RouteDetailListAction extends ActionSupport {
 	private List<BusTypeBean> busTypes = new ArrayList<BusTypeBean>();
 	private List<BusStatusBean> busStatusBeans = new ArrayList<BusStatusBean>();
 	private List<BusInfo> busInfos = new ArrayList<BusInfo>();
+	private List<CityBean> cityBeans = new ArrayList<CityBean>();
 
 	private int routeId;
 	private int reverseRouteId;
@@ -49,8 +52,10 @@ public class RouteDetailListAction extends ActionSupport {
 	private BusStatusDAO busStatusDAO;
 	private RouteDAO routeDAO;
 	private BusDAO busDAO;
+	private CityDAO cityDAO;
 
 	public String execute() {
+	   cityBeans = cityDAO.getAll();
 		List<BusBean> busBeans = busDAO.getBusByRouteId(routeId);
 		if (busBeans.size() != 0) {
 			haveBus = true;
@@ -255,4 +260,20 @@ public class RouteDetailListAction extends ActionSupport {
 	public void setBusDAO(BusDAO busDAO) {
 		this.busDAO = busDAO;
 	}
+
+   public List<CityBean> getCityBeans() {
+      return cityBeans;
+   }
+
+   public void setCityBeans(List<CityBean> cityBeans) {
+      this.cityBeans = cityBeans;
+   }
+
+   public CityDAO getCityDAO() {
+      return cityDAO;
+   }
+
+   public void setCityDAO(CityDAO cityDAO) {
+      this.cityDAO = cityDAO;
+   }
 }
