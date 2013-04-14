@@ -58,7 +58,7 @@ $(document).ready(function() {
                         .append(
                                 '<div class="alert fade in">'
                                         + '<button type="button" class="close" data-dismiss="alert">×</button>'
-                                        + 'Vui lòng chọn chuyến về có thời gian khởi hành sau khi chuyến đi kết thúc.'
+                                        + '<ul><li>Vui lòng chọn chuyến về có thời gian khởi hành sau khi chuyến đi kết thúc.</ul></li>'
                                         + '</div>');
                 
                 return;
