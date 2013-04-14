@@ -644,10 +644,6 @@ Date.prototype.toMyString = function () {
 
 		$("#busDetailAdd").click(function() {
 				var busId = $("#busDetailbusPlate").val();
-				if (!busId || busId == '') {
-					$("#busDetailBusPlate").attr("disabled","disabled");
-					return;
-				}
 				var plateNumber = $("#busDetailbusPlate option:selected").text();
 				busDetailTable.dataTable().fnAddData([
 					busId,plateNumber,
@@ -664,6 +660,10 @@ Date.prototype.toMyString = function () {
 					$("#busDetailAdd").addClass("btn-primary");
 					$("#busDetailAdd").removeAttr("disabled"); 
 				});
+				if (busId == null || busId == '') {
+		               $("#busDetailBusPlate").attr("disabled","disabled");
+		               return;
+		      }
 		});
 
 		$("#busDetailAdd").bind('click', function(){
