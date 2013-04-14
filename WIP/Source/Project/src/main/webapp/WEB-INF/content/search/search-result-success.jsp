@@ -53,8 +53,63 @@
 	
 <!-- Start notify message -->
 	<section>
+	<s:set name="onwardMap" value="onwardMap"/>
+	<s:set name="departDayMonth" value="%{departureDate.substring(0,5)}" />
+	<s:set name="ticketType" value="ticketType" />
+	<s:if test="%{#ticketType == 'roundtrip'}">
+		<s:set name="returnMap" value="returnMap"/>
+		<s:set name="returnDayMonth" value="%{returnDate.substring(0,5)}" />
+	</s:if>
 	<div class="notify-message"></div>
+<!-- Alert -->	
+	<div class="alert alert-info alert-block">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              <ul>
+              <s:if test="%{!#onwardMap.containsKey(#departDayMonth) && #onwardMap.size != 0 && !#returnMap.containsKey(#returnDayMonth) && #returnMap.size != 0}">
+				<li>Chuyến đi từ <strong>${deptCity}</strong> đến <strong>${arrCity}</strong> vào ngày <strong>${departureDate}</strong>
+				và chuyến về từ <strong>${arrCity}</strong> đến <strong>${deptCity}</strong> vào ngày <strong>${returnDate}</strong> đều không có hoặc đã hết vé. 
+				Chúng tôi đã chọn ra những chuyến có ngày gần với ngày quý khách mong muốn.</li>
+			  </s:if>
+			  <s:else>
+			   <s:if test="%{!#onwardMap.containsKey(#departDayMonth) && #onwardMap.size != 0}">
+				<li>Chuyến đi từ <strong>${deptCity}</strong> đến <strong>${arrCity}</strong> vào ngày <strong>${departureDate}</strong> không có hoặc đã hết vé. 
+				Chúng tôi đã chọn ra những chuyến có ngày gần với ngày quý khách mong muốn.</li>
+			  </s:if>
+			   <s:if test="%{!#returnMap.containsKey(#returnDayMonth) && #returnMap.size != 0}">
+					<li>Chuyến về từ <strong>${arrCity}</strong> đến <strong>${deptCity}</strong> vào ngày <strong>${returnDate}</strong> không có hoặc đã hết vé. 
+					Chúng tôi đã chọn ra những chuyến có ngày gần với ngày quý khách mong muốn.</li>
+			  	</s:if>
+			  </s:else>
+			  <s:if test="%{#ticketType == 'roundtrip'}">
+			  		<s:if test="%{#onwardMap.size == 0 && #returnMap.size == 0}">
+			  			<li>Chuyến đi từ <strong>${deptCity}</strong> đến <strong>${arrCity}</strong> vào ngày <strong>${departureDate}</strong> và chuyến về từ <strong>${arrCity}</strong> đến <strong>${deptCity}</strong> vào ngày <strong>${returnDate}</strong> đều không có hoặc đã hết vé. 
+			  			Xin quý khách vui lòng nhấn <span class="label"><s:text name="button.back"/></span> để tìm chuyến vào ngày khác.</li>
+			  		</s:if>
+			  		<s:else>
+			  			<s:if test="%{#onwardMap.size == 0}">
+					 		<li>Chuyến đi từ <strong>${deptCity}</strong> đến <strong>${arrCity}</strong> vào ngày <strong>${departureDate}</strong> không có hoặc đã hết vé. Quý khách có thể chọn chuyến về và nhấn <span class="label label-info"><s:text name="next"/></span> hoặc nhấn <span class="label"><s:text name="button.back"/></span> để tìm chuyến vào ngày khác.</li>
+						</s:if>
+			  			<s:if test="%{#returnMap.size == 0}">
+					 		<li>Chuyến về từ <strong>${arrCity}</strong> đến <strong>${deptCity}</strong> vào ngày <strong>${returnDate}</strong> không có hoặc đã hết vé. Quý khách có thể chọn chuyến đi và nhấn <span class="label label-info"><s:text name="next"/></span> hoặc nhấn <span class="label"><s:text name="button.back"/></span> để tìm chuyến vào ngày khác.</li>
+						</s:if>
+			  		</s:else>
+			  		<s:if test="%{#onwardMap.containsKey(#departDayMonth) && #returnMap.containsKey(#returnDayMonth)}">
+						<li>Vui lòng chọn một chuyến đi và một chuyến về rồi nhấn <span class="label label-info"><s:text name="next"/></span></li>
+					</s:if>
+			  </s:if>
+			  <s:else>
+			  	<s:if test="%{#onwardMap.size == 0}">
+			    <li>Chuyến đi từ <strong>${deptCity}</strong> đến <strong>${arrCity}</strong> vào ngày <strong>${departureDate}</strong> không có hoặc đã hết vé.
+			  			Xin quý khách vui lòng nhấn <span class="label"><s:text name="button.back"/></span> để tìm chuyến vào ngày khác.</li>
+			  </s:if>
+			  <s:if test="%{#onwardMap.containsKey(#departDayMonth)}">
+						<li>Vui lòng chọn một chuyến đi rồi nhấn <span class="label label-info"><s:text name="next"/></span></li>
+					</s:if>
+			</s:else>
+			</ul>
+    </div>
 	</section>
+	
 <!-- End notify message -->
 
 	<section class="body">
@@ -80,25 +135,14 @@
 					<span><span class="dept-city"><h5>${deptCity}</h5></span>
 					 	<span class="arrow-left"></span><span class="arr-city"><h5>${arrCity}</h5></span>
 					</span>
+					<s:if test="%{#onwardMap.size == 0}">
+					<span class="label label-warning" style="font-size: 16pt; padding: 6px 5px; -webkit-transform: rotate(-15deg); -moz-transform: rotate(-15deg); margin-left: 20px; margin-bottom: 20px">
+						Hết vé</span>
+				</s:if>
 				</div>
 				<br/>
-				<s:set name="onwardMap" value="onwardMap"/>
-				<s:set name="departDayMonth" value="%{departureDate.substring(0,5)}" />
 				<s:hidden id="departDayMonth" value="%{departDayMonth}"/>
-				<s:if test="%{!#onwardMap.containsKey(#departDayMonth) && #onwardMap.size != 0}">
-				<div style="display:block; margin-left:10px; margin-bottom:15px;">Hiện tại không có chuyến nào vào ngày <strong>${departureDate}</strong>. 
-					 Dưới đây là những chuyến có ngày gần với ngày quý khách mong muốn.</div>
-					 <br/>
-					 </s:if>
-				<s:if test="%{#onwardMap.size == 0}">
-					 Hiện tại chuyến đi từ <strong>${deptCity}</strong> đến <strong>${arrCity}</strong> vào ngày <strong>${departureDate}</strong> không có hoặc đã hết vé. Quý khách có thể nhấn <span class="label"><s:text name="button.back"/></span> để tìm chuyến vào ngày khác.
-				</s:if>	
-				
-				<s:if test="onwardMap.containsKey(#departDayMonth)">
-					<div style="display:block; margin-left:10px; margin-bottom:15px">Vui lòng chọn một chuyến đi và nhấn <span class="label label-info"><s:text name="next"/></span></div>
-				</s:if>
-				<!-- ONWARD RESULT HEADER -->
-						
+				<!-- ONWARD RESULT HEADER -->						
 				<div class="result-header onward">
 					<s:iterator value="onwardMap" status="onwardStt" var="owd">		
 							<span class="list-header onward<s:property value="#onwardStt.count" />">
@@ -166,7 +210,6 @@
     			<div id="map" class="map-container"></div>
    			</div>		
    			
-			<s:set name="ticketType" value="ticketType" />
 			<s:if test="%{#ticketType=='roundtrip'}"> 			
 			<!-- <<<***RETURN INFORMATION***>>> -->
 			<div class="return-info">
@@ -177,22 +220,15 @@
 					<span><span class="dept-city"><h5>${deptCity}</h5></span>
 					 	<span class="arrow-right"></span><span class="arr-city"><h5>${arrCity}</h5></span>
 					</span>
+					<s:if test="%{#returnMap.size == 0}">
+					<span class="label label-warning" style="font-size: 16pt; padding: 6px 5px; -webkit-transform: rotate(-15deg); -moz-transform: rotate(-15deg); margin-left: 20px; margin-bottom: 20px">
+						Hết vé</span>
+				</s:if>
 				</div>
 				<br/>
-				<s:set name="returnMap" value="returnMap"/>
-				<s:set name="returnDayMonth" value="%{returnDate.substring(0,5)}" />
+				
 				<s:hidden id="returnDayMonth" value="%{returnDayMonth}"/>
-				<s:if test="%{!#returnMap.containsKey(#returnDayMonth) && #returnMap.size != 0}">
-				<div style="display:block; margin-left:10px; margin-bottom:15px;">Hiện tại không có chuyến nào vào ngày <strong>${returnDate}</strong>. 
-					 Dưới đây là những chuyến có ngày gần với ngày quý khách mong muốn.</div>
-					 <br/>
-					 </s:if>
-				<s:if test="%{#returnMap.size == 0}">
-					 Hiện tại chuyến về từ <strong>${arrCity}</strong> đến <strong>${deptCity}</strong> vào ngày <strong>${returnDate}</strong> không có hoặc đã hết vé. Quý khách có thể nhấn <span class="label"><s:text name="button.back"/></span> để tìm chuyến vào ngày khác.
-				</s:if>	 
-				<s:if test="%{#returnMap.containsKey(#returnDayMonth)}">
-					<div style="display:block; margin-left:10px; margin-bottom:15px">Vui lòng chọn một chuyến về và nhấn <span class="label label-info"><s:text name="next"/></span></div>
-				</s:if>
+
 				<!-- RETURN RESULT HEADER -->
 					<div class="result-header return">
 						<s:iterator value="returnMap" status="returnStt" var="ret">		
@@ -315,21 +351,6 @@
 		</div>
 	</div>
 	
-	<div id="confirmDiv" style="display: none;" class="">
-		<div class="modal" id="confirmContainer">
-			<div class="modal-header">
-				<a class="close" data-dismiss="modal">×</a>
-				<h3>Confirm your action</h3>
-			</div>
-			<div class="modal-body">
-				This is a confirm modal, click confirm button to perform your action
-			</div>
-			<div class="modal-footer">
-				<a href="#" class="btn btn-primary" id="confirmYesBtn">Confirm</a>
-				<a href="#" class="btn" data-dismiss="modal">Close</a>
-			</div>
-		</div>
-	</div>
 	<jsp:include page="../common/footer.jsp" />
 </body>
 </html>
