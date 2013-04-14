@@ -82,6 +82,8 @@ public class IndexAction extends BaseAction {
 	   	Collections.shuffle(list4Info);
 	   	// get only the first 4 trips
         list4Info.subList(4, list4Info.size()).clear();
+        // sort the list
+        Collections.sort(list4Info);
         return SUCCESS;
     }
 
