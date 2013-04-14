@@ -965,12 +965,12 @@ public class PaymentLogic extends BaseLogic {
                     }
                     payment.setPayAmount(roundingVND(
                             converter.convert(new BigDecimal(details
-                                    .getGrossAmount())), RoundingMode.FLOOR)
+                                    .getGrossAmount())), RoundingMode.CEILING)
                             .divide(BigDecimal.valueOf(1000), 1,
                                     RoundingMode.CEILING).doubleValue());
                     payment.setServiceFee(roundingVND(
                             converter.convert(new BigDecimal(details
-                                    .getFeeAmount())), RoundingMode.FLOOR)
+                                    .getFeeAmount())), RoundingMode.CEILING)
                             .divide(BigDecimal.valueOf(1000), 1,
                                     RoundingMode.CEILING).doubleValue());
                     payment.setTransactionId(details.getTransactionID());

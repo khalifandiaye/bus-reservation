@@ -90,7 +90,8 @@ public class AuthenticateAction extends BaseAction {
             errorMessage = getText("msgerrcm001", params);
         } else {
             try {
-                user = userLogic.loginUser(username, password, servletRequest.getContextPath());
+                user = userLogic.loginUser(username, password,
+                        servletRequest.getContextPath());
             } catch (CommonException e) {
                 errorProcessing(e);
                 errorMessage = getActionErrors().iterator().next();
@@ -108,20 +109,13 @@ public class AuthenticateAction extends BaseAction {
             "excludeProperties", "errorMessage", "callbackParameter",
             "callback" }) })
     public String checkUser() {
-        Object user = null;
+        User user = null;
         success = false;
-        if (session != null
-                && session.containsKey(CommonConstant.SESSION_KEY_USER)) {
-            user = session.get(CommonConstant.SESSION_KEY_USER);
-            if (User.class.isAssignableFrom(user.getClass())) {
-                name = ((User) user).getLastName() + " "
-                        + ((User) user).getFirstName();
-                roleId = ((User) user).getRoleId();
-                success = true;
-            } else {
-                // wrong object on session
-                session.remove(CommonConstant.SESSION_KEY_USER);
-            }
+        user = getUserFromSession();
+        if (user != null) {
+            name = user.getLastName() + " " + user.getFirstName();
+            roleId = user.getRoleId();
+            success = true;
         }
         return SUCCESS;
     }

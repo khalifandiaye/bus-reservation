@@ -80,12 +80,13 @@
 			<h3 id="myModalLabel"><s:text name="header.cancelReservation" /></h3>
 		</div>
 		<div class="modal-body">
+			<p id="cancelErrorMessage" class="error"></p>
 			<p id="cancelConfirmMessage"></p>
 		</div>
 		<div class="modal-footer">
 			<button id="btnClose" class="btn close-model-btn btn-primary hidden"><s:text name="button.close" /></button>
-			<button id="btnNo" class="btn close-model-btn"><s:text name="button.no" /></button>
-			<button id="btnCancel" class="btn btn-primary"><s:text name="button.yes" /></button>
+			<button id="btnNo" class="btn close-model-btn"><s:text name="button.close" /></button>
+			<button id="btnCancel" class="btn btn-danger"><s:text name="cancel" /></button>
 		</div>
 	</div>
 </body>

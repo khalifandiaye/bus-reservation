@@ -109,19 +109,19 @@ public class BookingInfoAction extends BaseAction {
 
     @SuppressWarnings("unchecked")
     public String execute() {
+        User user = null;
+        User sessionUser = null;
         if (forwardSeats == null) {
             return ERROR;
         }
-        User user = null;
-        User sessionUser = null;
-        if (!(session.get(CommonConstant.SESSION_KEY_USER) == null)
-                || !(session.get("User_tmp") == null)) {
-            if (!(session.get("User_tmp") == null)) {
-                user = (User) session.get("User_tmp");
-            } else {
-                user = (User) session.get(CommonConstant.SESSION_KEY_USER);
-                sessionUser = user;
-            }
+        // get user if exists from session
+        sessionUser = getUserFromSession();
+        if (session.containsKey("User_tmp")) {
+            user = (User) session.get("User_tmp");
+        } else if (sessionUser != null) {
+            user = sessionUser;
+        }
+        if (user != null) {
             this.inputFirstName = user.getFirstName();
             this.inputLastName = user.getLastName();
             this.inputEmail = user.getEmail();

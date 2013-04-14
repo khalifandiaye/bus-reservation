@@ -57,19 +57,15 @@ public class Pay01030Action extends BaseAction {
         String token = null;
         String status = null;
         int userId = 0;
+        User user = null;
         Object object = null;
         int paymentMethodId = 0;
         int reservationId = 0;
 
         if (session != null) {
-            if (session.containsKey(CommonConstant.SESSION_KEY_USER)) {
-                object = session.get(CommonConstant.SESSION_KEY_USER);
-                if (User.class.isAssignableFrom(object.getClass())) {
-                    userId = ((User) object).getUserId();
-                } else {
-                    // wrong object on session
-                    session.remove(CommonConstant.SESSION_KEY_USER);
-                }
+            user = getUserFromSession();
+            if (user != null) {
+                userId = user.getUserId();
             }
             if (session
                     .containsKey(CommonConstant.SESSION_KEY_PAYMENT_METHOD_ID)) {
@@ -87,8 +83,8 @@ public class Pay01030Action extends BaseAction {
         }
 
         token = (String) session.get(CommonConstant.SESSION_KEY_PAYMENT_TOKEN);
-        if (CheckUtils.isNullOrBlank(token) && object != null) {
-            token = ((User) object).getUsername();
+        if (CheckUtils.isNullOrBlank(token) && user != null) {
+            token = user.getUsername();
         }
         reservationId = (Integer) session
                 .get(CommonConstant.SESSION_KEY_RESERVATION_ID);
