@@ -10,7 +10,7 @@ width: 98%;
 height: 96%;
 }
 
-th.head
+.tbl-trip-list th
 {
 color:#FFFFFF;
 background:#6E6E6E;
@@ -22,60 +22,68 @@ cursor:default;
 height:25px;
 }
 
-.choose td {
+.choose td.row {
 	background:#DEEEFF !important;
 	 -moz-box-shadow: 0 4px 2px -3px #9ecaed inset;
     -webkit-box-shadow: 0 4px 2px -3px #9ecaed inset;
     box-shadow: 0 4px 2px -3px #9ecaed inset;
 }
-.choose td:first-child {
+.choose td.row:first-child {
     -moz-box-shadow: 4px 4px 2px -3px #9ecaed inset;
     -webkit-box-shadow: 4px 4px 2px -3px #9ecaed inset;
     box-shadow: 4px 4px 2px -3px #9ecaed inset;
 }
-.choose td:last-child {
+.choose td.row:last-child {
     -moz-box-shadow: 0 4px 2px -3px #9ecaed inset;
     -webkit-box-shadow: 0 4px 2px -3px #9ecaed inset;
     box-shadow: 0 4px 2px -3px #9ecaed inset;
-
 }
 
-tr.row
+.tbl-trip-list tr
 {
 color:#000000;
 font-weight:100;
 cursor:pointer;
 }
 
-tr.row:nth-child(odd) td
+.tbl-trip-list tr:nth-child(odd) td.row
 {
 background:#e5e5e5;
 }
 
-td.cell
+.tbl-trip-list td
 {
 padding:5px 8px;
 text-align:center;
 vertical-align:middle;
 height:40px;
+border-bottom: 1px solid #e5e5e5;
+border-right: 1px solid #e5e5e5;
+border-left: 1px solid #e5e5e5;
 }
 
-th.head:first-child
+.tbl-trip-list td.row
+{
+	border-right: 0px;
+	border-left: 0px;
+}
+
+.tbl-trip-list th:first-child
 {
 border-top-left-radius:0px;
 }
 
-th.head:last-child
+.tbl-trip-list th:last-child
 {
 border-top-right-radius:0px;
 }
 
-tr.row:last-child td.cell:first-child
+.tbl-trip-list tr:last-child td:first-child
 {
 border-bottom-left-radius:5px;
 }
 
-tr.row:last-child td.cell:last-child
+.tbl-trip-list tr:last-child td:last-child
 {
 border-bottom-right-radius:5px;
 }
@@ -112,7 +120,7 @@ span.list-header{
 }
 span.list-header-rtn{
 	width: 12.85%;
-	margin-left: 0.2%;	
+	margin-left: 0.1%;	
 }
 .header-current {
 	display: inline-block;
@@ -138,11 +146,11 @@ span.list-header-rtn{
 	font: 16px;
 	padding:5px 0px;
 }
-.trip-details {
+.trip-result {
 	width: 100%;
 	overflow: hidden;
 }
-.trip-details .blue-bus-ico {
+span.blue-bus-ico {
 	font-weight: bold;
 	width: 50%;
 	margin-top: -57px;
@@ -153,7 +161,7 @@ span.list-header-rtn{
 	background-position: left 0px;
 	background: url(../img/bus_64.png) 64px 64px no-repeat;
 }
-.trip-details .blue-bus-ico-ret {
+span.blue-bus-ico-ret {
 	font-weight: bold;
 	width: 50%;
 	margin-top: -57px;
@@ -164,7 +172,7 @@ span.list-header-rtn{
 	background-position: left 0px;
 	background: url(../img/bus_ret_64.png) 64px 64px no-repeat;
 }
-.trip-details .city-info {
+.trip-result .city-info {
 	margin-top: -73px;
 	margin-left: -46px;
 	height: 115px;
@@ -192,6 +200,15 @@ span.list-header-rtn{
 	display: inline-block;
 	background-position: left 0px;
 	background: url(../img/arrow_right_001.png) 64px 64px no-repeat;
+}
+.view-details-icon {
+	height: 50px;
+	width: 50px;
+	margin-left: -18px;
+	margin-right: -20px;
+	margin-top: -25px;
+	float:left;
+	background: url(../img/details_24x24.png) 24px 24px no-repeat;
 }
 .dept-city h5{
 	margin-top : 0 px;

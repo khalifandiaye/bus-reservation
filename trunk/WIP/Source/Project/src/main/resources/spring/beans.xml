@@ -26,6 +26,9 @@
 	<bean id="scheduleLogic" class="vn.edu.fpt.capstone.busReservation.logic.ScheduleLogic"
 		scope="singleton">
 	</bean>
+	<bean id="searchResultLogic" class="vn.edu.fpt.capstone.busReservation.logic.SearchResultLogic"
+		scope="singleton">
+	</bean>
 	<!-- *****************define DAO here***************** -->
 	<bean id="stationDAO" class="vn.edu.fpt.capstone.busReservation.dao.StationDAO">
 		<property name="sessionFactory" ref="sessionFactory" />

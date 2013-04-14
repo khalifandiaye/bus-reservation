@@ -31,7 +31,8 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
-	<!-- Start small nav -->
+	
+<!-- Start small nav -->
 	<section class="small-nav">
 	<div class="nav-step-wrapper step1">
 		<div class="nav-step">
@@ -48,12 +49,14 @@
 		</div>
 	</div>
 	</section>
-	<!-- End small nav -->
-	<!-- Start notify message -->
+<!-- End small nav -->
+	
+<!-- Start notify message -->
 	<section>
 	<div class="notify-message"></div>
 	</section>
-	<!-- End notify message -->
+<!-- End notify message -->
+
 	<section class="body">
 	<div class="container">
 		<div class="well">
@@ -72,142 +75,90 @@
 				<legend>
 					<span>Chuyến đi</span>
 					<span class="map-active onward" title="Hiện bản đồ cho chuyến đi"></span></legend>
-				<div class="trip-details" style="display:block;width:100%">
+				<div class="trip-result" style="display:block;width:100%">
 					<span class="blue-bus-ico"></span>
 					<span><span class="dept-city"><h5>${deptCity}</h5></span>
 					 	<span class="arrow-left"></span><span class="arr-city"><h5>${arrCity}</h5></span>
 					</span>
 				</div>
 				<br/>
-				<s:set name="result1" value="resultNo1" />
-				<s:set name="result2" value="resultNo2" />
-				<s:set name="result3" value="resultNo3" />
-				<s:set name="result4" value="resultNo4" />
-				<s:set name="result5" value="resultNo5" />
-				<s:set name="result6" value="resultNo6" />
-				<s:set name="result7" value="resultNo7" />
-				<s:if test="%{#result4.size == 0 && #msgRtn != ''}">
+				<s:set name="onwardMap" value="onwardMap"/>
+				<s:set name="departDayMonth" value="%{departureDate.substring(0,5)}" />
+				<s:hidden id="departDayMonth" value="%{departDayMonth}"/>
+				<s:if test="%{!#onwardMap.containsKey(#departDayMonth) && #onwardMap.size != 0}">
 				<div style="display:block; margin-left:10px; margin-bottom:15px;">Hiện tại không có chuyến nào vào ngày <strong>${departureDate}</strong>. 
 					 Dưới đây là những chuyến có ngày gần với ngày quý khách mong muốn.</div>
 					 <br/>
 					 </s:if>
-				<s:if test="%{#msgRtn == ''}">
-					 Hiện tại chuyến đi từ <strong>${deptCity}</strong> đến <strong>${arrCity}</strong> vào ngày <strong>${departureDate}</strong> không có hoặc đã hết vé. Xin quý khách vui lòng thử tìm chuyến vào ngày khác.
-				</s:if>	 
-				<s:if test="%{#result4.size != 0}">
-					<div style="display:block; margin-left:10px; margin-bottom:15px">Vui lòng chọn chuyến đi và nhấn <strong>"Tiếp tục"</strong></div>
+				<s:if test="%{#onwardMap.size == 0}">
+					 Hiện tại chuyến đi từ <strong>${deptCity}</strong> đến <strong>${arrCity}</strong> vào ngày <strong>${departureDate}</strong> không có hoặc đã hết vé. Quý khách có thể nhấn <span class="label"><s:text name="button.back"/></span> để tìm chuyến vào ngày khác.
+				</s:if>	
+				
+				<s:if test="onwardMap.containsKey(#departDayMonth)">
+					<div style="display:block; margin-left:10px; margin-bottom:15px">Vui lòng chọn một chuyến đi và nhấn <span class="label label-info"><s:text name="next"/></span></div>
 				</s:if>
 				<!-- ONWARD RESULT HEADER -->
-					<div class="result-header onward">
-						<s:if test="%{#result1.size != 0}">			
-							<span class="list-header onward1">
-								<s:date name="resultNo1[0].departureTime" format="dd-MM" />
-							</span>		
-						</s:if>	
-						<s:if test="%{#result2.size != 0}">
-							<span class="list-header onward2">
-								<s:date name="resultNo2[0].departureTime" format="dd-MM" />
+						
+				<div class="result-header onward">
+					<s:iterator value="onwardMap" status="onwardStt" var="owd">		
+							<span class="list-header onward<s:property value="#onwardStt.count" />">
+									<s:property	value="key" />
 							</span>
-						</s:if>	
-						<s:if test="%{#result3.size != 0}">
-							<span class="list-header onward3">
-								<s:date name="resultNo3[0].departureTime" format="dd-MM" />
-							</span>	
-						</s:if>
-						<s:if test="%{#result4.size != 0}">
-							<span class="list-header onward4">
-								<s:date name="resultNo4[0].departureTime" format="dd-MM"/>
-							</span>
-						</s:if>
-						<s:if test="%{#result5.size != 0}">
-							<span class="list-header onward5">
-								<s:date name="resultNo5[0].departureTime" format="dd-MM" />
-							</span>
-						</s:if>
-						<s:if test="%{#result6.size != 0}">	
-							<span class="list-header onward6">
-								<s:date name="resultNo6[0].departureTime" format="dd-MM" />				
-							</span>
-						</s:if>
-						<s:if test="%{#result7.size != 0}">	
-							<span class="list-header onward7">
-								<s:date name="resultNo7[0].departureTime" format="dd-MM" />							
-							</span>
-						</s:if>
+					</s:iterator>
+				</div>
+				<!-- ONWARD RESULT TABLE DETAILS -->
+				<div class="tab-content">
+					<s:iterator value="onwardMap" status="dateStatus" >
+						<div class="search-rs-dtl onward<s:property value="#dateStatus.count" />" id="<s:property value="key"/>">
+							<table class="tbl-trip-list onward<s:property value="#dateStatus.count" /> result-table">
+								<jsp:include page="../search/search-table-header.jsp" />
+								<tbody>
+									<s:iterator value="value" status="busTypeStatus">
+										<s:iterator value="value" status="listStatus" var="sr">
+											<tr class="tripDetails">
+												<s:if test="%{#listStatus.index == 0 }">
+													<td rowspan="<s:property value="value.size"/>">
+														<div style="float: left;"><s:property value="key" /></div>
+													</td>
+												</s:if>		
+												<td class="row choose-item">
+													<s:date name="departureTime" format="HH:mm" />
+													<s:set name="deptDate" value="%{getText('{0,date,yyyy/MM/dd}',{departureTime})}"/>
+													<s:set name="arrDate" value="%{getText('{0,date,yyyy/MM/dd}',{arrivalTime})}"/>
+												</td>
+												<s:if test="%{#deptDate == #arrDate}">
+													<td class="row choose-item" align="center">
+				   										<s:date name="arrivalTime" format="HH:mm" />
+				   									</td>
+												</s:if>
+												<s:else>
+													<td class="row choose-item">
+														<s:date name="arrivalTime" format="dd-MM" /><br>
+				   										<s:date name="arrivalTime" format="HH:mm" />
+				   									</td> 
+												</s:else> 	
+												<td class="row">
+													<span href="#trip-details" role="button" data-toggle="modal" class="trip-details onward view-details-icon" title="Xem thông tin chi tiết chuyến đi">
+													</span>
+												</td>
+												</td>
+												<td class="row choose-item"><s:property value="getText('{0,number,#,##0}',{fare})" />,000</td>
+												<td class="row choose-item"><s:property value="remainedSeats"/></td>
+												<td class="row out-journey-rdo choose-item">
+													<input title="Chọn chuyến này" type="checkbox" name="out_journey" id="out_journey" class="chb-out" />		
+													<input type="hidden" class="out_status" value="${sr.busStatusId}" />
+													<input type="hidden" class="out_deptTime" value="${sr.departureTime}" />
+													<input type="hidden" class="out_arrTime" value="${sr.arrivalTime}" />
+													<input type="hidden" class="out_fare" value="${sr.fare}" />
+													<s:hidden id="routeId" value="%{route}" /></td>
+											</tr>
+										</s:iterator>
+									</s:iterator>
+								</tbody>
+							</table>
 						</div>
-						<!-- ONWARD RESULT TABLE DETAILS -->
-					<div class="result-table onward">
-						<s:if test="%{#result1.size != 0}">			
-							<div class="search-rs-dtl onward1">
-								<table class="tbl-trip-list onward1">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="resultNo1" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail.jsp" />
-									</s:iterator>
-								</table>	
-							</div>							
-						</s:if>	
-						<s:if test="%{#result2.size != 0}">
-							<div class="search-rs-dtl onward2">
-								<table class="tbl-trip-list onward2">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="resultNo2" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail.jsp" />
-									</s:iterator>
-								</table>	
-							</div>
-						</s:if>	
-						<s:if test="%{#result3.size != 0}">
-							<div class="search-rs-dtl onward3">
-								<table class="tbl-trip-list onward3">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="resultNo3" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail.jsp" />
-									</s:iterator>
-								</table>	
-							</div>
-						</s:if>
-						<s:if test="%{#result4.size != 0}">
-							<div class="search-rs-dtl onward4">
-								<table class="tbl-trip-list onward4">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="resultNo4" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail.jsp" />
-									</s:iterator>
-								</table>	
-							</div>
-						</s:if>
-						<s:if test="%{#result5.size != 0}">
-							<div class="search-rs-dtl onward5">
-								<table class="tbl-trip-list onward5">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="resultNo5" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail.jsp" />
-									</s:iterator>
-								</table>	
-							</div>
-						</s:if>
-						<s:if test="%{#result6.size != 0}">	
-							<div class="search-rs-dtl onward6">
-								<table class="tbl-trip-list onward6">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="resultNo6" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail.jsp" />
-									</s:iterator>
-								</table>	
-							</div>
-						</s:if>
-						<s:if test="%{#result7.size != 0}">	
-							<div class="search-rs-dtl onward7">
-								<table class="tbl-trip-list onward7">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="resultNo7" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail.jsp" />
-									</s:iterator>
-								</table>	
-							</div>
-						</s:if>
-						</div>
+					</s:iterator>
+				</div>
 			</div>
 			
 			<!-- <<<***SHOW MAP***>>> -->
@@ -221,143 +172,87 @@
 			<div class="return-info">
 				<legend><span>Chuyến về</span>
 						<span class="map-active return" title="Hiện bản đồ cho chuyến về"></span></legend>
-				<div class="trip-details" style="display:block;width:100%">
+				<div class="trip-result" style="display:block;width:100%">
 					<span class="blue-bus-ico-ret"></span>
 					<span><span class="dept-city"><h5>${deptCity}</h5></span>
 					 	<span class="arrow-right"></span><span class="arr-city"><h5>${arrCity}</h5></span>
 					</span>
 				</div>
 				<br/>
-				<s:set name="rtnResult1" value="rtnResultNo1" />
-				<s:set name="rtnResult2" value="rtnResultNo2" />
-				<s:set name="rtnResult3" value="rtnResultNo3" />
-				<s:set name="rtnResult4" value="rtnResultNo4" />
-				<s:set name="rtnResult5" value="rtnResultNo5" />
-				<s:set name="rtnResult6" value="rtnResultNo6" />
-				<s:set name="rtnResult7" value="rtnResultNo7" />
-				<s:set name="flgRtn" value="rtnExistResultFlag"/>
-				<s:if test="%{#rtnResult4.size == 0 && #flgRtn != ''}">
+				<s:set name="returnMap" value="returnMap"/>
+				<s:set name="returnDayMonth" value="%{returnDate.substring(0,5)}" />
+				<s:hidden id="returnDayMonth" value="%{returnDayMonth}"/>
+				<s:if test="%{!#returnMap.containsKey(#returnDayMonth) && #returnMap.size != 0}">
 				<div style="display:block; margin-left:10px; margin-bottom:15px;">Hiện tại không có chuyến nào vào ngày <strong>${returnDate}</strong>. 
 					 Dưới đây là những chuyến có ngày gần với ngày quý khách mong muốn.</div>
 					 <br/>
 					 </s:if>
-				<s:if test="%{#flgRtn == ''}">
-					 Hiện tại chuyến về từ <strong>${arrCity}</strong> đến <strong>${deptCity}</strong> vào ngày <strong>${returnDate}</strong> không có hoặc đã hết vé. Xin quý khách vui lòng thử tìm chuyến vào ngày khác.
+				<s:if test="%{#returnMap.size == 0}">
+					 Hiện tại chuyến về từ <strong>${arrCity}</strong> đến <strong>${deptCity}</strong> vào ngày <strong>${returnDate}</strong> không có hoặc đã hết vé. Quý khách có thể nhấn <span class="label"><s:text name="button.back"/></span> để tìm chuyến vào ngày khác.
 				</s:if>	 
-				<s:if test="%{#rtnResult4.size != 0}">
-					<div style="display:block; margin-left:10px; margin-bottom:15px">Vui lòng chọn chuyến về và nhấn <strong>"Tiếp tục"</strong></div>
+				<s:if test="%{#returnMap.containsKey(#returnDayMonth)}">
+					<div style="display:block; margin-left:10px; margin-bottom:15px">Vui lòng chọn một chuyến về và nhấn <span class="label label-info"><s:text name="next"/></span></div>
 				</s:if>
 				<!-- RETURN RESULT HEADER -->
 					<div class="result-header return">
-						<s:if test="%{#rtnResult1.size != 0}">			
-							<span class="list-header-rtn return1">
-								<s:date name="rtnResultNo1[0].departureTime" format="dd-MM" />
-							</span>		
-						</s:if>	
-						<s:if test="%{#rtnResult2.size != 0}">
-							<span class="list-header-rtn return2">
-								<s:date name="rtnResultNo2[0].departureTime" format="dd-MM" />
+						<s:iterator value="returnMap" status="returnStt" var="ret">		
+							<span class="list-header-rtn return<s:property value="#returnStt.count" />">
+									<s:property	value="key" />
 							</span>
-						</s:if>	
-						<s:if test="%{#rtnResult3.size != 0}">
-							<span class="list-header-rtn return3">
-								<s:date name="rtnResultNo3[0].departureTime" format="dd-MM" />
-							</span>	
-						</s:if>
-						<s:if test="%{#rtnResult4.size != 0}">
-							<span class="list-header-rtn return4">
-								<s:date name="rtnResultNo4[0].departureTime" format="dd-MM"/>
-							</span>
-						</s:if>
-						<s:if test="%{#rtnResult5.size != 0}">
-							<span class="list-header-rtn return5">
-								<s:date name="rtnResultNo5[0].departureTime" format="dd-MM" />
-							</span>
-						</s:if>
-						<s:if test="%{#rtnResult6.size != 0}">	
-							<span class="list-header-rtn return6">
-								<s:date name="rtnResultNo6[0].departureTime" format="dd-MM" />				
-							</span>
-						</s:if>
-						<s:if test="%{#rtnResult7.size != 0}">	
-							<span class="list-header-rtn return7">
-								<s:date name="rtnResultNo7[0].departureTime" format="dd-MM" />							
-							</span>
-						</s:if>
+						</s:iterator>
+					</div>
+				<!-- RETURN RESULT TABLE DETAILS -->
+				<div class="tab-content">
+					<s:iterator value="returnMap" status="retDateStatus" >
+						<div class="search-rs-dtl-rtn return<s:property value="#retDateStatus.count" />" id="<s:property value="key"/>">
+							<table class="tbl-trip-list return<s:property value="#retDateStatus.count" /> result-table">
+								<jsp:include page="../search/search-table-header.jsp" />
+								<tbody>
+									<s:iterator value="value" status="retBusTypeStatus">
+										<s:iterator value="value" status="retListStatus" var="re">
+											<tr class="tripDetails">
+												<s:if test="%{#retListStatus.index == 0 }">
+													<td rowspan="<s:property value="value.size"/>">
+														<div style="float: left;"><s:property value="key" /></div>
+													</td>
+												</s:if>		
+												<td class="row choose-item">
+													<s:date name="departureTime" format="HH:mm" />
+													<s:set name="deptDate" value="%{getText('{0,date,yyyy/MM/dd}',{departureTime})}"/>
+													<s:set name="arrDate" value="%{getText('{0,date,yyyy/MM/dd}',{arrivalTime})}"/>
+												</td>
+												<s:if test="%{#deptDate == #arrDate}">
+													<td class="row choose-item" align="center">
+				   										<s:date name="arrivalTime" format="HH:mm" />
+				   									</td>
+												</s:if>
+												<s:else>
+													<td class="row choose-item">
+														<s:date name="arrivalTime" format="dd-MM" /><br>
+				   										<s:date name="arrivalTime" format="HH:mm" />
+				   									</td> 
+												</s:else> 	
+												<td class="row">
+													<span href="#trip-details" role="button" data-toggle="modal" class="trip-details return view-details-icon" title="Xem thông tin chi tiết chuyến đi">
+													</span>
+												</td>
+												<td class="row choose-item"><s:property value="getText('{0,number,#,##0}',{fare})" />,000</td>
+												<td class="row choose-item"><s:property value="remainedSeats"/></td>
+												<td class="row rtn-journey-rdo choose-item">
+													<input title="Chọn chuyến này" type="checkbox" name="rtn_journey" id="rtn_journey" class="chb-ret" />		
+													<input type="hidden" class="rtn_status" value="${re.busStatusId}" />
+													<input type="hidden" class="rtn_deptTime" value="${re.departureTime}" />
+													<input type="hidden" class="rtn_arrTime" value="${re.arrivalTime}" />
+													<input type="hidden" class="rtn_fare" value="${re.fare}" />
+													<s:hidden id="routeId" value="%{route}" /></td>
+											</tr>
+										</s:iterator>
+									</s:iterator>
+								</tbody>
+							</table>
 						</div>
-						<!-- RETURN RESULT TABLE DETAILS -->
-					<div class="result-table return">
-						<s:if test="%{#rtnResult1.size != 0}">			
-							<div class="search-rs-dtl-rtn return1">
-								<table class="tbl-trip-list return1">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="rtnResultNo1" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail-rtn.jsp" />
-									</s:iterator>
-								</table>	
-							</div>							
-						</s:if>	
-						<s:if test="%{#rtnResult2.size != 0}">
-							<div class="search-rs-dtl-rtn return2">
-								<table class="tbl-trip-list return2">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="rtnResultNo2" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail-rtn.jsp" />
-									</s:iterator>
-								</table>	
-							</div>
-						</s:if>	
-						<s:if test="%{#rtnResult3.size != 0}">
-							<div class="search-rs-dtl-rtn return3">
-								<table class="tbl-trip-list return3">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="rtnResultNo3" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail-rtn.jsp" />
-									</s:iterator>
-								</table>	
-							</div>
-						</s:if>
-						<s:if test="%{#rtnResult4.size != 0}">
-							<div class="search-rs-dtl-rtn return4">
-								<table class="tbl-trip-list return4">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="rtnResultNo4" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail-rtn.jsp" />
-									</s:iterator>
-								</table>	
-							</div>
-						</s:if>
-						<s:if test="%{#rtnResult5.size != 0}">
-							<div class="search-rs-dtl-rtn return5">
-								<table class="tbl-trip-list return5">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="rtnResultNo5" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail-rtn.jsp" />
-									</s:iterator>
-								</table>	
-							</div>
-						</s:if>
-						<s:if test="%{#rtnResult6.size != 0}">	
-							<div class="search-rs-dtl-rtn return6">
-								<table class="tbl-trip-list return6">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="rtnResultNo6" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail-rtn.jsp" />
-									</s:iterator>
-								</table>	
-							</div>
-						</s:if>
-						<s:if test="%{#rtnResult7.size != 0}">	
-							<div class="search-rs-dtl-rtn return7">
-								<table class="tbl-trip-list return7">
-									<jsp:include page="../search/search-table-header.jsp" />
-									<s:iterator value="rtnResultNo7" status="srStatus" var="sr">
-										<jsp:include page="../search/search-table-detail-rtn.jsp" />
-									</s:iterator>
-								</table>	
-							</div>
-						</s:if>
-						</div>
+					</s:iterator>
+				</div>
 			</div>
 			</s:if>
 			<input type="hidden" id="passengerNo" value="${passengerNo}" name="passengerNo" /> 
@@ -412,13 +307,29 @@
 			<h3 id="myModalLabel">Xác nhận chọn chuyến</h3>
 		</div>
 		<div class="modal-body">
+			<span class="confirm-one-way"></span>
 		</div>
 		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal" aria-hidden="true">Hủy</button>
-			<button class="btn btn-primary">Xác nhận</button>
+			<button id="btnCancel" class="btn close-model-btn" data-dismiss="modal" aria-hidden="true">Hủy</button>
+			<button id="btnOK" class="btn btn-primary">Xác nhận</button>
 		</div>
 	</div>
 	
+	<div id="confirmDiv" style="display: none;" class="">
+		<div class="modal" id="confirmContainer">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">×</a>
+				<h3>Confirm your action</h3>
+			</div>
+			<div class="modal-body">
+				This is a confirm modal, click confirm button to perform your action
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn btn-primary" id="confirmYesBtn">Confirm</a>
+				<a href="#" class="btn" data-dismiss="modal">Close</a>
+			</div>
+		</div>
+	</div>
 	<jsp:include page="../common/footer.jsp" />
 </body>
 </html>
