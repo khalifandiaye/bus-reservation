@@ -88,8 +88,7 @@
 	    	   manageSegmentTable.dataTable().fnDeleteRow(curPosition);
 	       }
 	       /* $('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>'); */
-	       manageSegmentTable.dataTable().fnDeleteRow(aPos[0]);
-	   }
+	}
    
    $(document).ready(function() {
       
@@ -178,15 +177,14 @@
             }
                            
             $('#manageSegmentTable').dataTable().fnAddData(
-                  [ startAt + " - " + stationEndAt, 
-                    duration ,
-                    '<button type="button" data-id="'+ startAtKey +'" class="btn btn-danger">Delete</button>' 
-                    ]);
-            $("#manageSegmentTable tr button[data-id="+ startAtKey + "]").click(
+                    [ startAt + ' - ' + stationStartAt,
+                      endAt + ' - ' + stationEndAt, 
+                      duration ]);
+            /* $("#manageSegmentTable tr button[data-id="+ startAtKey + "]").click(
                function(){
             	   deleteSegment(this);
             	}
-            );
+            ); */
             
             giCount++;
 
@@ -603,7 +601,7 @@ Date.prototype.toMyString = function () {
    					busDetailTable.dataTable().fnAddData([
    					   this.id,
    						this.plateNumber,
-   						'<button type="button" style="width: 56px !important; height: 24px !important;" data-id="'+ this.id +'" class="btn btn-danger">Delete</button>' ]);
+   						'<button type="button" data-id="'+ this.id +'" class="btn btn-danger">Delete</button>' ]);
    						$("#busDetailTable tr button[data-id="+ this.id+ "]").click(
    						function() {
    							var td = this.parentNode;
@@ -620,7 +618,7 @@ Date.prototype.toMyString = function () {
    		            busDetailTable.dataTable().fnAddData([
    		               this.id,
    		               this.plateNumber,
-   		               '<button type="button" style="width: 56px !important; height: 24px !important;" data-id="'+ this.id +'" disabled="disabled">Delete</button>' ]);
+   		               '<button type="button" class="btn" data-id="'+ this.id +'" disabled="disabled">Delete</button>' ]);
    		         };
    				});
 
@@ -653,7 +651,7 @@ Date.prototype.toMyString = function () {
 				var plateNumber = $("#busDetailbusPlate option:selected").text();
 				busDetailTable.dataTable().fnAddData([
 					busId,plateNumber,
-					'<button type="button" data-id="'+ busId +'" class="btn btn-danger btn-small">Delete</button>' ]);
+					'<button type="button" data-id="'+ busId +'" class="btn btn-danger">Delete</button>' ]);
 				$("#busDetailbusPlate option[value="+ busId + "]").remove();
 				$("#busDetailTable tr button[data-id="+ busId + "]").click(
 				function() {
@@ -946,7 +944,10 @@ Date.prototype.toMyString = function () {
                   </s:if>
                   <s:else>
                      <button class="btn" disabled="disabled" value="Add New Schedule" style="height: 30px">Add New Schedule</button>
-                  </s:else></td>
+                  </s:else>
+                  <s:if test="%{haveBus == false}">
+            <input class="btn btn-warning" type="button" id="editRoute" value="Edit Route" style="height: 30px" />
+         </s:if></td>
             </tr>
          </table>
       </h3>  
@@ -994,7 +995,6 @@ Date.prototype.toMyString = function () {
                </tr>
             </tfoot>
          </table>
-         <input class="btn btn-primary" type="button" id="editRoute" value="Edit Route" style="height: 30px" />
          <h3>
             Schedule
          </h3>
@@ -1147,19 +1147,12 @@ Date.prototype.toMyString = function () {
             <table id="manageSegmentTable" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
                <thead>
                   <tr>
-                     <th style="width: 145px;">Name</th>
-                     <th>Duration</th>
-                     <th></th>
+                     <td>Start At</td>
+                     <td>End At</td>
+                     <td>Duration (hh:mm)</td>
                   </tr>
                <thead>
                <tbody>
-                  <s:iterator value="segmentInfos">
-                     <tr>
-                        <td><s:property value="name" /></td>
-                        <td><label id="<s:property value='id'/>"><s:property value="duration" /></label></td>
-                        <td><input class="btn btn-danger" type="button" value="Delete" onclick="deleteSegment(this);"/></td>
-                     </tr>
-                  </s:iterator>
                </tbody>
             </table>
          </div>

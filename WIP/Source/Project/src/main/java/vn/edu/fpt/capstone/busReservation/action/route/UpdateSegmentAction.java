@@ -57,7 +57,16 @@ public class UpdateSegmentAction extends BaseAction {
 					});
 			
 			int routeId = segmentAddInfos.getRouteId();
+			List<Integer> routeTerminals = routeDAO.getRouteTerminal(routeId);
+			int terminalRouteId = 0;
+			if (routeTerminals.size() != 0) {
+			   terminalRouteId = routeTerminals.get(1);
+			}
+			
 			List<SegmentInfo> segmentInfosFoward = segmentAddInfos.getSegments();
+			
+			routeDetailsDAO.deleteRouteDetailByRouteId(routeId);
+			routeDetailsDAO.deleteRouteDetailByRouteId(terminalRouteId);
 
 			// Verify again, check exacly what route is duplicated, check if
 			// route is disabled => enable it
@@ -75,8 +84,7 @@ public class UpdateSegmentAction extends BaseAction {
 				}
 			}
 
-			if (segmentBeans.size() != 0 && segmentBeans.size()==segmentInfosFoward.size()) {
-				
+			if (segmentBeans.size() != 0 && segmentBeans.size() == segmentInfosFoward.size()) {
 				List<RouteBean> routeBeans = routeDAO.getExistRoute(segmentBeans);
 				if (routeBeans.size() != 0) {
 					if (routeBeans.get(0).getStatus().equals("active")) {
@@ -94,14 +102,18 @@ public class UpdateSegmentAction extends BaseAction {
 						message = "Existed route is re-activated successfully!";
 					}
 				} else {
-					insertSegment(segmentInfosFoward, false);
+					updateSegment(segmentInfosFoward, false, routeId);
 					Collections.reverse(segmentInfosFoward);
-					insertSegment(segmentInfosFoward, true);
+					if (terminalRouteId != 0) {
+					   updateSegment(segmentInfosFoward, true, terminalRouteId);
+					}
 				}
 			} else {
-				insertSegment(segmentInfosFoward, false);
+				updateSegment(segmentInfosFoward, false, routeId);
 				Collections.reverse(segmentInfosFoward);
-				insertSegment(segmentInfosFoward, true);
+				if (terminalRouteId != 0) {
+               updateSegment(segmentInfosFoward, true, terminalRouteId);
+            }
 			}
 		} catch (Exception e) {
 			message = "Error! Please contact admin!";
@@ -109,7 +121,7 @@ public class UpdateSegmentAction extends BaseAction {
 		return SUCCESS;
 	}
 
-	private void insertSegment(List<SegmentInfo> segmentInfos, boolean isReturnRoute) throws ParseException {
+	private void updateSegment(List<SegmentInfo> segmentInfos, boolean isReturnRoute, int routeId) throws ParseException {
 		String routeName = "";
 		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
 
@@ -179,10 +191,10 @@ public class UpdateSegmentAction extends BaseAction {
 			}
 		}
 
-		RouteBean routeBeanReturn = new RouteBean();
+		RouteBean routeBeanReturn = routeDAO.getById(routeId);
 		routeBeanReturn.setName(routeName);
-		routeBeanReturn.setStatus("active");
-		routeDAO.insert(routeBeanReturn);
+      routeBeanReturn.setStatus("active");
+      routeDAO.update(routeBeanReturn);
 
 		for (SegmentBean segmentBean : segmentBeans) {
 			RouteDetailsBean routeDetailsBean = new RouteDetailsBean();
