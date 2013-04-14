@@ -98,12 +98,16 @@ public class DeleteScheduleAction extends BaseAction {
         Object user = null;
         int userId = 0;
         String[] params = null;
+        String message = null;
         if (CheckUtils.isNullOrBlank(reason)) {
         	params = new String[1];
-        	params[0] = "field.cancelReason";
-        	errorProcessing(new CommonException("msgerrcm001", params), false);
-            messages = new String[getActionErrors().size()];
-            getActionErrors().toArray(messages);
+        	params[0] = getText("field.cancelReason");
+        	message = getText("msgerrcm001", params);
+            messages = new String[1];
+            messages[0] = message;
+        }
+        if (messages != null || messages.length > 0) {
+            return SUCCESS;
         }
         if (session != null
                 && session.containsKey(CommonConstant.SESSION_KEY_USER)) {
@@ -117,9 +121,6 @@ public class DeleteScheduleAction extends BaseAction {
         } else {
             // wrong object on session
             session.remove(CommonConstant.SESSION_KEY_USER);
-        }
-        if (hasActionErrors()) {
-        	return SUCCESS;
         }
         try {
             scheduleLogic.cancelBusStatus(Integer.parseInt(id), reason, userId);

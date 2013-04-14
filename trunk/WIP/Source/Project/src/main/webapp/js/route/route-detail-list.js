@@ -99,6 +99,9 @@ $(document).ready(function() {
         var id = $('#cancelModal input[name="cancelBusStatusId"]').val();
         // get reason
         var reason = $('#cancelModal input[name="reason"]').val();
+        // hide and clear previous error message
+        $("#cancelModal #errorMessage").hide();
+        $("#cancelModal #errorMessage").html('');
         // send request to execute cancel trip
         $.ajax({
             type : "POST",
@@ -120,6 +123,7 @@ $(document).ready(function() {
             success : function(data) {
                 $('#cancelModal').modal('unlock');
                 if (data.success) {
+                    // clear previous message
                     $("#cancelModal #message").html('');
                     // hide input field
                     $('#cancelModal input[name="reason"]').hide();
@@ -134,7 +138,6 @@ $(document).ready(function() {
                             id : id,
                         },
                         beforeSend : function() {
-                            $("#cancelModal #message").html('');
                             $("#cancelModal #message").append('<p>Refunding. Please don\'t close this page</p>');
                             $('#cancelModal .modal-body').addClass("loading");
                             // prevent closing page
@@ -142,30 +145,32 @@ $(document).ready(function() {
                                 return false;
                             });
                             // prevent accidentally closing modal
-                            $('#cancelModal').on('hidden.lock', function(e) {
-                                return false;
-                            });
+                            $('#cancelModal').modal('lock');
                         },
                         success : function(data) {
-                            // unlock
-                            $(window).off('unload.lock');
-                            $('#cancelModal').off('hidden.lock');
-                            $("#cancelModal #message").html('');
                             if (data.success) {
+                                // clear previous message
+                                $("#cancelModal #message").html('');
+                                // display returned message
                                 $("#cancelModal #message").append('<p>Refund process has been completed</p>');
                                 // close modal
-//                                $('#cancelModal').modal('hide');s
+                                $('#cancelModal').modal('hide');
                             } else {
                                 // display error message
                                 $.each(data.messages, function(index, value) {
-                                    $("#cancelModal #message").append('<p class="error">' + value + '</p>');
+                                    $("#cancelModal #errorMessage").append('<p>' + value + '</p>');
                                 });
+                                $("#cancelModal #errorMessage").show();
                             }
                         },
                         error : function() {
                             $("#cancelModal .modal-body").append('<p class="error">ERROR</p>');
                         },
                         complete : function() {
+                            // unlock
+                            $(window).off('unload.lock');
+                            $('#cancelModal').modal('unlock');
+                            // remove loading sign
                             $('#cancelModal .modal-body').removeClass("loading");
                         }
                     });
@@ -181,17 +186,20 @@ $(document).ready(function() {
                 } else {
                     // display error message
                     $.each(data.messages, function(index, value) {
-                        $("#cancelModal #message").append('<p class="error">' + value + '</p>');
+                        $("#cancelModal #errorMessage").append('<p>' + value + '</p>');
                     });
+                    $("#cancelModal #errorMessage").show();
                     // change button Yes > Retry
                     $("#cancelModal #btnCancel").text('Retry');
+                    $("#cancelModal #btnCancel").show();
                     // change button No > Close
                     $("#cancelModal #btnNo").text('Close');
                     $("#cancelModal #btnCancel").prop('disabled', false);
                 }
             },
             error : function() {
-            	$("#cancelModal .modal-body").append('<p class="error">ERROR</p>');
+                $("#cancelModal #errorMessage").append('<p>ERROR</p>');
+                $("#cancelModal #errorMessage").show();
                 // change button Yes > Retry
                 $("#cancelModal #btnCancel").text('Retry');
                 // change button No > Close
@@ -199,6 +207,10 @@ $(document).ready(function() {
                 $("#cancelModal #btnCancel").prop('disabled', false);
             },
             complete : function() {
+                // unlock
+                $(window).off('unload.lock');
+                $('#cancelModal').modal('unlock');
+                // remove loading sign
                 $('#cancelModal .modal-body').removeClass("loading");
             }
         });
