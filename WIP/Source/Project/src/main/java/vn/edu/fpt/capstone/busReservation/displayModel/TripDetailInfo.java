@@ -11,7 +11,7 @@ import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
  * Immutable
  *
  */
-public final class TripDetailInfo implements Serializable {
+public final class TripDetailInfo implements Serializable, Comparable<TripDetailInfo> {
 
     private static final long serialVersionUID = -2195287469199563262L;
 
@@ -118,5 +118,20 @@ public final class TripDetailInfo implements Serializable {
      */
     public int getRemainedSeatCount() {
         return remainedSeatCount;
+    }
+
+    @Override
+    public int compareTo(TripDetailInfo o) {
+        // null == null
+        if (this.departureTime == null && (o == null || o.departureTime == null)) {
+            return 0;
+        }
+        // null > anything
+        if (this.departureTime == null) {
+            return 1;
+        } else if (o == null || o.departureTime == null) {
+            return -1;
+        }
+        return this.departureTime.compareTo(o.departureTime);
     }
 }
