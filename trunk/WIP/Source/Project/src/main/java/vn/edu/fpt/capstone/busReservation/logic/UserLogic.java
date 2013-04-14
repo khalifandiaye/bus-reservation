@@ -193,11 +193,13 @@ public class UserLogic extends BaseLogic {
         } catch (IOException e) {
             throw new CommonException(e);
         }
-        templateName = (String) globalProps.get("mail.template.resetPass");
+        templateName = (String) globalProps.get("mail.template.regConfirm");
         mailTemplateBean = mailTemplateDAO.getByName(templateName);
         subject = new StringBuilder(mailTemplateBean.getSubject());
         content = new StringBuilder(mailTemplateBean.getText());
         MailUtils.replace(subject, ":companyName:",
+                globalProps.getProperty("company.fullName"));
+        MailUtils.replace(content, ":companyName:",
                 globalProps.getProperty("company.fullName"));
         MailUtils.replace(content, ":siteName:",
                 globalProps.getProperty("company.siteName"));
@@ -324,7 +326,6 @@ public class UserLogic extends BaseLogic {
         MailTemplateBean mailTemplateBean = null;
         StringBuilder subject = null;
         StringBuilder content = null;
-        StringBuilder url = null;
         Session session = null;
         Message message = null;
         // build subject and content
