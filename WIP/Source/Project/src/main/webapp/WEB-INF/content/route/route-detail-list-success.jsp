@@ -95,10 +95,10 @@
       
 	   manageSegmentTable = $('#manageSegmentTable').dataTable({ bSort : false });
             
-      $('#addRoute').bind('click', function(event) {
+      $('#editRoute').bind('click', function(event) {
          giCount = 0;
          $("#routeAddDialogOk").attr("disabled","disabled"); 
-         segmentTable.dataTable().fnClearTable();
+         manageSegmentTable.dataTable().fnClearTable();
          $("#startAt").prop("disabled", false);
          $("#stationStartAt").prop("disabled", false);
          $("#startAt").val(-1);

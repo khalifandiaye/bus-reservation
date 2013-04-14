@@ -77,8 +77,7 @@ public class UpdateSegmentAction extends BaseAction {
 
 			if (segmentBeans.size() != 0 && segmentBeans.size()==segmentInfosFoward.size()) {
 				
-				List<RouteBean> routeBeans = routeDAO
-						.getExistRoute(segmentBeans);
+				List<RouteBean> routeBeans = routeDAO.getExistRoute(segmentBeans);
 				if (routeBeans.size() != 0) {
 					if (routeBeans.get(0).getStatus().equals("active")) {
 						message = "Route existed! Please verify again!";
@@ -110,8 +109,7 @@ public class UpdateSegmentAction extends BaseAction {
 		return SUCCESS;
 	}
 
-	private void insertSegment(List<SegmentInfo> segmentInfos,
-			boolean isReturnRoute) throws ParseException {
+	private void insertSegment(List<SegmentInfo> segmentInfos, boolean isReturnRoute) throws ParseException {
 		String routeName = "";
 		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
 
@@ -137,26 +135,21 @@ public class UpdateSegmentAction extends BaseAction {
 				SegmentBean segmentBean = new SegmentBean();
 				String stravelTime = segmentInfos.get(i).getDuration();
 				String[] travelTime = stravelTime.split(":");
-				long dtravelTime = DateUtils.getTime(
-						Integer.parseInt(travelTime[0]),
-						Integer.parseInt(travelTime[1]), 0);
+				long dtravelTime = DateUtils.getTime(Integer.parseInt(travelTime[0]), 
+				      Integer.parseInt(travelTime[1]), 0);
 
 				if (!isReturnRoute) {
-					startStation = stationDAO.getById(segmentInfos.get(i)
-							.getStationStartAt());
-					endStation = stationDAO.getById(segmentInfos.get(i)
-							.getStationEndAt());
-
+					startStation = stationDAO.getById(segmentInfos.get(i).getStationStartAt());
+					endStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
 				} else {
-					endStation = stationDAO.getById(segmentInfos.get(i)
-							.getStationStartAt());
-					startStation = stationDAO.getById(segmentInfos.get(i)
-							.getStationEndAt());
+					endStation = stationDAO.getById(segmentInfos.get(i).getStationStartAt());
+					startStation = stationDAO.getById(segmentInfos.get(i).getStationEndAt());
 				}
 
 				if (i == 0) {
 					routeName += startStation.getCity().getName();
 				}
+				
 				if (i == segmentInfos.size() - 1) {
 					routeName += " - " + endStation.getCity().getName();
 				}
@@ -174,16 +167,12 @@ public class UpdateSegmentAction extends BaseAction {
 				segmentTravelTimeBean.setValidFrom(Calendar.getInstance()
 						.getTime());
 				segmentTravelTimeDAO.insert(segmentTravelTimeBean);
-
 			} else {
 				if (i == 0) {
-					routeName += duplicatedSegmentBeans.get(0).getStartAt()
-							.getCity().getName();
+					routeName += duplicatedSegmentBeans.get(0).getStartAt().getCity().getName();
 				}
 				if (i == segmentInfos.size() - 1) {
-					routeName += " - "
-							+ duplicatedSegmentBeans.get(0).getEndAt()
-									.getCity().getName();
+					routeName += " - " + duplicatedSegmentBeans.get(0).getEndAt().getCity().getName();
 				}
 				// add segment to route detail
 				segmentBeans.add(duplicatedSegmentBeans.get(0));
