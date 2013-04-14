@@ -6,7 +6,6 @@ import org.apache.struts2.convention.annotation.Result;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.displayModel.User;
-import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.logic.ScheduleLogic;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
@@ -106,7 +105,7 @@ public class DeleteScheduleAction extends BaseAction {
             messages = new String[1];
             messages[0] = message;
         }
-        if (messages != null || messages.length > 0) {
+        if (messages != null && messages.length > 0) {
             return SUCCESS;
         }
         if (session != null
