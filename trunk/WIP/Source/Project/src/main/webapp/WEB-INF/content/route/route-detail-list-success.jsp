@@ -780,7 +780,7 @@ Date.prototype.toMyString = function () {
                         var data = busDetailTable.fnGetData(tr);
                         $('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
                            busDetailTable.dataTable().fnDeleteRow(aPos[0]);
-                           $("#busDetailBusPlate").removeAttr("disabled");
+                           $('#busDetailbusPlate').attr('disabled',false);
                            $("#busDetailAdd").addClass("btn-primary");    
                            $("#busDetailAdd").removeAttr("disabled");
                      });
