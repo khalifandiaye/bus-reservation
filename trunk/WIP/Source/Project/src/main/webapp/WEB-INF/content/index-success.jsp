@@ -187,7 +187,7 @@
 		</div>
 		 
 		<div class="news" style="margin-top: 20px;">
-			<h4>Vé sắp khởi hành</h4>
+			<h4>Chuyến sắp khởi hành</h4>
 			<table width="100%">    
 			<s:iterator value="list4Info">
 				<tr height="35px;"> 

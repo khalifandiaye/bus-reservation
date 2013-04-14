@@ -14,9 +14,13 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
-	<div class="well" style="min-height: 150px;">  
-		<h3 style="line-height: 150px; text-align: center;">Có lỗi đã xảy ra vui lòng thực hiện lại việc chọn vé xe.</h3>
+	<!-- Start notify message -->
+	<section>
+	<div class="notify-message">
+		<div class="alert fade in"><button type="button" class="close" data-dismiss="alert">×</button>Có lỗi đã xảy ra vui lòng thực hiện lại việc chọn vé xe.</div>
 	</div>
+	</section>
+	<!-- End notify message -->
 	<s:actionerror />
 	<jsp:include page="../common/footer.jsp" />
 </body>
