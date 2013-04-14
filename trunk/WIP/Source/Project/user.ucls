@@ -1,0 +1,151 @@
+<class-diagram version="1.0.10" icons="true" automaticImage="PNG" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" 
+    name="vn.edu.fpt.capstone.busReservation.action.user.Reg01021Action" project="bus-reservation" 
+    file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/action/user/Reg01021Action.java" 
+    binary="false">    
+    <position height="163" width="211" x="41" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" 
+    name="vn.edu.fpt.capstone.busReservation.action.user.AuthenticateAction" project="bus-reservation" 
+    file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/action/user/AuthenticateAction.java" 
+    binary="false">    
+    <position height="367" width="211" x="292" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" 
+    name="vn.edu.fpt.capstone.busReservation.action.user.ActivateUserAction" project="bus-reservation" 
+    file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/action/user/ActivateUserAction.java" 
+    binary="false">    
+    <position height="214" width="211" x="543" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" 
+    name="vn.edu.fpt.capstone.busReservation.action.user.Reg01020Action" project="bus-reservation" 
+    file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/action/user/Reg01020Action.java" 
+    binary="false">    
+    <position height="282" width="228" x="794" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" 
+    name="vn.edu.fpt.capstone.busReservation.action.user.Reg01010Action" project="bus-reservation" 
+    file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/action/user/Reg01010Action.java" 
+    binary="false">    
+    <position height="95" width="211" x="1062" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.logic.UserLogic" 
+    project="bus-reservation" 
+    file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/logic/UserLogic.java" binary="false">    
+    <position height="316" width="297" x="418" y="444"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.UserDAO" 
+    project="bus-reservation" file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/UserDAO.java" 
+    binary="false">    
+    <position height="180" width="197" x="181" y="800"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.RoleDAO" 
+    project="bus-reservation" file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/RoleDAO.java" 
+    binary="false">    
+    <position height="78" width="180" x="418" y="800"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.MailTemplateDAO" 
+    project="bus-reservation" 
+    file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/MailTemplateDAO.java" binary="false">    
+    <position height="95" width="239" x="638" y="800"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <association id="10">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="11" name="userDAO"/>      
+      <multiplicity id="12" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="13">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="14" name="userLogic"/>      
+      <multiplicity id="15" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="16">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="17" name="roleDAO"/>      
+      <multiplicity id="18" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="19">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="20" name="userLogic"/>      
+      <multiplicity id="21" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="22">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="23" name="userLogic"/>      
+      <multiplicity id="24" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="25">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="26" name="mailTemplateDAO"/>      
+      <multiplicity id="27" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="28">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="29" name="userLogic"/>      
+      <multiplicity id="30" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
