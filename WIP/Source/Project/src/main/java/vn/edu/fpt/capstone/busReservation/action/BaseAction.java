@@ -13,7 +13,9 @@ import org.apache.struts2.interceptor.SessionAware;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
+import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -76,7 +78,7 @@ public class BaseAction extends ActionSupport implements SessionAware,
      * @param e
      */
     protected void errorProcessing(Exception ex) {
-    	errorProcessing(ex, true);
+        errorProcessing(ex, true);
     }
 
     /**
@@ -106,7 +108,8 @@ public class BaseAction extends ActionSupport implements SessionAware,
         } else {
             parameters = new String[0];
         }
-        addActionError(getText(e.getMessageId(), getText("msgerrcm000"), parameters));
+        addActionError(getText(e.getMessageId(), getText("msgerrcm000"),
+                parameters));
     }
 
     /**
@@ -137,4 +140,27 @@ public class BaseAction extends ActionSupport implements SessionAware,
     public void prepare() throws Exception {
     }
 
+    /**
+     * Get user from session
+     * <p>
+     * Will remove user session if the wrong object is on session
+     * 
+     * @return the current login user information if it exists on session, null
+     *         otherwise
+     */
+    protected User getUserFromSession() {
+        Object object = null;
+        User sessionUser = null;
+        if (session != null
+                && session.containsKey(CommonConstant.SESSION_KEY_USER)) {
+            object = session.get(CommonConstant.SESSION_KEY_USER);
+            if (User.class.isAssignableFrom(object.getClass())) {
+                sessionUser = (User) object;
+            } else {
+                // wrong object on session
+                session.remove(CommonConstant.SESSION_KEY_USER);
+            }
+        }
+        return sessionUser;
+    }
 }

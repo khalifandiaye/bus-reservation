@@ -146,12 +146,14 @@ public class ReservationInfo implements Serializable {
      */
     public Double getBasePriceValue() {
         double basePrice = 0;
-        if (transactionFee != null && transactionFee != 0 && totalAmount != 0 && totalAmount != null) {
-            basePrice = totalAmount - transactionFee;
+        if (totalAmount != 0 && totalAmount != null) {
+            basePrice = totalAmount
+                    - (transactionFee != null ? transactionFee : 0);
         } else if (tickets != null) {
             for (Ticket ticket : tickets) {
                 if (ticket != null) {
-                    basePrice += ticket.ticketPrice;
+                    basePrice += ticket.ticketPrice
+                            * (ticket.seats != null ? ticket.seats.length : 0);
                 }
             }
         }
@@ -170,12 +172,14 @@ public class ReservationInfo implements Serializable {
      */
     public Double getBasePriceInUSDValue() {
         double basePriceInUSD = 0;
-        if (transactionFeeInUSD != null && transactionFeeInUSD != 0 && totalAmountInUSD != 0 && totalAmountInUSD != null) {
-            basePriceInUSD = totalAmountInUSD - transactionFeeInUSD;
+        if (totalAmountInUSD != 0 && totalAmountInUSD != null) {
+            basePriceInUSD = totalAmountInUSD
+                    - (transactionFeeInUSD != null ? transactionFeeInUSD : 0);
         } else if (tickets != null) {
             for (Ticket ticket : tickets) {
                 if (ticket != null) {
-                    basePriceInUSD += ticket.ticketPriceInUSD;
+                    basePriceInUSD += ticket.ticketPriceInUSD
+                            * (ticket.seats != null ? ticket.seats.length : 0);
                 }
             }
         }
@@ -359,7 +363,8 @@ public class ReservationInfo implements Serializable {
     }
 
     /**
-     * @param cancelReason the cancelReason to set
+     * @param cancelReason
+     *            the cancelReason to set
      */
     public void setCancelReason(String cancelReason) {
         this.cancelReason = cancelReason;
@@ -645,7 +650,9 @@ public class ReservationInfo implements Serializable {
             this.returnTrip = returnTrip;
         }
 
-        /* (non-Javadoc)
+        /*
+         * (non-Javadoc)
+         * 
          * @see java.lang.Comparable#compareTo(java.lang.Object)
          */
         @Override

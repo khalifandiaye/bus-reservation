@@ -91,8 +91,15 @@
 						<label class="control-label" for="selectPaymentMethod">Thanh
 							toán</label>
 						<div class="controls">
-							<s:select list="paymentMethods" listKey="id" listValue="name"
-								name="paymentMethodId" id="selectPaymentMethod" />
+							<s:if test="%{paymentMethods.size == 1}">
+								<s:select list="paymentMethods" listKey="id" listValue="name"
+									name="paymentMethodId" id="selectPaymentMethod" disabled="true" />
+								<s:hidden name="paymentMethodId" value="%{paymentMethods[0].id}" />
+							</s:if>
+							<s:else>
+								<s:select list="paymentMethods" listKey="id" listValue="name"
+									name="paymentMethodId" id="selectPaymentMethod" />
+							</s:else>
 						</div>
 					</div>
 					<table class="listCheckedSeats table " style="width: 315px;">

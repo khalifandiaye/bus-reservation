@@ -10,55 +10,64 @@ $(document).ready(function() {
             	id : id
             },
             beforeSend : function() {
-                // display confirm modal
-                $("#cancelModal #message").html('');
+                // add loading sign
                 $('#cancelModal .modal-body').addClass("loading");
-                $("#cancelModal #cancelMessage").removeClass("error");
+                // hide and clear previous error message
+                $("#cancelModal #errorMessage").hide();
+                $("#cancelModal #errorMessage").html('');
+                // hide all but close button
                 $("#cancelModal #btnCancel").hide();
                 $("#cancelModal #btnNo").hide();
                 $("#cancelModal #btnClose").show();
                 $("#cancelModal #btnRetry").hide();
+                // on first try
                 if (!retry) {
+                    // clear previous message
+                    $("#cancelModal #message").html('');
+                    // show modal
                     $('#cancelModal').modal();
                 }
             },
             success : function(data) {
                 console.log(data);
                 if (data.success) {
+                    // clear previous message
+                    $("#cancelModal #message").html('');
+                    // show new message
                     $.each(data.messages, function(index, value) {
                         $("#cancelModal #message").append('<p>' + value + '</p>');
                     });
+                    // show input field
+                    $('#cancelModal input[name="reason"]').show();
+                    // show button confirm and cancel
                     $("#cancelModal #btnCancel").show();
                     $("#cancelModal #btnNo").show();
                     $("#cancelModal #btnClose").hide();
-                    $("#cancelModal #message").removeClass("error");
-                    $("#cancelModal #btnRetry").off('click.cancel');
                 } else {
+                    // show error message
                     $.each(data.messages, function(index, value) {
-                        $("#cancelModal #message").append('<p class="error">' + value + '</p>');
+                        $("#cancelModal #errorMessage").append('<p>' + value + '</p>');
                     });
+                    $("#cancelModal #errorMessage").show();
+                    // show retry button
                     $("#cancelModal #btnRetry").show();
-                    $("#cancelModal #btnRetry").on('click.cancel', function(e) {
-                        // get busStatus id
-                        var id = $('#cancelModal input[name="cancelBusStatusId"]').val();
-                        // send request to calculate refund amount
-                        confirmCancelSchedule(id, true);
-                        // disable default behavior (event will still bubble up)
-                        e.preventDefault();
-                    });
                 }
             },
             error : function() {
+                // show generic error message
+                $("#cancelModal #errorMessage").append('<p>ERROR</p>');
+                $("#cancelModal #errorMessage").show();
+                // show retry button
                 $("#cancelModal #btnRetry").show();
-                $("#cancelModal #message").addClass("error");
-            	$("#cancelModal #message").append('<p>ERROR</p>');
             },
             complete : function() {
+                // remove loading sign
                 $('.modal-body').removeClass("loading");
             }
         });
 	}
 
+	// click event for cancel button linked with each schedule
     $('#scheduleTable').on('click.cancel', 'a.btn-cancel', function(e) {
         // get busStatus id
         var id = $(this).siblings('input[name="id"]').val();
@@ -70,12 +79,26 @@ $(document).ready(function() {
         e.preventDefault();
     });
 
+    // click event for retry button in cancel schedule modal
+    $("#cancelModal #btnRetry").on('click.cancel', function(e) {
+        // get busStatus id
+        var id = $('#cancelModal input[name="cancelBusStatusId"]').val();
+        // send request to calculate refund amount
+        confirmCancelSchedule(id, true);
+        // disable default behavior (event will still bubble up)
+        e.preventDefault();
+    });
+
+    // click event to close cancel modal
     $("#cancelModal .close-model-btn").on('click.close', function(e) {
         $(this).parents('.modal').modal('hide');
     });
 
     $("#cancelModal #btnCancel").on('click.cancel', function(e) {
+        // get id of schedule to be cancel
         var id = $('#cancelModal input[name="cancelBusStatusId"]').val();
+        // get reason
+        var reason = $('#cancelModal input[name="reason"]').val();
         // send request to execute cancel trip
         $.ajax({
             type : "POST",
@@ -83,23 +106,23 @@ $(document).ready(function() {
             dataType: 'jsonp',
             crossDomain: true,
             data : {
-                // get id from hidden input
                 id : id,
-                reason : $('#cancelModal input[name="reason"]').val(),
+                reason : reason,
             },
             beforeSend : function() {
-                $("#cancelModal #message").html('');
+                // add loading sign
                 $('#cancelModal .modal-body').addClass("loading");
                 // prevent double submit
-                $("#cancelModal #btnCancel").prop('disabled', true);
+                $("#cancelModal #btnCancel").hide();
                 // prevent accidentally closing modal
-                $('#cancelModal').on('hidden.lock', function(e) {
-                    return false;
-                });
+                $('#cancelModal').modal('lock');
             },
             success : function(data) {
-                $('#cancelModal').off('hidden.lock');
+                $('#cancelModal').modal('unlock');
                 if (data.success) {
+                    $("#cancelModal #message").html('');
+                    // hide input field
+                    $('#cancelModal input[name="reason"]').hide();
                     // send request to refund related tickets
                     $.ajax({
                         type : "POST",

@@ -926,6 +926,7 @@ Date.prototype.toMyString = function () {
 		</div>
 		<div class="modal-body">
 			Reason <s:textfield label="Reason" name="reason" value="" /><span style="padding-left: 3px; color: red; font-size: 22px;">*</span>
+			<div id="errorMessage" class="error"></div>
 			<div id="message"></div>
 		</div>
 		<div class="modal-footer">

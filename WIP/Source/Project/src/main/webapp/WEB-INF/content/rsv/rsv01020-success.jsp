@@ -97,8 +97,8 @@
 												<s:text name="cancel" />
 											</a>
 										</s:if>
-										<s:else ><s:text name="%{status}" /></s:else> <s:if test="%{status == 'cancelled' || status == 'refunded2'}" ><span class="icon-question-sign" title='<s:text name="message.cancelReason.companySide"><s:param><s:property value="cancelReason" /></s:param></s:text>'></span></s:if>
-										<s:elseif test="%{status == 'refunded'}" ><span class="icon-question-sign" title='<s:text name="message.cancelReason.customerSide" />'></span></s:elseif>
+										<s:else ><s:text name="%{status}" /></s:else> <s:if test="%{status == 'cancelled' || status == 'refunded2'}" ><br /><span><s:text name="label.reason" /> <s:text name="message.cancelReason.companySide"><s:param><s:property value="cancelReason" /></s:param></s:text></span></s:if>
+										<s:elseif test="%{status == 'refunded'}" ><br /><span><s:text name="label.reason" /> <s:text name="message.cancelReason.customerSide" /></span></s:elseif>
 									</td>
 								</tr>
 							<s:if test="returnTrip">
@@ -157,12 +157,13 @@
 			<h3 id="myModalLabel"><s:text name="header.cancelReservation" /></h3>
 		</div>
 		<div class="modal-body">
+			<p id="cancelErrorMessage" class="error"></p>
 			<p id="cancelConfirmMessage"></p>
 		</div>
 		<div class="modal-footer">
 			<button id="btnClose" class="btn close-model-btn btn-primary hidden"><s:text name="button.close" /></button>
-			<button id="btnNo" class="btn close-model-btn"><s:text name="button.no" /></button>
-			<button id="btnCancel" class="btn btn-primary"><s:text name="button.yes" /></button>
+			<button id="btnNo" class="btn close-model-btn"><s:text name="button.close" /></button>
+			<button id="btnCancel" class="btn btn-danger"><s:text name="cancel" /></button>
 		</div>
 	</div>
 	</div>

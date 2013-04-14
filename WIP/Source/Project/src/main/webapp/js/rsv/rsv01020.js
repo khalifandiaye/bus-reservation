@@ -24,22 +24,23 @@ $(document).ready(function(){
                 // display confirm modal
                 $('.modal-body').addClass("loading");
                 $("#cancelConfirmMessage").html('');
-                $("#cancelConfirmMessage").removeClass("error");
                 $("#btnCancel").attr("disabled", "disabled");
+                $("#cancelErrorMessage").hide();
+                $("#cancelErrorMessage").html('');
                 $('#cancelModal').modal();
             },
             success : function(data) {
                 if (data.errorMessage) {
-                    $("#cancelConfirmMessage").addClass("error");
-                    $("#cancelConfirmMessage").html(data.errorMessage);
+                    $("#cancelErrorMessage").html(data.errorMessage);
+                    $("#cancelErrorMessage").show();
                 } else {
                     $("#cancelConfirmMessage").html(data.cancelConfirmMessage);
                     $("#btnCancel").removeAttr("disabled");
                 }
             },
             error : function() {
-                $("#cancelConfirmMessage").addClass("error");
-                $("#cancelConfirmMessage").html("ERROR");
+                $("#cancelErrorMessage").show();
+                $("#cancelErrorMessage").html('error');
             },
             complete : function() {
                 $('.modal-body').removeClass("loading");
@@ -66,20 +67,21 @@ $(document).ready(function(){
             },
             beforeSend : function() {
                 $('.modal-body').addClass("loading");
-                $("#btnCancel").attr("disabled", "disabled");
+                $("#btnCancel").prop("disabled", true);
+                $("#cancelErrorMessage").hide();
+                $("#cancelErrorMessage").html('');
             },
             success : function(data) {
                 if (data.errorMessage && !data.cancelConfirmMessage) {
-                    $("#cancelConfirmMessage").addClass("error");
-                    $("#cancelConfirmMessage").html(data.errorMessage);
-                    $("#btnCancel").removeAttr("disabled");
+                    $("#cancelErrorMessage").show();
+                    $("#cancelErrorMessage").html(data.errorMessage);
+                    $("#btnCancel").prop("disabled", false);
                 } else {
-                    var htmlString = '';
-                    htmlString = data.cancelConfirmMessage;
                     if (data.errorMessage) {
-                        htmlString += '<br/><span class="error">' + data.errorMessage + '</span>';
+                        $("#cancelErrorMessage").show();
+                        $("#cancelErrorMessage").html(data.errorMessage);
                     }
-                    $("#cancelConfirmMessage").html(htmlString);
+                    $("#cancelConfirmMessage").html(data.cancelConfirmMessage);
                     // display confirm modal
                     $('#cancelModal').on('hidden.reload', function() {
                         location.reload();
@@ -90,9 +92,9 @@ $(document).ready(function(){
                 }
             },
             error : function() {
-                $("#cancelConfirmMessage").addClass("error");
-                $("#cancelConfirmMessage").html("ERROR");
-                $("#btnCancel").removeAttr("disabled");
+                $("#cancelErrorMessage").show();
+                $("#cancelErrorMessage").html('error');
+                $("#btnCancel").prop("disabled", false);
             },
             complete : function() {
                 $('.modal-body').removeClass("loading");
