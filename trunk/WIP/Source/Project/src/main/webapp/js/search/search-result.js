@@ -536,7 +536,7 @@ $(document).ready(function() {
         $('.list-header.' + headerName).removeClass(
                 'header-default');
         $('.list-header.' + headerName).addClass(
-                'header-current');
+                'header-current'); 
     }
 
     //return journeys
