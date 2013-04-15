@@ -327,6 +327,14 @@ Date.prototype.toMyString = function () {
     	  $('#validDate').val(now);
 	});
 	
+	$('#cancelAdd').bind('click', function() {
+		$("#tripDialogRoutes").val(-1);
+		$("#tripDialogDepartureTime").val('');
+		$("#tripDialogArrivalTime").val('');
+		$('#tripDialogBusPlate').val('');
+		$('#CreateScheduleDialog').modal('hide');
+	});
+	
 	$(document).ready(function() {
 		checkBusType();
 		var active = $("#active").val();
