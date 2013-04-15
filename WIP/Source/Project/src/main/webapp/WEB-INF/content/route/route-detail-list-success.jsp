@@ -103,6 +103,7 @@ Date.prototype.toMyString = function () {
 	$(document).ready(function() {
 		checkBusType();
 		var active = $("#active").val();
+		
 		if (active == 'false') {
 			$("#addBusPrice").removeClass('btn-primary');
 			$("#assignBus").removeClass('btn-primary');
@@ -111,6 +112,14 @@ Date.prototype.toMyString = function () {
 			$("#assignBus").attr("disabled","disabled");
 			$("#busStatusInsertBtn").attr("disabled","disabled");
 		}
+		
+
+		$('tr[data-segment-id]').each(function() {
+			var id = this.dataset.segmentId;
+			var segment = {};
+			segment['id'] = id;
+			segments.push(segment);
+		});
 		
 		var selectedRouteId = $("#routeId").val();
 		if (selectedRouteId != '-1') 
@@ -348,6 +357,7 @@ Date.prototype.toMyString = function () {
 	               alert("Save new route failed!");
 	            }
 	         });
+			getPricePrefil(1, segments, $('#validDateDiv').val());
 		});
 
 		$("#assignBus").click(function() {
@@ -501,13 +511,6 @@ Date.prototype.toMyString = function () {
 			window.location = url;
 		});
 
-		$('tr[data-segment-id]').each(function() {
-			var id = this.dataset.segmentId;
-			var segment = {};
-			segment['id'] = id;
-			segments.push(segment);
-		});
-
 		validateBusType();
 		$('#busType').bind('change', function() {
 	         var busType = $('#busType').val();
@@ -583,12 +586,12 @@ Date.prototype.toMyString = function () {
          });
       });
 		
-	    $('#validDateSelect').bind('change', function() {
-	         var busType = $('#busType').val();
-	         var date = $('#validDateSelect').val();
-	         getPrice(busType, segments, date);
-	         getSegmentDuration(segments, date);
-	    });
+	    $('#validDate').bind('change', function() {
+	         var busType = $('#busTypes').val();
+	         var date = $('#validDate').val();
+	         getPricePrefil(busType, segments, date);
+	    });    
+	    
 		
 		var busType = $('#busType').val();
 		getPrice(busType, segments, $('#validDateSelect').val());
@@ -627,6 +630,28 @@ Date.prototype.toMyString = function () {
          }
       });
    };
+   
+   function getPricePrefil(busType, segments, date) {
+		var info = {};
+		info['busType'] = busType;
+		info['segments'] = segments;
+		info['validDate'] = date;
+		$.ajax({
+			type : "POST",
+			url : 'getPrice.html',
+			contentType : "application/x-www-form-urlencoded; charset=utf-8",
+			data : {data : JSON.stringify(info)},
+			success : function(response) {
+				var data = response.tariffInfos;
+				var temp = 0;
+				$("#editSegmentTable input").each(function(){
+					element = data[temp];
+				    $(this).val(element.fare);
+				    temp++;
+				});			
+			}
+		});
+	};
 	
 	function getPrice(busType, segments, date) {
 		var info = {};
@@ -656,7 +681,7 @@ Date.prototype.toMyString = function () {
 					  $('#totalMoney').html(accounting.formatMoney(totalMoney));
 				} else {
 					$('#totalMoney').html(0);
-				}
+				};
 			}
 		});
 	};
