@@ -35,13 +35,17 @@
 			   var busId = $('#busId').val();
             $.ajax({
             	url: "deleteBus.html?busId=" + busId,
-            }).done(function(data) {
-            	$('#deleteBusDialog').modal('hide');
-               var url = $('#contextPath').val() + "/bus/list.html";
-               window.location = url;
-               $('#addResult').text((data.message));
-            });
-      });
+	            }).done(function(data) {
+	            	$('#deleteBusDialog').modal('hide');
+	            	$("#deleteSuccess").modal();
+	            	$('#deleteSuccessDialogLabeMessage').text((data.message));
+	            });
+      	});
+		
+		$('#deleteSuccessDialogOk').click(function(){
+			var url = $('#contextPath').val() + "/bus/list.html";
+	        window.location = url;
+        });
 		
 		$('#busAddDialogOk').click(function(){
 		   var plateNumber = $('#plateNumber').val();
@@ -130,6 +134,23 @@
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 			<button id="busDeleteDialogOk" class="btn btn-danger">Delete</button>
+		</div>
+	</div>
+	
+		<!-- Modal delete success Dialog -->
+	<div id="deleteSuccess" class="modal hide fade" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"
+				aria-hidden="true">×</button>
+			<h3 id="deleteSuccessDialogLabel">Message</h3>
+		</div>
+		<div class="modal-body">
+			<p id="deleteSuccessDialogLabeMessage"></p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" id="deleteSuccessDialogOk" data-dismiss="modal"
+				aria-hidden="true">Ok</button>
 		</div>
 	</div>
 
