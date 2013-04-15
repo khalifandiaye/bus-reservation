@@ -59,6 +59,8 @@ public class RouteDetailListAction extends ActionSupport {
 		List<BusBean> busBeans = busDAO.getBusByRouteId(routeId);
 		if (busBeans.size() != 0) {
 			haveBus = true;
+		} else {
+			haveBus = false;
 		}
 		reverseRouteId = routeDAO.getRouteTerminal(routeId).get(1);
 

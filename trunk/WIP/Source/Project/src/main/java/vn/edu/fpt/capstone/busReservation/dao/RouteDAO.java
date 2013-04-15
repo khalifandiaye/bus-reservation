@@ -62,6 +62,29 @@ public class RouteDAO extends GenericDAO<Integer, RouteBean> {
 		}
 		return result;
 	}
+	
+	/**
+	 * Common database exception handling
+	 * 
+	 * @param e
+	 *            the occurred exception
+	 * @throws HibernateException
+	 *             the occurred exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<RouteBean> getAllRouteWithSort() {
+		String hql = "SELECT r FROM RouteBean r ORDER BY r.id DESC";
+		Session session = sessionFactory.getCurrentSession();
+		List<RouteBean> result = null;
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<Integer> getRouteTerminal(int routeId) {

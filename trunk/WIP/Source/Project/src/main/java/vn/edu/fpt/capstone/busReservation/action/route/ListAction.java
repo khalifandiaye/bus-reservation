@@ -40,7 +40,7 @@ public class ListAction extends ActionSupport {
 	private SystemSettingDAO systemSettingDAO;
 
 	public String execute() {
-		routeBeans = routeDAO.getAll();
+		routeBeans = routeDAO.getAllRouteWithSort();
 		cityBeans = cityDAO.getAll();
 		busTypeBeans = busTypeDAO.getAll();
 
