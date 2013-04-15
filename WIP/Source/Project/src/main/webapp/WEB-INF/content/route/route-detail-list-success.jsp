@@ -605,6 +605,7 @@ Date.prototype.toMyString = function () {
 			var routeId = $("#routeId").val();
 			var busType = $("#busType").val();
 			$("#addBus_BusType").val(busType);
+			
 			$.ajax({
 				type : "GET",
 				url : 'getBusInRoute.html?routeId='+ routeId+ '&type=' + busType,
@@ -659,6 +660,25 @@ Date.prototype.toMyString = function () {
 					$("#busDetailDialog").modal();
 				}
 			});
+			
+			$.ajax({
+	            type : "GET",
+	            url : 'getPreAssignableBus.html?busType=' + busType + "&routeId=" + routeId,
+	            contentType : "application/x-www-form-urlencoded; charset=utf-8",
+	            success : function(response) {
+	            	
+	               if((response.isAssignable == false) || response.message ==""){
+	            	   $("#addBusError").html(response.message);
+	            	   $("#busDetailbusPlate").attr("disabled","disabled");
+	            	   $("#busDetailAdd").removeClass("btn-primary");
+		               $("#busDetailAdd").attr("disabled","disabled");
+	               }
+	            },
+	            error : function() {
+	               alert("Get assignable bus failed!");
+	            }
+	        });
+			
 		});
 
 		$("#busDetailAdd").click(function() {
@@ -827,6 +847,13 @@ Date.prototype.toMyString = function () {
          });
       });
 		
+	    $('#validDateSelect').bind('change', function() {
+	         var busType = $('#busType').val();
+	         var date = $('#validDateSelect').val();
+	         getPrice(busType, segments, date);
+	         getSegmentDuration(segments, date);
+	    });
+
 	    $('#validDate').bind('change', function() {
 	         var busType = $('#busTypes').val();
 	         var date = $('#validDate').val();
@@ -1159,7 +1186,7 @@ Date.prototype.toMyString = function () {
       </div>
    </div>
    
-   <!-- Modal Show Edit Bus -->
+   <!-- Modal Show Edit Route -->
    <div id="editBusDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true">
       <div class="modal-header">

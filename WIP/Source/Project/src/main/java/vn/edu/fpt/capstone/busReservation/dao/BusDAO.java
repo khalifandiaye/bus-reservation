@@ -35,7 +35,7 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 
 	@SuppressWarnings("unchecked")
 	public List<BusBean> getBusByStatus(String status) {
-		String hql = "from BusBean busBean where busBean.status = :status";
+		String hql = "from BusBean busBean where busBean.status = :status ORDER BY busBean.id DESC";
 		Session session = sessionFactory.getCurrentSession();
 		List<BusBean> result = new ArrayList<BusBean>();
 		try {
