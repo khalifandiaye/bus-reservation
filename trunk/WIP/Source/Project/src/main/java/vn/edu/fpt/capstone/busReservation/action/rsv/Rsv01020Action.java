@@ -56,9 +56,14 @@ public class Rsv01020Action extends BaseAction {
     // ========================Action Execution========================
     @Override
     public void validate() {
-        if (CheckUtils.isNullOrBlank(reservationId)) {
+        if (CheckUtils.isNullOrBlank(reservationId)
+                && !session
+                        .containsKey(CommonConstant.SESSION_KEY_RESERVATION_ID)) {
             addActionError(getText("msgerrcm000"));
-        } else if (!CheckUtils.isPositiveInteger(reservationId)) {
+        } else if ((!CheckUtils.isNullOrBlank(reservationId) && !CheckUtils
+                .isPositiveInteger(reservationId))
+                || !Integer.class.isAssignableFrom(session.get(
+                        CommonConstant.SESSION_KEY_RESERVATION_ID).getClass())) {
             addActionError(getText("msgerrcm000"));
         }
     }
@@ -83,8 +88,18 @@ public class Rsv01020Action extends BaseAction {
             }
         }
         try {
-            reservationInfo = reservationLogic.loadReservationInfo(
-                    reservationId, userId);
+            if (CheckUtils.isNullOrBlank(reservationId)) {
+                reservationInfo = reservationLogic
+                        .loadReservationInfo(
+                                (Integer) session
+                                        .get(CommonConstant.SESSION_KEY_RESERVATION_ID),
+                                userId);
+            } else {
+                reservationInfo = reservationLogic.loadReservationInfo(
+                        reservationId, userId);
+                session.put(CommonConstant.SESSION_KEY_RESERVATION_ID,
+                        Integer.parseInt(reservationId));
+            }
         } catch (CommonException e) {
             // TODO handle exception
             errorProcessing(e);
