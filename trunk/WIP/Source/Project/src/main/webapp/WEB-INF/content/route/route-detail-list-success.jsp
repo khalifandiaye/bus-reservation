@@ -357,7 +357,9 @@ Date.prototype.toMyString = function () {
 	               alert("Save new route failed!");
 	            }
 	         });
-			getPricePrefil(1, segments, $('#validDateDiv').val());
+	        var busType = $('#busTypes').val();
+	        var date = $('#validDate').val();
+	        getPricePrefil(busType, segments, date);
 		});
 
 		$("#assignBus").click(function() {
