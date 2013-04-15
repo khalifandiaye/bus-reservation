@@ -20,8 +20,235 @@
 <script src="<%=request.getContextPath()%>/js/jquery-ui.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.ui.datepicker-vi.js"></script>
 <script src="<%=request.getContextPath()%>/js/route/route-detail-list.js"></script>
-<script type="text/javascript">
-var info = {};
+<script src="<%=request.getContextPath()%>/js/jquery.maskedinput.min.js"></script><script type="text/javascript">
+   function getStation(el, des, stationEndAtKey) {
+      cityId = $('#' + el).val();
+         if (cityId != -1) {
+         $.ajax({url: "getStation.html?cityId=" + cityId }).done(
+         function(data) {
+               $('#' + des).empty();
+                $.each(data.stationInfos, function() {
+                  $('#' + des).append('<option value="'+this.id+'">'+this.name+'</option>');
+                });
+                if (el == 'startAt' && stationEndAtKey) {
+                  $("#stationStartAt").val(stationEndAtKey);
+                }
+                getDuration();
+            });
+       }
+   };
+   
+   function getDuration() {
+      var startStationAt = $("#stationStartAt").val();
+      var endStationAt = $("#stationEndAt").val();
+      if (startStationAt && endStationAt && startStationAt != -1 && endStationAt != -1) {
+         $.ajax({
+               type : "GET",
+               url: "getSegmentDuration.html?startStation=" + startStationAt + "&endStation=" + endStationAt,
+               contentType : "application/x-www-form-urlencoded; charset=utf-8",
+            }).done(
+               function(data) {
+                  if (data.travelTime != '') {
+                     $("#duration").val(data.travelTime);
+                     $("#duration").prop("disabled", true);
+                  } else {
+                     $("#duration").prop("disabled", false);
+                  }
+                  checkAdd();
+               });
+      } 
+   }
+   
+   function checkAdd() {
+      var startAt = $('#startAt').val();
+      var endAt = $("#endAt").val();
+      var duration = $('#duration').val();
+      
+      duration = parseInt(duration.replace(":",""), 10);
+
+      if(startAt != -1 && endAt != -1 && duration != '' && duration >= parseInt('100', 10)){
+         $("#add").removeAttr("disabled"); 
+      } else { 
+         $("#add").attr("disabled","disabled");
+      }
+   }
+   
+   var manageSegmentTable;
+   
+   function deleteSegment(value) {
+	      var td = value.parentNode;
+	       var tr = td.parentNode;
+	       var aPos = manageSegmentTable.dataTable().fnGetPosition(td);
+	       var data = manageSegmentTable.fnGetData(tr);
+	       
+	       var curPosition = aPos[0];
+	       var tableLength = manageSegmentTable.dataTable().fnGetData().length;
+	       for (var i = curPosition; i <= tableLength; i++) {
+	    	   manageSegmentTable.dataTable().fnDeleteRow(curPosition);
+	       }
+	}
+   
+   $(document).ready(function() {
+      
+	   manageSegmentTable = $('#manageSegmentTable').dataTable({ bSort : false });
+            
+      $('#editRoute').bind('click', function(event) {
+         giCount = 0;
+         $("#routeAddDialogOk").attr("disabled","disabled"); 
+         manageSegmentTable.dataTable().fnClearTable();
+         $("#startAt").prop("disabled", false);
+         $("#stationStartAt").prop("disabled", false);
+         $("#startAt").val(-1);
+         $("#endAt").val(-1);
+         $("#duration").val('01:00');
+         $('#stationStartAt').empty();
+         $('#stationEndAt').empty();
+         $("#endAt option").show();
+         $("#addRouteDialog").modal();
+      });
+       
+      $("#duration").mask("99:99");
+      
+      $('#startAt').change(function() {
+         $("#endAt option").show();
+         $("#endAt").val(-1);
+         $('#stationEndAt').empty();
+         getStation('startAt', 'stationStartAt');
+         $("#endAt option[value=" + $("#startAt").val() + "]").hide();
+         checkAdd();
+      });
+                  
+      $('#endAt').change(function() {
+         getStation('endAt', 'stationEndAt');
+         checkAdd();
+      });
+      
+      $('#stationEndAt').change(function() {
+         getDuration();
+          checkAdd();
+      });
+      
+      $('#duration').change(function(){
+         checkAdd();
+      });
+                  
+      $("#validDateDiv").datetimepicker({
+         format : "yyyy/mm/dd - hh:ii",
+         autoclose : true,
+         todayBtn : true,
+         startDate : new Date(),
+         minuteStep : 10
+      });
+      
+      $("#add").bind('click', function() {
+            if (giCount == 6) {
+               $("#errorMessage").text("Maximum segment added!");
+               return;
+            }
+            
+            $("#routeAddDialogOk").removeAttr("disabled");  
+
+            var startAtKey = $("#startAt").val();
+            var stationStartAtKey = $("#stationStartAt").val();
+            var endAtKey = $("#endAt").val();
+            var stationEndAtKey = $("#stationEndAt").val();
+            var startAt = $("#startAt option:selected").text();
+            var stationStartAt = $("#stationStartAt option:selected").text();
+            var endAt = $("#endAt option:selected").text();
+            var stationEndAt = $("#stationEndAt option:selected").text();
+            var duration = $("#duration").val();
+                           
+            if (endAt.trim() == '' || endAtKey == -1) {
+               return;
+            }
+            
+            if (stationStartAt.trim() == '' || stationStartAtKey == -1) {
+               return;
+            }
+                           
+            if (stationEndAt.trim() == '' || stationEndAtKey == -1) {
+               return;
+            }
+                           
+            if (duration.trim() == '') {
+               return;
+            }
+                           
+            $('#manageSegmentTable').dataTable().fnAddData(
+                    [ startAt + ' - ' + stationStartAt,
+                      endAt + ' - ' + stationEndAt, 
+                      duration ]);
+            /* $("#manageSegmentTable tr button[data-id="+ startAtKey + "]").click(
+               function(){
+            	   deleteSegment(this);
+            	}
+            ); */
+            
+            giCount++;
+
+            $("#startAt").val(endAtKey);
+            $("#startAt").prop("disabled", true);
+            $("#stationStartAt").prop("disabled", true);
+            $("#stationEndAt").empty();
+            getStation('startAt', 'stationStartAt', stationEndAtKey);
+                          
+            $("#endAt option[value=" + endAtKey + "]").hide();
+            $("#endAt").val(-1);
+            $("#duration").val('01:00');
+            $('#stationEndAt').empty();
+            $("#duration").prop("disabled", false);
+
+            var segment = {};
+            segment['startAt'] = startAtKey;
+            segment['stationStartAt'] = stationStartAtKey;
+            segment['endAt'] = endAtKey;
+            segment['stationEndAt'] = stationEndAtKey;
+            segment['duration'] = duration;
+            newSegments.push(segment);
+     });
+
+     $("#editRouteSave").bind('click', 
+          function() {
+    	      newInfo['routeId'] = $("#routeId").val();
+    	      newInfo['segments'] = newSegments;
+                           
+            $.ajax({
+               type : "POST",
+               url : 'updateSegment.html',
+               contentType : "application/x-www-form-urlencoded; charset=utf-8",
+               data : {
+                  data : JSON.stringify(newInfo)
+               },
+               success : function(response) {
+            	   var url = $('#contextPath').val() + "/route/route-detail-list.html?routeId="
+					+ $('#routeId').val();
+				   window.location = url;
+               },
+               error: function(){
+            	   $('#saveSuccess').modal('hide');
+            	   $("#saveSuccessDialogLabeMessage").html(response);
+            	   $("#saveSuccess").text("Save new route failed!");
+               }
+            });
+         });
+     
+     $('#saveSuccessDialogOk').click(function() {
+            var url = $('#contextPath').val() + "/route/list.html";
+            window.location = url;
+      });
+     
+     $('#editRouteCancel').click(function() {
+    	 newInfo = {};
+    	 newSegments = [];
+       giCount = 0;
+     });
+   });
+
+   var newInfo = {};
+   var newSegments = [];
+   var giCount = 0;
+</script>
+<script type="text/javascript">var info = {};
 Date.prototype.toMyString = function () {
 
     function padZero(obj) {
@@ -237,7 +464,10 @@ Date.prototype.toMyString = function () {
 			$('#CreateScheduleDialog').modal('hide');
 		});
 
-		$('#addNewSchedule').bind('click',
+		$('#editRoute').bind('click', function(event){
+			$("#editBusDialog").modal();
+		});
+				$('#addNewSchedule').bind('click',
 			function(event) {
 				var selectedRouteId = $("#routeId").val();
 				$("#routeBeans").val(selectedRouteId);
@@ -648,7 +878,12 @@ Date.prototype.toMyString = function () {
 				var temp = 0;
 				$("#editSegmentTable input").each(function(){
 					element = data[temp];
-				    $(this).val(element.fare);
+					if(element.fare != 0){
+						$(this).val(element.fare);
+					} else {
+						$(this).val("50");
+					}
+				    
 				    temp++;
 				});			
 			}
@@ -720,7 +955,11 @@ Date.prototype.toMyString = function () {
    width: 700px;
    margin-left: -360px;
 }
-</style>
+
+#editBusDialog {
+   width: 1000px;
+   margin-left: -500px;
+}</style>
 </head>
 <body>
    <jsp:include page="../common/header.jsp" />
@@ -739,7 +978,10 @@ Date.prototype.toMyString = function () {
                   </s:if>
                   <s:else>
                      <button class="btn" disabled="disabled" value="Add New Schedule" style="height: 30px">Add New Schedule</button>
-                  </s:else></td>
+                 </s:else>
+                  <s:if test="%{haveBus == false}">
+            <input class="btn btn-warning" type="button" id="editRoute" value="Edit Route" style="height: 30px" />
+         </s:if></td>
             </tr>
          </table>
       </h3>  
@@ -909,7 +1151,53 @@ Date.prototype.toMyString = function () {
       </div>
    </div>
    
-   <!-- Modal add new schedule-->
+   <!-- Modal Show Edit Bus -->
+   <div id="editBusDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+         <h3 id="editBusDialogLabel">List Bus In Route</h3>
+      </div>
+      <div class="modal-body">
+         <div class="post" style="margin: 0px auto; width: 95%;">
+            <table>
+               <tr style="margin-bottom: 10px;">
+               <td><s:select id="startAt" headerKey="-1"
+                     headerValue="--- Select Route ---" list="cityBeans"
+                     name="routeBeans" listKey="id" listValue="name"></s:select><select
+                  id="stationStartAt" headerKey="-1"
+                  headerValue="--- Select Start Station ---" style="margin-top:10px;"></select></td>
+               <td><s:select id="endAt" headerKey="-1"
+                     headerValue="--- Select Route ---" list="cityBeans"
+                     name="routeBeans" listKey="id" listValue="name">
+                     </s:select><select
+                  id="stationEndAt" headerKey="-1"
+                  headerValue="--- Select End Station ---" style="margin-top:10px;"></select></td>
+               <td><input type="text" id="duration" value="01:00"/></td>
+               <td><input class="btn btn-primary" type="button" id="add" value="Add" disabled="disabled" 
+                  style="margin: 10px 0 20px 10px; width: 75px; height: 30px"/>
+               </td>
+            </tr>
+            </table>
+            <table id="manageSegmentTable" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
+               <thead>
+                  <tr>
+                     <td>Start At</td>
+                     <td>End At</td>
+                     <td>Duration (hh:mm)</td>
+                  </tr>
+               <thead>
+               <tbody>
+               </tbody>
+            </table>
+         </div>
+      </div>
+      <div class="modal-footer">
+         <button type="button" id="editRouteCancel" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+         <button id="editRouteSave" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Save</button>
+      </div>
+   </div>
+      <!-- Modal add new schedule-->
    <div id="CreateScheduleDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true">
       <form id="addNewTripForm" action="save.html" method="POST">
