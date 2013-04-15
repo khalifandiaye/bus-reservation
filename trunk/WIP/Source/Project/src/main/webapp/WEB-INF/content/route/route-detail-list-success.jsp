@@ -192,12 +192,12 @@ Date.prototype.toMyString = function () {
 			var departureTime = $("#tripDialogDepartureTime").val();
 			if (selectedRouteId != '-1' && departureTime != "") {$.ajax(
 				{
-					url : $('#contextPath')
-							.val()
-							+ "/schedule/getArrivalTime.html?departureTime="
-							+ departureTime
-							+ "&routeId="
-							+ selectedRouteId,
+				url : $('#contextPath')
+						.val()
+						+ "/schedule/getArrivalTime.html?departureTime="
+						+ departureTime
+						+ "&routeId="
+						+ selectedRouteId,
 				}).done(function(data) {
 					$("#tripDialogArrivalTime").val(data.arrivalTime);
 				});
@@ -613,7 +613,7 @@ Date.prototype.toMyString = function () {
 			$("#busStatusInsertBtn").removeAttr("disabled"); 
 		}
 	}
-	
+		
 	function getSegmentDuration(segments, date) {
       var info = {};
       info['segments'] = segments;

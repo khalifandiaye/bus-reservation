@@ -243,7 +243,7 @@ Date.prototype.toMyString = function () {
       </div>
       <div class="modal-footer">
          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-         <button id="editSegmentDialogOk" class="btn btn-danger">Save</button>
+         <button id="editSegmentDialogOk" class="btn btn-primary">Save</button>
       </div>
    </div>
    <jsp:include page="../common/footer.jsp" />
