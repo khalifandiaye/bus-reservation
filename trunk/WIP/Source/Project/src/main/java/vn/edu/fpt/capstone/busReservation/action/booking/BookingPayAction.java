@@ -190,7 +190,14 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 					}
 				}
 				boolean canBook = reservationDAO.getBusSeatCountByEmail(inputEmail,listOutTripBean,listOutSeat.size());
-				if(!canBook){
+				boolean isStaff = false;
+				if(userBean != null){
+					if(userBean.getRole().getId() == 2){
+						isStaff = true;
+					}
+				}
+				if(!canBook && !isStaff ){
+					
 					SearchParamsInfo searchParams = createSearchParam(listOutTripBean);
 					
 					session.put("searchAnother", searchParams);
@@ -221,7 +228,13 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 					}
 				}
 				boolean canBook = reservationDAO.getBusSeatCountByEmail(inputEmail,listOutTripBean,listOutSeat.size());
-				if(!canBook){
+				boolean isStaff = false;
+				if(userBean != null){
+					if(userBean.getRole().getId() == 2){
+						isStaff = true;
+					}
+				}
+				if(!canBook && !isStaff ){
 					SearchParamsInfo searchParams = createSearchParam(listReturnTripBean);
 					
 					session.put("searchAnother", searchParams);
@@ -394,11 +407,13 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 		searchParams.setDepartureCity(listTripBean.get(0).getRouteDetails().getSegment().getStartAt().getCity().getId());
 		searchParams.setArrivalCity(listTripBean.get(listTripBean.size()-1).getRouteDetails().getSegment().getEndAt().getCity().getId());
 		searchParams.setDepartureDate(fromFormat.format(listTripBean.get(0).getDepartureTime()));
-		searchParams.setReturnDate(fromFormat.format(listTripBean.get(0).getArrivalTime()));
+		
 		searchParams.setBusType(listTripBean.get(0).getBusStatus().getBus().getBusType().getId());
 		searchParams.setPassengerNo(1);
 		
 		if(session.containsKey("listReturnTripBean")){
+			List<TripBean> returnTrip = (List<TripBean>)session.get("listReturnTripBean");
+			searchParams.setReturnDate(fromFormat.format(returnTrip.get(0).getDepartureTime()));
 			searchParams.setTicketType("roundtrip");
 		}else{
 			searchParams.setTicketType("oneway");

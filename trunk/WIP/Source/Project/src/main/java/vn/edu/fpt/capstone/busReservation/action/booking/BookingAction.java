@@ -4,6 +4,8 @@
 package vn.edu.fpt.capstone.busReservation.action.booking;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +17,7 @@ import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SeatInfo;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 /**
  * @author NoName
@@ -301,6 +304,10 @@ public class BookingAction extends BaseAction implements SessionAware {
 				int busStatus = Integer.parseInt(outBusStatus);
 				listOutTripBean = tripDAO.getBookingTrips(busStatus,
 						outDepartTime, outArriveTime);
+				//check bus is departed or not
+				if(!checkBusDepartTime(listOutTripBean)){
+					return ERROR; 
+				}
 				session.put("listOutTripBean", listOutTripBean);
 				
 				List<String> listSoldSeat = seatPositionDAO.getSoldSeats(listOutTripBean);
@@ -312,6 +319,10 @@ public class BookingAction extends BaseAction implements SessionAware {
 				int busStatus = Integer.parseInt(rtnBusStatus);
 				listOutTripBean = tripDAO.getBookingTrips(busStatus,
 						rtnDepartTime, rtnArriveTime);
+				//check bus is departed or not
+				if(!checkBusDepartTime(listOutTripBean)){
+					return ERROR; 
+				}
 				session.put("listOutTripBean", listOutTripBean);
 				
 				List<String> listSoldSeat = seatPositionDAO.getSoldSeats(listOutTripBean);
@@ -325,11 +336,18 @@ public class BookingAction extends BaseAction implements SessionAware {
 				int busStatusRtn = Integer.parseInt(rtnBusStatus);
 				listOutTripBean = tripDAO.getBookingTrips(busStatusOut,
 						outDepartTime, outArriveTime);
+				//check bus is departed or not
+				if(!checkBusDepartTime(listOutTripBean)){
+					return ERROR; 
+				}
 				session.put("listOutTripBean", listOutTripBean);
 				listReturnTripBean = tripDAO.getBookingTrips(busStatusRtn,
 						rtnDepartTime, rtnArriveTime);
 				session.put("listReturnTripBean", listReturnTripBean);
-				
+				//check bus is departed or not
+				if(!checkBusDepartTime(listReturnTripBean)){
+					return ERROR; 
+				}
 				List<String> listSoldSeatOut = seatPositionDAO.getSoldSeats(listOutTripBean);
 				List<String> listSoldSeatReturn = seatPositionDAO.getSoldSeats(listReturnTripBean);
 				//Set remain seat for 2 trips
@@ -415,7 +433,17 @@ public class BookingAction extends BaseAction implements SessionAware {
 		}
 		return SUCCESS;
 	}
-
+	
+	public boolean checkBusDepartTime(List<TripBean> listTripBean){
+		Calendar timeLimit = Calendar.getInstance();
+        timeLimit.add(Calendar.MINUTE, +CommonConstant.MIN_TIME_BEFORE_DEPART);
+		if(listTripBean.get(0).getDepartureTime().getTime() < timeLimit.getTime().getTime()){
+			//session.put("message", getText("msg_booking006"));
+			return false;
+		}
+		return true;
+	}
+	
 	@Override
 	public void setSession(Map<String, Object> map) {
 		this.session = map;

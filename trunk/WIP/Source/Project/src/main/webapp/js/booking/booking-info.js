@@ -30,15 +30,16 @@ function removeSeatInHiddenInput(seatName,seatType){
 
 function removeSeat(){
 	var seatList = $(".listCheckedSeats tbody tr");
+	var isSomethingToDelete = false;
 	for(var i = 0; i < seatList.length; i++ ){
 		var seatType = seatList.eq(i).find("input[type='checkbox']").attr("name");
 		if($(seatList).eq(i).find("input[type='checkbox']").is(":checked")){
 			$(seatList).eq(i).remove();
 			removeSeatInHiddenInput($(seatList).eq(i).find(".seatChecked").text(),seatType);
-			return true; 
+			isSomethingToDelete = true;
 		}
 	}
-	return false;
+	return isSomethingToDelete;
 }
 
 function showPopup(message){
@@ -95,7 +96,6 @@ $(function(){
 				message = "Bạn chưa chọn ghế để bỏ.";
 			}
 		}
-		
 		if(message){
             showPopup(message);
         }
