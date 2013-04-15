@@ -234,6 +234,7 @@ Date.prototype.toMyString = function () {
 			$("#tripDialogDepartureTime").val('');
 			$("#tripDialogArrivalTime").val('');
 			$('#tripDialogBusPlate').val('');
+			$('#CreateScheduleDialog').modal('hide');
 		});
 
 		$('#addNewSchedule').bind('click',
@@ -575,7 +576,7 @@ Date.prototype.toMyString = function () {
                });
                if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
             	   $("#busDetailbusPlate").attr("disabled","disabled");
-					$("#addBusError").text("There're no free bus at the moment!");
+				   $("#addBusError").text("There're no free bus at the moment!");
                    $("#busDetailAdd").removeClass("btn-primary");
                    $("#busDetailAdd").attr("disabled","disabled");
                } else {
@@ -593,7 +594,6 @@ Date.prototype.toMyString = function () {
 	         var date = $('#validDate').val();
 	         getPricePrefil(busType, segments, date);
 	    });    
-	    
 		
 		var busType = $('#busType').val();
 		getPrice(busType, segments, $('#validDateSelect').val());
