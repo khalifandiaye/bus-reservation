@@ -46,7 +46,25 @@ $(document).ready(function() {
                     '.rtn_deptTime').val();
             var arrive = $(outRadio).siblings(
                     '.out_arrTime').val();
-
+            var nowDepart = new Date();
+            var departTime = new Date($(outRadio).siblings('.out_deptTime').val());
+            //cannot book departed trips
+            if(nowDepart.getTime() >= departTime.getTime()){
+            	if ($(".notify-message").html()
+                        .trim() != "") {
+                    $(".notify-message")
+                            .empty();
+                }
+                $(".notify-message")
+                        .append(
+                                '<div class="alert fade in">'
+                                        + '<button type="button" class="close" data-dismiss="alert">×</button>'
+                                        + '<ul><li>Chuyến đi bạn chọn đã khởi hành. Vui lòng chọn chuyến khác.</ul></li>'
+                                        + '</div>');
+                
+                return;
+            };
+            
             // cannot arrive before depart
             if (depart <= arrive) {
                 if ($(".notify-message").html()
@@ -497,7 +515,7 @@ $(document).ready(function() {
     	var returnClass = "return1";
     	for(var i=0; i<$('.list-header-rtn').size(); i++){
     		if($($('.list-header-rtn')[i]).text().trim() == $('#returnDayMonth').val()){
-    			onwardClass = $($('.list-header-rtn')[i]).attr('class').split(' ')[1];
+    			returnClass = $($('.list-header-rtn')[i]).attr('class').split(' ')[1];
     		}
     	}
     	showResultDetailsRtn(returnClass);

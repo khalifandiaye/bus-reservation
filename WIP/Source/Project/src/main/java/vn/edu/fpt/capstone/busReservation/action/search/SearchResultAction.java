@@ -208,8 +208,8 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 				}
 				// return journey
 				String retDate = toFormat.format(fromFormat.parse(returnDate));
-				this.returnMap = searchResultLogic.searchTripGroupByDate(this.departureCity, 
-			 			this.arrivalCity, retDate, CommonConstant.PASSENGER_MIN_NO, minDate);
+				this.returnMap = searchResultLogic.searchTripGroupByDate(this.arrivalCity, 
+			 			this.departureCity, retDate, CommonConstant.PASSENGER_MIN_NO, minDate);
 			} 
 			
 			deptCity = cityDAO.getById(this.departureCity).getName();
