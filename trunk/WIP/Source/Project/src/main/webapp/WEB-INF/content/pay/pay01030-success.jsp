@@ -35,13 +35,17 @@
 	<!-- End small nav -->
 	<div class="alert alert-success">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
-        <p><strong><s:text name="message.reservationComplete" /></strong></p>
+        <ul><li><strong><s:text name="message.reservationComplete" /></strong></li></ul>
 	</div>
 	<div class="reservation-details">
 		<div class="container">
 			<s:actionerror/>
 			<div class="well">
-				<h3><s:text name="reservationInfo" /> <img id="btnPrint" class="click-able" src="<%=request.getContextPath()%>/images/print.png" alt="<s:text name="label.print" />" /><img id="btnPrintPDF" class="click-able" src="<%=request.getContextPath()%>/images/print-pdf.png" alt="<s:text name="label.print-pdf" />" /></h3>
+				<legend>
+					<s:text name="reservationInfo" />
+					<img id="btnPrint" class="click-able" src="<%=request.getContextPath()%>/images/print.png" alt="<s:text name="label.print" />" style="margin-left: 40px;"/>
+					<img id="btnPrintPDF" class="click-able" src="<%=request.getContextPath()%>/images/print-pdf.png" alt="<s:text name="label.print-pdf" />" style="margin-left:10px;"/>
+				</legend>
 				<div class="general-info">
 					<div class="item">
 						<label><s:text name="reservation.booker" /></label>
