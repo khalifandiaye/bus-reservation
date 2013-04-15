@@ -177,8 +177,10 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 				this.departureDate = searchParam.getDepartureDate();
 				this.departureCity = searchParam.getDepartureCity();
 				this.arrivalCity = searchParam.getArrivalCity();
+				this.ticketType = searchParam.getTicketType();
 				this.message = (String) session.get("message");
-
+				this.returnDate = searchParam.getReturnDate();
+				
 				session.remove("message");
 				session.remove("searchAnother");
 			}		
