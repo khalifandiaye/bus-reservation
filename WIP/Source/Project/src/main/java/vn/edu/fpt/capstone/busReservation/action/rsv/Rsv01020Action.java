@@ -62,8 +62,11 @@ public class Rsv01020Action extends BaseAction {
             addActionError(getText("msgerrcm000"));
         } else if ((!CheckUtils.isNullOrBlank(reservationId) && !CheckUtils
                 .isPositiveInteger(reservationId))
-                || !Integer.class.isAssignableFrom(session.get(
-                        CommonConstant.SESSION_KEY_RESERVATION_ID).getClass())) {
+                || (session
+                        .containsKey(CommonConstant.SESSION_KEY_RESERVATION_ID) && !Integer.class
+                        .isAssignableFrom(session.get(
+                                CommonConstant.SESSION_KEY_RESERVATION_ID)
+                                .getClass()))) {
             addActionError(getText("msgerrcm000"));
         }
     }
