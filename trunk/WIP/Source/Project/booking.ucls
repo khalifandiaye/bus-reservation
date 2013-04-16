@@ -4,358 +4,358 @@
     name="vn.edu.fpt.capstone.busReservation.action.booking.BookingPayAction" project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/action/booking/BookingPayAction.java" 
     binary="false">    
-    <position height="554" width="336" x="705" y="37"/>    
+    <position height="384" width="336" x="705" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="2" corner="BOTTOM_RIGHT" language="java" 
     name="vn.edu.fpt.capstone.busReservation.action.booking.BookingInfoAction" project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/action/booking/BookingInfoAction.java" 
     binary="false">    
-    <position height="401" width="262" x="1992" y="37"/>    
+    <position height="265" width="262" x="1983" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="3" corner="BOTTOM_RIGHT" language="java" 
     name="vn.edu.fpt.capstone.busReservation.action.booking.BookingAction" project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/action/booking/BookingAction.java" 
     binary="false">    
-    <position height="792" width="252" x="1700" y="37"/>    
+    <position height="452" width="234" x="1709" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="4" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.TripDAO" 
     project="bus-reservation" file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/TripDAO.java" 
     binary="false">    
-    <position height="231" width="350" x="2429" y="1990"/>    
+    <position height="231" width="350" x="2429" y="1378"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="5" corner="BOTTOM_RIGHT" language="java" 
     name="vn.edu.fpt.capstone.busReservation.dao.TripDAO.TripDetailInfoTransformer" project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/TripDAO.java" binary="false">    
-    <position height="129" width="213" x="2429" y="2941"/>    
+    <position height="95" width="213" x="2429" y="2057"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="6" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.UserDAO" 
     project="bus-reservation" file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/UserDAO.java" 
     binary="false">    
-    <position height="180" width="197" x="561" y="1990"/>    
+    <position height="180" width="197" x="561" y="1378"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="7" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO" 
     project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/BusStatusDAO.java" binary="false">    
-    <position height="316" width="395" x="268" y="869"/>    
+    <position height="316" width="395" x="268" y="529"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="8" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.logic.PaymentLogic" 
     project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/logic/PaymentLogic.java" binary="false">    
-    <position height="554" width="439" x="1109" y="869"/>    
+    <position height="418" width="439" x="1109" y="529"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="9" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.SeatPositionDAO" 
     project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/SeatPositionDAO.java" binary="false">    
-    <position height="112" width="324" x="745" y="869"/>    
+    <position height="112" width="324" x="745" y="529"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="10" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.ReservationDAO" 
     project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/ReservationDAO.java" binary="false">    
-    <position height="163" width="346" x="1109" y="1990"/>    
+    <position height="163" width="346" x="1109" y="1378"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="11" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.logic.ReservationLogic" 
     project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/logic/ReservationLogic.java" binary="false">    
-    <position height="367" width="393" x="1860" y="869"/>    
+    <position height="333" width="393" x="1860" y="529"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="12" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.TicketDAO" 
     project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/TicketDAO.java" binary="false">    
-    <position height="231" width="325" x="1495" y="1990"/>    
+    <position height="231" width="325" x="1495" y="1378"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="13" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.MailTemplateDAO" 
     project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/MailTemplateDAO.java" binary="false">    
-    <position height="95" width="239" x="282" y="1990"/>    
+    <position height="95" width="239" x="282" y="1378"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="14" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO" 
     project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/SystemSettingDAO.java" binary="false">    
-    <position height="129" width="257" x="1860" y="1990"/>    
+    <position height="129" width="257" x="1860" y="1378"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="15" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.PaymentMethodDAO" 
     project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/PaymentMethodDAO.java" binary="false">    
-    <position height="78" width="271" x="798" y="1990"/>    
+    <position height="78" width="271" x="798" y="1378"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="16" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.TariffViewDAO" 
     project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/TariffViewDAO.java" binary="false">    
-    <position height="112" width="232" x="2157" y="1990"/>    
+    <position height="112" width="232" x="2157" y="1378"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="17" corner="BOTTOM_RIGHT" language="java" name="vn.edu.fpt.capstone.busReservation.dao.PaymentDAO" 
     project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/dao/PaymentDAO.java" binary="false">    
-    <position height="78" width="201" x="41" y="1990"/>    
+    <position height="78" width="201" x="41" y="1378"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="18" corner="BOTTOM_RIGHT" language="java" 
     name="vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo.Ticket" project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/displayModel/ReservationInfo.java" 
     binary="false">    
-    <position height="911" width="219" x="2819" y="1990"/>    
+    <position height="639" width="219" x="2819" y="1378"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <class id="19" corner="BOTTOM_RIGHT" language="java" 
     name="vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo" project="bus-reservation" 
     file="/bus-reservation/src/main/java/vn/edu/fpt/capstone/busReservation/displayModel/ReservationInfo.java" 
     binary="false">    
-    <position height="1081" width="223" x="2815" y="869"/>    
+    <position height="809" width="223" x="2815" y="529"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
+      <attributes public="true" package="true" protected="true" private="false"/>      
+      <operations public="true" package="true" protected="true" private="false"/>    
     </display>  
   </class>  
   <association id="20">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="21" name="seatPositionDAO"/>      
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="21" name="paymentMethodDAO"/>      
       <multiplicity id="22" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
+    <end type="TARGET" refId="15" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="23">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="24" name="reservationLogic"/>      
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="24" name="busStatusDAO"/>      
       <multiplicity id="25" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="26">    
-    <bendpoint x="693" y="869"/>    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="27" name="userDAO"/>      
-      <multiplicity id="28" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="29">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="30" name="paymentLogic"/>      
-      <multiplicity id="31" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="32">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="33" name="paymentLogic"/>      
-      <multiplicity id="34" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="35">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="36" name="ticketDAO"/>      
-      <multiplicity id="37" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="12" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="38">    
-    <end type="SOURCE" refId="19"/>    
-    <end type="TARGET" refId="18"/>  
-  </nesting>  
-  <association id="39">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="40" name="busStatusDAO"/>      
-      <multiplicity id="41" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="42">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="5"/>  
-  </nesting>  
-  <association id="43">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="44" name="reservationDAO"/>      
-      <multiplicity id="45" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="46">    
-    <end type="SOURCE" refId="19" navigable="false">      
-      <attribute id="47" name="tickets"/>      
-      <multiplicity id="48" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="18" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="49">    
+  <association id="26">    
     <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="50" name="systemSettingDAO"/>      
-      <multiplicity id="51" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="52">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="53" name="seatPositionDAO"/>      
-      <multiplicity id="54" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="55">    
-    <bendpoint x="2283" y="869"/>    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="56" name="tripDAO"/>      
-      <multiplicity id="57" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="58">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="59" name="tariffViewDAO"/>      
-      <multiplicity id="60" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="61">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="62" name="paymentDAO"/>      
-      <multiplicity id="63" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="64">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="65" name="userDAO"/>      
-      <multiplicity id="66" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="67">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="68" name="reservationDAO"/>      
-      <multiplicity id="69" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="70">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="71" name="tripDAO"/>      
-      <multiplicity id="72" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="73">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="74" name="reservationInfo"/>      
-      <multiplicity id="75" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="76">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="77" name="ticketDAO"/>      
-      <multiplicity id="78" minimum="0" maximum="1"/>    
+      <attribute id="27" name="ticketDAO"/>      
+      <multiplicity id="28" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="12" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="79">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="80" name="userDAO"/>      
-      <multiplicity id="81" minimum="0" maximum="1"/>    
+  <association id="29">    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="30" name="tickets"/>      
+      <multiplicity id="31" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
+    <end type="TARGET" refId="18" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="82">    
+  <association id="32">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="33" name="reservationDAO"/>      
+      <multiplicity id="34" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="35">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="36" name="seatPositionDAO"/>      
+      <multiplicity id="37" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="38">    
     <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="83" name="systemSettingDAO"/>      
-      <multiplicity id="84" minimum="0" maximum="1"/>    
+      <attribute id="39" name="systemSettingDAO"/>      
+      <multiplicity id="40" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="14" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <nesting id="41">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </nesting>  
+  <association id="42">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="43" name="tariffViewDAO"/>      
+      <multiplicity id="44" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="45">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="46" name="ticketDAO"/>      
+      <multiplicity id="47" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="48">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="49" name="tripDAO"/>      
+      <multiplicity id="50" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="51">    
+    <bendpoint x="693" y="529"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="52" name="userDAO"/>      
+      <multiplicity id="53" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="54">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="55" name="userDAO"/>      
+      <multiplicity id="56" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="57">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="58" name="userDAO"/>      
+      <multiplicity id="59" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="60">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="61" name="mailTemplateDAO"/>      
+      <multiplicity id="62" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="63">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="64" name="systemSettingDAO"/>      
+      <multiplicity id="65" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="66">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="67" name="paymentLogic"/>      
+      <multiplicity id="68" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="69">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="18"/>  
+  </nesting>  
+  <association id="70">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="71" name="reservationDAO"/>      
+      <multiplicity id="72" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="73">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="74" name="seatPositionDAO"/>      
+      <multiplicity id="75" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="76">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="77" name="reservationInfo"/>      
+      <multiplicity id="78" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="79">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="80" name="reservationLogic"/>      
+      <multiplicity id="81" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="82">    
+    <bendpoint x="2283" y="529"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="83" name="tripDAO"/>      
+      <multiplicity id="84" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <association id="85">    
-    <bendpoint x="714" y="869"/>    
+    <bendpoint x="714" y="529"/>    
     <end type="SOURCE" refId="1" navigable="false">      
       <attribute id="86" name="reservationDAO"/>      
       <multiplicity id="87" minimum="0" maximum="1"/>    
@@ -365,24 +365,24 @@
   </association>  
   <association id="88">    
     <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="89" name="mailTemplateDAO"/>      
+      <attribute id="89" name="paymentDAO"/>      
       <multiplicity id="90" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
+    <end type="TARGET" refId="17" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="91">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="92" name="paymentMethodDAO"/>      
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="92" name="paymentLogic"/>      
       <multiplicity id="93" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
+    <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     visibility="true">    
-    <attributes public="true" package="true" protected="true" private="true"/>    
+    <attributes public="true" package="true" protected="true" private="false"/>    
     <operations public="true" package="true" protected="true" private="true"/>  
   </classifier-display>  
-  <association-display labels="true" multiplicity="true"/>
+  <association-display labels="false" multiplicity="false"/>
 </class-diagram>

@@ -45,6 +45,14 @@ public class ReservationInfo implements Serializable {
     }
 
     /**
+     * 
+     */
+    public ReservationInfo(Locale locale) {
+        super();
+        this.locale = locale;
+    }
+
+    /**
      * @return the id
      */
     public int getId() {
