@@ -397,11 +397,6 @@ Date.prototype.toMyString = function () {
 				getAvailBus();
 				getArrivalTime();
 				checkButton();
-				var newDate = ev.date;
-				newDate.setDate(newDate.getDate() + 1);
-				$("#autoReturnDialogDepartureTimeDiv").datetimepicker("setDate", newDate);
-				$("#autoReturnDialogDepartureTimeDiv").datetimepicker("setStartDate", newDate);
-				getAutoArrivalTime();
 			});
 			
 			$("#autoReturnDialogDepartureTimeDiv").datetimepicker({
@@ -411,7 +406,7 @@ Date.prototype.toMyString = function () {
 				  minuteStep : 10
 	      }).on('changeDate', function(ev) {
 	    	     getAutoArrivalTime();
-	      });;
+	      });
 			
 			$("#tripDialogDepartureTimeDiv").datetimepicker("setDate", date);
 			
@@ -449,7 +444,8 @@ Date.prototype.toMyString = function () {
 		function getArrivalTime() {
 			var selectedRouteId = $("#routeId").val();
 			var departureTime = $("#tripDialogDepartureTime").val();
-			if (selectedRouteId != '-1' && departureTime != "") {$.ajax(
+			if (selectedRouteId != '-1' && departureTime != "") {
+		   $.ajax(
 				{
 				url : $('#contextPath')
 						.val()
@@ -459,6 +455,13 @@ Date.prototype.toMyString = function () {
 						+ selectedRouteId,
 				}).done(function(data) {
 					$("#tripDialogArrivalTime").val(data.arrivalTime);
+					var tempData = data.arrivalTime.split(" - "); 
+					var tempDate = tempData[1];
+					var date = tempDate.split("/");
+					var newDate = new Date(date[2], parseInt(date[1]) - 1, parseInt(date[0]) + 1);
+		         $("#autoReturnDialogDepartureTimeDiv").datetimepicker("setDate", newDate);
+		         $("#autoReturnDialogDepartureTimeDiv").datetimepicker("setStartDate", newDate);
+		         getAutoArrivalTime();
 				});
 			}
 		}
@@ -466,7 +469,8 @@ Date.prototype.toMyString = function () {
 		function getAutoArrivalTime() {
 	         var selectedRouteId = $("#routeId").val();
 	         var departureTime = $("#autoReturnDialogDepartureTime").val();
-	         if (selectedRouteId != '-1' && departureTime != "") {$.ajax(
+	         if (selectedRouteId != '-1' && departureTime != "") {
+	        	$.ajax(
 	            {
 	            url : $('#contextPath').val()
 	                  + "/schedule/getArrivalTime.html?departureTime="
