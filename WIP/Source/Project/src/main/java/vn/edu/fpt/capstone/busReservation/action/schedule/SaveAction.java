@@ -16,6 +16,7 @@ import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentTravelTimeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
@@ -32,6 +33,8 @@ public class SaveAction extends ActionSupport {
 	private String tripDialogDepartureTime;
 	private String message;
 	private int tripDialogBusPlate;
+	private String autoReturnBus;
+	private String autoReturnDepartureTime;
 
 	private BusDAO busDAO;
 	private RouteDAO routeDAO;
@@ -69,12 +72,52 @@ public class SaveAction extends ActionSupport {
 			if(!isUpdated){
 				addNewSchedule(fromDate, busBean, routeDetailsList);
 			}
+			
+			if("on".equals(autoReturnBus)){
+				Date fromDateReturn = FormatUtils.deFormatDate(autoReturnDepartureTime,
+						"hh:mm - dd/MM/yyyy", CommonConstant.LOCALE_US,
+						CommonConstant.DEFAULT_TIME_ZONE);
+				RouteBean reverseRoute = routeDAO.getById(routeDAO.getRouteTerminal(routeBeans).get(1));
+				List<RouteDetailsBean> reverseRouteDetails = reverseRoute.getRouteDetails();
+				addAutoReturnSchedule(fromDateReturn, busBean, reverseRouteDetails);
+			}
 
 		} catch (Exception ex) {
 			message = "Error! Please try again!";
 			ex.printStackTrace();
 		}
 		return SUCCESS;
+	}
+	
+	public void addAutoReturnSchedule(Date fromDate, BusBean busBean,
+			List<RouteDetailsBean> routeDetailsList) {
+		// list start date of each segment (required to get valid travel
+		// time of each segment)
+		long traTime = 0;
+		Date startDate = fromDate;
+		Date endDate = fromDate;
+		for (RouteDetailsBean routeDetailsBean : routeDetailsList) {
+			List<SegmentTravelTimeBean> segmentTravelTimeBeans = segmentTravelTimeDAO
+					.getExistDuration(routeDetailsBean.getSegment().getId(),
+							endDate);
+			if (segmentTravelTimeBeans.size() != 0) {
+				traTime += segmentTravelTimeBeans.get(0).getTravelTime();
+				endDate = new Date(endDate.getTime() + traTime);
+			} else {
+				message = "Cannot get segment travel time of segment "
+						+ routeDetailsBean.getSegment().getId();
+			}
+		}
+
+		BusStatusBean busStatusBean = new BusStatusBean();
+		busStatusBean.setBus(busBean);
+		busStatusBean.setBusStatus("return");
+		busStatusBean.setFromDate(startDate);
+		busStatusBean.setToDate(endDate);
+		busStatusBean.setStatus("active");
+		busStatusBean.setEndStation(routeDetailsList
+				.get(routeDetailsList.size() - 1).getSegment().getEndAt());
+		busStatusDAO.insert(busStatusBean);
 	}
 
 	public void addNewSchedule(Date fromDate, BusBean busBean, List<RouteDetailsBean> routeDetailsList) {
@@ -142,6 +185,14 @@ public class SaveAction extends ActionSupport {
 		}
 	}
 
+	public void setAutoReturnBus(String autoReturnBus) {
+		this.autoReturnBus = autoReturnBus;
+	}
+	
+	public void setAutoReturnDepartureTime(String autoReturnDepartureTime) {
+		this.autoReturnDepartureTime = autoReturnDepartureTime;
+	}
+
 	public void setSegmentTravelTimeDAO(
 			SegmentTravelTimeDAO segmentTravelTimeDAO) {
 		this.segmentTravelTimeDAO = segmentTravelTimeDAO;
@@ -182,4 +233,5 @@ public class SaveAction extends ActionSupport {
 	public String getMessage() {
 		return message;
 	}
+
 }

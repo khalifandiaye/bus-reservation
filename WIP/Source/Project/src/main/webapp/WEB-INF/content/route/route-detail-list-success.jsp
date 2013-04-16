@@ -462,11 +462,9 @@ Date.prototype.toMyString = function () {
 		
 		$("#tripDialogBusType").change(function(){
 			getAvailBus();
-	      /* checkButton(); */
 	   });
 		
 		$("#tripDialogBusPlate").change(function(){
-	      /* checkButton();  */
       });
 		
 /* 		$('#cancelAdd').bind('click', function() {
@@ -480,7 +478,9 @@ Date.prototype.toMyString = function () {
 		$('#editRoute').bind('click', function(event){
 			$("#editBusDialog").modal();
 		});
-				$('#addNewSchedule').bind('click',
+		
+		
+		$('#addNewSchedule').bind('click',
 			function(event) {
 				var selectedRouteId = $("#routeId").val();
 				$("#routeBeans").val(selectedRouteId);
@@ -665,7 +665,8 @@ Date.prototype.toMyString = function () {
 					$("#busDetailDialog").modal();
 				}
 			});
-			
+
+			/* 			
 			$.ajax({
 	            type : "GET",
 	            url : 'getPreAssignableBus.html?busType=' + busType + "&routeId=" + routeId,
@@ -683,7 +684,7 @@ Date.prototype.toMyString = function () {
 	            error : function() {
 	               alert("Get assignable bus failed!");
 	            }
-	        });
+	        }); */
 			
 		});
 
@@ -725,6 +726,13 @@ Date.prototype.toMyString = function () {
 	      } 
 		});
 
+		$("#autoReturnBus").bind('click', function(){
+			if($('#autoReturnBus').is(':checked')){
+				$('#autoReturnDiv').show();
+			} else{
+				$('#autoReturnDiv').hide();
+			}
+		});
 		$("#busDetailSave").click(
 			function() {
 				var routeId = $("#routeId").val();
@@ -1238,7 +1246,8 @@ Date.prototype.toMyString = function () {
          <button id="editRouteSave" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Save</button>
       </div>
    </div>
-      <!-- Modal add new schedule-->
+   
+   <!-- Modal add new schedule-->
    <div id="CreateScheduleDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true">
       <form id="addNewTripForm" action="save.html" method="POST">
@@ -1270,9 +1279,21 @@ Date.prototype.toMyString = function () {
             </div>
             <div id="tripDialogStatus"></div>
          </div>
-<!--          <div>
-         	<label id="addScheduleError" style="color: red; margin-left: 15px;"></label>
-         </div> -->
+         <div>
+         	<input type="checkbox" id="autoReturnBus" name="autoReturnBus" style="margin-left: 15px; margin-top: -14px;"/> Set auto-return to start station.
+         	<div id="autoReturnDiv" style="display:none;">
+         		<label for="autoReturnDialogDepartureTimeDiv">From Date: </label>
+		            <div id="autoReturnDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
+		               <input id="autoReturnDialogDepartureTime" size="16" type="text" value="" readonly
+		                  name="autoReturnDepartureTime"><span
+		                  class="add-on"><i class="icon-calendar"></i></span>
+		         	</div>
+	         	<label for="autoReturnpDialogArrivalTimeDiv">To Date: </label>
+		            <div id="autoReturnDialogArrivalTimeDiv" class="input-append date form_datetime" data-date="">
+		               <input id="autoReturnDialogArrivalTime" size="16" type="text" value="" readonly>
+		            </div>
+         </div>
+		
          <div class="modal-footer">
             <button type="button" class="btn" id="cancelAdd" data-dismiss="modal" aria-hidden="true">Cancel</button> 
             <input disabled="disabled" type="button" id="addNewSchedule" class="btn btn-primary" value='Save changes' />
