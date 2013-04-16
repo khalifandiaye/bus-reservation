@@ -666,8 +666,7 @@ Date.prototype.toMyString = function () {
 	            url : 'getPreAssignableBus.html?busType=' + busType + "&routeId=" + routeId,
 	            contentType : "application/x-www-form-urlencoded; charset=utf-8",
 	            success : function(response) {
-	            	
-	               if((response.isAssignable == false) || response.message ==""){
+	               if((!response.isAssignable) || response.message ==""){
 	            	   $("#addBusError").html(response.message);
 	            	   $("#busDetailbusPlate").attr("disabled","disabled");
 	            	   $("#busDetailAdd").removeClass("btn-primary");
