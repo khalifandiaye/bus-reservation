@@ -67,8 +67,10 @@
       duration = parseInt(duration.replace(":",""), 10);
 
       if(startAt != -1 && endAt != -1 && duration != '' && duration >= parseInt('100', 10)){
-         $("#add").removeAttr("disabled"); 
+    	  $("#add").addClass("btn-primary");
+    	  $("#add").removeAttr("disabled"); 
       } else { 
+    	 $("#add").removeClass('btn-primary');
          $("#add").attr("disabled","disabled");
       }
    }
@@ -141,8 +143,10 @@
       });
       
       $("#add").bind('click', function() {
-            if (giCount == 6) {
+            if (giCount == 5) {
                $("#errorMessage").text("Maximum segment added!");
+               $("#add").removeClass('btn-primary');
+               $("#add").attr("disabled","disabled");
                return;
             }
             
@@ -178,11 +182,6 @@
                     [ startAt + ' - ' + stationStartAt,
                       endAt + ' - ' + stationEndAt, 
                       duration ]);
-            /* $("#manageSegmentTable tr button[data-id="+ startAtKey + "]").click(
-               function(){
-            	   deleteSegment(this);
-            	}
-            ); */
             
             giCount++;
 
@@ -209,6 +208,7 @@
 
      $("#editRouteSave").bind('click', 
           function() {
+    	      $("#editRouteSave").attr("disabled","disabled");
     	      newInfo['routeId'] = $("#routeId").val();
     	      newInfo['segments'] = newSegments;
                            
@@ -508,14 +508,6 @@ Date.prototype.toMyString = function () {
 		$("#tripDialogBusPlate").change(function(){
       });
 		
-/* 		$('#cancelAdd').bind('click', function() {
-			$("#tripDialogRoutes").val(-1);
-			$("#tripDialogDepartureTime").val('');
-			$("#tripDialogArrivalTime").val('');
-			$('#tripDialogBusPlate').val('');
-			$('#CreateScheduleDialog').modal('hide');
-		}); */
-
 		$('#editRoute').bind('click', function(event){
 			$("#editBusDialog").modal();
 		});
@@ -1225,10 +1217,12 @@ Date.prototype.toMyString = function () {
    <!-- Modal Show Edit Route -->
    <div id="editBusDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
       aria-hidden="true">
+      
       <div class="modal-header">
          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
          <h3 id="editBusDialogLabel">List Bus In Route</h3>
       </div>
+      <label style="color: red;margin-left: 42px;margin-top: 10px;" id="errorMessage"></label>
       <div class="modal-body">
          <div class="post" style="margin: 0px auto; width: 95%;">
             <table>
@@ -1237,13 +1231,13 @@ Date.prototype.toMyString = function () {
                      headerValue="--- Select Route ---" list="cityBeans"
                      name="routeBeans" listKey="id" listValue="name"></s:select><select
                   id="stationStartAt" headerKey="-1"
-                  headerValue="--- Select Start Station ---" style="margin-top:10px;"></select></td>
+                  headerValue="--- Select Start Station ---" ></select></td>
                <td><s:select id="endAt" headerKey="-1"
                      headerValue="--- Select Route ---" list="cityBeans"
                      name="routeBeans" listKey="id" listValue="name">
                      </s:select><select
                   id="stationEndAt" headerKey="-1"
-                  headerValue="--- Select End Station ---" style="margin-top:10px;"></select></td>
+                  headerValue="--- Select End Station ---" ></select></td>
                <td><input type="text" id="duration" value="01:00"/></td>
                <td><input class="btn btn-primary" type="button" id="add" value="Add" disabled="disabled" 
                   style="margin: 10px 0 20px 10px; width: 75px; height: 30px"/>

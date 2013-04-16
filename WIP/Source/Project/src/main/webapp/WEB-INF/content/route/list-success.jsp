@@ -98,6 +98,7 @@
       $('#addRoute').bind('click', function(event) {
     	  $(".alert.fade.in").hide();
     	   giCount = 0;
+    	   $("#routeAddDialogOk").removeClass('btn-primary');
     	   $("#routeAddDialogOk").attr("disabled","disabled"); 
     	   segmentTable.dataTable().fnClearTable();
     	   $("#startAt").prop("disabled", false);
@@ -183,8 +184,9 @@
                $("#add").attr("disabled","disabled");
                return;
     	      }
-    	      
-    	    	$("#routeAddDialogOk").removeAttr("disabled");  
+    	    
+    	    $("#routeAddDialogOk").addClass("btn-primary");
+    	    $("#routeAddDialogOk").removeAttr("disabled");  
 
             var startAtKey = $("#startAt").val();
             var stationStartAtKey = $("#stationStartAt").val();
@@ -243,6 +245,7 @@
 
      $("#routeAddDialogOk").bind('click', 
     		 function() {
+    	 	$("#routeAddDialogOk").attr("disabled","disabled");
             info['segments'] = segments;
                            
             $.ajax({
@@ -253,7 +256,7 @@
                   data : JSON.stringify(info)
                },
                success : function(response) {
-              	   $('#addRouteDialog').modal('hide');
+              	  $('#addRouteDialog').modal('hide');
                   $("#saveSuccessDialogLabeMessage").html(response);
                   $("#saveSuccess").modal();
                },
@@ -414,27 +417,6 @@
       </div>
    </div>
 	
-<!-- Modal PreUpdateTariffCheck -->
-<div id="preUpdateTariff" class="modal hide fade" tabindex="-1"
-   role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-   <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal"
-         aria-hidden="true">×</button>
-      <h3 id="preUpdateTariffDialogLabel">Message</h3>
-   </div>
-   <div class="modal-body">
-      <p> The folowing route(s) may have been changed when you update the this Tariff: </p>
-      <p id="preUpdateTariffDialogLabeMessage"></p>
-      <p> Do you want to continue? </p>
-   </div>
-   <div class="modal-footer">
-      <button class="btn" id="preUpdateTariffDialogCancel" data-dismiss="modal"
-         aria-hidden="true">Cancel</button>
-      <button class="btn" id="preUpdateTariffDialogOk" data-dismiss="modal"
-         aria-hidden="true">Ok</button>
-   </div>
-</div>
-
 <input id="routeId" value="" type="hidden" />
 <jsp:include page="../common/footer.jsp" />
 </body>
