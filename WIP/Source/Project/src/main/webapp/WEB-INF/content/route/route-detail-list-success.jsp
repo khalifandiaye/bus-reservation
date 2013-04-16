@@ -397,11 +397,32 @@ Date.prototype.toMyString = function () {
 				getAvailBus();
 				getArrivalTime();
 				checkButton();
+				var newDate = ev.date;
+				newDate.setDate(newDate.getDate() + 1);
+				$("#autoReturnDialogDepartureTimeDiv").datetimepicker("setDate", newDate);
+				$("#autoReturnDialogDepartureTimeDiv").datetimepicker("setStartDate", newDate);
+				getAutoArrivalTime();
 			});
 			
+			$("#autoReturnDialogDepartureTimeDiv").datetimepicker({
+				  format : "hh:ii - dd/mm/yyyy",
+				  autoclose : true,
+				  startDate : date,
+				  minuteStep : 10
+	      }).on('changeDate', function(ev) {
+	    	     getAutoArrivalTime();
+	      });;
+			
 			$("#tripDialogDepartureTimeDiv").datetimepicker("setDate", date);
+			
+			var d = date;
+         d.setDate(d.getDate() + 1);
+			$("#autoReturnDialogDepartureTimeDiv").datetimepicker("setDate", d);
+			$("#autoReturnDialogDepartureTimeDiv").datetimepicker("setStartDate", d);
+			
 			getArrivalTime();
 			getAvailBus();
+			getAutoArrivalTime();
 		});
 
 		function getAvailBus() {
@@ -441,6 +462,22 @@ Date.prototype.toMyString = function () {
 				});
 			}
 		}
+		
+		function getAutoArrivalTime() {
+	         var selectedRouteId = $("#routeId").val();
+	         var departureTime = $("#autoReturnDialogDepartureTime").val();
+	         if (selectedRouteId != '-1' && departureTime != "") {$.ajax(
+	            {
+	            url : $('#contextPath').val()
+	                  + "/schedule/getArrivalTime.html?departureTime="
+	                  + departureTime
+	                  + "&routeId="
+	                  + selectedRouteId,
+	            }).done(function(data) {
+	               $("#autoReturnDialogArrivalTime").val(data.arrivalTime);
+	            });
+	         }
+	    }
 		   
 		function checkButton(){
             var departureTime = $("#tripDialogDepartureTime").val();
@@ -559,13 +596,13 @@ Date.prototype.toMyString = function () {
 		});
 
 		$("#validDateDiv").datetimepicker({
-			format : "yyyy/mm/dd - hh:ii",
+			format : "hh:ii - dd/mm/yyyy",
 			autoclose : true,
 			todayBtn : true,
 			startDate : new Date(),
 			minuteStep : 10
 		});
-
+		
 		$("#editPriceSave").bind('click',function() {
 			info = {};
 			var tariffs = [];
@@ -725,7 +762,8 @@ Date.prototype.toMyString = function () {
 	         $("#busDetailAdd").attr("disabled","disabled");
 	      } 
 		});
-
+		
+		$("#autoReturnBus").attr("checked", false);
 		$("#autoReturnBus").bind('click', function(){
 			if($('#autoReturnBus').is(':checked')){
 				$('#autoReturnDiv').show();
@@ -733,6 +771,7 @@ Date.prototype.toMyString = function () {
 				$('#autoReturnDiv').hide();
 			}
 		});
+		
 		$("#busDetailSave").click(
 			function() {
 				var routeId = $("#routeId").val();
@@ -1278,22 +1317,21 @@ Date.prototype.toMyString = function () {
                   name='tripDialogBusPlate'></select>
             </div>
             <div id="tripDialogStatus"></div>
+            <div>
+            <input style="margin-top: -3px;" type="checkbox" id="autoReturnBus" name="autoReturnBus"/> Set auto-return to start station.
+            <div id="autoReturnDiv" style="display: none;">
+               <label for="autoReturnDialogDepartureTimeDiv">From Date: </label>
+               <div id="autoReturnDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
+                  <input id="autoReturnDialogDepartureTime" size="16" type="text" value="" readonly
+                     name="autoReturnDepartureTime"><span class="add-on"><i class="icon-calendar"></i></span>
+               </div>
+               <label for="autoReturnpDialogArrivalTimeDiv">To Date: </label>
+               <div id="autoReturnDialogArrivalTimeDiv" class="input-append date form_datetime" data-date="">
+                  <input id="autoReturnDialogArrivalTime" size="16" type="text" value="" readonly>
+               </div>
+            </div>
          </div>
-         <div>
-         	<input type="checkbox" id="autoReturnBus" name="autoReturnBus" style="margin-left: 15px; margin-top: -14px;"/> Set auto-return to start station.
-         	<div id="autoReturnDiv" style="display:none;">
-         		<label for="autoReturnDialogDepartureTimeDiv">From Date: </label>
-		            <div id="autoReturnDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
-		               <input id="autoReturnDialogDepartureTime" size="16" type="text" value="" readonly
-		                  name="autoReturnDepartureTime"><span
-		                  class="add-on"><i class="icon-calendar"></i></span>
-		         	</div>
-	         	<label for="autoReturnpDialogArrivalTimeDiv">To Date: </label>
-		            <div id="autoReturnDialogArrivalTimeDiv" class="input-append date form_datetime" data-date="">
-		               <input id="autoReturnDialogArrivalTime" size="16" type="text" value="" readonly>
-		            </div>
          </div>
-		
          <div class="modal-footer">
             <button type="button" class="btn" id="cancelAdd" data-dismiss="modal" aria-hidden="true">Cancel</button> 
             <input disabled="disabled" type="button" id="addNewSchedule" class="btn btn-primary" value='Save changes' />
