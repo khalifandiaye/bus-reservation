@@ -13,15 +13,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
-import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
-import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SegmentDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SegmentTravelTimeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.StationDAO;
-import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
-import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
@@ -49,8 +45,6 @@ public class UpdateSegmentAction extends BaseAction {
 	private RouteDAO routeDAO;
 	private RouteDetailsDAO routeDetailsDAO;
 	private SegmentTravelTimeDAO segmentTravelTimeDAO;
-	private BusDAO busDAO;
-	private BusStatusDAO busStatusDAO;
 
 	private String message = "New Route saved successfully!";
 
@@ -221,14 +215,6 @@ public class UpdateSegmentAction extends BaseAction {
 			routeDetailsBean.setRoute(routeBeanReturn);
 			routeDetailsDAO.insert(routeDetailsBean);
 		}
-	}
-
-	public void setBusStatusDAO(BusStatusDAO busStatusDAO) {
-		this.busStatusDAO = busStatusDAO;
-	}
-
-	public void setBusDAO(BusDAO busDAO) {
-		this.busDAO = busDAO;
 	}
 
 	public void setSegmentTravelTimeDAO(

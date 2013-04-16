@@ -230,6 +230,8 @@
             	   $("#saveSuccess").text("Save new route failed!");
                }
             });
+            
+            
          });
      
      $('#saveSuccessDialogOk').click(function() {
