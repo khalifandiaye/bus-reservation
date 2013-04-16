@@ -11,7 +11,7 @@ import vn.edu.fpt.capstone.busReservation.logic.UserLogic;
  * @author Yoshimi
  * 
  */
-public class Reg01021 extends BaseAction {
+public class Reg01021Action extends BaseAction {
 
     /**
      * 
