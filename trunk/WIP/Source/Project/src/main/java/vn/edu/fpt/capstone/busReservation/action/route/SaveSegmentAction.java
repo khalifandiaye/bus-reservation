@@ -173,6 +173,9 @@ public class SaveSegmentAction extends BaseAction {
 				segmentTravelTimeBean.setValidFrom(Calendar.getInstance()
 						.getTime());
 				segmentTravelTimeDAO.insert(segmentTravelTimeBean);
+				
+				//add initiation tariff for this segment.
+				
 
 			} else {
 				if (i == 0) {
