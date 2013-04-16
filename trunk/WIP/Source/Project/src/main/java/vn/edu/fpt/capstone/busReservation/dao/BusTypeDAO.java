@@ -37,12 +37,21 @@ public class BusTypeDAO extends GenericDAO<Integer, BusTypeBean>{
 		Session session = sessionFactory.getCurrentSession();
 		Transaction tx = session.beginTransaction();
 		try {
-			String queryString = "SELECT bt.* FROM " +
-               "( SELECT rd.route_id AS id, t.bus_type_id AS bus_type_id " +
-               "FROM route_details rd LEFT JOIN tariff t ON rd.segment_id = t.segment_id " +
-               "GROUP BY rd.route_id, t.bus_type_id HAVING rd.route_id = :routeId ) " +
-               "AS bir LEFT JOIN bus_type bt " +
-               "ON bir.bus_type_id = bt.id";
+			String queryString = " SELECT bty.* " +
+								 " FROM bus_type bty " +
+								 " 	 INNER JOIN tariff trf ON bty.id = trf.bus_type_id " +
+								 "	 INNER JOIN route_details rdt ON rdt.segment_id = trf.segment_id " +
+								 " WHERE rdt.route_id = :routeId " +
+								 " GROUP BY bty.id " +
+								 " HAVING COUNT(DISTINCT trf.segment_id) = (SELECT COUNT(rou.segment_id) " + 
+								 "							 			    FROM route_details rou " +
+								 "										    WHERE rou.route_id = :routeId) ";
+//			String queryString = "SELECT bt.* FROM " +
+				//               "( SELECT rd.route_id AS id, t.bus_type_id AS bus_type_id " +
+				//               "FROM route_details rd LEFT JOIN tariff t ON rd.segment_id = t.segment_id " +
+				//               "GROUP BY rd.route_id, t.bus_type_id HAVING rd.route_id = :routeId ) " +
+				//               "AS bir LEFT JOIN bus_type bt " +
+				//               "ON bir.bus_type_id = bt.id";
 			Query query = session.createSQLQuery(queryString);
 			query.setParameter("routeId", routeId);
 			result = query.list();

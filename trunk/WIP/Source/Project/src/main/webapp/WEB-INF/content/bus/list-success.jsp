@@ -51,6 +51,7 @@
 		   var plateNumber = $('#plateNumber').val();
 		   var busType = $('#busType').val();
 		   if (plateNumber.trim() == '' || busType == -1) {
+			   $('#addResult').text("Please enter bus plate number! ");
 			   return;
 		   }
             $.ajax({
@@ -175,9 +176,10 @@
 						<tr>
 							<td>
 							  Plate Number : <input type="text" id="plateNumber"
-								name="plateNumber" value="">
+								name="plateNumber" value=""> <span style="color: red;"><strong>&nbsp;*</strong> </span> <br/>
+								<p id="addResult" style="color: red; "></p>
 							</td>
-							<td>
+							<td style="vertical-align: top;">
 							  Select Bus Type : <s:select id="busType" list="busTypeBeans"
 									name="busTypeBeans" listKey="id" listValue="name" />
 						   </td>
@@ -186,7 +188,7 @@
 				</table>
 			</form>
 		</div>
-		<p id="addResult" style="color: red; margin-left: 16px;"></p>
+		
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 			<button id="busAddDialogOk" class="btn btn-primary" >Save</button>
