@@ -23,7 +23,7 @@
 				<legend>
 					<s:text name="reservationInfo" />
 					<img id="btnPrint" class="click-able" src="<%=request.getContextPath()%>/images/print.png" alt="<s:text name="label.print" />" style="margin-left: 40px;"/>
-					<img id="btnPrintPDF" class="click-able" src="<%=request.getContextPath()%>/images/print-pdf.png" alt="<s:text name="label.print-pdf" />" style="margin-left:10px;"/>
+					<a href="<%=request.getContextPath()%>/rsv/rsv01030.html"><img id="btnPrintPDF" class="click-able" src="<%=request.getContextPath()%>/images/print-pdf.png" alt="<s:text name="label.print-pdf" />" style="margin-left:10px;"/></a>
 				</legend>
 				<div class="general-info">
 					<div class="item">

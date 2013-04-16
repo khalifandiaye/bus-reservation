@@ -18,8 +18,12 @@ import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
  */
 public class ReservationInfoXMLReader extends AbstractObjectReader {
 
-    /* (non-Javadoc)
-     * @see vn.edu.fpt.capstone.busReservation.util.xml.AbstractObjectReader#parse(org.xml.sax.InputSource)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * vn.edu.fpt.capstone.busReservation.util.xml.AbstractObjectReader#parse
+     * (org.xml.sax.InputSource)
      */
     @Override
     public void parse(InputSource input) throws IOException, SAXException {
@@ -33,8 +37,11 @@ public class ReservationInfoXMLReader extends AbstractObjectReader {
 
     /**
      * Starts parsing the ReservationInfo object.
-     * @param reservationInfo The object to parse
-     * @throws SAXException In case of a problem during SAX event generation
+     * 
+     * @param reservationInfo
+     *            The object to parse
+     * @throws SAXException
+     *             In case of a problem during SAX event generation
      */
     public void parse(ReservationInfo reservationInfo) throws SAXException {
         if (reservationInfo == null) {
@@ -57,8 +64,11 @@ public class ReservationInfoXMLReader extends AbstractObjectReader {
 
     /**
      * Generates SAX events for a ReservationInfo object.
-     * @param reservationInfo ReservationInfo object to use
-     * @throws SAXException In case of a problem during SAX event generation
+     * 
+     * @param reservationInfo
+     *            ReservationInfo object to use
+     * @throws SAXException
+     *             In case of a problem during SAX event generation
      */
     protected void generateFor(ReservationInfo reservationInfo)
             throws SAXException {
@@ -84,8 +94,10 @@ public class ReservationInfoXMLReader extends AbstractObjectReader {
         handler.element("totalAmount", reservationInfo.getTotalAmount());
         handler.element("totalAmountInUSD",
                 reservationInfo.getTotalAmountInUSD());
-        if (reservationInfo.getRefundedAmountValue() > 0) {
-            handler.element("refundedAmount", reservationInfo.getRefundedAmount());
+        if (reservationInfo.getRefundedAmountValue() != null
+                && reservationInfo.getRefundedAmountValue() > 0) {
+            handler.element("refundedAmount",
+                    reservationInfo.getRefundedAmount());
             handler.element("refundedAmountInUSD",
                     reservationInfo.getRefundedAmountInUSD());
         }
