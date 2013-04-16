@@ -34,10 +34,10 @@ public class PreAssignableBusAction extends BaseAction {
 		int routeReturnId = routeDAO.getRouteTerminal(routeId).get(1);
 
 		if(!isHasTariff(routeId, busType)){
-			message = "Please add tariff for current date before assign bus! ";
+			message = "Please add tariff for this type of bus in current date before assign bus! ";
 		}
 		else if (!isHasTariff(routeReturnId, busType)){
-			message = "Please add tariff of returned route for current time before assign bus! ";
+			message = "Please add tariff of returned route for this type of bus in current time before assign bus! ";
 		} else {
 			isAssignable = true;
 		}
