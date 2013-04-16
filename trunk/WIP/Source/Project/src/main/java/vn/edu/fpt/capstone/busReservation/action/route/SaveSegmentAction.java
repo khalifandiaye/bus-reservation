@@ -1,9 +1,12 @@
 package vn.edu.fpt.capstone.busReservation.action.route;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -30,7 +33,9 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentAddInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentInfo;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.DateUtils;
+import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
 @ParentPackage("jsonPackage")
 public class SaveSegmentAction extends BaseAction {
@@ -184,6 +189,11 @@ public class SaveSegmentAction extends BaseAction {
 				segmentTravelTimeBean.setValidFrom(Calendar.getInstance().getTime());
 				segmentTravelTimeDAO.insert(segmentTravelTimeBean);
 				
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+				String date = dateFormat.format(Calendar.getInstance().getTime());
+				Date validDate = FormatUtils.deFormatDate(date,
+						"yyyy/MM/dd", CommonConstant.LOCALE_US,
+						CommonConstant.DEFAULT_TIME_ZONE);
 				List<TariffBean> tariffBeans = new ArrayList<TariffBean>();
 				//add initiation tariff for this segment.
 				for (BusTypeBean busTypeBean : busTypeBeans) {
@@ -191,7 +201,7 @@ public class SaveSegmentAction extends BaseAction {
 					tariffBean.setSegment(segmentBean);
 					tariffBean.setBusType(busTypeBean);
 					tariffBean.setFare(price);
-					tariffBean.setValidFrom(Calendar.getInstance().getTime());
+					tariffBean.setValidFrom(validDate);
 					tariffBeans.add(tariffBean);
 				}
 				tariffDAO.insert(tariffBeans);

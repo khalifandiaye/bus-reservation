@@ -1,9 +1,12 @@
 package vn.edu.fpt.capstone.busReservation.action.route;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.struts2.convention.annotation.Action;
@@ -13,19 +16,26 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
+import vn.edu.fpt.capstone.busReservation.dao.BusTypeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SegmentDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SegmentTravelTimeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.StationDAO;
+import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
+import vn.edu.fpt.capstone.busReservation.dao.TariffDAO;
+import vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentTravelTimeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentAddInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentInfo;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.DateUtils;
+import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
 
 @ParentPackage("jsonPackage")
 public class UpdateSegmentAction extends BaseAction {
@@ -45,6 +55,9 @@ public class UpdateSegmentAction extends BaseAction {
 	private RouteDAO routeDAO;
 	private RouteDetailsDAO routeDetailsDAO;
 	private SegmentTravelTimeDAO segmentTravelTimeDAO;
+	private BusTypeDAO busTypeDAO;
+	private TariffDAO tariffDAO;
+	private SystemSettingDAO systemSettingDAO;
 
 	private String message = "New Route saved successfully!";
 
@@ -135,6 +148,8 @@ public class UpdateSegmentAction extends BaseAction {
 	}
 
 	private void updateSegment(List<SegmentInfo> segmentInfos, boolean isReturnRoute, int routeId) throws ParseException {
+		List<BusTypeBean> busTypeBeans = busTypeDAO.getAll();
+		Double price = Double.parseDouble(systemSettingDAO.getSegmentDefaultPrice().toString());
 		String routeName = "";
 		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
 
@@ -192,6 +207,24 @@ public class UpdateSegmentAction extends BaseAction {
 				segmentTravelTimeBean.setValidFrom(Calendar.getInstance()
 						.getTime());
 				segmentTravelTimeDAO.insert(segmentTravelTimeBean);
+				
+				List<TariffBean> tariffBeans = new ArrayList<TariffBean>();
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+				String date = dateFormat.format(Calendar.getInstance().getTime());
+				Date validDate = FormatUtils.deFormatDate(date,
+						"yyyy/MM/dd", CommonConstant.LOCALE_US,
+						CommonConstant.DEFAULT_TIME_ZONE);
+				//add initiation tariff for this segment.
+				for (BusTypeBean busTypeBean : busTypeBeans) {
+					TariffBean tariffBean = new TariffBean();
+					tariffBean.setSegment(segmentBean);
+					tariffBean.setBusType(busTypeBean);
+					tariffBean.setFare(price);
+					tariffBean.setValidFrom(validDate);
+					tariffBeans.add(tariffBean);
+				}
+				tariffDAO.insert(tariffBeans);
+				
 			} else {
 				if (i == 0) {
 					routeName += duplicatedSegmentBeans.get(0).getStartAt().getCity().getName();
@@ -217,6 +250,18 @@ public class UpdateSegmentAction extends BaseAction {
 		}
 	}
 
+	public void setTariffDAO(TariffDAO tariffDAO) {
+		this.tariffDAO = tariffDAO;
+	}
+
+	public void setSystemSettingDAO(SystemSettingDAO systemSettingDAO) {
+		this.systemSettingDAO = systemSettingDAO;
+	}
+
+	public void setBusTypeDAO(BusTypeDAO busTypeDAO) {
+		this.busTypeDAO = busTypeDAO;
+	}
+	
 	public void setSegmentTravelTimeDAO(
 			SegmentTravelTimeDAO segmentTravelTimeDAO) {
 		this.segmentTravelTimeDAO = segmentTravelTimeDAO;
