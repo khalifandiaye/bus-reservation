@@ -58,6 +58,32 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
 	}
 
 	/**
+	 * Common database exception handling
+	 * 
+	 * @param e
+	 *            the occurred exception
+	 * @throws HibernateException
+	 *             the occurred exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<BusStatusBean> getInitiationTrips(BusBean busBean) {
+		String hql = "SELECT bs FROM BusStatusBean bs WHERE bs.bus = :busBean "
+				+ "AND bs.busStatus == :busStatus ORDER BY bs.fromDate DESC";
+		Session session = sessionFactory.getCurrentSession();
+		List<BusStatusBean> result = new ArrayList<BusStatusBean>();
+		try {
+			// must have to start any transaction
+			Query query = session.createQuery(hql);
+			query.setParameter("busBean", busBean);
+			query.setParameter("busStatus", "initiation");
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
+	}
+	
+	/**
 	 * Common database exception handling Get all scheduled trip from (toDate)
 	 * to future that has status is maintain or ontrip
 	 * 

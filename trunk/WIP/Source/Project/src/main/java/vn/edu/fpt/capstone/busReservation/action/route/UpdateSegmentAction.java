@@ -13,11 +13,15 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
+import vn.edu.fpt.capstone.busReservation.dao.BusDAO;
+import vn.edu.fpt.capstone.busReservation.dao.BusStatusDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SegmentDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SegmentTravelTimeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.StationDAO;
+import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
@@ -45,6 +49,8 @@ public class UpdateSegmentAction extends BaseAction {
 	private RouteDAO routeDAO;
 	private RouteDetailsDAO routeDetailsDAO;
 	private SegmentTravelTimeDAO segmentTravelTimeDAO;
+	private BusDAO busDAO;
+	private BusStatusDAO busStatusDAO;
 
 	private String message = "New Route saved successfully!";
 
@@ -94,11 +100,23 @@ public class UpdateSegmentAction extends BaseAction {
 						routeBeans.add(routeDAO.getById(routeDAO
 								.getRouteTerminal(routeBeans.get(0).getId())
 								.get(1)));
-
+						
 						for (RouteBean routeBean : routeBeans) {
 							routeBean.setStatus("active");
 						}
+						
+						RouteBean currentRouteForward = routeDAO.getById(routeId);
+						currentRouteForward.setStatus("inactive");
+						RouteBean currentRouteReturn = routeDAO.getById(terminalRouteId);
+						currentRouteReturn.setStatus("inactive");
+						
+						routeBeans.add(currentRouteReturn);
+						routeBeans.add(currentRouteForward);
+						
 						routeDAO.update(routeBeans);
+						
+
+						
 						message = "Existed route is re-activated successfully!";
 					}
 				} else {
@@ -112,9 +130,10 @@ public class UpdateSegmentAction extends BaseAction {
 				updateSegment(segmentInfosFoward, false, routeId);
 				Collections.reverse(segmentInfosFoward);
 				if (terminalRouteId != 0) {
-               updateSegment(segmentInfosFoward, true, terminalRouteId);
-            }
+					updateSegment(segmentInfosFoward, true, terminalRouteId);
+				}
 			}
+			
 		} catch (Exception e) {
 			message = "Error! Please contact admin!";
 		}
@@ -193,8 +212,8 @@ public class UpdateSegmentAction extends BaseAction {
 
 		RouteBean routeBeanReturn = routeDAO.getById(routeId);
 		routeBeanReturn.setName(routeName);
-      routeBeanReturn.setStatus("active");
-      routeDAO.update(routeBeanReturn);
+		routeBeanReturn.setStatus("active");
+		routeDAO.update(routeBeanReturn);
 
 		for (SegmentBean segmentBean : segmentBeans) {
 			RouteDetailsBean routeDetailsBean = new RouteDetailsBean();
@@ -202,6 +221,14 @@ public class UpdateSegmentAction extends BaseAction {
 			routeDetailsBean.setRoute(routeBeanReturn);
 			routeDetailsDAO.insert(routeDetailsBean);
 		}
+	}
+
+	public void setBusStatusDAO(BusStatusDAO busStatusDAO) {
+		this.busStatusDAO = busStatusDAO;
+	}
+
+	public void setBusDAO(BusDAO busDAO) {
+		this.busDAO = busDAO;
 	}
 
 	public void setSegmentTravelTimeDAO(

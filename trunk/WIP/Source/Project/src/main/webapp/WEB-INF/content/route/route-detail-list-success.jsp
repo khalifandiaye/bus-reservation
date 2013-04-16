@@ -671,6 +671,8 @@ Date.prototype.toMyString = function () {
 	            	   $("#busDetailbusPlate").attr("disabled","disabled");
 	            	   $("#busDetailAdd").removeClass("btn-primary");
 		               $("#busDetailAdd").attr("disabled","disabled");
+		               $("#busDetailSave").removeClass("btn-primary");
+		               $("#busDetailSave").attr("disabled","disabled");
 	               }
 	            },
 	            error : function() {
