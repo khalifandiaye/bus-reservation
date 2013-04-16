@@ -96,6 +96,7 @@
 	   var segmentTable = $('#segmentTable').dataTable({ bSort : false , bPaginate : false });
       	   
       $('#addRoute').bind('click', function(event) {
+    	  $(".alert.fade.in").hide();
     	   giCount = 0;
     	   $("#routeAddDialogOk").attr("disabled","disabled"); 
     	   segmentTable.dataTable().fnClearTable();
@@ -107,6 +108,7 @@
     	   $('#stationStartAt').empty();
     	   $('#stationEndAt').empty();
     	   $("#endAt option").show();
+    	   checkAdd();
     	   $("#addRouteDialog").modal();
       });
        
@@ -175,8 +177,10 @@
       });
       
       $("#add").bind('click', function() {
-    	      if (giCount == 6) {
-               $("#errorMessage").text("Maximum segment added!");
+    	      if (giCount == 5) {
+               $("#errorMessage").text("Sorry, you cannot add more than 5 segments per route.");
+               $(".alert.fade.in").show();
+               $("#add").attr("disabled","disabled");
                return;
     	      }
     	      
@@ -233,6 +237,8 @@
             segment['stationEndAt'] = stationEndAtKey;
             segment['duration'] = duration;
             segments.push(segment);
+            
+            checkAdd();
      });
 
      $("#routeAddDialogOk").bind('click', 
@@ -335,6 +341,9 @@
          <h3 id="routeAddDialogLabel">Add new route</h3>
       </div>
       <div class="modal-body">
+      	<div class="alert fade in" style="display:none;"><button type="button" class="close" data-dismiss="alert">×</button>
+				<span id="errorMessage"></span>
+			</div>
          <div class="post" style="margin: 0px auto; width: 95%;">
 				<table id="segmentTable">
             <thead>
@@ -342,6 +351,7 @@
                   <td>Start At</td>
                   <td>End At</td>
                   <td>Duration (hh:mm)</td>
+                  <td>Price (VND)</td>
                </tr>
             <thead>
             <tbody>
@@ -362,6 +372,7 @@
                <td><input class="btn btn-primary" type="button" id="add" value="Add" disabled="disabled" 
                   style="margin-top: 10px;;margin-bottom: 10px; margin-left: 10px; margin-right: 0; width: 75px;"/>
                </td>
+               <td><input id="<s:property value='id'/>" type="text" value="" maxlength="7" style="text-align: right;margin: 0" /> .000</td>
             </tr>
          </table>
       </div>

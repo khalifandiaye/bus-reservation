@@ -376,6 +376,7 @@ Date.prototype.toMyString = function () {
 		$('#busStatusInsertBtn').click(function() {
 			var date = new Date();
 			date.setDate(date.getDate() + 1);
+			//$(".alert.fade.in.schedule-error").hide();
 			$("#addNewSchedule").removeClass('btn-success');
 			$("#addNewSchedule").attr("disabled","disabled");
 			$('#tripDialogRoutes').val(-1);
@@ -450,8 +451,10 @@ Date.prototype.toMyString = function () {
             	$("#addScheduleError").text("");
             	addNewSchedule.addClass("btn-primary");
             	addNewSchedule.removeAttr("disabled"); 
+            	$("#schedule-error").hide();
             } else { 
             	$("#addScheduleError").text("There're no bus available at this time. Please select other time or click cancel!");
+            	$("#schedule-error").show();
             	addNewSchedule.removeClass('btn-primary');
             	addNewSchedule.attr("disabled","disabled");
             }
@@ -466,13 +469,13 @@ Date.prototype.toMyString = function () {
 	      /* checkButton();  */
       });
 		
-		$('#cancelAdd').bind('click', function() {
+/* 		$('#cancelAdd').bind('click', function() {
 			$("#tripDialogRoutes").val(-1);
 			$("#tripDialogDepartureTime").val('');
 			$("#tripDialogArrivalTime").val('');
 			$('#tripDialogBusPlate').val('');
 			$('#CreateScheduleDialog').modal('hide');
-		});
+		}); */
 
 		$('#editRoute').bind('click', function(event){
 			$("#editBusDialog").modal();
@@ -622,7 +625,7 @@ Date.prototype.toMyString = function () {
    					busDetailTable.dataTable().fnAddData([
    					   this.id,
    						this.plateNumber,
-   						'<button type="button" style="width: 56px !important; height: 24px !important;" data-id="'+ this.id +'" class="btn btn-danger">Delete</button>' ]);
+   						'<button type="button" data-id="'+ this.id +'" class="btn btn-danger btn-small">Delete</button>' ]);
    						$("#busDetailTable tr button[data-id="+ this.id+ "]").click(
    						function() {
    							$('#busDetailbusPlate').attr('disabled',false);
@@ -640,7 +643,7 @@ Date.prototype.toMyString = function () {
    		            busDetailTable.dataTable().fnAddData([
    		               this.id,
    		               this.plateNumber,
-   		               '<button type="button" style="width: 56px !important; height: 24px !important;" data-id="'+ this.id +'" disabled="disabled">Delete</button>' ]);
+   		               '<button type="button" data-id="'+ this.id +'" class="btn btn-small" disabled="disabled">Delete</button>' ]);
    		         };
    				});
 
@@ -1245,6 +1248,9 @@ Date.prototype.toMyString = function () {
             <h3 id="tripEditDialogLabel"></h3>
          </div>
          <div class="modal-body">
+         <div class="alert fade in" id="schedule-error" style="display:none;"><button type="button" class="close" data-dismiss="alert">×</button>
+         <label id="addScheduleError"></label>
+         </div>
             <label for="tripDialogDepartureTimeDiv">From Date: </label>
             <div id="tripDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
                <input id="tripDialogDepartureTime" size="16" type="text" value="" readonly
@@ -1264,11 +1270,11 @@ Date.prototype.toMyString = function () {
             </div>
             <div id="tripDialogStatus"></div>
          </div>
-         <div>
+<!--          <div>
          	<label id="addScheduleError" style="color: red; margin-left: 15px;"></label>
-         </div>
+         </div> -->
          <div class="modal-footer">
-            <button class="btn" id="cancelAdd" data-dismiss="modal" aria-hidden="true">Cancel</button> 
+            <button type="button" class="btn" id="cancelAdd" data-dismiss="modal" aria-hidden="true">Cancel</button> 
             <input disabled="disabled" type="button" id="addNewSchedule" class="btn btn-primary" value='Save changes' />
          </div>
       </form>

@@ -11,6 +11,9 @@ public class SegmentInfo implements Serializable {
 	private int endAt;
 	private String duration;
 	private Double price;
+	private Double price1;
+	private Double price2;
+
 	private int stationStartAt;
 	private int stationEndAt;
 	private String startAtName;
@@ -19,6 +22,22 @@ public class SegmentInfo implements Serializable {
 	private int id;
 	private String name;
 
+	public Double getPrice1() {
+		return price1;
+	}
+
+	public void setPrice1(Double price1) {
+		this.price1 = price1;
+	}
+
+	public Double getPrice2() {
+		return price2;
+	}
+
+	public void setPrice2(Double price2) {
+		this.price2 = price2;
+	}
+	
 	public int getStartAt() {
 		return startAt;
 	}

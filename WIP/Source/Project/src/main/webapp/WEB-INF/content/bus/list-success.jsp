@@ -175,8 +175,8 @@
 					<tbody>
 						<tr>
 							<td>
-							  Plate Number : <input type="text" id="plateNumber"
-								name="plateNumber" value=""> <span style="color: red;"><strong>&nbsp;*</strong> </span> <br/>
+							  Plate Number : <input type="text" id="plateNumber" name="plateNumber" value="">
+								<span style="color: red; font-size: 22px;">*</span>
 								<p id="addResult" style="color: red; "></p>
 							</td>
 							<td style="vertical-align: top;">
