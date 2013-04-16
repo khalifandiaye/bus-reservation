@@ -17,16 +17,6 @@ import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
 
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.stream.StreamSource;
-
-import org.apache.fop.apps.Fop;
-import org.apache.fop.apps.FopFactory;
-import org.apache.fop.apps.MimeConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import vn.edu.fpt.capstone.busReservation.dao.ReservationDAO;
@@ -70,9 +60,6 @@ public class ReservationLogic extends BaseLogic {
     private ReservationDAO reservationDAO;
     private SystemSettingDAO systemSettingDAO;
     private TicketDAO ticketDAO;
-    private FopFactory fopFactory = FopFactory.newInstance();
-    private TransformerFactory transformerFactory = TransformerFactory
-            .newInstance();
 
     /**
      * @param userDAO
@@ -299,7 +286,7 @@ public class ReservationLogic extends BaseLogic {
         if (tickets != null && tickets.size() > 0) {
             info = loadReservationInfo(tickets);
         } else {
-            throw new CommonException();
+            throw new CommonException("msgerrrs009");
         }
         return info;
     }
@@ -440,13 +427,8 @@ public class ReservationLogic extends BaseLogic {
         return info;
     }
 
-    public InputStream printReservation(int reservationId, String sessionId,
-            String realPath) throws CommonException {
-        Source src = null;
-        Transformer transformer = null;
-        Fop fop = null;
+    public InputStream printReservation(int reservationId) throws CommonException {
         OutputStream out = null;
-        Result res = null;
         InputStream fileInputStream = null;
         File file = null;
         File xslt = null;
