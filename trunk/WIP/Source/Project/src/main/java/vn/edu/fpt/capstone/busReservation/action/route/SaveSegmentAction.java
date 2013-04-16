@@ -13,16 +13,21 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
+import vn.edu.fpt.capstone.busReservation.dao.BusTypeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDAO;
 import vn.edu.fpt.capstone.busReservation.dao.RouteDetailsDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SegmentDAO;
 import vn.edu.fpt.capstone.busReservation.dao.SegmentTravelTimeDAO;
 import vn.edu.fpt.capstone.busReservation.dao.StationDAO;
+import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
+import vn.edu.fpt.capstone.busReservation.dao.TariffDAO;
+import vn.edu.fpt.capstone.busReservation.dao.bean.BusTypeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.RouteDetailsBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SegmentTravelTimeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TariffBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentAddInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SegmentInfo;
 import vn.edu.fpt.capstone.busReservation.util.DateUtils;
@@ -45,6 +50,10 @@ public class SaveSegmentAction extends BaseAction {
 	private RouteDAO routeDAO;
 	private RouteDetailsDAO routeDetailsDAO;
 	private SegmentTravelTimeDAO segmentTravelTimeDAO;
+	private BusTypeDAO busTypeDAO;
+	private TariffDAO tariffDAO;
+	private SystemSettingDAO systemSettingDAO;
+
 
 	private String message = "New Route saved successfully!";
 
@@ -111,9 +120,11 @@ public class SaveSegmentAction extends BaseAction {
 
 	private void insertSegment(List<SegmentInfo> segmentInfos,
 			boolean isReturnRoute) throws ParseException {
+		Double price = Double.parseDouble(systemSettingDAO.getSegmentDefaultPrice().toString());
+		List<BusTypeBean> busTypeBeans = busTypeDAO.getAll();
 		String routeName = "";
 		List<SegmentBean> segmentBeans = new ArrayList<SegmentBean>();
-
+		
 		for (int i = 0; i < segmentInfos.size(); i++) {
 
 			// Check if segment exist
@@ -170,12 +181,20 @@ public class SaveSegmentAction extends BaseAction {
 				SegmentTravelTimeBean segmentTravelTimeBean = new SegmentTravelTimeBean();
 				segmentTravelTimeBean.setSegment(segmentBean);
 				segmentTravelTimeBean.setTravelTime(dtravelTime);
-				segmentTravelTimeBean.setValidFrom(Calendar.getInstance()
-						.getTime());
+				segmentTravelTimeBean.setValidFrom(Calendar.getInstance().getTime());
 				segmentTravelTimeDAO.insert(segmentTravelTimeBean);
 				
+				List<TariffBean> tariffBeans = new ArrayList<TariffBean>();
 				//add initiation tariff for this segment.
-				
+				for (BusTypeBean busTypeBean : busTypeBeans) {
+					TariffBean tariffBean = new TariffBean();
+					tariffBean.setSegment(segmentBean);
+					tariffBean.setBusType(busTypeBean);
+					tariffBean.setFare(price);
+					tariffBean.setValidFrom(Calendar.getInstance().getTime());
+					tariffBeans.add(tariffBean);
+				}
+				tariffDAO.insert(tariffBeans);
 
 			} else {
 				if (i == 0) {
@@ -203,6 +222,18 @@ public class SaveSegmentAction extends BaseAction {
 			routeDetailsBean.setRoute(routeBeanReturn);
 			routeDetailsDAO.insert(routeDetailsBean);
 		}
+	}
+
+	public void setSystemSettingDAO(SystemSettingDAO systemSettingDAO) {
+		this.systemSettingDAO = systemSettingDAO;
+	}
+	
+	public void setTariffDAO(TariffDAO tariffDAO) {
+		this.tariffDAO = tariffDAO;
+	}
+	
+	public void setBusTypeDAO(BusTypeDAO busTypeDAO) {
+		this.busTypeDAO = busTypeDAO;
 	}
 
 	public void setSegmentTravelTimeDAO(

@@ -351,7 +351,6 @@
                   <td>Start At</td>
                   <td>End At</td>
                   <td>Duration (hh:mm)</td>
-                  <td>Price (VND)</td>
                </tr>
             <thead>
             <tbody>
@@ -372,7 +371,6 @@
                <td><input class="btn btn-primary" type="button" id="add" value="Add" disabled="disabled" 
                   style="margin-top: 10px;;margin-bottom: 10px; margin-left: 10px; margin-right: 0; width: 75px;"/>
                </td>
-               <td><input id="<s:property value='id'/>" type="text" value="" maxlength="7" style="text-align: right;margin: 0" /> .000</td>
             </tr>
          </table>
       </div>
