@@ -706,27 +706,6 @@ Date.prototype.toMyString = function () {
 					$("#busDetailDialog").modal();
 				}
 			});
-
-			/* 			
-			$.ajax({
-	            type : "GET",
-	            url : 'getPreAssignableBus.html?busType=' + busType + "&routeId=" + routeId,
-	            contentType : "application/x-www-form-urlencoded; charset=utf-8",
-	            success : function(response) {
-	               if((!response.isAssignable) || response.message ==""){
-	            	   $("#addBusError").html(response.message);
-	            	   $("#busDetailbusPlate").attr("disabled","disabled");
-	            	   $("#busDetailAdd").removeClass("btn-primary");
-		               $("#busDetailAdd").attr("disabled","disabled");
-		               $("#busDetailSave").removeClass("btn-primary");
-		               $("#busDetailSave").attr("disabled","disabled");
-	               }
-	            },
-	            error : function() {
-	               alert("Get assignable bus failed!");
-	            }
-	        }); */
-			
 		});
 
 		$("#busDetailAdd").click(function() {
@@ -873,7 +852,7 @@ Date.prototype.toMyString = function () {
                         $('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
                            busDetailTable.dataTable().fnDeleteRow(aPos[0]);
                            $('#busDetailbusPlate').attr('disabled',false);
-                           $("$addBusError").text("");
+                           $("#addBusError").text("");
                            $("#busDetailAdd").addClass("btn-primary");    
                            $("#busDetailAdd").removeAttr("disabled");
                      });
@@ -896,7 +875,7 @@ Date.prototype.toMyString = function () {
                    $("#busDetailAdd").attr("disabled","disabled");
                } else {
             	   $('#busDetailbusPlate').attr('disabled',false);
-                   $("$addBusError").text("");
+                   $("#addBusError").text("");
                    $("#busDetailAdd").addClass("btn-primary");    
                    $("#busDetailAdd").removeAttr("disabled");
               }
