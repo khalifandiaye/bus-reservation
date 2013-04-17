@@ -143,7 +143,7 @@ public class RouteDetailListAction extends ActionSupport {
 						.getCity().getName();
 
 		Long hours = sumTraTime / (1000 * 60 * 60);
-		Long minutes = (traTime % (1000 * 60 * 60)) / (1000 * 60);
+		Long minutes = (sumTraTime % (1000 * 60 * 60)) / (1000 * 60);
 		sumaryTime = (hours < 10 ? ("0" + hours.toString()) : hours) + ":"
 				+ (minutes < 10 ? ("0" + minutes.toString()) : minutes);
 
