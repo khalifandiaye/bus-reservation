@@ -393,7 +393,7 @@ Date.prototype.toMyString = function () {
 				todayBtn : false,
 				startDate : date,
 				minuteStep : 10
-			}).on('changeDate', function(ev) {
+			}).on('change', function(ev) {
 				getAvailBus();
 				getArrivalTime();
 				checkButton();
@@ -404,14 +404,14 @@ Date.prototype.toMyString = function () {
 				  autoclose : true,
 				  startDate : date,
 				  minuteStep : 10
-	      }).on('changeDate', function(ev) {
+	      }).on('change', function(ev) {
 	    	     getAutoArrivalTime();
 	      });
 			
 			$("#tripDialogDepartureTimeDiv").datetimepicker("setDate", date);
 			
 			var d = date;
-         d.setDate(d.getDate() + 1);
+         	d.setDate(d.getDate() + 1);
 			$("#autoReturnDialogDepartureTimeDiv").datetimepicker("setDate", d);
 			$("#autoReturnDialogDepartureTimeDiv").datetimepicker("setStartDate", d);
 			
@@ -446,8 +446,7 @@ Date.prototype.toMyString = function () {
 			var departureTime = $("#tripDialogDepartureTime").val();
 			if (selectedRouteId != '-1' && departureTime != "") {
 			   	$.ajax(
-					{
-					url : $('#contextPath')
+					{url : $('#contextPath')
 							.val()
 							+ "/schedule/getArrivalTime.html?departureTime="
 							+ departureTime
@@ -455,13 +454,14 @@ Date.prototype.toMyString = function () {
 							+ selectedRouteId,
 					}).done(function(data) {
 						$("#tripDialogArrivalTime").val(data.arrivalTime);
-						var tempData = data.arrivalTime.split(" - "); 
-						var tempDate = tempData[1];
-						var date = tempDate.split("/");
-						var newDate = new Date(date[2], parseInt(date[1]) - 1, parseInt(date[0]) + 1);
-			         $("#autoReturnDialogDepartureTimeDiv").datetimepicker("setDate", newDate);
-			         $("#autoReturnDialogDepartureTimeDiv").datetimepicker("setStartDate", newDate);
-			         getAutoArrivalTime();
+					     var tempData = data.arrivalTime.split(" - "); 
+					     var tempHour = tempData[0];
+					     var tempDate = tempData[1];
+					     var date = tempDate.split("/");
+					     var newDate = new Date(date[2], parseInt(date[1]), parseInt(date[0]), parseInt(tempHour[1]) + 1, parseInt(tempHour[0]));
+			           	 $("#autoReturnDialogDepartureTimeDiv").datetimepicker("setDate", newDate);
+			             $("#autoReturnDialogDepartureTimeDiv").datetimepicker("setStartDate", newDate);
+			             getAutoArrivalTime();
 					});
 			}
 		}
