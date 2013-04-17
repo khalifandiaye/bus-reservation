@@ -33,11 +33,11 @@ import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
+import org.xml.sax.SAXException;
 
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 
@@ -61,14 +61,13 @@ public class PDFUtils {
      *            the target PDF file
      * @throws IOException
      *             In case of an I/O problem
-     * @throws FOPException
-     *             In case of a FOP problem
      * @throws TransformerException
      *             In case of a XSL transformation problem
+     * @throws SAXException 
      */
     public static void convertReservationInfo2PDF(ReservationInfo reservationInfo,
-            File xslt, File pdf) throws IOException, FOPException,
-            TransformerException {
+            File xslt, File pdf) throws IOException, TransformerException, SAXException {
+        fopFactory.setUserConfig(new File(PDFUtils.class.getClassLoader().getResource("/fop/fop.xconf.xml").getPath()));
 
         FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
         // configure foUserAgent as desired

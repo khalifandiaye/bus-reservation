@@ -10,6 +10,7 @@ import javax.xml.transform.TransformerException;
 
 import org.apache.fop.apps.FOPException;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
@@ -24,7 +25,7 @@ import vn.edu.fpt.capstone.busReservation.util.xml.PDFUtils;
 public class PDFUtilsTest extends DAOTest {
     @Test
     public void convertReservationInfo2PDFTest001() throws CommonException,
-            FOPException, IOException, TransformerException {
+            IOException, TransformerException, SAXException {
         ReservationLogic reservationLogic = (ReservationLogic) getBean("reservationLogic");
         ReservationInfo info = reservationLogic.loadReservationInfo(13, 6);
         File xslt = new File(ReservationLogic.class.getResource(

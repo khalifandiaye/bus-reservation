@@ -23,7 +23,10 @@
 				<legend>
 					<s:text name="reservationInfo" />
 					<img id="btnPrint" class="click-able" src="<%=request.getContextPath()%>/images/print.png" alt="<s:text name="label.print" />" style="margin-left: 40px;"/>
-					<a href="<%=request.getContextPath()%>/rsv/rsv01030.html"><img id="btnPrintPDF" class="click-able" src="<%=request.getContextPath()%>/images/print-pdf.png" alt="<s:text name="label.print-pdf" />" style="margin-left:10px;"/></a>
+					<s:url action="rsv01030.html" namespace="/rsv/" var="pdfUrl">
+						<s:param name="id" value="%{reservationInfo.id}" />
+					</s:url>
+					<s:a href="%{#pdfUrl}"><img id="btnPrintPDF" class="click-able" src="<%=request.getContextPath()%>/images/print-pdf.png" alt="<s:text name="label.print-pdf" />" style="margin-left:10px;"/></s:a>
 				</legend>
 				<div class="general-info">
 					<div class="item">
@@ -143,7 +146,6 @@
 							<label><s:text name="reservation.refundedAmount" /></label>
 							<span class="vnd"><s:property value="%{reservationInfo.refundedAmount + ' đồng'}" /></span>
 							<span class="usd"><s:property value="%{'($' + reservationInfo.refundedAmountInUSD + ')'}" /></span>
-							<span class="rate"><s:property value="%{'(' + reservationInfo.refundRate + '%)'}" /></span>
 						</div>
 					</s:if>
 				</div>
@@ -172,7 +174,9 @@
 	</div>
 	</div>
 	<div class="printable">
-		<h3><s:text name="reservationInfo" /> <img id="btnPrint" class="click-able" src="<%=request.getContextPath()%>/images/print.png" alt="<s:text name="label.print" />" /><img id="btnPrintPDF" class="click-able" src="<%=request.getContextPath()%>/images/print-pdf.png" alt="<s:text name="label.print-pdf" />" /></h3>
+		<legend>
+			<s:text name="reservationInfo" />
+		</legend>
 		<div class="general-info">
 			<div class="item">
 				<label><s:text name="reservation.booker" /></label>
@@ -243,7 +247,14 @@
 								<s:iterator value="seats" ><s:property/> </s:iterator>
 							</td>
 							<td rowspan="2"><s:property value="busType" /></td>
-							<td rowspan="2"><s:text name="%{status}" /> <s:if test="%{status == 'cancelled' || status == 'refunded2'}" ><span title='<s:text name="message.cancelReason.companySide"><s:param><s:property value="cancelReason" /></s:param></s:text>'>?</span></s:if>
+							<td rowspan="2">
+								<s:if test="%{status == 'active' && reservationInfo.status != unpaid}" >
+									<a id="<s:property value="%{'cancel_' + id}"/>" href="#">
+										<s:text name="cancel" />
+									</a>
+								</s:if>
+								<s:else ><s:text name="%{status}" /></s:else> <s:if test="%{status == 'cancelled' || status == 'refunded2'}" ><br /><span><s:text name="label.reason" /> <s:text name="message.cancelReason.companySide"><s:param><s:property value="cancelReason" /></s:param></s:text></span></s:if>
+								<s:elseif test="%{status == 'refunded'}" ><br /><span><s:text name="label.reason" /> <s:text name="message.cancelReason.customerSide" /></span></s:elseif>
 							</td>
 						</tr>
 					<s:if test="returnTrip">
@@ -284,7 +295,6 @@
 					<label><s:text name="reservation.refundedAmount" /></label>
 					<span class="vnd"><s:property value="%{reservationInfo.refundedAmount + ' đồng'}" /></span>
 					<span class="usd"><s:property value="%{'($' + reservationInfo.refundedAmountInUSD + ')'}" /></span>
-					<span class="rate"><s:property value="%{'(' + reservationInfo.refundRate + '%)'}" /></span>
 				</div>
 			</s:if>
 		</div>
