@@ -315,10 +315,10 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
                     + "     ,btp.numberOfSeats"
                     + " HAVING btp.numberOfSeats - COUNT(DISTINCT stp.name) >= :remainedSeatCount";
             result = session.createQuery(queryString)
-                    // from specified date
-                    .setDate("fromDate", date)
-                    // to the next 24 hours
-                    .setDate("toDate", new Date(date.getTime() + 86400000))
+                    // from specified date + 30 minute
+                    .setDate("fromDate", new Date(date.getTime() + 1800000))
+                    // to the next 120 hours
+                    .setDate("toDate", new Date(date.getTime() + 432000000))
                     // with number of remained seats greater specified number
                     .setInteger("remainedSeatCount", remainedSeatCount)
                     // transform each tuple to TripDetailInfo
