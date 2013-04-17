@@ -144,7 +144,7 @@
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
 				aria-hidden="true">×</button>
-			<h3 id="deleteSuccessDialogLabel">Message</h3>
+			<h3 id="deleteSuccessDialogLabel">Delete Result</h3>
 		</div>
 		<div class="modal-body">
 			<p id="deleteSuccessDialogLabeMessage"></p>

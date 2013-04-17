@@ -1032,7 +1032,7 @@ Date.prototype.toMyString = function () {
 				Route details
          <table class="pull-right">
             <tr>
-               <td><input class="btn btn-primary" type="button" id="addBusPrice" value="Add Bus Price"
+               <td><input class="btn btn-primary" type="button" id="addBusPrice" value="Edit Route Price"
                   style="height: 30px" /> <input class="btn btn-primary" id="assignBus" type="button"
                   value="Assign Bus to Route" style="height: 30px" /> 
                   <s:if test="%{haveBus == true}">
@@ -1111,8 +1111,8 @@ Date.prototype.toMyString = function () {
                   <tr>
                      <td><s:property value="bus.plateNumber" /></td>
                      <td><s:property value="bus.busType.name" /></td>
-                     <td><s:date name="fromDate" format="hh:mm - dd/MM/yyyy" /></td>
-                     <td><s:date name="toDate" format="hh:mm - dd/MM/yyyy" /></td>
+                     <td><s:date name="fromDate" format="HH:mm - dd/MM/yyyy" /></td>
+                     <td><s:date name="toDate" format="HH:mm - dd/MM/yyyy" /></td>
                      <td><s:if test="%{status == 'active'}"><s:hidden name="id" value="%{id}" /><a class="btn btn-danger btn-small btn-cancel" >Cancel</a></s:if><s:elseif test="status == 'cancelled'">Cancelled</s:elseif></td>
                   </tr>
                </s:iterator>
@@ -1168,7 +1168,7 @@ Date.prototype.toMyString = function () {
       aria-hidden="true">
       <div class="modal-header">
          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-         <h3 id="editPriceDialogLabel">List Bus In Route</h3>
+         <h3 id="editPriceDialogLabel">Edit Route Price</h3>
       </div>
       <div class="modal-body">
          <div class="post" style="margin: 0px auto; width: 95%;">
