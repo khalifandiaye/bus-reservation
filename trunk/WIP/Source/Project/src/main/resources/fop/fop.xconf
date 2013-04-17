@@ -58,18 +58,18 @@
         (normal = 400, bold = 700)
         -->
 
-        <!--
-        <font metrics-url="arial.xml" kerning="yes" embed-url="arial.ttf">
+        <!--<font kerning="yes" embed-url="file://arial.ttf">
+          <font-triplet name="Arial" style="normal" weight="normal"/>
+          <font-triplet name="ArialMT" style="normal" weight="normal"/>
+        </font>-->
+        <!--<font kerning="yes" embed-url="file://arialb.ttf">
+          <font-triplet name="Arial" style="normal" weight="bold"/>
+          <font-triplet name="ArialMT" style="normal" weight="bold"/>
+        </font>-->
+        <font kerning="yes" embed-url="file:///C:/Windows/Fonts/arial.ttf">
           <font-triplet name="Arial" style="normal" weight="normal"/>
           <font-triplet name="ArialMT" style="normal" weight="normal"/>
         </font>
-        <font metrics-url="arialb.xml" kerning="yes" embed-url="arialb.ttf">
-          <font-triplet name="Arial" style="normal" weight="bold"/>
-          <font-triplet name="ArialMT" style="normal" weight="bold"/>
-        </font>
-        -->
-        <!-- automatically detect operating system installed fonts -->
-        <auto-detect/>
       </fonts>
 
       <!-- This option lets you specify additional options on an XML handler -->
