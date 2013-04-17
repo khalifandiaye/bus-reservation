@@ -33,7 +33,7 @@ public class CityDAO extends GenericDAO<Integer, CityBean> {
                     + "   AND trip.busStatus.status = :status ";
             Calendar now = Calendar.getInstance();
             now.add(Calendar.MINUTE, 30);
-            query = session.createQuery(queryString).setDate("time", now.getTime())
+            query = session.createQuery(queryString).setTimestamp("time", now.getTime())
             										.setString("status", "active");
             result = query.list();
             // commit transaction
@@ -68,7 +68,7 @@ public class CityDAO extends GenericDAO<Integer, CityBean> {
             now.add(Calendar.MINUTE, 30);
             query = session.createQuery(queryString)
                     .setInteger("id", departCityId)
-                    .setDate("time", now.getTime())
+                    .setTimestamp("time", now.getTime())
                     .setString("status", "active");
             result = query.list();
             // commit transaction
