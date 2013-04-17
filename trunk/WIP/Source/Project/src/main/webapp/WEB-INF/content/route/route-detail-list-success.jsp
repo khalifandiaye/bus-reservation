@@ -445,24 +445,24 @@ Date.prototype.toMyString = function () {
 			var selectedRouteId = $("#routeId").val();
 			var departureTime = $("#tripDialogDepartureTime").val();
 			if (selectedRouteId != '-1' && departureTime != "") {
-		   $.ajax(
-				{
-				url : $('#contextPath')
-						.val()
-						+ "/schedule/getArrivalTime.html?departureTime="
-						+ departureTime
-						+ "&routeId="
-						+ selectedRouteId,
-				}).done(function(data) {
-					$("#tripDialogArrivalTime").val(data.arrivalTime);
-					var tempData = data.arrivalTime.split(" - "); 
-					var tempDate = tempData[1];
-					var date = tempDate.split("/");
-					var newDate = new Date(date[2], parseInt(date[1]) - 1, parseInt(date[0]) + 1);
-		         $("#autoReturnDialogDepartureTimeDiv").datetimepicker("setDate", newDate);
-		         $("#autoReturnDialogDepartureTimeDiv").datetimepicker("setStartDate", newDate);
-		         getAutoArrivalTime();
-				});
+			   	$.ajax(
+					{
+					url : $('#contextPath')
+							.val()
+							+ "/schedule/getArrivalTime.html?departureTime="
+							+ departureTime
+							+ "&routeId="
+							+ selectedRouteId,
+					}).done(function(data) {
+						$("#tripDialogArrivalTime").val(data.arrivalTime);
+						var tempData = data.arrivalTime.split(" - "); 
+						var tempDate = tempData[1];
+						var date = tempDate.split("/");
+						var newDate = new Date(date[2], parseInt(date[1]) - 1, parseInt(date[0]) + 1);
+			         $("#autoReturnDialogDepartureTimeDiv").datetimepicker("setDate", newDate);
+			         $("#autoReturnDialogDepartureTimeDiv").datetimepicker("setStartDate", newDate);
+			         getAutoArrivalTime();
+					});
 			}
 		}
 		
