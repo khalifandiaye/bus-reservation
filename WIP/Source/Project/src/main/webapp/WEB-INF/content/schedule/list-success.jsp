@@ -196,7 +196,7 @@
 	<div id="page" class="well small-well">
 		<h3 style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">    
 				Manage schedule  
-				<input id="busStatusInsertBtn" type="button" class="btn btn-primary pull-right" 
+				<input style="display: none" id="busStatusInsertBtn" type="button" class="btn btn-primary pull-right" 
 					value="Add New Schedule" />
 		</h3>  
 		<div class="post">
@@ -216,8 +216,8 @@
 						<tr id="busStatus_<s:property value='id'/>">
 						   <td><s:property value="trips[0].routeDetails.route.name" /></td>
 							<td><s:property value="bus.plateNumber" /></td>
-							<td><s:date name="fromDate" format="hh:mm - dd/MM/yyyy" /></td>
-							<td><s:date name="toDate" format="hh:mm - dd/MM/yyyy" /></td>
+							<td><s:date name="fromDate" format="HH:mm - dd/MM/yyyy" /></td>
+							<td><s:date name="toDate" format="HH:mm - dd/MM/yyyy" /></td>
 							<td style="width:6%"><input class="btn btn-info btn-small"
 								type="button" value="View Details" 
 								onclick='javascript: loadDetails(<s:property value='id'/>)' /></td>
@@ -301,7 +301,7 @@
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"
 				aria-hidden="true">×</button>
-			<h3 id="saveSuccessDialogLabel">Message</h3>
+			<h3 id="saveSuccessDialogLabel">Result Message</h3>
 		</div>
 		<div class="modal-body">
 			<p id="saveSuccessDialogLabeMessage"></p>

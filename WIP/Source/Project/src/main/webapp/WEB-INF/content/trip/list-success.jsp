@@ -53,7 +53,7 @@
 				<table id="tripsTable" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
 					<thead>
 						<tr>
-							<th>Name</th>
+							<th>Segment Name</th>
 							<th>Departure Time</th>
 							<th>Arrival Time</th>
 						</tr>
@@ -62,8 +62,8 @@
 						<s:iterator value="tripBeans" status="tripBeansStatus">
 							<tr id="trip_<s:property value='id'/>">
 								<td><s:property value="routeDetails.segment.startAt.city.name" /> - <s:property value="routeDetails.segment.endAt.city.name" /></td>
-								<td><s:date name="departureTime" format="dd/MM/yyyy hh:mm:ss" /></td>
-								<td><s:date name="arrivalTime" format="dd/MM/yyyy hh:mm:ss" /></td>
+								<td><s:date name="departureTime" format="HH:mm - dd/MM/yyyy" /></td>
+								<td><s:date name="arrivalTime" format="HH:mm - dd/MM/yyyy" /></td>
 							</tr>
 						</s:iterator>
 					</tbody>
