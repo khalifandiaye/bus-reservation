@@ -185,7 +185,11 @@ public class SaveSegmentAction extends BaseAction {
 				// add initiation travel time of recent added segment
 				SegmentTravelTimeBean segmentTravelTimeBean = new SegmentTravelTimeBean();
 				segmentTravelTimeBean.setSegment(segmentBean);
+				if(dtravelTime < 3600000){
+					segmentTravelTimeBean.setTravelTime(3600000);
+				} else {
 				segmentTravelTimeBean.setTravelTime(dtravelTime);
+				}
 				segmentTravelTimeBean.setValidFrom(Calendar.getInstance().getTime());
 				segmentTravelTimeDAO.insert(segmentTravelTimeBean);
 				
