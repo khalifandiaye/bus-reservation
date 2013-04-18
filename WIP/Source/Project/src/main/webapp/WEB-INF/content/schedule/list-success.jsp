@@ -42,6 +42,7 @@
    }
 	 
 	$(document).ready(
+			$('#scheduleTable').dataTable({ bSort : false });
 			function() {
 				var oTable = $('#scheduleTable').dataTable({
 					"aoColumnDefs": [
