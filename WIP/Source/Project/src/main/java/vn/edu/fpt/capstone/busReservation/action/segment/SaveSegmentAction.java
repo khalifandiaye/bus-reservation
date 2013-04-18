@@ -63,7 +63,11 @@ public class SaveSegmentAction extends BaseAction {
 						segmentTravelTimeBeans.add(dupTimeReturnBeans.get(0));
 					}
 					for (SegmentTravelTimeBean segmentTravelTimeBean : segmentTravelTimeBeans) {
+						if(dtravelTime < 3600000){
+							segmentTravelTimeBean.setTravelTime(3600000);
+						} else {
 						segmentTravelTimeBean.setTravelTime(dtravelTime);
+						}
 						segmentTravelTimeDAO.update(segmentTravelTimeBean);
 					}
 				}
