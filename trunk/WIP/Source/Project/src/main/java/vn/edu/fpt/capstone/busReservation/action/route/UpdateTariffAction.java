@@ -110,7 +110,11 @@ public class UpdateTariffAction extends BaseAction {
 
 			if (tariffBeans.size() != 0) {
 				TariffBean tariffBean = tariffBeans.get(0);
-				tariffBean.setFare(tariffInfo.getFare());
+				if(tariffInfo.getFare() == null | tariffInfo.getFare() < 50){
+					tariffBean.setFare(50);
+				} else {
+					tariffBean.setFare(tariffInfo.getFare());
+				}
 				tariffDAO.update(tariffBean);
 			} else {
 				List<SegmentBean> segments = new ArrayList<SegmentBean>();
