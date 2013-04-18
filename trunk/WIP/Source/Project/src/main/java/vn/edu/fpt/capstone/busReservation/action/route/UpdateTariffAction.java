@@ -118,7 +118,12 @@ public class UpdateTariffAction extends BaseAction {
 				
 				if (segments.size() != 0) {
 					TariffBean tariffBean = new TariffBean();
-					tariffBean.setFare(tariffInfo.getFare());
+					if(tariffInfo.getFare() == null | tariffInfo.getFare() < 50){
+						tariffBean.setFare(50);
+					} else {
+						tariffBean.setFare(tariffInfo.getFare());
+					}
+					
 					tariffBean.setValidFrom(validDate);
 					tariffBean.setBusType(busTypeBean);
 					tariffBean.setSegment(segments.get(0));
