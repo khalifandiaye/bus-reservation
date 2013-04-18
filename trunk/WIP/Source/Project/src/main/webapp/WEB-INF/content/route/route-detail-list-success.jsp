@@ -338,6 +338,7 @@ Date.prototype.toMyString = function () {
 	});
 	
 	$(document).ready(function() {
+		$('#scheduleTable').dataTable({ bSort : false });
 		checkBusType();
 		var active = $("#active").val();
 		
