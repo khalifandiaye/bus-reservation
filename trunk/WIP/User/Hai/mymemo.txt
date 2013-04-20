@@ -1,11 +1,7 @@
-TODO
-	[DB] add payment.currency, payment_method.currency
-	[DB?] system_settings {name, value}
-	[DC] list all javascript functions
-	[RQ] send mail after payment, cancel
-	[RQ] check spell
 NOTE
 	DB: database
 	DM: database mapping
 	DC: document
 	RQ: requirement specification
+QUESTION
+	[DB] Tai sao segment, route_details, ... co pk rieng ma khong dung fk lam pk luon?
