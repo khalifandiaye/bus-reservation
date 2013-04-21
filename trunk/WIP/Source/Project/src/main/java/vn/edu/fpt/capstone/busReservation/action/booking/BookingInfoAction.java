@@ -58,6 +58,7 @@ public class BookingInfoAction extends BaseAction {
         this.returnSeats = returnSeats;
     }
 
+    // ==========================Action Output=========================
     private List<PaymentMethodBean> paymentMethods;
     private ReservationInfo reservationInfo;
     private String inputFirstName;
