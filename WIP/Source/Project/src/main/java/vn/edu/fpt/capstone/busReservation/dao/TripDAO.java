@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.transform.ResultTransformer;
+import org.hibernate.type.StandardBasicTypes;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo;
@@ -207,7 +208,7 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
         return result;
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
+    @SuppressWarnings({ "unchecked" })
     public int getMinDuration(int deptCity, int arrvCity) {
         List<Integer> duration = null;
         Session session = sessionFactory.getCurrentSession();
@@ -220,7 +221,7 @@ public class TripDAO extends GenericDAO<Integer, TripBean> {
                             "select min(datediff(arrival_time,departure_time)) as date_diff "
                                     + " from trip_start_end "
                                     + " where start_location_id = :start and end_location_id = :end")
-                    .addScalar("date_diff", Hibernate.INTEGER);
+                    .addScalar("date_diff", StandardBasicTypes.INTEGER);
             duration = query.setInteger("start", deptCity)
                     .setInteger("end", arrvCity).list();
 

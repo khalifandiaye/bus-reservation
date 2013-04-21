@@ -86,7 +86,7 @@
 							<s:param>captcha</s:param>
 						</s:fielderror>
 						</div>
-						<s:submit cssClass="btn btn-small" key="btn.register"/>
+						<s:submit cssClass="btn btn-small btn-primary" key="btn.register"/>
 					</div>
 				</div>
 			</div>

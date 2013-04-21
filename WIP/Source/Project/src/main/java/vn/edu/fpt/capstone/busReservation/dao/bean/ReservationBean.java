@@ -3,7 +3,6 @@
  */
 package vn.edu.fpt.capstone.busReservation.dao.bean;
 
-import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.List;
 
@@ -154,7 +153,8 @@ public class ReservationBean extends AbstractBean<Integer> {
     }
 
     /**
-     * @param tickets the tickets to set
+     * @param tickets
+     *            the tickets to set
      */
     public void setTickets(List<TicketBean> tickets) {
         this.tickets = tickets;
@@ -166,85 +166,58 @@ public class ReservationBean extends AbstractBean<Integer> {
      * @author Yoshimi
      * 
      */
-    public static class ReservationStatus {
-        private final String value;
+    public static enum ReservationStatus {
         /**
          * The reservation is in effect.
          */
-        public static final ReservationStatus PAID = new ReservationStatus(
-                "paid");
+        PAID("paid"),
         /**
          * The reservation has been created, but payment has not been completed
          */
-        public static final ReservationStatus UNPAID = new ReservationStatus(
-                "unpaid");
+        UNPAID("unpaid"),
         /**
          * The reservation can no longer be cancelled
          */
-        public static final ReservationStatus PENDING = new ReservationStatus(
-                "pending");
+        PENDING("pending"),
         /**
          * The first trip has departed
          */
-        public static final ReservationStatus DEPARTED = new ReservationStatus(
-                "departed");
+        DEPARTED("departed"),
         /**
          * The reservation has been cancelled due to the trip being cancelled.<br>
          * Awaiting refund or changing trip.
          */
-        public static final ReservationStatus CANCELLED = new ReservationStatus(
-                "cancelled");
+        CANCELLED("cancelled"),
         /**
          * The reservation has been moved to another trip
          */
-        public static final ReservationStatus MOVED = new ReservationStatus(
-                "moved");
+        MOVED("moved"),
         /**
          * The reservation was not paid within the time limit
          */
-        public static final ReservationStatus DELETED = new ReservationStatus(
-                "deleted");
+        DELETED("deleted"),
         /**
          * The reservation was cancelled by user, and refund is completed.
          */
-        public static final ReservationStatus REFUNDED = new ReservationStatus(
-                "refunded");
+        REFUNDED("refunded"),
         /**
          * The reservation was cancelled by company, and refund is completed.
          */
-        public static final ReservationStatus REFUNDED2 = new ReservationStatus(
-                "refunded2");
+        REFUNDED2("refunded2");
+
+        private String value;
 
         private ReservationStatus(String value) {
             this.value = value;
         }
 
         public static final ReservationStatus fromValue(final String value) {
-            if (value == null) {
-                return null;
-            } else if (PAID.value.equalsIgnoreCase(value)) {
-                return PAID;
-            } else if (UNPAID.value.equalsIgnoreCase(value)) {
-                return UNPAID;
-            } else if (PENDING.value.equalsIgnoreCase(value)) {
-                return PENDING;
-            } else if (DEPARTED.value.equalsIgnoreCase(value)) {
-                return DEPARTED;
-            } else if (CANCELLED.value.equalsIgnoreCase(value)) {
-                return CANCELLED;
-            } else if (MOVED.value.equalsIgnoreCase(value)) {
-                return MOVED;
-            } else if (DELETED.value.equalsIgnoreCase(value)) {
-                return DELETED;
-            } else if (REFUNDED.value.equalsIgnoreCase(value)) {
-                return REFUNDED;
-            } else if (REFUNDED2.value.equalsIgnoreCase(value)) {
-                return REFUNDED2;
-            } else {
-                throw new InvalidParameterException("Can not instantiate new "
-                        + ReservationStatus.class.getName()
-                        + " from the value \"" + value + "\"");
+            for (ReservationStatus c : values()) {
+                if (c.value.equals(value)) {
+                    return c;
+                }
             }
+            throw new IllegalArgumentException(value);
         }
 
         /**

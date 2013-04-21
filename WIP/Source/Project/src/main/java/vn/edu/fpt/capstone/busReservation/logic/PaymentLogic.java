@@ -183,6 +183,14 @@ public class PaymentLogic extends BaseLogic {
     }
 
     // =========================Main Functions=========================
+    /**
+     * Get all payment methods that a user role can access
+     * 
+     * @param roleId
+     *            id of the user role
+     * @return list of payment methods
+     * @throws HibernateException
+     */
     public List<PaymentMethodBean> getPaymentMethods(int roleId)
             throws HibernateException {
         List<PaymentMethodBean> paymentMethods = null;
@@ -256,10 +264,16 @@ public class PaymentLogic extends BaseLogic {
     // }
 
     /**
+     * Update payment info in a detailed reservation information object
+     * 
      * @param info
+     *            the detailed reservation information object
      * @param forwardSeats
+     *            new list of seats in forward trips
      * @param returnSeats
+     *            new list of seats in return trips
      * @param paymentMethodId
+     *            new payment method id
      * @throws CommonException
      * @throws HibernateException
      */
@@ -314,6 +328,14 @@ public class PaymentLogic extends BaseLogic {
         info.setTotalAmountInUSD(converter.convert(totalAmount).doubleValue());
     }
 
+    /**
+     * Calculate the amount to be refunded of a ticket
+     * 
+     * @param ticketId
+     *            id of the ticket
+     * @return refund details
+     * @throws CommonException
+     */
     public RefundInfo calculateRefundAmount(int ticketId)
             throws CommonException {
         TicketInfoBean ticket = null;
@@ -321,11 +343,29 @@ public class PaymentLogic extends BaseLogic {
         return calculateRefundAmount(ticket);
     }
 
+    /**
+     * Calculate the amount to be refunded of a ticket
+     * 
+     * @param ticketInfo
+     *            extended details of the ticket
+     * @return refund details
+     * @throws CommonException
+     */
     private RefundInfo calculateRefundAmount(TicketInfoBean ticketInfo)
             throws CommonException {
         return calculateRefundAmount(ticketInfo, false);
     }
 
+    /**
+     * Calculate the amount to be refunded of a ticket
+     * 
+     * @param ticketInfo
+     *            extended details of the ticket
+     * @param fullRefund
+     *            specify whether the ticket is refunded in full or partly
+     * @return refund details
+     * @throws CommonException
+     */
     private RefundInfo calculateRefundAmount(TicketInfoBean ticketInfo,
             boolean fullRefund) throws CommonException {
         RefundInfo refundInfo = null;
@@ -413,6 +453,17 @@ public class PaymentLogic extends BaseLogic {
         return refundInfo;
     }
 
+    /**
+     * Execute the refund process of a ticket
+     * 
+     * @param ticketId
+     *            id of the ticket
+     * @param userId
+     *            id of the user who execute the refund
+     * @return id of the reservation of the ticket
+     * @throws HibernateException
+     * @throws CommonException
+     */
     public int doRefund(int ticketId, int userId) throws HibernateException,
             CommonException {
         String[] refundReturn = null;
@@ -536,6 +587,18 @@ public class PaymentLogic extends BaseLogic {
         return returnVal;
     }
 
+    /**
+     * Setup payment for a reservation
+     * 
+     * @param reservationInfo
+     *            detailed information of the reservation
+     * @param paymentMethodId
+     *            id of the payment method
+     * @param contextPath
+     *            the site context path
+     * @return setup details of the payment
+     * @throws CommonException
+     */
     public PaymentSetupDetails setupPayment(ReservationInfo reservationInfo,
             Integer paymentMethodId, String contextPath) throws CommonException {
         PaymentSetupDetails setupDetails = null;
@@ -556,6 +619,16 @@ public class PaymentLogic extends BaseLogic {
         return setupDetails;
     }
 
+    /**
+     * Setup payment with Paypal for a reservation
+     * 
+     * @param reservationInfo
+     *            detailed information of the reservation
+     * @param contextPath
+     *            the site context path
+     * @return setup details of the payment
+     * @throws CommonException
+     */
     public String setPaypalExpressCheckout(ReservationInfo reservationInfo,
             String contextPath) throws CommonException {
         PayPalAPIInterfaceServiceService service = null;
@@ -685,6 +758,18 @@ public class PaymentLogic extends BaseLogic {
         return paymentToken;
     }
 
+    /**
+     * Execute a payment
+     * 
+     * @param reservationInfo
+     *            detailed information of the reservation
+     * @param paymentMethodId
+     *            id of the payment method
+     * @param token
+     *            the transaction token, or in case there's no token, the
+     *            username of the user who execute the payment
+     * @throws CommonException
+     */
     public void doPayment(ReservationInfo reservationInfo, int paymentMethodId,
             String token) throws CommonException {
         List<PaymentDetails> paymentDetailsList = null;
@@ -743,7 +828,15 @@ public class PaymentLogic extends BaseLogic {
         paymentDAO.completeTransaction();
     }
 
-    public GetExpressCheckoutDetailsResponseType getPaypalExpressCheckoutDetails(
+    /**
+     * Get details of a Paypal transaction
+     * 
+     * @param token
+     *            the transaction token
+     * @return details of the transaction
+     * @throws CommonException
+     */
+    private GetExpressCheckoutDetailsResponseType getPaypalExpressCheckoutDetails(
             String token) throws CommonException {
         PayPalAPIInterfaceServiceService service = null;
         GetExpressCheckoutDetailsReq checkoutDetailsReq = null;
@@ -820,6 +913,14 @@ public class PaymentLogic extends BaseLogic {
         return checkoutDetailsResponse;
     }
 
+    /**
+     * Execute a Paypal transaction
+     * 
+     * @param checkoutDetailsResponse
+     *            details of the transaction
+     * @return id of the transaction
+     * @throws CommonException
+     */
     public String doPaypalExpressCheckoutPayment(
             GetExpressCheckoutDetailsResponseType checkoutDetailsResponse)
             throws CommonException {
@@ -926,7 +1027,7 @@ public class PaymentLogic extends BaseLogic {
      * @throws CommonException
      * @throws HibernateException
      */
-    public String savePayment(int reservationId,
+    private String savePayment(int reservationId,
             List<PaymentDetails> paymentDetails, int paymentMethodId,
             PaymentType paymentType) throws CommonException, HibernateException {
         ReservationBean reservation = null;
@@ -1045,6 +1146,17 @@ public class PaymentLogic extends BaseLogic {
         return reservationCode;
     }
 
+    /**
+     * Calculate total amount to be paid of a reservation
+     * 
+     * @param basePrice
+     *            sum of the ticket price, multiplied by the number of booked
+     *            seats
+     * @param fee
+     *            the online transaction fee
+     * @return the total amount to be paid
+     * @throws ParseException
+     */
     private BigDecimal calculateTotal(final double basePrice,
             final BigDecimal fee) throws ParseException {
         BigDecimal result = null;
@@ -1052,6 +1164,18 @@ public class PaymentLogic extends BaseLogic {
         return result;
     }
 
+    /**
+     * Calculate the online transaction fee of a reservation
+     * 
+     * @param basePrice
+     *            sum of the ticket price, multiplied by the number of booked
+     *            seats
+     * @param paymentMethod
+     *            the payment method
+     * @return the online transaction fee
+     * @throws IOException
+     * @throws ParseException
+     */
     private BigDecimal calculateFee(final double basePrice,
             final PaymentMethodBean paymentMethod) throws IOException,
             ParseException {
@@ -1077,15 +1201,42 @@ public class PaymentLogic extends BaseLogic {
         return result;
     }
 
+    /**
+     * Round a number to a valid amount in VND
+     * 
+     * @param number
+     *            the number to be rounded
+     * @param roundingMode
+     *            the rounding mode
+     * @return the rounded number
+     */
     private BigDecimal roundingVND(final BigDecimal number,
             RoundingMode roundingMode) {
         return ReservationUtils.roundingVND(number, roundingMode);
     }
 
+    /**
+     * Round a number to a valid amount in VND
+     * 
+     * @param number
+     *            the number to be rounded
+     * @param roundingMode
+     *            the rounding mode
+     * @return the rounded number
+     */
     private Double roundingVND(final Double number, RoundingMode roundingMode) {
         return ReservationUtils.roundingVND(number, roundingMode);
     }
 
+    /**
+     * Send a mail informing user of the canceling of a ticket
+     * 
+     * @param reservationId
+     *            id of the reservation
+     * @param contextPath
+     *            the site context path
+     * @throws CommonException
+     */
     public void sendCancelReservationMail(int reservationId, String contextPath)
             throws CommonException {
         Properties globalProps = null;
@@ -1249,6 +1400,15 @@ public class PaymentLogic extends BaseLogic {
         }
     }
 
+    /**
+     * Send a mail informing user of the completion of a reservation
+     * 
+     * @param reservationId
+     *            id of the reservation
+     * @param contextPath
+     *            the site context path
+     * @throws CommonException
+     */
     public void sendReservationCompleteMail(int reservationId,
             String contextPath) throws CommonException {
         Properties globalProps = null;
@@ -1415,6 +1575,12 @@ public class PaymentLogic extends BaseLogic {
         }
     }
 
+    /**
+     * Refund all tickets in a cancelled schedule
+     * 
+     * @param busStatusId
+     *            id of the cancelled schedule
+     */
     public void refundBusStatus(int busStatusId) {
         List<TicketInfoBean> ticketInfos = null;
         RefundInfo refundInfo = null;
@@ -1428,9 +1594,10 @@ public class PaymentLogic extends BaseLogic {
         LOG.debug("Prepare to refund " + ticketInfos.size() + " tickets");
         for (TicketInfoBean ticketInfo : ticketInfos) {
             try {
-                if (ticketInfo.getId().getPayments() != null && ticketInfo.getId().getPayments().size() > 0)
-                paymentMethodId = ticketInfo.getId().getPayments().get(0)
-                        .getPaymentMethod().getId();
+                if (ticketInfo.getId().getPayments() != null
+                        && ticketInfo.getId().getPayments().size() > 0)
+                    paymentMethodId = ticketInfo.getId().getPayments().get(0)
+                            .getPaymentMethod().getId();
                 if (2 == paymentMethodId) {
                     refundInfo = calculateRefundAmount(ticketInfo, true);
                     refundReturn = doPaypalRefund(ticketInfo, refundInfo);
