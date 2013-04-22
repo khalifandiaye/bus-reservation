@@ -110,7 +110,13 @@
 							<td><s:property value="busType.name" /></td>
 							<td><s:property value="plateNumber" /></td>
 							<td><s:property value="forwardRoute.name" /></td>
-							<td><s:property value="status" /></td>
+							<td> 
+								<s:iterator value="listBusStatusInfo">
+									<s:if test="busId == id">
+										<s:property value="status"/> 
+									</s:if>
+								</s:iterator>
+							</td>
 							<td style="width: 6%"><a
 								data-delete="<s:property value='id'/>" style="cursor: pointer;"   
 								onclick='javascript: deleteBus(<s:property value='id'/>)' class="btn btn-small btn-danger" >Delete</a></td>
