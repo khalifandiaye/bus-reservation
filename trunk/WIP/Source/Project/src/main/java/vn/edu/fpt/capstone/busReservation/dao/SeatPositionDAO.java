@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SeatPositionKey;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean.TicketStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
@@ -42,7 +43,8 @@ public class SeatPositionDAO extends
             		" INNER JOIN tic.reservation AS rsv" +
             		" WHERE trp IN (:trips)" +
             		" AND stp.name IN (:seatNames)" +
-            		" AND (rsv.status = :statusPaid OR rsv.status = :statusPending OR (rsv.status = :statusUnpaid AND rsv.bookTime > :timeLimit))";
+            		" AND (rsv.status = :statusPaid OR rsv.status = :statusPending OR (rsv.status = :statusUnpaid AND rsv.bookTime > :timeLimit))" + 
+            		" AND (tic.status = :statusTicActive OR tic.status = :statusTicPending)";
             query = session.createQuery(queryString);
             query.setParameterList("trips", trips);
             query.setParameterList("seatNames", seatNames);
@@ -50,6 +52,8 @@ public class SeatPositionDAO extends
             query.setString("statusPaid", ReservationStatus.PAID.getValue());
             query.setString("statusUnpaid", ReservationStatus.UNPAID.getValue());
             query.setTimestamp("timeLimit", timeLimit.getTime());
+            query.setString("statusTicActive", TicketStatus.ACTIVE.getValue());
+            query.setString("statusTicPending", TicketStatus.PENDING.getValue());
             result = query.list();
         } catch (HibernateException e) {
             exceptionHandling(e, session);
@@ -75,13 +79,16 @@ public class SeatPositionDAO extends
             		" INNER JOIN tic.seatPositions AS stp" +
             		" INNER JOIN tic.reservation AS rsv" +
             		" WHERE trp IN (:trips)" +
-            		" AND (rsv.status = :statusPaid OR rsv.status = :statusPending OR (rsv.status = :statusUnpaid AND rsv.bookTime > :timeLimit))";
+            		" AND (rsv.status = :statusPaid OR rsv.status = :statusPending OR (rsv.status = :statusUnpaid AND rsv.bookTime > :timeLimit))" +
+            		" AND (tic.status = :statusTicActive OR tic.status = :statusTicPending)";
             query = session.createQuery(queryString);
             query.setParameterList("trips", trips);
             query.setString("statusPending", ReservationStatus.PENDING.getValue());
             query.setString("statusPaid", ReservationStatus.PAID.getValue());
             query.setString("statusUnpaid", ReservationStatus.UNPAID.getValue());
             query.setTimestamp("timeLimit", timeLimit.getTime());
+            query.setString("statusTicActive", TicketStatus.ACTIVE.getValue());
+            query.setString("statusTicPending", TicketStatus.PENDING.getValue());
             result = query.list();
         } catch (HibernateException e) {
             exceptionHandling(e, session);
