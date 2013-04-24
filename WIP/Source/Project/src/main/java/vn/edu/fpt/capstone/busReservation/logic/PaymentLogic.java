@@ -1035,7 +1035,7 @@ public class PaymentLogic extends BaseLogic {
         int maxTry = CommonConstant.MAX_REGENERATE_CODE_TRY;
         String reservationCode = null;
         CurrencyConverter converter = null;
-        boolean allRefunded = false;
+        boolean allRefunded = true;
         paymentDAO.startTransaction();
         // Update database
         reservation = reservationDAO.getById(reservationId);
@@ -1132,8 +1132,10 @@ public class PaymentLogic extends BaseLogic {
                         }
                     }
                     // check if all ticket(s) has been invalidated
-                    if (TicketStatus.ACTIVE.equals(ticket.getStatus())
-                            || TicketStatus.PENDING.equals(ticket.getStatus())) {
+                    if (TicketStatus.ACTIVE.getValue().equals(
+                            ticket.getStatus())
+                            || TicketStatus.PENDING.getValue().equals(
+                                    ticket.getStatus())) {
                         allRefunded = false;
                     }
                 }
