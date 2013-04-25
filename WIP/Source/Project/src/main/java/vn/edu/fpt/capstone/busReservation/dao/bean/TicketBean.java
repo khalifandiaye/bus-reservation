@@ -1,47 +1,38 @@
 package vn.edu.fpt.capstone.busReservation.dao.bean;
 
-import java.io.Serializable;
-import java.security.InvalidParameterException;
 import java.util.List;
 
-import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
-
 public class TicketBean extends AbstractBean<Integer> {
-    public static final class TicketStatus implements Serializable {
-        /**
-         * serialVersionUID
-         */
-        private static final long serialVersionUID = 1L;
+    public static enum TicketStatus {
         /**
          * The ticket is in effect.
          */
-        public static final TicketStatus ACTIVE = new TicketStatus("active");
+        ACTIVE("active"),
         /**
          * The ticket can no longer be cancelled
          */
-        public static final TicketStatus PENDING = new TicketStatus("pending");
+        PENDING("pending"),
         /**
          * The first trip has departed
          */
-        public static final TicketStatus DEPARTED = new TicketStatus("departed");
+        DEPARTED("departed"),
         /**
          * The ticket has been cancelled due to the trip being cancelled.<br>
          * Awaiting refund or changing trip.
          */
-        public static final TicketStatus CANCELLED = new TicketStatus(
-                "cancelled");
+        CANCELLED("cancelled"),
         /**
          * The ticket has been moved to another trip
          */
-        public static final TicketStatus MOVED = new TicketStatus("moved");
+        MOVED("moved"),
         /**
          * The ticket was cancelled, and refund is completed.
          */
-        public static final TicketStatus REFUNDED = new TicketStatus("refunded");
+        REFUNDED("refunded"),
         /**
          * The ticket was cancelled, and refund is completed.
          */
-        public static final TicketStatus REFUNDED2 = new TicketStatus("refunded2");
+        REFUNDED2("refunded2");
         private final String value;
 
         /**
@@ -52,27 +43,12 @@ public class TicketBean extends AbstractBean<Integer> {
         }
 
         public static final TicketStatus fromValue(final String value) {
-            if (value == null) {
-                return null;
-            } else if (ACTIVE.value.equalsIgnoreCase(value)) {
-                return ACTIVE;
-            } else if (PENDING.value.equalsIgnoreCase(value)) {
-                return PENDING;
-            } else if (DEPARTED.value.equalsIgnoreCase(value)) {
-                return DEPARTED;
-            } else if (CANCELLED.value.equalsIgnoreCase(value)) {
-                return CANCELLED;
-            } else if (MOVED.value.equalsIgnoreCase(value)) {
-                return MOVED;
-            } else if (REFUNDED.value.equalsIgnoreCase(value)) {
-                return REFUNDED;
-            } else if (REFUNDED2.value.equalsIgnoreCase(value)) {
-                return REFUNDED2;
-            } else {
-                throw new InvalidParameterException("Can not instantiate new "
-                        + ReservationStatus.class.getName()
-                        + " from the value \"" + value + "\"");
+            for (TicketStatus c : values()) {
+                if (c.value.equals(value)) {
+                    return c;
+                }
             }
+            throw new IllegalArgumentException(value);
         }
 
         /**
@@ -80,29 +56,6 @@ public class TicketBean extends AbstractBean<Integer> {
          */
         public String getValue() {
             return value;
-        }
-
-        /* (non-Javadoc)
-         * @see java.lang.Object#hashCode()
-         */
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((value == null) ? 0 : value.hashCode());
-            return result;
-        }
-
-        /* (non-Javadoc)
-         * @see java.lang.Object#equals(java.lang.Object)
-         */
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            return value.equals(obj);
         }
     }
 
@@ -143,7 +96,7 @@ public class TicketBean extends AbstractBean<Integer> {
      *            the status to set
      */
     public void setStatus(String status) {
-        this.status = TicketStatus.fromValue(status);
+        this.status = status != null ? TicketStatus.fromValue(status) : null;
     }
 
     /**
@@ -184,7 +137,8 @@ public class TicketBean extends AbstractBean<Integer> {
     }
 
     /**
-     * @param payments the payments to set
+     * @param payments
+     *            the payments to set
      */
     public void setPayments(List<PaymentBean> payments) {
         this.payments = payments;
