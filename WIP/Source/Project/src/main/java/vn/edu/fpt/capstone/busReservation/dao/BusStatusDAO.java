@@ -16,6 +16,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.BusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusChangeBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.BusStatusChangeTypeBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.StationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
@@ -562,6 +563,44 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
                 query.setTimestamp("date", date);
             }
             query.setResultTransformer(new BusStatusInfoTransformer(last, date));
+            result = query.list();
+        } catch (HibernateException e) {
+            exceptionHandling(e, session);
+        }
+        return result;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<TicketBean> getAllTickets(int busStatusId) {
+        List<TicketBean> result = null;
+        Query query = null;
+        String queryString = null;
+        Session session = null;
+        List<String> stati = null;
+        // get the current session
+        session = sessionFactory.getCurrentSession();
+        try {
+            // perform database access (query, insert, update, etc) here
+            queryString = "SELECT DISTINCT tkt"
+                    +" FROM TicketBean tkt"
+                    +" INNER JOIN tkt.reservation rsv"
+                    +" INNER JOIN tkt.trips trp"
+                    +" INNER JOIN trp.busStatus bst"
+                    +" WHERE bst.id = :busStatusId"
+                    +"  AND ("
+                    +"      (rsv.status IN (:rsvStati))"
+                    +"      AND (tkt.status IN (:tktStati))"
+                    +"      )";
+            query = session.createQuery(queryString);
+            query.setInteger("busStatusId", busStatusId);
+            stati = new ArrayList<String>();
+            stati.add(ReservationStatus.PAID.getValue());
+            stati.add(ReservationStatus.PENDING.getValue());
+            query.setParameterList("rsvStati", stati);
+            stati = new ArrayList<String>();
+            stati.add(TicketStatus.ACTIVE.getValue());
+            stati.add(TicketStatus.PENDING.getValue());
+            query.setParameterList("tktStati", stati);
             result = query.list();
         } catch (HibernateException e) {
             exceptionHandling(e, session);

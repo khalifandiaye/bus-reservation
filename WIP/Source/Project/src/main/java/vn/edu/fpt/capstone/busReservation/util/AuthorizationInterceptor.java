@@ -73,29 +73,33 @@ public class AuthorizationInterceptor implements Interceptor {
             namespace = ServletActionContext.getActionMapping().getNamespace();
 
             if (namespace.startsWith("/admin")) {
+                ServletActionContext.getContext().setLocale(
+                        CommonConstant.LOCALE_US);
                 allowOp = false;
                 allowCus = false;
-            } else if (namespace.startsWith("/route") || namespace.startsWith("/bus")
-                    || namespace.startsWith("/schedule") || namespace.startsWith("/segment")) {
+            } else if (namespace.startsWith("/route")
+                    || namespace.startsWith("/bus")
+                    || namespace.startsWith("/schedule")
+                    || namespace.startsWith("/segment")) {
+                ServletActionContext.getContext().setLocale(
+                        CommonConstant.LOCALE_US);
                 allowCus = false;
-                allowAdmin = false;
-            } else if (!"/".equals(namespace) && !namespace.startsWith("/user")) {
                 allowAdmin = false;
             } else if (namespace.startsWith("/debug")) {
+                ServletActionContext.getContext().setLocale(
+                        CommonConstant.LOCALE_VN);
                 allowCus = false;
                 allowOp = false;
+                allowAdmin = false;
+            } else if (!"/".equals(namespace) && !namespace.startsWith("/user")) {
+                ServletActionContext.getContext().setLocale(
+                        CommonConstant.LOCALE_VN);
                 allowAdmin = false;
             }
             if ((!allowCus && (user == null || user.getRoleId() == 1))
                     || (!allowOp && user != null && user.getRoleId() == 2)
                     || (!allowAdmin && user != null && user.getRoleId() == 3)) {
                 return "unauthorized";
-            }
-            // set locale
-            if (user != null && (user.getRoleId() == 2 || user.getRoleId() == 3)) {
-                ServletActionContext.getContext().setLocale(CommonConstant.LOCALE_US);
-            } else {
-                ServletActionContext.getContext().setLocale(CommonConstant.LOCALE_VN);
             }
         }
         // Call the next interceptor (continue request processing)
