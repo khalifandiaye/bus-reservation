@@ -11,6 +11,7 @@ import org.apache.struts2.interceptor.SessionAware;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
 import vn.edu.fpt.capstone.busReservation.dao.SeatPositionDAO;
+import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SeatInfo;
@@ -31,8 +32,13 @@ public class BookingAction extends BaseAction implements SessionAware {
     // ==================== Database Access Object ====================
     private TripDAO tripDAO;
     private SeatPositionDAO seatPositionDAO;
+    private SystemSettingDAO systemSettingDAO;
+    
+	public void setSystemSettingDAO(SystemSettingDAO systemSettingDAO) {
+		this.systemSettingDAO = systemSettingDAO;
+	}
 
-    public void setSeatPositionDAO(SeatPositionDAO seatPositionDAO) {
+	public void setSeatPositionDAO(SeatPositionDAO seatPositionDAO) {
         this.seatPositionDAO = seatPositionDAO;
     }
 
@@ -49,8 +55,32 @@ public class BookingAction extends BaseAction implements SessionAware {
     private String rtnBusStatus;
     private String out_journey;
     private String rtn_journey;
-
+    private String outRouteName;
+    private String rtnRouteName;
+    private String maxSeatNumber;
+    
     /**
+	 * @return the maxSeatNumber
+	 */
+	public String getMaxSeatNumber() {
+		return maxSeatNumber;
+	}
+
+	/**
+	 * @return the outRouteName
+	 */
+	public String getOutRouteName() {
+		return outRouteName;
+	}
+
+	/**
+	 * @return the rtnRouteName
+	 */
+	public String getRtnRouteName() {
+		return rtnRouteName;
+	}
+
+	/**
      * @param rtnBusStatus
      *            the rtnBusStatus to set
      */
@@ -428,12 +458,18 @@ public class BookingAction extends BaseAction implements SessionAware {
             session.remove("seatsOutDouble");
             session.remove("seatsReturnDouble");
         }
-        if (listOutTripBean != null) {
+        if (listOutTripBean != null) { 
             seatMapOut = buildSeatMap(listOutTripBean);
+            outRouteName = listOutTripBean.get(0).getRouteDetails().getSegment().getStartAt().getCity().getName() + " - " +
+            		listOutTripBean.get(listOutTripBean.size()-1).getRouteDetails().getSegment().getEndAt().getCity().getName();
         }
         if (listReturnTripBean != null) {
             seatMapReturn = buildSeatMap(listReturnTripBean);
+            rtnRouteName = listReturnTripBean.get(0).getRouteDetails().getSegment().getStartAt().getCity().getName() + " - " +
+            		listReturnTripBean.get(listOutTripBean.size()-1).getRouteDetails().getSegment().getEndAt().getCity().getName();
         }
+        maxSeatNumber = systemSettingDAO.getMaxSeatNumber()+"";
+        		
         return SUCCESS;
     }
 

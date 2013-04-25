@@ -111,8 +111,24 @@ public final class BusStatus implements Serializable {
     }
 
     public String getDisplayStatus() {
-        // TODO implement it
-        return null;
+    	if(!this.isAssigned()){
+    		return "UnAssigned";
+    	}else{
+    		if(this.getEndLocation() == ""){
+    			return "UnSchedule";
+    		}else{
+    			Date now = new Date();
+    			if(this.getToDate().getTime() <= now.getTime()){
+//    				if(!last){
+    					return "Current Location : "+ this.getEndLocation();
+//    				}else{
+//    					return "Last Location : " + this.getEndLocation();
+//    				}
+    			}else{
+					return "Running to :" + this.getEndLocation();
+    			}
+    		}
+    	}
     }
 
 }

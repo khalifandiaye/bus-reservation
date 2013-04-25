@@ -56,6 +56,7 @@
 		<div class="tab-content">
 			<s:if test="seatMapOut != null">
 				<div id="seat-map-out" class="tab-pane" style="overflow: hidden;">
+				<h4><s:property value="outRouteName"/></h4>
 					<s:if test="seatMapOut.size == 1">
 						<div class="seat-map">
 							<div class="seat-map-wrapper">
@@ -141,6 +142,7 @@
 			</s:if>
 			<s:if test="seatMapReturn != null">
 				<div id="seat-map-return" class="tab-pane" style="overflow: hidden;">
+				<h4><s:property value="rtnRouteName"/></h4>
 					<s:if test="seatMapReturn.size == 1">
 						<div class="seat-map ">
 							<div class="seat-map-wrapper">
@@ -268,6 +270,7 @@
 			<s:hidden id="selectedReturnSeat" name="selectedReturnSeat"></s:hidden>
 			<s:hidden id="passengerNoOut" name="passengerNoOut"></s:hidden>
 			<s:hidden id="passengerNoReturn" name="passengerNoReturn"></s:hidden>
+			<s:hidden id="maxSeatNumber" name="maxSeatNumber"></s:hidden>
 		</div>
 	</div>
 	</setion>

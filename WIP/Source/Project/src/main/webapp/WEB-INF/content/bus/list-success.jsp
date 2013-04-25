@@ -111,9 +111,9 @@
 							<td><s:property value="plateNumber" /></td>
 							<td><s:property value="forwardRoute.name" /></td>
 							<td> 
-								<s:iterator value="listBusStatusInfo">
+								<s:iterator value="listStatus">
 									<s:if test="busId == id">
-										<s:property value="status"/> 
+										<s:property value="getDisplayStatus()"/> 
 									</s:if>
 								</s:iterator>
 							</td>
