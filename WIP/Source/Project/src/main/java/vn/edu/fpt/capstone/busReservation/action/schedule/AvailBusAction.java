@@ -30,6 +30,8 @@ public class AvailBusAction extends BaseAction {
 	private int busType;
 	private int routeId;
 	private List<BusInfo> busInfos = new ArrayList<BusInfo>();
+	private List<BusInfo> busInfosExtend = new ArrayList<BusInfo>();
+
 
 	@Action(value = "/availBus", results = { @Result(type = "json", name = SUCCESS) })
 	public String execute() {
@@ -54,11 +56,25 @@ public class AvailBusAction extends BaseAction {
 				busInfo.setPlateNumber((String) b[1]);
 				busInfos.add(busInfo);
 			}
+			
+			// get available bus extend
+			List<Object[]> busExtend = busDAO.getAvailBusExtend(startDate,
+					startStationId, busType);
+			for (Object b[] : busExtend) {
+				BusInfo busInfo = new BusInfo();
+				busInfo.setId((Integer) b[0]);
+				busInfo.setPlateNumber((String) b[1]);
+				busInfosExtend.add(busInfo);
+			}
 		} catch (Exception e) {
 		}
 		return SUCCESS;
 	}
 
+	public List<BusInfo> getBusInfosExtend() {
+		return busInfosExtend;
+	}
+	
 	public void setBusDAO(BusDAO busDAO) {
 		this.busDAO = busDAO;
 	}

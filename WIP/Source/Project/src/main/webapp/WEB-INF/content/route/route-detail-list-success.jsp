@@ -342,15 +342,6 @@ Date.prototype.toMyString = function () {
 		checkBusType();
 		var active = $("#active").val();
 		
-		if (active == 'false') {
-			$("#addBusPrice").removeClass('btn-primary');
-			$("#assignBus").removeClass('btn-primary');
-			$("#busStatusInsertBtn").removeClass('btn-success');
-			$("#addBusPrice").attr("disabled","disabled");
-			$("#assignBus").attr("disabled","disabled");
-			$("#busStatusInsertBtn").attr("disabled","disabled");
-		}
-		
 
 		$('tr[data-segment-id]').each(function() {
 			var id = this.dataset.segmentId;
@@ -891,6 +882,17 @@ Date.prototype.toMyString = function () {
 		
 		var busType = $('#busType').val();
 		getPrice(busType, segments, $('#validDateSelect').val());
+		
+		if (active == 'false') {
+			$("#addBusPrice").removeClass('btn-primary');
+			$("#assignBus").removeClass('btn-primary');
+			$("#busStatusInsertBtn").removeClass('btn-success');
+			$("#editRoute").removeClass('btn-warning');
+			$("#addBusPrice").attr("disabled","disabled");
+			$("#assignBus").attr("disabled","disabled");
+			$("#busStatusInsertBtn").attr("disabled","disabled");
+			$("#editRoute").attr("disabled","disabled");
+		}
 	});
 
 	function validateBusType(){
@@ -1296,8 +1298,9 @@ Date.prototype.toMyString = function () {
             </div>
             <div id="tripDialogStatus"></div>
             <div>
-            <input style="margin-top: -3px;" type="checkbox" id="autoReturnBus" name="autoReturnBus"/> Set auto-return to start station.
+            <input style="margin-top: -3px;" type="checkbox" id="autoReturnBus" name="autoReturnBus"/> Auto-return to start station.
             <div id="autoReturnDiv" style="display: none;">
+               <input style="margin-top: -3px;" type="checkbox" id="allowBooking" name="allowBooking" checked="checked"/> Allow booking. 
                <label for="autoReturnDialogDepartureTimeDiv">From Date: </label>
                <div id="autoReturnDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
                   <input id="autoReturnDialogDepartureTime" size="16" type="text" value="" readonly
