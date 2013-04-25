@@ -401,7 +401,8 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 		return ticketBean;
 	}
 	
-	public SearchParamsInfo createSearchParam(List<TripBean> listTripBean){
+	@SuppressWarnings("unchecked")
+    public SearchParamsInfo createSearchParam(List<TripBean> listTripBean){
 		SimpleDateFormat fromFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 		SearchParamsInfo searchParams = new SearchParamsInfo();
 		searchParams.setDepartureCity(listTripBean.get(0).getRouteDetails().getSegment().getStartAt().getCity().getId());

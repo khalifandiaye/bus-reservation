@@ -21,21 +21,25 @@ public final class BusStatus implements Serializable {
     private static final long serialVersionUID = 1L;
     private final int busId;
     private final String busPlate;
+    private final boolean assigned;
+    private final String busStatus;
     private final Date toDate;
     private final String endStation;
     private final String endLocation;
+    private final String status;
 
-    /**
-     * @param busId
-     * @param busPlate
-     * @param toDate
-     * @param endStation
-     * @param endLocation
-     */
-    public BusStatus(int busId, String busPlate, Date toDate,
-            String endStation, String endLocation) {
+    public BusStatus(Integer busId, String busPlate, String status,
+            Integer forwardRouteId, Integer returnRouteId, String busStatus,
+            Date toDate, String endStation, String endLocation) {
         this.busId = busId;
         this.busPlate = busPlate;
+        this.status = status;
+        if (forwardRouteId != null && returnRouteId != null) {
+            assigned = true;
+        } else {
+            assigned = false;
+        }
+        this.busStatus = busStatus;
         this.toDate = toDate;
         this.endStation = endStation;
         this.endLocation = endLocation;
@@ -53,6 +57,20 @@ public final class BusStatus implements Serializable {
      */
     public String getBusPlate() {
         return busPlate;
+    }
+
+    /**
+     * @return the assigned
+     */
+    public boolean isAssigned() {
+        return assigned;
+    }
+
+    /**
+     * @return the busStatus
+     */
+    public String getBusStatus() {
+        return busStatus;
     }
 
     /**
@@ -83,6 +101,13 @@ public final class BusStatus implements Serializable {
      */
     public String getEndLocation() {
         return endLocation;
+    }
+
+    /**
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
     }
 
     public String getDisplayStatus() {

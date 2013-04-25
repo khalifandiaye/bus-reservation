@@ -10,7 +10,6 @@ import vn.edu.fpt.capstone.busReservation.displayModel.User;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.logic.PaymentLogic;
 import vn.edu.fpt.capstone.busReservation.logic.ReservationLogic;
-import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 public class BookingInfoAction extends BaseAction {
 

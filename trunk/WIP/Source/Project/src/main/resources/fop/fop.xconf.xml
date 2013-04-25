@@ -70,6 +70,10 @@
           <font-triplet name="Arial" style="normal" weight="normal"/>
           <font-triplet name="ArialMT" style="normal" weight="normal"/>
         </font>
+        <font kerning="yes" embed-url="file:///C:/Windows/Fonts/arialbd.ttf">
+          <font-triplet name="Arial" style="normal" weight="bold"/>
+          <font-triplet name="ArialMT" style="normal" weight="bold"/>
+        </font>
       </fonts>
 
       <!-- This option lets you specify additional options on an XML handler -->

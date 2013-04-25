@@ -82,7 +82,7 @@ public class ReservationBean extends AbstractBean<Integer> {
      *            the status to set
      */
     public void setStatus(String status) {
-        this.status = ReservationStatus.fromValue(status);
+        this.status = status != null ? ReservationStatus.fromValue(status) : null;
     }
 
     /**

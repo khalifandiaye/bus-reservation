@@ -24,72 +24,77 @@
 			<fo:layout-master-set>
 				<fo:simple-page-master master-name="simpleA4"
 					page-height="29.7cm" page-width="21cm" margin-top="2cm"
-					margin-bottom="2cm" margin-left="2cm" margin-right="2cm">
+					margin-bottom="2cm" margin-left="1.3cm" margin-right="1.3cm">
 					<fo:region-body />
 				</fo:simple-page-master>
 			</fo:layout-master-set>
 			<fo:page-sequence master-reference="simpleA4">
 				<fo:flow flow-name="xsl-region-body">
-					<fo:block font-family="Arial" font-size="12pt" font-weight="bold" space-after="5mm">
+					<fo:block font-family="Arial" font-size="12pt" font-weight="bold"
+						space-after="5mm">
 						Người đặt:
 						<xsl:value-of select="bookerName" />
 					</fo:block>
-					<fo:block font-family="Arial" font-size="12pt" font-weight="bold" space-after="5mm">
+					<fo:block font-family="Arial" font-size="12pt" font-weight="bold"
+						space-after="5mm">
 						Mã đặt vé:
 						<xsl:value-of select="code" />
 					</fo:block>
-					<fo:block font-family="Arial" font-size="12pt">
-						<fo:table table-layout="auto" width="100%"
-							border-collapse="collapse">
-							<fo:table-column />
-							<fo:table-column />
-							<fo:table-column />
-							<fo:table-column />
-							<fo:table-column />
-							<fo:table-column />
-							<fo:table-header>
-								<fo:table-cell>
-									<fo:block font-weight="bold">Trạm</fo:block>
-								</fo:table-cell>
-								<fo:table-cell>
-									<fo:block font-weight="bold">Ngày đi / Ngày đến</fo:block>
-								</fo:table-cell>
-								<fo:table-cell>
-									<fo:block font-weight="bold">Ghế</fo:block>
-								</fo:table-cell>
-								<fo:table-cell>
-									<fo:block font-weight="bold">Loại xe</fo:block>
-								</fo:table-cell>
-								<fo:table-cell>
-									<fo:block font-weight="bold"></fo:block>
-								</fo:table-cell>
-							</fo:table-header>
-							<fo:table-body>
-								<xsl:apply-templates select="ticket" />
-							</fo:table-body>
-						</fo:table>
-					</fo:block>
+					<fo:table table-layout="auto" width="100%" font-family="Arial"
+						font-size="12pt" border-width="1pt" border-style="solid" border-color="black"
+						border-collapse="collapse" space-after="5mm">
+						<fo:table-column column-width="40mm" />
+						<fo:table-column column-width="60mm" />
+						<fo:table-column column-width="23mm" />
+						<fo:table-column column-width="25mm" />
+						<fo:table-column column-width="40mm" />
+						<fo:table-header text-align="center">
+							<fo:table-cell border-width="1pt" border-style="solid"
+								border-color="black" padding="4pt">
+								<fo:block font-weight="bold">Trạm</fo:block>
+							</fo:table-cell>
+							<fo:table-cell border-width="1pt" border-style="solid"
+								border-color="black" padding="4pt">
+								<fo:block font-weight="bold">Ngày đi / Ngày đến</fo:block>
+							</fo:table-cell>
+							<fo:table-cell border-width="1pt" border-style="solid"
+								border-color="black" padding="4pt">
+								<fo:block font-weight="bold">Loại xe</fo:block>
+							</fo:table-cell>
+							<fo:table-cell border-width="1pt" border-style="solid"
+								border-color="black" padding="4pt">
+								<fo:block font-weight="bold">Ghế</fo:block>
+							</fo:table-cell>
+							<fo:table-cell border-width="1pt" border-style="solid"
+								border-color="black" padding="4pt">
+								<fo:block font-weight="bold">Trạng thái</fo:block>
+							</fo:table-cell>
+						</fo:table-header>
+						<fo:table-body>
+							<xsl:apply-templates select="ticket" />
+						</fo:table-body>
+					</fo:table>
 					<fo:block font-family="Arial" font-size="12pt" font-weight="bold" space-after="5mm">
 						Tổng cộng:
 						<xsl:value-of select="basePrice" /> đồng
-						($ <xsl:value-of select="basePriceInUSD" />)
+						($<xsl:value-of select="basePriceInUSD" />)
 					</fo:block>
 					<fo:block font-family="Arial" font-size="12pt" font-weight="bold" space-after="5mm">
 						Phí:
 						<xsl:value-of select="transactionFee" /> đồng
-						($ <xsl:value-of select="transactionFeeInUSD" />)
+						($<xsl:value-of select="transactionFeeInUSD" />)
 					</fo:block>
 					<fo:block font-family="Arial" font-size="12pt" font-weight="bold" space-after="5mm">
 						Thành tiền:
 						<xsl:value-of select="totalAmount" /> đồng
-						($ <xsl:value-of select="totalAmountInUSD" />)
+						($<xsl:value-of select="totalAmountInUSD" />)
 					</fo:block>
 					<xsl:if test="refundedAmount">
 						<fo:block font-family="Arial" font-size="12pt" font-weight="bold"
 							space-after="5mm">
 							Đã hoàn lại:
 							<xsl:value-of select="refundedAmount" /> đồng
-							($ <xsl:value-of select="refundedAmountInUSD" />)
+							($<xsl:value-of select="refundedAmountInUSD" />)
 						</fo:block>
 					</xsl:if>
 				</fo:flow>
@@ -101,38 +106,43 @@
 	<!-- ========================= -->
 	<xsl:template match="ticket">
 		<fo:table-row>
-			<xsl:if test="function = 'lead'">
-				<xsl:attribute name="font-weight">bold</xsl:attribute>
-			</xsl:if>
-			<fo:table-cell>
+			<fo:table-cell border-width="1pt" border-style="solid"
+				border-color="black" padding="4pt">
 				<fo:block>
 					<xsl:value-of select="departureStation" />
 				</fo:block>
 			</fo:table-cell>
-			<fo:table-cell>
+			<fo:table-cell border-width="1pt" border-style="solid"
+				border-color="black" padding="4pt">
 				<fo:block>
 					<xsl:value-of select="departureDate" />
 				</fo:block>
 			</fo:table-cell>
-			<fo:table-cell number-rows-spanned="2">
+			<fo:table-cell border-width="1pt" border-style="solid"
+				border-color="black" number-rows-spanned="2" display-align="center"
+				padding="4pt">
 				<fo:block>
 					<xsl:value-of select="busType" />
 				</fo:block>
 			</fo:table-cell>
-			<fo:table-cell number-rows-spanned="2">
+			<fo:table-cell border-width="1pt" border-style="solid"
+				border-color="black" number-rows-spanned="2" display-align="center"
+				padding="4pt">
 				<fo:block>
 					<xsl:for-each select="seat">
-						<xsl:value-of select="." />
+						<xsl:value-of select="." />&#160;
 					</xsl:for-each>
 				</fo:block>
 			</fo:table-cell>
-			<fo:table-cell number-rows-spanned="2">
+			<fo:table-cell border-width="1pt" border-style="solid"
+				border-color="black" number-rows-spanned="2" display-align="center"
+				padding="4pt">
 				<fo:block>
 					<xsl:choose>
-						<xsl:when test="status ='active' and ../../status = 'unpaid'">
+						<xsl:when test="status ='active' and ../status = 'unpaid'">
 							Chưa thanh toán
 						</xsl:when>
-						<xsl:when test="status ='active' and ../../status = 'paid'">
+						<xsl:when test="status ='active' and ../status = 'paid'">
 							Đã thanh toán
 						</xsl:when>
 						<xsl:when test="status ='pending'">
@@ -141,7 +151,8 @@
 						<xsl:when test="status ='cancelled'">
 							Đã huỷ
 							<fo:block />
-							Do <xsl:value-of select="cancelReason" />
+							Do
+							<xsl:value-of select="cancelReason" />
 						</xsl:when>
 						<xsl:when test="status ='refunded'">
 							Đã hoàn tiền
@@ -151,19 +162,22 @@
 						<xsl:when test="status ='refunded2'">
 							Đã hoàn tiền
 							<fo:block />
-							Do <xsl:value-of select="cancelReason" />
+							Do
+							<xsl:value-of select="cancelReason" />
 						</xsl:when>
 					</xsl:choose>
 				</fo:block>
 			</fo:table-cell>
 		</fo:table-row>
 		<fo:table-row>
-			<fo:table-cell>
+			<fo:table-cell border-width="1pt" border-style="solid"
+				border-color="black" padding="4pt">
 				<fo:block>
 					<xsl:value-of select="arrivalStation" />
 				</fo:block>
 			</fo:table-cell>
-			<fo:table-cell>
+			<fo:table-cell border-width="1pt" border-style="solid"
+				border-color="black" padding="4pt">
 				<fo:block>
 					<xsl:value-of select="arrivalDate" />
 				</fo:block>

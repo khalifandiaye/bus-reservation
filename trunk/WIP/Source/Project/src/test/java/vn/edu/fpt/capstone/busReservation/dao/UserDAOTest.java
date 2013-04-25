@@ -6,7 +6,6 @@ package vn.edu.fpt.capstone.busReservation.dao;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import vn.edu.fpt.capstone.busReservation.dao.bean.UserBean;
@@ -18,12 +17,6 @@ import vn.edu.fpt.capstone.busReservation.util.CryptUtils;
  *
  */
 public class UserDAOTest extends DAOTest {
-    @Test
-    public void testIsExist001() {
-        UserDAO userDAO = (UserDAO) getBean("userDAO");
-        boolean result = userDAO.isExist("sonngocs");
-        Assert.assertFalse(result);
-    }
     @Test
     public void testUpdate() throws NoSuchAlgorithmException {
         UserDAO userDAO = (UserDAO) getBean("userDAO");
