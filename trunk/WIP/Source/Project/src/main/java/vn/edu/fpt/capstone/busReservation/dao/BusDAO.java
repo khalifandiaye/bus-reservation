@@ -97,6 +97,35 @@ public class BusDAO extends GenericDAO<Integer, BusBean> {
 			exceptionHandling(e, session);
 		}
 		return result;
+	} 
+	
+	/*SELECT b.id, b.plate_number, bs.to_date, bs.end_station_id "
+				+ "FROM bus b LEFT JOIN (SELECT t1.* FROM bus_status t1 "
+				+ "JOIN (SELECT Max(id) id, MAX(to_date) to_date FROM bus_status WHERE status = 'active' GROUP BY bus_id ) t2 "
+				+ "ON t1.id = t2.id AND t1.to_date = t2.to_date) bs ON b.id = bs.bus_id "
+				+ "WHERE b.bus_type_id = :busTypeId AND b.status = 'active'"
+				+ "GROUP BY b.id "
+				+ "HAVING ( bs.to_date < :departureTime OR bs.to_date IS NULL ) " +
+				"AND ( bs.end_station_id = :startStationId "
+				+ "OR bs.end_station_id IS NULL )*/
+
+	@SuppressWarnings("unchecked")
+	public List<Object[]> getAvailBusExtend(Date departureTime, int startStationId, int busTypeId) {
+		String stringQuery = "(SELECT MAX(bs.toDate), bs.bus.id FROM BusStatusBean bs WHERE bs.toDate < :departureTime)";
+
+		Session session = sessionFactory.getCurrentSession();
+		List<Object[]> result = new ArrayList<Object[]>();
+		try {
+			// must have to start any transaction
+			Query query = session.createSQLQuery(stringQuery);
+			query.setParameter("departureTime", departureTime);
+			query.setParameter("startStationId", startStationId);
+			query.setParameter("busTypeId", busTypeId);
+			result = query.list();
+		} catch (HibernateException e) {
+			exceptionHandling(e, session);
+		}
+		return result;
 	}
 
 	@SuppressWarnings("unchecked")

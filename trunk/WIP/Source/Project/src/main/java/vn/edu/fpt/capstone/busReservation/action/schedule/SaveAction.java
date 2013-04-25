@@ -35,6 +35,7 @@ public class SaveAction extends ActionSupport {
 	private int tripDialogBusPlate;
 	private String autoReturnBus;
 	private String autoReturnDepartureTime;
+	private String allowBooking;
 
 	private BusDAO busDAO;
 	private RouteDAO routeDAO;
@@ -56,9 +57,10 @@ public class SaveAction extends ActionSupport {
 
 			// check if bus_status is duplicated in DB
 			List<BusStatusBean> busStatusBeans = busStatusDAO
-					.getDuplicatedBusAndDate(busBean, fromDate, routeDetailsList
-							.get(routeDetailsList.size() - 1).getSegment().getEndAt());
-			
+					.getDuplicatedBusAndDate(busBean, fromDate,
+							routeDetailsList.get(routeDetailsList.size() - 1)
+									.getSegment().getEndAt());
+
 			boolean isUpdated = false;
 			for (int i = 0; i < busStatusBeans.size(); i++) {
 				if (busStatusBeans.get(i).getTrips().get(0).getRouteDetails()
@@ -69,17 +71,23 @@ public class SaveAction extends ActionSupport {
 					isUpdated = true;
 				}
 			}
-			if(!isUpdated){
+			if (!isUpdated) {
 				addNewSchedule(fromDate, busBean, routeDetailsList);
 			}
-			
-			if("on".equals(autoReturnBus)){
-				Date fromDateReturn = FormatUtils.deFormatDate(autoReturnDepartureTime,
-						"hh:mm - dd/MM/yyyy", CommonConstant.LOCALE_US,
+
+			if ("on".equals(autoReturnBus)) {
+
+				Date fromDateReturn = FormatUtils.deFormatDate(
+						autoReturnDepartureTime, "hh:mm - dd/MM/yyyy",
+						CommonConstant.LOCALE_US,
 						CommonConstant.DEFAULT_TIME_ZONE);
 				RouteBean reverseRoute = routeDAO.getById(routeDAO.getRouteTerminal(routeBeans).get(1));
 				List<RouteDetailsBean> reverseRouteDetails = reverseRoute.getRouteDetails();
-				addAutoReturnSchedule(fromDateReturn, busBean, reverseRouteDetails);
+				if ("on".equals(allowBooking)) {
+					addNewSchedule(fromDateReturn, busBean, reverseRouteDetails);
+				} else {
+					addAutoReturnSchedule(fromDateReturn, busBean, reverseRouteDetails);
+				}
 			}
 
 		} catch (Exception ex) {
@@ -88,7 +96,7 @@ public class SaveAction extends ActionSupport {
 		}
 		return SUCCESS;
 	}
-	
+
 	public void addAutoReturnSchedule(Date fromDate, BusBean busBean,
 			List<RouteDetailsBean> routeDetailsList) {
 		// list start date of each segment (required to get valid travel
@@ -120,10 +128,11 @@ public class SaveAction extends ActionSupport {
 		busStatusDAO.insert(busStatusBean);
 	}
 
-	public void addNewSchedule(Date fromDate, BusBean busBean, List<RouteDetailsBean> routeDetailsList) {
+	public void addNewSchedule(Date fromDate, BusBean busBean,
+			List<RouteDetailsBean> routeDetailsList) {
 		try {
 			long delayTime = (long) systemSettingDAO.getStationDelayTime() * 60 * 1000;
-			
+
 			// list start date of each segment (required to get valid travel
 			// time of each segment)
 			List<Date> startDateOfSegment = new ArrayList<Date>();
@@ -136,13 +145,14 @@ public class SaveAction extends ActionSupport {
 				traTime = segmentTravelTimeDAO
 						.getTravelTimebyDate(
 								routeDetailsBean.getSegment().getId(),
-								startDateOfSegment.get(i)).get(0).getTravelTime();
-			   List<SegmentTravelTimeBean> segmentTravelTimeBeans = segmentTravelTimeDAO.getTravelTimebyDate(
-                  routeDetailsBean.getSegment().getId(),
-                  startDateOfSegment.get(i));
-			   if (segmentTravelTimeBeans.size() != 0) {
-			      traTime = segmentTravelTimeBeans.get(0).getTravelTime();
-			   }
+								startDateOfSegment.get(i)).get(0)
+						.getTravelTime();
+				List<SegmentTravelTimeBean> segmentTravelTimeBeans = segmentTravelTimeDAO
+						.getTravelTimebyDate(routeDetailsBean.getSegment()
+								.getId(), startDateOfSegment.get(i));
+				if (segmentTravelTimeBeans.size() != 0) {
+					traTime = segmentTravelTimeBeans.get(0).getTravelTime();
+				}
 
 				Date newEndDate = new Date(startDateOfSegment.get(i).getTime()
 						+ traTime);
@@ -188,7 +198,7 @@ public class SaveAction extends ActionSupport {
 	public void setAutoReturnBus(String autoReturnBus) {
 		this.autoReturnBus = autoReturnBus;
 	}
-	
+
 	public void setAutoReturnDepartureTime(String autoReturnDepartureTime) {
 		this.autoReturnDepartureTime = autoReturnDepartureTime;
 	}
@@ -234,4 +244,7 @@ public class SaveAction extends ActionSupport {
 		return message;
 	}
 
+	public void setAllowBooking(String allowBooking) {
+		this.allowBooking = allowBooking;
+	}
 }
