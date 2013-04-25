@@ -40,160 +40,23 @@
          addNewSchedule.attr("disabled","disabled");
       }
    }
+	$(document).ready(function() {
+	    $('.btnListTicket').on('click.listTicket', function(e) {
+		    var id = $(this).parents('tr').attr('id').replace('busStatus_','');
+		    $('#listTicketForm input[name="busStatusId"]').val(id);
+		    $('#listTicketForm').submit();
+		    return false;
+		    });
+		});
 	 
-	$(document).ready(
-			$('#scheduleTable').dataTable({ bSort : false });
-			function() {
-				var oTable = $('#scheduleTable').dataTable({
-					"aoColumnDefs": [
-					                 { 'bSortable': false, 'aTargets': [ 4,5 ] }   
-					              ]
-				});
-				
-		      $("#tripDialogBusPlate").change(function(){
-		         checkButton(); 
-		      });
-		      
-				$('#busStatusInsertBtn').click(function() {
-					var date = new Date();
-			      date.setDate(date.getDate() + 1);
-			         
-					$('#tripDialogRoutes').val(-1);
-					$('#tripDialogDepartureTime').val('');
-					$('#tripDialogArrivalTime').val('');
-					$('#tripDialogBusType').empty();
-               $('#tripDialogBusType').append('<option value="-1">Select Bus Type</option>');
-               $('#tripDialogBusPlate').empty();
-					
-					$('#CreateScheduleDialog').modal();
-					$('#tripEditDialogLabel').html("Add New Schedule");
-					$("#tripDialogDepartureTimeDiv").datetimepicker({
-						format : "hh:ii - dd/mm/yyyy",
-						autoclose : true,
-						todayBtn : true,
-						startDate : date,
-						minuteStep : 10
-					}).on('changeDate', function(ev) {
-						getAvailBus();
-						getArrivalTime();
-						checkButton();
-					});
-					
-					$("#tripDialogDepartureTimeDiv").datetimepicker("setDate", date);
-				});
-				
-				$('#tripDeleteDialogOk').click(function() {
-					var busStatusId = $('#busStatusId').val();
-					$.ajax({url: "deleteSchedule.html?busStatusId=" + busStatusId,}).done(function(data) {
-						   alert(data.message);
-						   var url = $('#contextPath').val() + "/schedule/list.html";
-						   window.location = url;
-					});
-				});
-				
-				$('#tripDialogBusType').change(function() {
-					getAvailBus();
-					getArrivalTime();
-					checkButton();
-				});
-				
-				$('#tripDialogRoutes').change(function() {
-					getBusTypesInRoute();
-					getAvailBus();
-					getArrivalTime();
-		      });
-				
-				$('#tripDialogBusPlate').change(function() {
-					checkButton();
-				});
-				
-				function getAvailBus() {
-					var selectedRouteId = $("#tripDialogRoutes").val();
-					var departureTime = $("#tripDialogDepartureTime").val();
-					var selectedBusType = $("#tripDialogBusType").val();
-					if (selectedRouteId != '-1' && departureTime != ""
-							&& selectedBusType != '-1') {
-						$.ajax({
-		    				  url: "availBus.html?departureTime=" + departureTime + "&busType=" + selectedBusType + "&routeId=" + selectedRouteId,
-		    				}).done(function(data) {
-		    					$('#tripDialogBusPlate').empty();
-		    					$.each(data.busInfos, function() {
-		    						$('#tripDialogBusPlate').append('<option value="'+this.id+'">'+this.plateNumber+'</option>');
-		    					});
-		    				});
-					}
-				};
-				
-				function getBusTypesInRoute() {
-					var selectedRouteId = $("#tripDialogRoutes").val();
-		         if (selectedRouteId != '-1') {
-		            $.ajax({
-		                 url: "busTypes.html?&routeId=" + selectedRouteId,
-		                }).done(function(data) {
-		                 $('#tripDialogBusType').empty();
-		                 $.each(data.busTypeInfos, function() {
-		                 $('#tripDialogBusType').append('<option value="'+this.id+'">'+this.type+'</option>');
-		                });
-		              });
-		         }
-				}
-				
-				function getArrivalTime() {
-					var selectedRouteId = $("#tripDialogRoutes").val();
-		         var departureTime = $("#tripDialogDepartureTime").val();
-		         if (selectedRouteId != '-1' && departureTime != "") {
-		        	   $.ajax({
-		        		   url: "getArrivalTime.html?departureTime=" + departureTime + "&routeId=" + selectedRouteId,
-		        	   }).done(function(data) {
-		        		   $("#tripDialogArrivalTime").val(data.arrivalTime);
-		        		});
-		         }
-				}
-				
-				$('#cancelAdd').bind('click', function(){
-					$("#tripDialogRoutes").val(-1);
-		         $("#tripDialogDepartureTime").val('');
-		         $("#tripDialogArrivalTime").val('');
-		         $("#tripDialogBusType").empty();
-		         $('#tripDialogBusPlate').val('');
-				});
-				
-				$('#addNewSchedule').bind('click', function(event) {
-					var selectedRouteId = $("#tripDialogRoutes").val();
-		         var departureTime = $("#tripDialogDepartureTime").val();
-		         var selectedBusType = $("#tripDialogBusType").val();
-		         var busPlate = $('#tripDialogBusPlate').val();
-					var form = $('#addNewTripForm');
-					
-					if (selectedRouteId == -1 || departureTime == '' || !selectedBusType
-							|| selectedBusType == -1 || !busPlate
-							|| busPlate == '') {
-						return;
-					}
-					
-					event.preventDefault();
-					$.ajax({
-					      type: "POST",
-					      url: form.attr('action'),
-					      data: form.serialize(),
-					      success: function( response ) {
-					    	  $('#CreateScheduleDialog').modal('hide');
-					    	  $("#saveSuccessDialogLabeMessage").html(response);
-					    	  $("#saveSuccess").modal();
-					      }
-					});
-				});
-				
-				$('#saveSuccessDialogOk').bind('click', function(){
-					var url = $('#contextPath').val() + "/schedule/list.html";
-					window.location = url;
-				});
-			});
 </script>
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
 	<jsp:include page="../common/menu.jsp" />
+	<s:form id="listTicketForm" action="report01010">
+		<s:hidden name="busStatusId" value="%{id}" />
+	</s:form>
 	<div id="page" class="well small-well">
 		<h3 style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">    
 				Manage schedule  
@@ -208,6 +71,7 @@
 						<th>Bus Number</th>
 						<th>From Date</th>
 						<th>To Date</th>
+						<th></th>
 						<th></th>
 						<th></th>
 					</tr>
@@ -225,6 +89,9 @@
 							<td><input data-delete="<s:property value='id'/>"
 								class="btn btn-danger btn-small" type="button" value="Delete"  
 								onclick='javascript: deleteTrip(<s:property value='id'/>)' /></td>
+							<td>
+								<input class="btn btn-info btn-small btnListTicket" type="submit" value="List Tickets"/>
+							</td>
 						</tr>
 					</s:iterator>
 				</tbody>
