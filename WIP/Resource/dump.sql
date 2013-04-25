@@ -684,7 +684,7 @@ CREATE TABLE `system_setting` (
 
 LOCK TABLES `system_setting` WRITE;
 /*!40000 ALTER TABLE `system_setting` DISABLE KEYS */;
-INSERT INTO `system_setting` VALUES ('maximum.segment.in.route','5'),('minimum.segment.traveltime','3600000'),('refund.1.rate','70'),('refund.1.time','10'),('refund.2.rate','30'),('refund.2.time','5'),('reservation.timeout','15'),('segment.default.price','50'),('station.delay','30');
+INSERT INTO `system_setting` VALUES ('maximum.segment.in.route','5'),('minimum.segment.traveltime','3600000'),('refund.1.rate','70'),('refund.1.time','10'),('refund.2.rate','30'),('refund.2.time','5'),('reservation.maxSeat','5'),('reservation.timeout','15'),('segment.default.price','50'),('station.delay','30');
 /*!40000 ALTER TABLE `system_setting` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1508,4 +1508,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-04-24  0:20:21
+-- Dump completed on 2013-04-26  2:04:12
