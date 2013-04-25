@@ -15,7 +15,7 @@ var SEAT_EMPTY = 0,
     SEAT_SELECTED = 2;
  
 function getSeatsToAllocate(seatType){
-	if(seatType=="return"){
+	if(seatType=="return"){ 
 		return SeatsReturnToAllocate;
 	}else{
 		return SeatsOutToAllocate;
@@ -240,20 +240,22 @@ function showPopup(message){
 
 function updateSeatNum(seatType){
     $(".seat-number").text(getSeatsToAllocate(seatType) - getSeatsNotAllocatedCount(seatType));
+    MaxSeatNumber = parseInt($("#maxSeatNumber").val());
     if(seatType == 'out'){
-    	$(".seat-number-selected").text(parseInt($("#passengerNoOut").val()) > 5 ? 5 : parseInt($("#passengerNoOut").val()));
+    	$(".seat-number-selected").text(parseInt($("#passengerNoOut").val()) > MaxSeatNumber ? MaxSeatNumber : parseInt($("#passengerNoOut").val()));
     }else{
-    	$(".seat-number-selected").text(parseInt($("#passengerNoReturn").val()) > 5 ? 5 : parseInt($("#passengerNoReturn").val()));
+    	$(".seat-number-selected").text(parseInt($("#passengerNoReturn").val()) > MaxSeatNumber ? MaxSeatNumber : parseInt($("#passengerNoReturn").val()));
     }
 }
 
 $(function(){
-	SeatsOutToAllocate = parseInt($("#passengerNoOut").val()) > 5 ? 5 : parseInt($("#passengerNoOut").val());
-	SeatsReturnToAllocate = parseInt($("#passengerNoReturn").val()) > 5 ? 5 : parseInt($("#passengerNoReturn").val());
-	$(".seat-number-selected").text(parseInt($("#passengerNoOut").val()) > 5 ? 5 : parseInt($("#passengerNoOut").val()));
+	MaxSeatNumber = parseInt($("#maxSeatNumber").val());
+	SeatsOutToAllocate = parseInt($("#passengerNoOut").val()) > MaxSeatNumber ? MaxSeatNumber : parseInt($("#passengerNoOut").val());
+	SeatsReturnToAllocate = parseInt($("#passengerNoReturn").val()) > MaxSeatNumber ? MaxSeatNumber : parseInt($("#passengerNoReturn").val());
+	$(".seat-number-selected").text(parseInt($("#passengerNoOut").val()) > MaxSeatNumber ? MaxSeatNumber : parseInt($("#passengerNoOut").val()));
 	
-	SeatsOutNotAllocatedCount = parseInt($("#passengerNoOut").val()) > 5 ? 5 : parseInt($("#passengerNoOut").val());
-	SeatsReturnNotAllocatedCount = parseInt($("#passengerNoReturn").val()) > 5 ? 5 : parseInt($("#passengerNoReturn").val());
+	SeatsOutNotAllocatedCount = parseInt($("#passengerNoOut").val()) > MaxSeatNumber ? MaxSeatNumber : parseInt($("#passengerNoOut").val());
+	SeatsReturnNotAllocatedCount = parseInt($("#passengerNoReturn").val()) > MaxSeatNumber ? MaxSeatNumber : parseInt($("#passengerNoReturn").val());
 	
 	if($("#isNew").val() == "new"){
 		sessionStorage.clear();
