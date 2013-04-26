@@ -99,8 +99,6 @@ public class ScheduleLogic extends BaseLogic {
             tripMap = new HashMap<Integer, SegmentTicket>();
             seats = new StringBuilder();
             for (TicketBean ticket : tickets) {
-                // clean the string builder
-                seats.setLength(0);
                 for (TripBean trip : ticket.getTrips()) {
                     if (tripMap.containsKey(trip.getId())) {
                         segmentTicket = tripMap.get(trip.getId());
@@ -113,6 +111,8 @@ public class ScheduleLogic extends BaseLogic {
                         routeTicketList.getSegmentTicketList().add(
                                 segmentTicket);
                     }
+                    // clean the string builder
+                    seats.setLength(0);
                     for (SeatPositionBean seat : ticket.getSeatPositions()) {
                         seats.append(seat.getName());
                         seats.append(", ");
