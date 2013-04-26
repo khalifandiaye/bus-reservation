@@ -4,7 +4,7 @@
 	"-//W3C//DTD XHTML 1.1 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<<s:if test="%{model != null}">
+<s:if test="%{model != null}">
 <h3>
 	<s:text name="label.routeFromTo" >
 		<s:param value="%{model.from}" />
@@ -38,9 +38,8 @@
 </div>
 </s:iterator>
 </s:if>
-<<s:else>
+<s:else>
 <h3>
 	<s:text name="label.noTicket" />
-	</s:text>
 </h3>
 </s:else>
