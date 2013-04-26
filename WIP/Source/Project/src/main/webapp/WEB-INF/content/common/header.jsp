@@ -75,6 +75,8 @@
 								<li class="admin hidden"><a
 									href="<%=request.getContextPath()%>/admin/user-management.html">THÀNH
 										VIÊN</a></li>
+								<li class="admin hidden"><a
+									href="<%=request.getContextPath()%>/admin/settings.html">Configuration</a></li>
 							</ul></li>
 					</ul>
 				</div>
