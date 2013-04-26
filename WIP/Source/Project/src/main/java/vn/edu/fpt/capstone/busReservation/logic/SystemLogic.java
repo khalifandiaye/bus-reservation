@@ -35,85 +35,68 @@ public class SystemLogic extends BaseLogic {
 
     public void setConfiguration(SettingModel model) {
         SystemSettingBean setting = null;
+        String[] time = null;
         if (model != null) {
-            if (CheckUtils.isNullOrBlank(model.getSegment().getDefaultPrice())) {
-                setting = new SystemSettingBean();
-                setting.setId("segment.default.price");
+            if (!CheckUtils.isNullOrBlank(model.getSegment().getDefaultPrice())) {
+                setting = systemSettingDAO.getById("segment.default.price");
                 setting.setValue(model.getSegment().getDefaultPrice());
                 systemSettingDAO.update(setting);
             }
-            if (CheckUtils.isNullOrBlank(model.getSegment().getMaxCount())) {
-                setting = new SystemSettingBean();
-                setting.setId("maximum.segment.in.route");
+            if (!CheckUtils.isNullOrBlank(model.getSegment().getMaxCount())) {
+                setting = systemSettingDAO.getById("maximum.segment.in.route");
                 setting.setValue(model.getSegment().getMaxCount());
                 systemSettingDAO.update(setting);
             }
-            if (CheckUtils.isNullOrBlank(model.getSegment().getRest())) {
-                setting = new SystemSettingBean();
-                setting.setId("station.delay");
+            if (!CheckUtils.isNullOrBlank(model.getSegment().getRest())) {
+                setting = systemSettingDAO.getById("station.delay");
                 setting.setValue(model.getSegment().getRest());
                 systemSettingDAO.update(setting);
             }
-            if (CheckUtils.isNullOrBlank(model.getSegment()
-                    .getDefaultTravelTime().getHour())
-                    && CheckUtils.isNullOrBlank(model.getSegment()
-                            .getDefaultTravelTime().getMinute())) {
-                setting = new SystemSettingBean();
-                setting.setId("minimum.segment.traveltime");
-                setting.setValue(Long.toString(Long.parseLong(model
-                        .getSegment().getDefaultTravelTime().getHour())
-                        * 60
-                        * 60
-                        * 1000
-                        + Long.parseLong(model.getSegment()
-                                .getDefaultTravelTime().getMinute())
-                        * 60
-                        * 1000));
+            if (!CheckUtils.isNullOrBlank(model.getSegment()
+                    .getDefaultTravelTime().getHour())) {
+                setting = systemSettingDAO.getById("minimum.segment.traveltime");
+                time = model.getSegment().getDefaultTravelTime().getHour()
+                        .split(":");
+                setting.setValue(Long.toString(Long.parseLong(time[0]) * 60
+                        * 60 * 1000 + Long.parseLong(time[1]) * 60 * 1000));
                 systemSettingDAO.update(setting);
             }
-            if (CheckUtils.isNullOrBlank(model.getReservation().getMaxSeat())) {
-                setting = new SystemSettingBean();
-                setting.setId("reservation.maxSeat");
+            if (!CheckUtils.isNullOrBlank(model.getReservation().getMaxSeat())) {
+                setting = systemSettingDAO.getById("reservation.maxSeat");
                 setting.setValue(model.getReservation().getMaxSeat());
                 systemSettingDAO.update(setting);
             }
-            if (CheckUtils.isNullOrBlank(model.getReservation().getTimeout())) {
-                setting = new SystemSettingBean();
-                setting.setId("reservation.timeout");
+            if (!CheckUtils.isNullOrBlank(model.getReservation().getTimeout())) {
+                setting = systemSettingDAO.getById("reservation.timeout");
                 setting.setValue(model.getReservation().getTimeout());
                 systemSettingDAO.update(setting);
             }
-            if (CheckUtils.isNullOrBlank(model.getReservation()
+            if (!CheckUtils.isNullOrBlank(model.getReservation()
                     .getRefundRate1())) {
-                setting = new SystemSettingBean();
-                setting.setId("refund.1.rate");
+                setting = systemSettingDAO.getById("refund.1.rate");
                 setting.setValue(model.getReservation().getRefundRate1());
                 systemSettingDAO.update(setting);
             }
-            if (CheckUtils.isNullOrBlank(model.getReservation()
+            if (!CheckUtils.isNullOrBlank(model.getReservation()
                     .getRefundRate2())) {
-                setting = new SystemSettingBean();
-                setting.setId("refund.2.rate");
+                setting = systemSettingDAO.getById("refund.2.rate");
                 setting.setValue(model.getReservation().getRefundRate2());
                 systemSettingDAO.update(setting);
             }
-            if (CheckUtils.isNullOrBlank(model.getReservation()
+            if (!CheckUtils.isNullOrBlank(model.getReservation()
                     .getRefundTime1())) {
-                setting = new SystemSettingBean();
-                setting.setId("refund.1.time");
+                setting = systemSettingDAO.getById("refund.1.time");
                 setting.setValue(model.getReservation().getRefundTime1());
                 systemSettingDAO.update(setting);
             }
-            if (CheckUtils.isNullOrBlank(model.getReservation()
+            if (!CheckUtils.isNullOrBlank(model.getReservation()
                     .getRefundTime2())) {
-                setting = new SystemSettingBean();
-                setting.setId("refund.2.time");
+                setting = systemSettingDAO.getById("refund.2.time");
                 setting.setValue(model.getReservation().getRefundTime2());
                 systemSettingDAO.update(setting);
             }
-            if (CheckUtils.isNullOrBlank(model.getDiscount().getFullRoute())) {
-                setting = new SystemSettingBean();
-                setting.setId("discount.fullRoute");
+            if (!CheckUtils.isNullOrBlank(model.getDiscount().getFullRoute())) {
+                setting = systemSettingDAO.getById("discount.fullRoute");
                 setting.setValue(model.getDiscount().getFullRoute());
                 systemSettingDAO.update(setting);
             }
@@ -135,10 +118,12 @@ public class SystemLogic extends BaseLogic {
                 } else if ("minimum.segment.traveltime".equalsIgnoreCase(bean
                         .getId())) {
                     time = Long.parseLong(value);
-                    model.getSegment().getDefaultTravelTime()
-                            .setMinute(Long.toString(time / 1000 / 60 % 60));
-                    model.getSegment().getDefaultTravelTime()
-                            .setHour(Long.toString(time / 1000 / 60 / 60));
+                    model.getSegment()
+                            .getDefaultTravelTime()
+                            .setHour(
+                                    String.format("%02d%02d",
+                                            time / 1000 / 60 / 60,
+                                            time / 1000 / 60 % 60));
                 } else if ("segment.default.price".equalsIgnoreCase(id)) {
                     model.getSegment().setDefaultPrice(value);
                 } else if ("station.delay".equalsIgnoreCase(id)) {

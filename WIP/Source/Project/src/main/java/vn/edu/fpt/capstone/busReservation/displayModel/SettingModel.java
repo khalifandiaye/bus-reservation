@@ -255,6 +255,7 @@ public class SettingModel implements Serializable {
          * 
          */
         private Discount() {
+            super();
         }
 
         /**
