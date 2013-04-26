@@ -7,18 +7,18 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title><s:title /></title>
+<title><s:text name="title.settings" /></title>
 <jsp:include page="../common/xheader.jsp" />
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/styles/style.css">
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/styles/custom-data-table.css">
+	href="<%=request.getContextPath()%>/styles/admin/settings.css">
 
 <script src="<%=request.getContextPath()%>/js/jquery.validate.min.js"></script>
-<script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
-<script src="<%=request.getContextPath()%>/js/admin/admin-user.js"></script>
+<script src="<%=request.getContextPath()%>/js/jquery.maskedinput.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/admin/settings.js"></script>
 </head>
-<body> 
+<body>
 	<jsp:include page="../common/header.jsp" />
 	<div class="container">
 	<s:actionerror/>
@@ -30,18 +30,18 @@
 		<s:form action="settings">
 		<s:hidden name="model.updateSettings" value="%{true}" />
 		<div>
-			<h5>Segment</h5>
+			<h4>Segment</h4>
 			<div class="item" title="Maximum number of segments in a route">
 				<label>Max Count</label>
 				<span><s:textfield name="model.segment.maxCount" /> segments</span>
 			</div>
 			<div class="item" title="Default travel time of a segment in hour:minute">
 				<label>Default Travel Time</label>
-				<span><s:textfield name="model.segment.defaultTravelTime.hour" maxlength="2" />:<s:textfield name="model.segment.defaultTravelTime.minute" maxlength="2" /></span>
+				<span><s:textfield cssClass="time" name="model.segment.defaultTravelTime.hour" maxlength="4" /></span>
 			</div>
 			<div class="item" title="Default ticket price for a segment">
 				<label>Default Price</label>
-				<span><s:textfield name="model.segment.defaultPrice" />,000 VND</span>
+				<span><s:textfield cssClass="money" name="model.segment.defaultPrice" maxlength="5" />,000 VND</span>
 			</div>
 			<div class="item" title="Time for the bus to stop at each station on a trip">
 				<label>Rest Interval</label>
@@ -49,7 +49,7 @@
 			</div>
 		</div>
 		<div>
-			<h5>Reservation</h5>
+			<h4>Reservation</h4>
 			<div class="item" title="Maximum number of seats per reservation">
 				<label>Max Seats</label>
 				<span><s:textfield name="model.reservation.maxSeat" /> seats</span>
@@ -76,13 +76,13 @@
 			</div>
 		</div>
 		<div>
-			<h5>Discount</h5>
+			<h4>Discount</h4>
 			<div class="item" title="Discount amount when a customer books the whole route">
 				<label>Whole route</label>
-				<span><s:textfield name="model.discount.fullRoute" /> seats</span>
+				<span><s:textfield name="model.discount.fullRoute" />%</span>
 			</div>
 		</div>
-		<s:submit value="Update" /><s:reset value="Clear" />
+		<s:submit cssClass="btn btn-primary" value="Update" /><s:reset cssClass="btn" value="Reset" />
 		</s:form>
 		</div>
 		</div>

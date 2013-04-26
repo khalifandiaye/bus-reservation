@@ -56,4 +56,12 @@ public class SettingsAction extends BaseAction implements ModelDriven<SettingMod
         return SUCCESS;
     }
 
+    @Override
+    public void prepare() throws Exception {
+        super.prepare();
+        if (model == null) {
+            model = new SettingModel();
+        }
+    }
+
 }
