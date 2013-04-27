@@ -30,6 +30,7 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.PaymentBean.PaymentType;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
+import vn.edu.fpt.capstone.busReservation.dao.bean.SystemSettingBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean.TicketStatus;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
@@ -39,6 +40,7 @@ import vn.edu.fpt.capstone.busReservation.displayModel.ReservationInfo.Ticket;
 import vn.edu.fpt.capstone.busReservation.displayModel.SimpleReservationInfo;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 import vn.edu.fpt.capstone.busReservation.util.CurrencyConverter;
 import vn.edu.fpt.capstone.busReservation.util.ReservationUtils;
 import vn.edu.fpt.capstone.busReservation.util.xml.PDFUtils;
@@ -332,6 +334,39 @@ public class ReservationLogic extends BaseLogic {
     }
 
     /**
+     * Get detailed information of a reservation
+     * 
+     * @param reservationId
+     *            id of reservation
+     * @param userId
+     *            id of the reservation's booker
+     * @param calculateDiscount
+     *            specify whether discount info should calculated or not
+     * @return detailed information of the reservation
+     * @throws CommonException
+     */
+    public ReservationInfo loadReservationInfo(int reservationId, int userId,
+            boolean calculateDiscount) throws CommonException {
+        ReservationInfo info = null;
+        List<TicketBean> tickets = null;
+        tickets = ticketDAO.getTickets(reservationId);
+        if (tickets != null && tickets.size() > 0) {
+            if (tickets.get(0).getReservation().getBooker() != null
+                    && userId == 0) {
+                // unauthenticated access
+                throw new CommonException("msgerrrs006");
+            } else if (tickets.get(0).getReservation().getBooker() != null
+                    && userId != tickets.get(0).getReservation().getBooker()
+                            .getId()) {
+                // unauthorized access
+                throw new CommonException("msgerrrs004");
+            }
+            info = loadReservationInfo(tickets, calculateDiscount);
+        }
+        return info;
+    }
+
+    /**
      * Get detailed information of a reservation<br>
      * This method does not validate the reservation's booker
      * 
@@ -426,7 +461,136 @@ public class ReservationLogic extends BaseLogic {
             // TODO handle error
             throw new CommonException(e);
         }
-        info.setTickets(new ArrayList<ReservationInfo.Ticket>());
+        for (TicketBean ticket : tickets) {
+            ReservationUtils.addTickets(
+                    info,
+                    ticket,
+                    (tickets.size() > 1 && ticket
+                            .getTrips()
+                            .get(0)
+                            .getDepartureTime()
+                            .after(tickets
+                                    .get(tickets.size()
+                                            - tickets.indexOf(ticket) - 1)
+                                    .getTrips().get(0).getDepartureTime())),
+                    tariffViewDAO, ticketDAO, converter);
+            if (ticket.getPayments() != null && ticket.getPayments().size() > 0) {
+                for (PaymentBean payment : ticket.getPayments()) {
+                    if (PaymentType.PAY.getValue().equals(payment.getType())) {
+                        paidAmount += payment.getPayAmount();
+                        fee += payment.getServiceFee();
+                    } else {
+                        refundedAmount += payment.getPayAmount();
+                    }
+                }
+            }
+        }
+        if (ReservationStatus.CANCELLED.getValue().equals(
+                reservationBean.getStatus())
+                || ReservationStatus.REFUNDED2.getValue().equals(
+                        reservationBean.getStatus())) {
+            for (Ticket ticket : info.getTickets()) {
+                if (!CheckUtils.isNullOrBlank(ticket.getCancelReason())) {
+                    info.setCancelReason(ticket.getCancelReason());
+                    break;
+                }
+            }
+        }
+        paidAmount *= 1000;
+        fee *= 1000;
+        refundedAmount *= 1000;
+        info.setTotalAmount(paidAmount);
+        info.setTotalAmountInUSD(converter.convert(paidAmount));
+        info.setTransactionFee(fee);
+        info.setTransactionFeeInUSD(converter.convert(fee));
+        if (refundedAmount > 0) {
+            info.setRefundedAmount(refundedAmount);
+            info.setRefundedAmountInUSD(converter.convert(refundedAmount));
+            info.setRefundRate((int) (refundedAmount * 100 / paidAmount));
+        }
+        Collections.sort(info.getTickets());
+        return info;
+    }
+
+    /**
+     * Get detailed information of a reservation from its ticket(s)
+     * 
+     * @param tickets
+     *            tickets of the reservation
+     * @param calculateDiscount
+     *            specify whether discount info should calculated or not
+     * @return detailed information of the reservation
+     * @throws CommonException
+     */
+    private ReservationInfo loadReservationInfo(List<TicketBean> tickets,
+            boolean calculateDiscount) throws CommonException {
+        ReservationInfo info = null;
+        ReservationBean reservationBean = null;
+        CurrencyConverter converter = null;
+        double paidAmount = 0;
+        double fee = 0;
+        double refundedAmount = 0;
+        SystemSettingBean setting = null;
+        double globalDiscount = 0;
+        double forwardDiscount = 0;
+        double returnDiscount = 0;
+        List<TripBean> trips = null;
+        reservationBean = tickets.get(0).getReservation();
+        if (calculateDiscount) {
+            setting = systemSettingDAO
+                    .getById(CommonConstant.SYSTEM_DISCOUNT_WHOLE_TRIP);
+            for (TicketBean ticket : tickets) {
+                trips = ticket.getTrips();
+                if (tickets.size() > 1
+                        && trips.get(0)
+                                .getDepartureTime()
+                                .after(tickets
+                                        .get(tickets.size()
+                                                - tickets.indexOf(ticket) - 1)
+                                        .getTrips().get(0).getDepartureTime())) {
+                    if (trips != null
+                            && trips.size() > 0
+                            && trips.size() == trips.get(0).getRouteDetails()
+                                    .getRoute().getRouteDetails().size()) {
+                        if (setting != null) {
+                            returnDiscount = Double.parseDouble(setting
+                                    .getValue());
+                        }
+                    }
+                } else {
+                    if (trips != null
+                            && trips.size() > 0
+                            && trips.size() == trips.get(0).getRouteDetails()
+                                    .getRoute().getRouteDetails().size()) {
+                        if (setting != null) {
+                            forwardDiscount = Double.parseDouble(setting
+                                    .getValue());
+                        }
+                    }
+                }
+            }
+            info = new ReservationInfo(globalDiscount, forwardDiscount,
+                    returnDiscount);
+        } else {
+            info = new ReservationInfo();
+        }
+        info.setId(reservationBean.getId());
+        info.setCode(reservationBean.getCode());
+        info.setBookerName(reservationBean.getBookerLastName() + " "
+                + reservationBean.getBookerFirstName());
+        info.setPhone(reservationBean.getPhone());
+        info.setEmail(reservationBean.getEmail());
+        info.setStatus(reservationBean.getStatus());
+        try {
+            converter = CurrencyConverter.getInstance(
+                    Currency.getInstance("VND"), Currency.getInstance("USD"));
+        } catch (InstantiationException e) {
+            LOG.error("Impossible error", e);
+            throw new CommonException(e);
+        } catch (IOException e) {
+            // TODO handle error
+            throw new CommonException(e);
+        }
         for (TicketBean ticket : tickets) {
             ReservationUtils.addTickets(
                     info,
@@ -498,9 +662,10 @@ public class ReservationLogic extends BaseLogic {
             int returnQuantity) throws CommonException {
         ReservationInfo info = null;
         CurrencyConverter converter = null;
-        List<Ticket> tickets = null;
-        info = new ReservationInfo();
-        info.setId(0);
+        SystemSettingBean setting = null;
+        double globalDiscount = 0;
+        double forwardDiscount = 0;
+        double returnDiscount = 0;
         try {
             converter = CurrencyConverter.getInstance(
                     Currency.getInstance("VND"), Currency.getInstance("USD"));
@@ -511,13 +676,32 @@ public class ReservationLogic extends BaseLogic {
             // TODO handle error
             throw new CommonException(e);
         }
-        tickets = new ArrayList<ReservationInfo.Ticket>();
-        info.setTickets(tickets);
+        setting = systemSettingDAO
+                .getById(CommonConstant.SYSTEM_DISCOUNT_WHOLE_TRIP);
         tripDAO.refresh(forwardTrips);
+        if (forwardTrips.size() > 0
+                && forwardTrips.size() == forwardTrips.get(0).getRouteDetails()
+                        .getRoute().getRouteDetails().size()) {
+            if (setting != null) {
+                forwardDiscount = Double.parseDouble(setting.getValue());
+            }
+        }
+        if (returnTrips != null) {
+            tripDAO.refresh(returnTrips);
+            if (returnTrips.size() > 0
+                    && returnTrips.size() == returnTrips.get(0).getRouteDetails()
+                            .getRoute().getRouteDetails().size()) {
+                if (setting != null) {
+                    returnDiscount = Double.parseDouble(setting.getValue());
+                }
+            }
+        }
+        info = new ReservationInfo(globalDiscount, forwardDiscount,
+                returnDiscount);
+        info.setId(0);
         ReservationUtils.addTickets(info, forwardTrips, fowardQuantity, false,
                 tariffViewDAO, converter);
         if (returnTrips != null) {
-            tripDAO.refresh(returnTrips);
             ReservationUtils.addTickets(info, returnTrips, returnQuantity,
                     true, tariffViewDAO, converter);
         }

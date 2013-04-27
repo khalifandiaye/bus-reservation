@@ -102,7 +102,7 @@ public class Pay01030Action extends BaseAction {
                 return ERROR;
             }
             reservationInfo = reservationLogic.loadReservationInfo(
-                    reservationId, userId);
+                    reservationId, userId, true);
             paymentLogic.updateReservationPaymentInfo(reservationInfo, null,
                     null, paymentMethodId);
             paymentLogic.doPayment(reservationInfo, paymentMethodId, token);
