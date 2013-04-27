@@ -56,13 +56,13 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
                 return tuple == null ? null : new BusStatus((Integer) tuple[0],
                         (String) tuple[1], (String) tuple[2],
                         (Integer) tuple[3], (Integer) tuple[4], null, null,
-                        null, null);
+                        null, null,last);
             } else {
                 return tuple == null ? null : new BusStatus((Integer) tuple[0],
                         (String) tuple[1], (String) tuple[2],
                         (Integer) tuple[3], (Integer) tuple[4],
                         (String) tuple[5], (Date) tuple[7], (String) tuple[8],
-                        (String) tuple[9]);
+                        (String) tuple[9],last);
             }
         }
 
@@ -535,7 +535,7 @@ public class BusStatusDAO extends GenericDAO<Integer, BusStatusBean> {
                 append = "";
             }
             queryString = " SELECT DISTINCT bus.id, bus.plateNumber"
-                    + "     , bus.status, rtef.id, rter.id"
+                    + "     , bus.status, bus.forwardRoute.id, bus.returnRoute.id"
                     + "     , bst.busStatus, bst.fromDate, bst.toDate"
                     + "     , stne.name, loce.name FROM BusBean bus"
                     + " LEFT JOIN bus.forwardRoute rtef"

@@ -27,10 +27,11 @@ public final class BusStatus implements Serializable {
     private final String endStation;
     private final String endLocation;
     private final String status;
+    private final boolean last;
 
     public BusStatus(Integer busId, String busPlate, String status,
             Integer forwardRouteId, Integer returnRouteId, String busStatus,
-            Date toDate, String endStation, String endLocation) {
+            Date toDate, String endStation, String endLocation,boolean last) {
         this.busId = busId;
         this.busPlate = busPlate;
         this.status = status;
@@ -43,6 +44,7 @@ public final class BusStatus implements Serializable {
         this.toDate = toDate;
         this.endStation = endStation;
         this.endLocation = endLocation;
+        this.last = last;
     }
 
     /**
@@ -109,26 +111,32 @@ public final class BusStatus implements Serializable {
     public String getStatus() {
         return status;
     }
+    
+    /**
+	 * @return the last
+	 */
+	public boolean isLast() {
+		return last;
+	}
 
-    public String getDisplayStatus() {
+	public String getDisplayStatus() {
     	if(!this.isAssigned()){
     		return "UnAssigned";
     	}else{
-    		if(this.getEndLocation() == ""){
+    		if(this.getBusStatus() == null){
     			return "UnSchedule";
     		}else{
-    			Date now = new Date();
-    			if(this.getToDate().getTime() <= now.getTime()){
-//    				if(!last){
-    					return "Current Location : "+ this.getEndLocation();
-//    				}else{
-//    					return "Last Location : " + this.getEndLocation();
-//    				}
-    			}else{
-					return "Running to :" + this.getEndLocation();
-    			}
+				Date now = new Date();
+				if(this.getToDate().getTime() <= now.getTime()){
+					return "Current location : " + this.getEndLocation();
+				}else{
+					if(this.isLast()){
+						return "Location : " + this.getEndLocation() + " at " + this.getToDateString();
+					}else{
+						return "Runngin to : " + this.getEndLocation();
+					}
+				}
     		}
     	}
     }
-
 }
