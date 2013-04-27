@@ -4,6 +4,7 @@
 package vn.edu.fpt.capstone.busReservation.displayModel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -15,6 +16,300 @@ import vn.edu.fpt.capstone.busReservation.util.FormatUtils;
  * 
  */
 public class ReservationInfo implements Serializable {
+
+    /**
+     * @author Yoshimi
+     * 
+     */
+    public class Ticket implements Serializable, Comparable<Ticket> {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+        private int id;
+        private Long departureDateInMilisec;
+        private String departureDate;
+        private String departureStation;
+        private String departureLocation;
+        private String arrivalDate;
+        private String arrivalStation;
+        private String arrivalLocation;
+        private String busType;
+        private String[] seats;
+        private Double ticketPrice;
+        private Double ticketPriceInUSD;
+        private String status;
+        private String cancelReason;
+        private boolean returnTrip;
+
+        /**
+         * @return the id
+         */
+        public int getId() {
+            return id;
+        }
+
+        /**
+         * @param id
+         *            the id to set
+         */
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        /**
+         * @return the departureDateInMilisec
+         */
+        public Long getDepartureDateInMilisec() {
+            return departureDateInMilisec;
+        }
+
+        /**
+         * @param departureDateInMilisec
+         *            the departureDateInMilisec to set
+         */
+        public void setDepartureDateInMilisec(Long departureDateInMilisec) {
+            this.departureDateInMilisec = departureDateInMilisec;
+        }
+
+        /**
+         * @return the departureDate
+         */
+        public String getDepartureDate() {
+            return departureDate;
+        }
+
+        /**
+         * @param departureDate
+         *            the departureDate to set
+         */
+        public void setDepartureDate(String departureDate) {
+            this.departureDate = departureDate;
+        }
+
+        /**
+         * @return the departureStation
+         */
+        public String getDepartureStation() {
+            return departureStation;
+        }
+
+        /**
+         * @param departureStation
+         *            the departureStation to set
+         */
+        public void setDepartureStation(String departureStation) {
+            this.departureStation = departureStation;
+        }
+
+        /**
+         * @return the departureLocation
+         */
+        public String getDepartureLocation() {
+            return departureLocation;
+        }
+
+        /**
+         * @param departureLocation
+         *            the departureLocation to set
+         */
+        public void setDepartureLocation(String departureLocation) {
+            this.departureLocation = departureLocation;
+        }
+
+        /**
+         * @return the arrivalDate
+         */
+        public String getArrivalDate() {
+            return arrivalDate;
+        }
+
+        /**
+         * @param arrivalDate
+         *            the arrivalDate to set
+         */
+        public void setArrivalDate(String arrivalDate) {
+            this.arrivalDate = arrivalDate;
+        }
+
+        /**
+         * @return the arrivalStation
+         */
+        public String getArrivalStation() {
+            return arrivalStation;
+        }
+
+        /**
+         * @param arrivalStation
+         *            the arrivalStation to set
+         */
+        public void setArrivalStation(String arrivalStation) {
+            this.arrivalStation = arrivalStation;
+        }
+
+        /**
+         * @return the arrivalLocation
+         */
+        public String getArrivalLocation() {
+            return arrivalLocation;
+        }
+
+        /**
+         * @param arrivalLocation
+         *            the arrivalLocation to set
+         */
+        public void setArrivalLocation(String arrivalLocation) {
+            this.arrivalLocation = arrivalLocation;
+        }
+
+        /**
+         * @return the busType
+         */
+        public String getBusType() {
+            return busType;
+        }
+
+        /**
+         * @param busType
+         *            the busType to set
+         */
+        public void setBusType(String busType) {
+            this.busType = busType;
+        }
+
+        /**
+         * @return the seats
+         */
+        public String[] getSeats() {
+            return seats;
+        }
+
+        /**
+         * @param seats
+         *            the seats to set
+         */
+        public void setSeats(String[] seats) {
+            this.seats = seats;
+        }
+
+        /**
+         * @return the ticketPrice
+         */
+        public String getTicketPrice() {
+            return FormatUtils.formatNumber(getTicketPriceValue(), 0, locale);
+        }
+
+        /**
+         * @return the ticketPrice
+         */
+        public Double getTicketPriceValue() {
+            return ticketPrice * (100 - globalDiscount) / 100
+                    * (100 - (returnTrip ? returnDiscount : forwardDiscount))
+                    / 100;
+        }
+
+        /**
+         * @param ticketPrice
+         *            the ticketPrice to set
+         */
+        public void setTicketPrice(Double ticketPrice) {
+            this.ticketPrice = ticketPrice;
+        }
+
+        /**
+         * @return the ticketPriceInUSD
+         */
+        public String getTicketPriceInUSD() {
+            return FormatUtils.formatNumber(getTicketPriceInUSDValue(), 2,
+                    locale);
+        }
+
+        /**
+         * @return the ticketPriceInUSD
+         */
+        public Double getTicketPriceInUSDValue() {
+            return ticketPriceInUSD * (100 - globalDiscount) / 100
+                    * (100 - (returnTrip ? returnDiscount : forwardDiscount))
+                    / 100;
+        }
+
+        /**
+         * @param ticketPriceInUSD
+         *            the ticketPriceInUSD to set
+         */
+        public void setTicketPriceInUSD(Double ticketPriceInUSD) {
+            this.ticketPriceInUSD = ticketPriceInUSD;
+        }
+
+        /**
+         * @return the status
+         */
+        public String getStatus() {
+            return status;
+        }
+
+        /**
+         * @param status
+         *            the status to set
+         */
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        /**
+         * @return the cancelReason
+         */
+        public String getCancelReason() {
+            return cancelReason;
+        }
+
+        /**
+         * @param cancelReason
+         *            the cancelReason to set
+         */
+        public void setCancelReason(String cancelReason) {
+            this.cancelReason = cancelReason;
+        }
+
+        /**
+         * @return the returnTrip
+         */
+        public boolean isReturnTrip() {
+            return returnTrip;
+        }
+
+        /**
+         * @param returnTrip
+         *            the returnTrip to set
+         */
+        public void setReturnTrip(boolean returnTrip) {
+            this.returnTrip = returnTrip;
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see java.lang.Comparable#compareTo(java.lang.Object)
+         */
+        @Override
+        public int compareTo(Ticket o) {
+            int result = 0;
+            if (this.departureDateInMilisec == null
+                    || (!this.returnTrip && o.returnTrip)) {
+                result = -1;
+            } else if (o == null || o.departureDateInMilisec == null
+                    || (this.returnTrip && !o.returnTrip)) {
+                result = 1;
+            } else {
+                result = o.departureDateInMilisec
+                        .compareTo(departureDateInMilisec);
+            }
+            return result;
+        }
+
+    }
+
     /**
      * 
      */
@@ -24,7 +319,7 @@ public class ReservationInfo implements Serializable {
     private String bookerName;
     private String phone;
     private String email;
-    private List<Ticket> tickets;
+    private final List<Ticket> tickets;
     private Double transactionFee;
     private Double transactionFeeInUSD;
     private Double totalAmount;
@@ -35,13 +330,20 @@ public class ReservationInfo implements Serializable {
     private String status;
     private String cancelReason;
     private Locale locale;
+    private final double globalDiscount;
+    private final double forwardDiscount;
+    private final double returnDiscount;
 
     /**
      * 
      */
     public ReservationInfo() {
         super();
+        tickets = new ArrayList<ReservationInfo.Ticket>();
         locale = CommonConstant.LOCALE_VN;
+        globalDiscount = 0;
+        forwardDiscount = 0;
+        returnDiscount = 0;
     }
 
     /**
@@ -49,7 +351,43 @@ public class ReservationInfo implements Serializable {
      */
     public ReservationInfo(Locale locale) {
         super();
+        tickets = new ArrayList<ReservationInfo.Ticket>();
         this.locale = locale;
+        globalDiscount = 0;
+        forwardDiscount = 0;
+        returnDiscount = 0;
+    }
+
+    /**
+     * @param globalDiscount
+     * @param forwardDiscount
+     * @param returnDiscount
+     */
+
+    public ReservationInfo(double globalDiscount, double forwardDiscount,
+            double returnDiscount) {
+        super();
+        tickets = new ArrayList<ReservationInfo.Ticket>();
+        locale = CommonConstant.LOCALE_VN;
+        this.globalDiscount = globalDiscount;
+        this.forwardDiscount = forwardDiscount;
+        this.returnDiscount = returnDiscount;
+    }
+
+    /**
+     * @param locale
+     * @param globalDiscount
+     * @param forwardDiscount
+     * @param returnDiscount
+     */
+    public ReservationInfo(Locale locale, double globalDiscount,
+            double forwardDiscount, double returnDiscount) {
+        super();
+        tickets = new ArrayList<ReservationInfo.Ticket>();
+        this.locale = locale;
+        this.globalDiscount = globalDiscount;
+        this.forwardDiscount = forwardDiscount;
+        this.returnDiscount = returnDiscount;
     }
 
     /**
@@ -132,14 +470,6 @@ public class ReservationInfo implements Serializable {
      */
     public List<Ticket> getTickets() {
         return tickets;
-    }
-
-    /**
-     * @param tickets
-     *            the tickets to set
-     */
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
     }
 
     /**
@@ -394,290 +724,24 @@ public class ReservationInfo implements Serializable {
     }
 
     /**
-     * @author Yoshimi
-     * 
+     * @return the globalDiscount
      */
-    public class Ticket implements Serializable, Comparable<Ticket> {
-
-        /**
-         * 
-         */
-        private static final long serialVersionUID = 1L;
-        private int id;
-        private Long departureDateInMilisec;
-        private String departureDate;
-        private String departureStation;
-        private String departureLocation;
-        private String arrivalDate;
-        private String arrivalStation;
-        private String arrivalLocation;
-        private String busType;
-        private String[] seats;
-        private Double ticketPrice;
-        private Double ticketPriceInUSD;
-        private String status;
-        private String cancelReason;
-        private boolean returnTrip;
-
-        /**
-         * @return the id
-         */
-        public int getId() {
-            return id;
-        }
-
-        /**
-         * @param id
-         *            the id to set
-         */
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        /**
-         * @return the departureDateInMilisec
-         */
-        public Long getDepartureDateInMilisec() {
-            return departureDateInMilisec;
-        }
-
-        /**
-         * @param departureDateInMilisec
-         *            the departureDateInMilisec to set
-         */
-        public void setDepartureDateInMilisec(Long departureDateInMilisec) {
-            this.departureDateInMilisec = departureDateInMilisec;
-        }
-
-        /**
-         * @return the departureDate
-         */
-        public String getDepartureDate() {
-            return departureDate;
-        }
-
-        /**
-         * @param departureDate
-         *            the departureDate to set
-         */
-        public void setDepartureDate(String departureDate) {
-            this.departureDate = departureDate;
-        }
-
-        /**
-         * @return the departureStation
-         */
-        public String getDepartureStation() {
-            return departureStation;
-        }
-
-        /**
-         * @param departureStation
-         *            the departureStation to set
-         */
-        public void setDepartureStation(String departureStation) {
-            this.departureStation = departureStation;
-        }
-
-        /**
-         * @return the departureLocation
-         */
-        public String getDepartureLocation() {
-            return departureLocation;
-        }
-
-        /**
-         * @param departureLocation
-         *            the departureLocation to set
-         */
-        public void setDepartureLocation(String departureLocation) {
-            this.departureLocation = departureLocation;
-        }
-
-        /**
-         * @return the arrivalDate
-         */
-        public String getArrivalDate() {
-            return arrivalDate;
-        }
-
-        /**
-         * @param arrivalDate
-         *            the arrivalDate to set
-         */
-        public void setArrivalDate(String arrivalDate) {
-            this.arrivalDate = arrivalDate;
-        }
-
-        /**
-         * @return the arrivalStation
-         */
-        public String getArrivalStation() {
-            return arrivalStation;
-        }
-
-        /**
-         * @param arrivalStation
-         *            the arrivalStation to set
-         */
-        public void setArrivalStation(String arrivalStation) {
-            this.arrivalStation = arrivalStation;
-        }
-
-        /**
-         * @return the arrivalLocation
-         */
-        public String getArrivalLocation() {
-            return arrivalLocation;
-        }
-
-        /**
-         * @param arrivalLocation
-         *            the arrivalLocation to set
-         */
-        public void setArrivalLocation(String arrivalLocation) {
-            this.arrivalLocation = arrivalLocation;
-        }
-
-        /**
-         * @return the busType
-         */
-        public String getBusType() {
-            return busType;
-        }
-
-        /**
-         * @param busType
-         *            the busType to set
-         */
-        public void setBusType(String busType) {
-            this.busType = busType;
-        }
-
-        /**
-         * @return the seats
-         */
-        public String[] getSeats() {
-            return seats;
-        }
-
-        /**
-         * @param seats
-         *            the seats to set
-         */
-        public void setSeats(String[] seats) {
-            this.seats = seats;
-        }
-
-        /**
-         * @return the ticketPrice
-         */
-        public String getTicketPrice() {
-            return FormatUtils.formatNumber(ticketPrice, 0, locale);
-        }
-
-        /**
-         * @return the ticketPrice
-         */
-        public Double getTicketPriceValue() {
-            return ticketPrice;
-        }
-
-        /**
-         * @param ticketPrice
-         *            the ticketPrice to set
-         */
-        public void setTicketPrice(Double ticketPrice) {
-            this.ticketPrice = ticketPrice;
-        }
-
-        /**
-         * @return the ticketPriceInUSD
-         */
-        public String getTicketPriceInUSD() {
-            return FormatUtils.formatNumber(ticketPriceInUSD, 2, locale);
-        }
-
-        /**
-         * @return the ticketPriceInUSD
-         */
-        public Double getTicketPriceInUSDValue() {
-            return ticketPriceInUSD;
-        }
-
-        /**
-         * @param ticketPriceInUSD
-         *            the ticketPriceInUSD to set
-         */
-        public void setTicketPriceInUSD(Double ticketPriceInUSD) {
-            this.ticketPriceInUSD = ticketPriceInUSD;
-        }
-
-        /**
-         * @return the status
-         */
-        public String getStatus() {
-            return status;
-        }
-
-        /**
-         * @param status
-         *            the status to set
-         */
-        public void setStatus(String status) {
-            this.status = status;
-        }
-
-        /**
-         * @return the cancelReason
-         */
-        public String getCancelReason() {
-            return cancelReason;
-        }
-
-        /**
-         * @param cancelReason
-         *            the cancelReason to set
-         */
-        public void setCancelReason(String cancelReason) {
-            this.cancelReason = cancelReason;
-        }
-
-        /**
-         * @return the returnTrip
-         */
-        public boolean isReturnTrip() {
-            return returnTrip;
-        }
-
-        /**
-         * @param returnTrip
-         *            the returnTrip to set
-         */
-        public void setReturnTrip(boolean returnTrip) {
-            this.returnTrip = returnTrip;
-        }
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see java.lang.Comparable#compareTo(java.lang.Object)
-         */
-        @Override
-        public int compareTo(Ticket o) {
-            int result = 0;
-            if (this.departureDateInMilisec == null
-                    || (!this.returnTrip && o.returnTrip)) {
-                result = -1;
-            } else if (o == null || o.departureDateInMilisec == null
-                    || (this.returnTrip && !o.returnTrip)) {
-                result = 1;
-            } else {
-                result = o.departureDateInMilisec
-                        .compareTo(departureDateInMilisec);
-            }
-            return result;
-        }
-
+    public double getGlobalDiscount() {
+        return globalDiscount;
     }
+
+    /**
+     * @return the forwardDiscount
+     */
+    public double getForwardDiscount() {
+        return forwardDiscount;
+    }
+
+    /**
+     * @return the returnDiscount
+     */
+    public double getReturnDiscount() {
+        return returnDiscount;
+    }
+
 }

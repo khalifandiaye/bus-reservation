@@ -11,6 +11,7 @@ import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
 import vn.edu.fpt.capstone.busReservation.dao.bean.SystemSettingBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SettingModel;
 import vn.edu.fpt.capstone.busReservation.util.CheckUtils;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 /**
  * @author Yoshimi
@@ -54,7 +55,8 @@ public class SystemLogic extends BaseLogic {
             }
             if (!CheckUtils.isNullOrBlank(model.getSegment()
                     .getDefaultTravelTime().getHour())) {
-                setting = systemSettingDAO.getById("minimum.segment.traveltime");
+                setting = systemSettingDAO
+                        .getById("minimum.segment.traveltime");
                 time = model.getSegment().getDefaultTravelTime().getHour()
                         .split(":");
                 setting.setValue(Long.toString(Long.parseLong(time[0]) * 60
@@ -96,7 +98,8 @@ public class SystemLogic extends BaseLogic {
                 systemSettingDAO.update(setting);
             }
             if (!CheckUtils.isNullOrBlank(model.getDiscount().getFullRoute())) {
-                setting = systemSettingDAO.getById("discount.fullRoute");
+                setting = systemSettingDAO
+                        .getById(CommonConstant.SYSTEM_DISCOUNT_WHOLE_TRIP);
                 setting.setValue(model.getDiscount().getFullRoute());
                 systemSettingDAO.update(setting);
             }
@@ -140,7 +143,8 @@ public class SystemLogic extends BaseLogic {
                     model.getReservation().setMaxSeat(value);
                 } else if ("reservation.timeout".equalsIgnoreCase(id)) {
                     model.getReservation().setTimeout(value);
-                } else if ("discount.fullRoute".equalsIgnoreCase(id)) {
+                } else if (CommonConstant.SYSTEM_DISCOUNT_WHOLE_TRIP
+                        .equalsIgnoreCase(id)) {
                     model.getDiscount().setFullRoute(value);
                 }
             }
