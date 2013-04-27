@@ -47,6 +47,15 @@ public class ListAction extends BaseAction {
 		return SUCCESS;
 	}
 	
+	
+	/**
+	 * @param showType the showType to set
+	 */
+	public void setShowType(String showType) {
+		this.showType = showType;
+	}
+
+
 	/**
 	 * @param busStatusDAO the busStatusDAO to set
 	 */
