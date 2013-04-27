@@ -91,7 +91,9 @@
 			<h3 style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">    
 				Manage bus  
 				<input class="btn btn-primary pull-right" id="addBus" type="button"
-					value="Add New Bus" />
+					value="Add New Bus" />  
+				<a class="btn btn-primary pull-right" style="margin-right: 10px;" href="list.html">View Current Location</a>
+				<a class="btn btn-primary pull-right" style="margin-right: 10px;" href="?showType=last" >View Last Location</a>
 			</h3>  
 			
 			<table id="busTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
