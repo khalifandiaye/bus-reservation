@@ -334,6 +334,7 @@ Date.prototype.toMyString = function () {
 		$("#tripDialogDepartureTime").val('');
 		$("#tripDialogArrivalTime").val('');
 		$('#tripDialogBusPlate').val('');
+		$('#tripDialogBusPlateExtends').val('');
 		$('#CreateScheduleDialog').modal('hide');
 	});
 	
@@ -375,6 +376,7 @@ Date.prototype.toMyString = function () {
 			$('#tripDialogDepartureTime').val('');
 			$('#tripDialogArrivalTime').val('');
 			$('#tripDialogBusPlate').empty();
+			$('#tripDialogBusPlateExtends').empty();
 			$('#addScheduleError').empty();
 			$('#CreateScheduleDialog').modal();
 			$('#tripEditDialogLabel').html("Add New Schedule");
@@ -428,6 +430,11 @@ Date.prototype.toMyString = function () {
 							'#tripDialogBusPlate')
 							.append('<option value="' + this.id + '">'+ this.plateNumber+ '</option>');
 						});
+						$('#tripDialogBusPlateExtends').empty();
+						$.each(data.busInfosExtend,function() {$(
+							'#tripDialogBusPlateExtends')
+							.append('<option value="' + this.id + '">'+ this.plateNumber+ '</option>');
+						});
 						checkButton();
 					});
 			} 
@@ -476,27 +483,59 @@ Date.prototype.toMyString = function () {
 	    }
 		   
 		function checkButton(){
+			var rb = $("#avaiBusList").val();
             var departureTime = $("#tripDialogDepartureTime").val();
             var busPlate = $('#tripDialogBusPlate').val();
+            var busPlateExtend = $('#tripDialogBusPlateExtends').val();
             var addNewSchedule = $("#addNewSchedule");
-
-            if(busPlate != '' && busPlate != null){
-            	$("#addScheduleError").text("");
-            	addNewSchedule.addClass("btn-primary");
-            	addNewSchedule.removeAttr("disabled"); 
-            	$("#schedule-error").hide();
-            } else { 
-            	$("#addScheduleError").text("There're no bus available at this time. Please select other time or click cancel!");
-            	$("#schedule-error").show();
-            	addNewSchedule.removeClass('btn-primary');
-            	addNewSchedule.attr("disabled","disabled");
-            }
+			
+            if(rb == "busInRoute"){
+	            if(busPlate != '' && busPlate != null){
+	            	$("#addScheduleError").text("");
+	            	addNewSchedule.addClass("btn-primary");
+	            	addNewSchedule.removeAttr("disabled"); 
+	            	$("#schedule-error").hide();
+	            } else { 
+	            	$("#addScheduleError").text("There is no available bus at this time. Please select other time or click cancel!");
+	            	$("#schedule-error").show();
+	            	addNewSchedule.removeClass('btn-primary');
+	            	addNewSchedule.attr("disabled","disabled");
+	            }
+	        } else {
+	        	if(busPlateExtend != '' && busPlateExtend != null){
+	            	$("#addScheduleError").text("");
+	            	addNewSchedule.addClass("btn-primary");
+	            	addNewSchedule.removeAttr("disabled"); 
+	            	$("#schedule-error").hide();
+	            } else { 
+	            	$("#addScheduleError").text("There is no available bus at this time. Please select other time or click cancel!");
+	            	$("#schedule-error").show();
+	            	addNewSchedule.removeClass('btn-primary');
+	            	addNewSchedule.attr("disabled","disabled");
+	            }
+	        }
 		}
 		
 		$("#tripDialogBusType").change(function(){
 			getAvailBus();
-	   });
+	    });
+
+		$("#avaiBusList").change(function(){
+/* 			var busInRoute = $("#tripDialogBusPlate").val();
+			var busInStation = $("#tripDialogBusPlateExtends").val();
+			var rb =  $('#avaiBusList').val();
+			
+			if(rb=="busInRoute"){
+				busInRoute.show;
+				busInStation.hide;
+				
+			} else {
+				busInRoute.hide;
+				busInStation.show;
+			} */
+		});
 		
+
 		$("#tripDialogBusPlate").change(function(){
       });
 		
@@ -512,12 +551,14 @@ Date.prototype.toMyString = function () {
 				var departureTime = $("#tripDialogDepartureTime").val();
 				var selectedBusType = $("#tripDialogBusType").val();
 				var busPlate = $('#tripDialogBusPlate').val();
+				var busPlateExtends = $('#tripDialogBusPlateExtends').val();
 				var form = $('#addNewTripForm');
 
 				if (selectedRouteId == -1
 						|| departureTime == ''
 						|| !selectedBusType
 						|| selectedBusType == -1
+						|| !busPlateExtends || busPlateExtends == ''
 						|| !busPlate || busPlate == '') {
 					return;
 				}
@@ -1292,10 +1333,14 @@ Date.prototype.toMyString = function () {
             <label for="tripDialogBusType">Bus Type: </label> <select id="tripDialogBusType" name="busTypeBeans">
                <option value="-1">Select Bus Type</option>
             </select>
-            <div id="trip-plate-number"> 
-               <label for="routeSelect">Bus Plate Number</label> <select id='tripDialogBusPlate'
-                  name='tripDialogBusPlate'></select>
-            </div>
+            <div id="trip-plate-number">
+					<input type="radio" id="avaiBusList" name="avaiBusList" value="busInRoute" checked="checked">Available Bus in Route
+					<input type="radio" id="avaiBusList" name="avaiBusList" value="busInStation">Available Bus in this Station
+					<label for="routeSelect">Bus Plate Number</label>
+					<select id='tripDialogBusPlate' name='tripDialogBusPlate'></select>					
+					<select id='tripDialogBusPlateExtends'
+						name='tripDialogBusPlateExtends'></select>
+				</div>
             <div id="tripDialogStatus"></div>
             <div>
             <input style="margin-top: -3px;" type="checkbox" id="autoReturnBus" name="autoReturnBus"/> Auto-return to start station.
