@@ -33,9 +33,13 @@ public class SaveAction extends ActionSupport {
 	private String tripDialogDepartureTime;
 	private String message;
 	private int tripDialogBusPlate;
+	private int tripDialogBusPlateExtends;
+
 	private String autoReturnBus;
 	private String autoReturnDepartureTime;
 	private String allowBooking;
+	private String avaiBusList;
+
 
 	private BusDAO busDAO;
 	private RouteDAO routeDAO;
@@ -51,9 +55,17 @@ public class SaveAction extends ActionSupport {
 			Date fromDate = FormatUtils.deFormatDate(tripDialogDepartureTime,
 					"hh:mm - dd/MM/yyyy", CommonConstant.LOCALE_US,
 					CommonConstant.DEFAULT_TIME_ZONE);
-			BusBean busBean = busDAO.getById(tripDialogBusPlate);
+			BusBean busBean = new BusBean();
+			
+			if ("busInRoute".equals(avaiBusList)) {
+				busBean = busDAO.getById(tripDialogBusPlate);
+			} else {
+				busBean = busDAO.getById(tripDialogBusPlateExtends);
+			}
+			
 			List<RouteDetailsBean> routeDetailsList = routeDAO.getById(
 					routeBeans).getRouteDetails();
+			message = avaiBusList;
 
 			// check if bus_status is duplicated in DB
 			List<BusStatusBean> busStatusBeans = busStatusDAO
@@ -195,6 +207,12 @@ public class SaveAction extends ActionSupport {
 		}
 	}
 
+
+	
+	public void setAvaiBusList(String avaiBusList) {
+		this.avaiBusList = avaiBusList;
+	}
+
 	public void setAutoReturnBus(String autoReturnBus) {
 		this.autoReturnBus = autoReturnBus;
 	}
@@ -239,6 +257,11 @@ public class SaveAction extends ActionSupport {
 	public void setTripDialogBusPlate(int tripDialogBusPlate) {
 		this.tripDialogBusPlate = tripDialogBusPlate;
 	}
+
+	public void setTripDialogBusPlateExtends(int tripDialogBusPlateExtends) {
+		this.tripDialogBusPlateExtends = tripDialogBusPlateExtends;
+	}
+
 
 	public String getMessage() {
 		return message;
