@@ -21,6 +21,20 @@
 <script src="<%=request.getContextPath()%>/js/jquery.ui.datepicker-vi.js"></script>
 <script src="<%=request.getContextPath()%>/js/route/route-detail-list.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.maskedinput.min.js"></script><script type="text/javascript">
+
+	function showTripDialogBusPlate(){
+		var rb1 = $("input[name='avaiBusList']:checked").val();
+		
+		if(rb1 == "busInRoute"){
+			$('#tripDialogBusPlate').removeClass('hidden');
+			$('#tripDialogBusPlateExtends').addClass('hidden');
+		} else {
+			$('#tripDialogBusPlateExtends').removeClass('hidden');
+			$('#tripDialogBusPlate').addClass('hidden');
+		}
+		checkButton();
+	}
+   
    function getStation(el, des, stationEndAtKey) {
       cityId = $('#' + el).val();
          if (cityId != -1) {
@@ -481,40 +495,6 @@ Date.prototype.toMyString = function () {
 	            });
 	         }
 	    }
-		   
-		function checkButton(){
-			var rb = $("#avaiBusList").val();
-            var departureTime = $("#tripDialogDepartureTime").val();
-            var busPlate = $('#tripDialogBusPlate').val();
-            var busPlateExtend = $('#tripDialogBusPlateExtends').val();
-            var addNewSchedule = $("#addNewSchedule");
-			
-            if(rb == "busInRoute"){
-	            if(busPlate != '' && busPlate != null){
-	            	$("#addScheduleError").text("");
-	            	addNewSchedule.addClass("btn-primary");
-	            	addNewSchedule.removeAttr("disabled"); 
-	            	$("#schedule-error").hide();
-	            } else { 
-	            	$("#addScheduleError").text("There is no available bus at this time. Please select other time or click cancel!");
-	            	$("#schedule-error").show();
-	            	addNewSchedule.removeClass('btn-primary');
-	            	addNewSchedule.attr("disabled","disabled");
-	            }
-	        } else {
-	        	if(busPlateExtend != '' && busPlateExtend != null){
-	            	$("#addScheduleError").text("");
-	            	addNewSchedule.addClass("btn-primary");
-	            	addNewSchedule.removeAttr("disabled"); 
-	            	$("#schedule-error").hide();
-	            } else { 
-	            	$("#addScheduleError").text("There is no available bus at this time. Please select other time or click cancel!");
-	            	$("#schedule-error").show();
-	            	addNewSchedule.removeClass('btn-primary');
-	            	addNewSchedule.attr("disabled","disabled");
-	            }
-	        }
-		}
 		
 		$("#tripDialogBusType").change(function(){
 			getAvailBus();
@@ -997,6 +977,39 @@ Date.prototype.toMyString = function () {
 		});
 	};
 	
+	function checkButton(){
+		var rb = $("input[name='avaiBusList']:checked").val();
+        var busPlate = $('#tripDialogBusPlate').val();
+        var busPlateExtend = $('#tripDialogBusPlateExtends').val();
+        var addNewSchedule = $("#addNewSchedule");
+		
+        if(rb == "busInRoute"){
+            if(busPlate != '' && busPlate != null){
+            	$("#addScheduleError").text("");
+            	addNewSchedule.addClass("btn-primary");
+            	addNewSchedule.removeAttr("disabled"); 
+            	$("#schedule-error").hide();
+            } else { 
+            	$("#addScheduleError").text("There is no available bus at this time. Please select other time or click cancel!");
+            	$("#schedule-error").show();
+            	addNewSchedule.removeClass('btn-primary');
+            	addNewSchedule.attr("disabled","disabled");
+            }
+        } else {
+        	if(busPlateExtend != '' && busPlateExtend != null){
+            	$("#addScheduleError").text("");
+            	addNewSchedule.addClass("btn-primary");
+            	addNewSchedule.removeAttr("disabled"); 
+            	$("#schedule-error").hide();
+            } else { 
+            	$("#addScheduleError").text("There is no available bus at this time. Please select other time or click cancel!");
+            	$("#schedule-error").show();
+            	addNewSchedule.removeClass('btn-primary');
+            	addNewSchedule.attr("disabled","disabled");
+            }
+        }
+	}
+	
 	function getPrice(busType, segments, date) {
 		var info = {};
 		info['busType'] = busType;
@@ -1320,41 +1333,62 @@ Date.prototype.toMyString = function () {
          <div class="alert fade in" id="schedule-error" style="display:none;"><button type="button" class="close" data-dismiss="alert">×</button>
          <label id="addScheduleError"></label>
          </div>
-            <label for="tripDialogDepartureTimeDiv">From Date: </label>
-            <div id="tripDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
-               <input id="tripDialogDepartureTime" size="16" type="text" value="" readonly
-                  name="tripDialogDepartureTime"><span
-                  class="add-on"><i class="icon-calendar"></i></span>
+         	<div style="overflow: hidden;">
+	         	<div style="float: left; width: 50%">
+		            <label for="tripDialogDepartureTimeDiv">From Date: </label>
+		            <div id="tripDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
+		               <input id="tripDialogDepartureTime" size="16" type="text" value="" readonly
+		                  name="tripDialogDepartureTime"><span
+		                  class="add-on"><i class="icon-calendar"></i></span>
+		            </div>
+	            </div>
+	            
+	            <div style="float: left; width: 50%">
+		            <label for="tripDialogArrivalTimeDiv">To Date: </label>
+		            <div id="tripDialogArrivalTimeDiv" class="input-append date form_datetime" data-date="">
+		               <input id="tripDialogArrivalTime" size="16" type="text" value="" readonly>
+		            </div>
+	            </div>
             </div>
-            <label for="tripDialogArrivalTimeDiv">To Date: </label>
-            <div id="tripDialogArrivalTimeDiv" class="input-append date form_datetime" data-date="">
-               <input id="tripDialogArrivalTime" size="16" type="text" value="" readonly>
-            </div>
+            
             <label for="tripDialogBusType">Bus Type: </label> <select id="tripDialogBusType" name="busTypeBeans">
                <option value="-1">Select Bus Type</option>
             </select>
             <div id="trip-plate-number">
-					<input type="radio" id="avaiBusList" name="avaiBusList" value="busInRoute" checked="checked">Available Bus in Route
-					<input type="radio" id="avaiBusList" name="avaiBusList" value="busInStation">Available Bus in this Station
+					<label style="width: 50%; float: left;"><input type="radio" name="avaiBusList" value="busInRoute" checked="checked" onclick="showTripDialogBusPlate()" style="margin-top: 0">
+						<span style="margin-left:10px; ">Available Bus in Route</span>
+					</label>
+					<label style="width: 50%; float: left;"><input type="radio" name="avaiBusList" value="busInStation" onclick="showTripDialogBusPlate()">
+						<span style="margin-left:10px; ">Available Bus in this Station</span>
+					</label>
 					<label for="routeSelect">Bus Plate Number</label>
 					<select id='tripDialogBusPlate' name='tripDialogBusPlate'></select>					
 					<select id='tripDialogBusPlateExtends'
-						name='tripDialogBusPlateExtends'></select>
+						name='tripDialogBusPlateExtends' class="hidden"></select>
 				</div>
             <div id="tripDialogStatus"></div>
             <div>
-            <input style="margin-top: -3px;" type="checkbox" id="autoReturnBus" name="autoReturnBus"/> Auto-return to start station.
+            <input style="margin-top: -3px;" type="checkbox" id="autoReturnBus" name="autoReturnBus"/> Auto-return to start station. 
             <div id="autoReturnDiv" style="display: none;">
                <input style="margin-top: -3px;" type="checkbox" id="allowBooking" name="allowBooking" checked="checked"/> Allow booking. 
-               <label for="autoReturnDialogDepartureTimeDiv">From Date: </label>
-               <div id="autoReturnDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
-                  <input id="autoReturnDialogDepartureTime" size="16" type="text" value="" readonly
-                     name="autoReturnDepartureTime"><span class="add-on"><i class="icon-calendar"></i></span>
+               
+               <div style="overflow: hidden;">
+               	   <div style="float: left; width: 50%">
+		               <label for="autoReturnDialogDepartureTimeDiv">From Date: </label>
+		               <div id="autoReturnDialogDepartureTimeDiv" class="input-append date form_datetime" data-date="">
+		                  <input id="autoReturnDialogDepartureTime" size="16" type="text" value="" readonly
+		                     name="autoReturnDepartureTime"><span class="add-on"><i class="icon-calendar"></i></span>
+		               </div>
+	               </div>
+	               
+	               <div style="float: left; width: 50%">
+		               <label for="autoReturnpDialogArrivalTimeDiv">To Date: </label>
+		               <div id="autoReturnDialogArrivalTimeDiv" class="input-append date form_datetime" data-date="">
+		                  <input id="autoReturnDialogArrivalTime" size="16" type="text" value="" readonly>
+		               </div>
+		           </div>
                </div>
-               <label for="autoReturnpDialogArrivalTimeDiv">To Date: </label>
-               <div id="autoReturnDialogArrivalTimeDiv" class="input-append date form_datetime" data-date="">
-                  <input id="autoReturnDialogArrivalTime" size="16" type="text" value="" readonly>
-               </div>
+               
             </div>
          </div>
          </div>
