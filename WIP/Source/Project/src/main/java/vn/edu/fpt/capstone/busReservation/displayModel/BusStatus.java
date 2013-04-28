@@ -121,10 +121,10 @@ public final class BusStatus implements Serializable {
 
 	public String getDisplayStatus() {
     	if(!this.isAssigned()){
-    		return "UnAssigned";
+    		return "Unassigned";
     	}else{
     		if(this.getBusStatus() == null){
-    			return "UnSchedule";
+    			return "Unschedule";
     		}else{
 				Date now = new Date();
 				if(this.getToDate().getTime() <= now.getTime()){
@@ -133,7 +133,7 @@ public final class BusStatus implements Serializable {
 					if(this.isLast()){
 						return "Location : " + this.getEndLocation() + " at " + this.getToDateString();
 					}else{
-						return "Runngin to : " + this.getEndLocation();
+						return "Running to : " + this.getEndLocation();
 					}
 				}
     		}
