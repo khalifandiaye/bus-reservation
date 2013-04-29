@@ -12,10 +12,13 @@
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/styles/jquery-ui.css" />
 <jsp:include page="common/xheader.jsp" />
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/styles/select2.css" />
 <script src="<%=request.getContextPath()%>/js/index.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery-ui.js"></script>
 <script src="<%=request.getContextPath()%>/js/search-common.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.ui.datepicker-vi.js"></script>
+<script src="<%=request.getContextPath()%>/js/select2.min.js"></script>
 <script type="text/javascript">
 	var d = new Date();
 	var now = d.toMyString();
@@ -52,6 +55,9 @@
 		});
 		
 		getDuration();
+		
+		$("#departureCity").select2();
+		$("#arrivalCity").select2();
 		
 		if($('#rdoOneway').prop('checked')){
 			$("#input-return").hide(500);
@@ -140,13 +146,13 @@
 				<div class="controls controls-row">
 					<label>Điểm đi</label>
 					<s:select list="deptCity" listKey="id" listValue="name"
-						name="departureCity" onchange="findArriveCity()" />
+						name="departureCity" onchange="findArriveCity()" style="width:100%;"/>
 				</div>
 				<div class="controls controls-row"
-					style="margin-bottom: 10px; border-bottom: 1px #fff dashed; padding-bottom: 5px;">
+					style="margin-bottom: 10px; padding-top:10px; border-bottom: 1px #fff dashed; padding-bottom: 15px;">
 					<label>Điểm đến</label>
 					<s:select list="arrCity" listKey="id" listValue="name"
-						name="arrivalCity" onchange="getDuration()"/>
+						name="arrivalCity" onchange="getDuration()" style="width:100%"/>
 				</div>
 				<div class="controls controls-row" id="input-depart">
 					<label>Ngày đi</label> <input type="text" id="dp1"

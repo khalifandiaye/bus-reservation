@@ -104,5 +104,9 @@ public interface CommonConstant {
      * Minimum number of passenger for each trip
      */
     public final static int PASSENGER_MIN_NO = 1;
+    /**
+     * System discount whole trip database key
+     */
     public final static String SYSTEM_DISCOUNT_WHOLE_TRIP = "discount.fullRoute";
+    
 }

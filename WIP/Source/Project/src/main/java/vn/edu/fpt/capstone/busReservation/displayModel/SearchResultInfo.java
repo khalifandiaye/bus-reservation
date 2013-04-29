@@ -29,6 +29,8 @@ public class SearchResultInfo implements Serializable{
 		private int route;
 		private int busTypeId;
 		private String busType;
+		private int tripNumbers;
+		private int segmentNumbers;
 		
 		/**
 		 * @return the busStatusId
@@ -201,5 +203,30 @@ public class SearchResultInfo implements Serializable{
 		public void setBusType(String busType) {
 			this.busType = busType;
 		}
+		/**
+		 * @return the tripNumbers
+		 */
+		public int getTripNumbers() {
+			return tripNumbers;
+		}
+		/**
+		 * @param tripNumbers the tripNumbers to set
+		 */
+		public void setTripNumbers(int tripNumbers) {
+			this.tripNumbers = tripNumbers;
+		}
+		/**
+		 * @return the segmentNumbers
+		 */
+		public int getSegmentNumbers() {
+			return segmentNumbers;
+		}
+		/**
+		 * @param segmentNumbers the segmentNumbers to set
+		 */
+		public void setSegmentNumbers(int segmentNumbers) {
+			this.segmentNumbers = segmentNumbers;
+		}
+		
 		
 }
