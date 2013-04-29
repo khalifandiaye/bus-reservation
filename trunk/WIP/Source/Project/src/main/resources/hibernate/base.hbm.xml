@@ -486,6 +486,8 @@
 		<property name="route" column="route" type="int" not-null="true" />
 		<property name="busType" column="bus_type" type="string" not-null="true" />
 		<property name="busTypeId" column="bus_type_id" type="int" not-null="true" />
+		<property name="tripNumbers" column="trip_numbers" type="int" not-null="true"/>
+		<property name="segmentNumbers" column="segment_numbers" type="int" not-null="true"/>
 	</class>
 	<sql-query name="callSearchTripsProcedure">
 		<return alias="searchResult"
@@ -505,6 +507,8 @@
 			<return-property name="route" column="route" />
 			<return-property name="busType" column="bus_type"/>
 			<return-property name="busTypeId" column="bus_type_id"/>
+			<return-property name="tripNumbers" column="trip_numbers"/>
+			<return-property name="segmentNumbers" column="segment_numbers"/>
 		</return>
 		<![CDATA[CALL search_trips(:deptCity, :arrvCity, :deptDate, :pssgrNo, :minDate);]]>
 	</sql-query>

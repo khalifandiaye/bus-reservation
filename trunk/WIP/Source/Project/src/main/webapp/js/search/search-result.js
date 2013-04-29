@@ -20,6 +20,8 @@ function showPopup(message) {
 
 // document ready
 $(document).ready(function() {
+	//tooltip
+	$('.tooltip').tooltip();
     // switch on after map initialization has been called
     var mapInit = false;
     $('div.map-slider').hide();

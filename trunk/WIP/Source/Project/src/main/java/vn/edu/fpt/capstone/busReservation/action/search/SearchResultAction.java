@@ -4,8 +4,10 @@
 package vn.edu.fpt.capstone.busReservation.action.search;
 
 import vn.edu.fpt.capstone.busReservation.action.BaseAction;
+import vn.edu.fpt.capstone.busReservation.dao.SystemSettingDAO;
 import vn.edu.fpt.capstone.busReservation.dao.TripDAO;
 import vn.edu.fpt.capstone.busReservation.dao.CityDAO;
+import vn.edu.fpt.capstone.busReservation.dao.bean.SystemSettingBean;
 import vn.edu.fpt.capstone.busReservation.displayModel.SearchParamsInfo;
 import vn.edu.fpt.capstone.busReservation.displayModel.SearchResultInfo;
 import vn.edu.fpt.capstone.busReservation.exception.CommonException;
@@ -24,6 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.struts2.interceptor.SessionAware;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Monkey
@@ -45,10 +48,12 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 	// Commons
 	private String deptCity;
 	private String arrCity;
+	private double discountFullRoute;
 	private String message;
 	
 	// =======================Data Access Object==================
 	private CityDAO cityDAO;
+	private SystemSettingDAO settingDAO;
 
 	//========================Logic===============================
 	private SearchResultLogic searchResultLogic;
@@ -64,6 +69,7 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 	 * @param cityDAO
 	 *            the cityDAO to set
 	 */
+	@Autowired
 	public void setCityDAO(CityDAO cityDAO) {
 		this.cityDAO = cityDAO;
 	}
@@ -143,8 +149,14 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 	public String getArrCity() {
 		return arrCity;
 	}
-
 	
+	/**
+	 * @return the discountFullRoute
+	 */
+	public double getDiscountFullRoute() {
+		return discountFullRoute;
+	}
+
 	/**
 	 * @return the onwardMap
 	 */
@@ -164,6 +176,14 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 	 */
 	public void setSearchResultLogic(SearchResultLogic searchResultLogic) {
 		this.searchResultLogic = searchResultLogic;
+	}
+
+	/**
+	 * @param settingDAO the settingDAO to set
+	 */
+	@Autowired
+	public void setSettingDAO(SystemSettingDAO settingDAO) {
+		this.settingDAO = settingDAO;
 	}
 
 	/**
@@ -214,13 +234,15 @@ public class SearchResultAction extends BaseAction implements SessionAware {
 			 			this.departureCity, retDate, CommonConstant.PASSENGER_MIN_NO, minDate);
 			} 
 			
-			deptCity = cityDAO.getById(this.departureCity).getName();
-			arrCity = cityDAO.getById(this.arrivalCity).getName();
+			this.deptCity = cityDAO.getById(this.departureCity).getName();
+			this.arrCity = cityDAO.getById(this.arrivalCity).getName();
 
+			List<SystemSettingBean> sysBean = settingDAO.getAllLike(CommonConstant.SYSTEM_DISCOUNT_WHOLE_TRIP);
+			this.discountFullRoute = Double.parseDouble(sysBean.get(0).getValue())/100;
 		} catch (Exception e) {
-			//errorProcessing(e);
-			//return ERROR;
 			e.printStackTrace();
+			errorProcessing(e);
+			return ERROR;
 		}
 		return SUCCESS;
 	}
