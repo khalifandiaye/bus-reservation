@@ -4,7 +4,7 @@ USE `bus_reservation`;
 --
 -- Host: localhost    Database: bus_reservation
 -- ------------------------------------------------------
--- Server version	5.5.28-log
+-- Server version	5.5.29
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -38,7 +38,7 @@ CREATE TABLE `bus` (
   CONSTRAINT `bus_assigned_route_forward_id` FOREIGN KEY (`assigned_route_forward_id`) REFERENCES `route` (`id`),
   CONSTRAINT `bus_assigned_route_return_id` FOREIGN KEY (`assigned_route_return_id`) REFERENCES `route` (`id`),
   CONSTRAINT `bus_bus_type_id` FOREIGN KEY (`bus_type_id`) REFERENCES `bus_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +47,7 @@ CREATE TABLE `bus` (
 
 LOCK TABLES `bus` WRITE;
 /*!40000 ALTER TABLE `bus` DISABLE KEYS */;
-INSERT INTO `bus` VALUES (15,2,'50G-000.01',3,4,'active'),(16,2,'50G-000.02',3,4,'active'),(17,2,'51G-000.03',6,5,'active'),(18,2,'53G-002.01',4,3,'active'),(19,2,'52G-001.01',6,5,'active'),(20,1,'55N-000.01',3,4,'active'),(21,1,'55N-000.03',3,4,'active'),(22,1,'55N-000.04',3,4,'active'),(23,1,'55N-000.05',3,4,'active'),(24,1,'55N-001.01',6,5,'active'),(25,2,'50G-002.02',4,3,'active'),(26,1,'50N-010.01',6,5,'active'),(27,1,'50N-010.02',6,5,'active'),(28,1,'50N-010.03',6,5,'active'),(29,1,'50N-010.04',6,5,'active'),(30,2,'50G-010.05',6,5,'active'),(31,2,'50G-010.06',6,5,'active'),(32,2,'50G-010.07',6,5,'active'),(33,2,'50G-010.08',NULL,NULL,'active');
+INSERT INTO `bus` VALUES (15,2,'50G-000.01',3,4,'active'),(16,2,'50G-000.02',3,4,'active'),(17,2,'51G-000.03',6,5,'active'),(18,2,'53G-002.01',4,3,'active'),(19,2,'52G-001.01',6,5,'active'),(20,1,'55N-000.01',3,4,'active'),(21,1,'55N-000.03',3,4,'active'),(22,1,'55N-000.04',3,4,'active'),(23,1,'55N-000.05',3,4,'active'),(24,1,'55N-001.01',6,5,'active'),(25,2,'50G-002.02',4,3,'active'),(26,1,'50N-010.01',6,5,'active'),(27,1,'50N-010.02',6,5,'active'),(28,1,'50N-010.03',6,5,'active'),(29,1,'50N-010.04',6,5,'active'),(30,2,'50G-010.05',6,5,'active'),(31,2,'50G-010.06',6,5,'active'),(32,2,'50G-010.07',6,5,'active'),(33,2,'50G-010.08',NULL,NULL,'active'),(34,1,'TEST-03',NULL,NULL,'inactive');
 /*!40000 ALTER TABLE `bus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -207,7 +207,7 @@ CREATE TABLE `location` (
 
 LOCK TABLES `location` WRITE;
 /*!40000 ALTER TABLE `location` DISABLE KEYS */;
-INSERT INTO `location` VALUES (4,'Hà Nội',21.03,105.84),(8,'TP. Hồ Chí Minh',10.78,106.69),(20,'Lào Cai',22.5,103.96),(25,'Lạng Sơn',21.86,106.76),(29,'Yên Bái',21.71,104.87),(31,'Hải Phòng',20.85,106.6833),(37,'Thanh Hoá',19.81,105.78),(38,'Nghệ An',19.3333,104.8333),(39,'Hà Tĩnh',18.37,105.9),(52,'Quảng Bình',17.46906,106.59984),(54,'Thừa Thiên Huế',16.48,107.58),(55,'Quảng Ngãi',15.12,108.81),(56,'Bình Định',14.1667,109),(58,'Vạn Giã',12.25,109.2),(59,'Gia Lai',13.9833,108),(61,'Đồng Nai',11.116666666666667,107.18333333333334),(62,'Bình Thuận',10.933333333333334,108.1),(63,'Lâm Đồng',11.9417,108.4383),(64,'Vũng Tàu',10.416666666666666,107.16805555555555),(66,'Tây Ninh',11.3,106.1),(72,'Long An',10.666666666666666,106.16666666666667),(75,'Bến Tre',10.2333,106.3833),(76,'An Giang',10.5,105.16666666666667),(500,'Đăk Lăk',12.667,108.05),(511,'Đà Nẵng',16.0667,108.2333),(512,'Bà Rịa',10.35,107.25),(513,'Nha Trang',12.25,109.1833);
+INSERT INTO `location` VALUES (4,'Hà Nội',21.03,105.84),(8,'TP. Hồ Chí Minh',10.78,106.69),(20,'Lào Cai',22.5,103.96),(25,'Lạng Sơn',21.86,106.76),(29,'Yên Bái',21.71,104.87),(31,'Hải Phòng',20.85,106.6833),(37,'Thanh Hoá',19.81,105.78),(38,'Nghệ An',19.3333,104.8333),(39,'Hà Tĩnh',18.37,105.9),(52,'Quảng Bình',17.46906,106.59984),(54,'Thừa Thiên Huế',16.48,107.58),(55,'Quảng Ngãi',15.12,108.81),(56,'Bình Định',13.78927,109.21972),(58,'Vạn Giã',12.25,109.2),(59,'Gia Lai',13.9833,108),(61,'Đồng Nai',11.116666666666667,107.18333333333334),(62,'Bình Thuận',10.933333333333334,108.1),(63,'Lâm Đồng',11.9417,108.4383),(64,'Vũng Tàu',10.416666666666666,107.16805555555555),(66,'Tây Ninh',11.3,106.1),(70,'Vĩnh Long',10.25,105.9667),(71,'Cần Thơ',10.033333,105.783333),(72,'Long An',10.666666666666666,106.16666666666667),(73,'Tiền Giang',10.35,106.35),(75,'Bến Tre',10.2333,106.3833),(76,'An Giang',10.5,105.16666666666667),(500,'Đăk Lăk',12.667,108.05),(501,'Đăk Nông',12.00365,107.68765),(511,'Đà Nẵng',16.0667,108.2333),(512,'Bà Rịa',10.35,107.25),(513,'Nha Trang',12.25,109.1833);
 /*!40000 ALTER TABLE `location` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -258,7 +258,7 @@ CREATE TABLE `payment` (
   KEY `payment_payment_method_id_idx` (`payment_method_id`),
   CONSTRAINT `payment_payment_method_id` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_method` (`id`),
   CONSTRAINT `payment_ticket_id` FOREIGN KEY (`ticket_id`) REFERENCES `ticket` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -267,7 +267,7 @@ CREATE TABLE `payment` (
 
 LOCK TABLES `payment` WRITE;
 /*!40000 ALTER TABLE `payment` DISABLE KEYS */;
-INSERT INTO `payment` VALUES (17,35,1000.5,0,1,'tram','pay'),(18,36,800,0,1,'tram','pay'),(19,39,940.5,40.5,2,'50G57246SR211513A','pay'),(20,40,940.5,40.5,2,'50G57246SR211513A','pay'),(21,41,753,33,2,'2EB30714K13686353','pay'),(22,42,753,33,2,'2EB30714K13686353','pay');
+INSERT INTO `payment` VALUES (17,35,1000.5,0,1,'tram','pay'),(18,36,800,0,1,'tram','pay'),(19,39,940.5,40.5,2,'50G57246SR211513A','pay'),(20,40,940.5,40.5,2,'50G57246SR211513A','pay'),(21,41,753,33,2,'2EB30714K13686353','pay'),(22,42,753,33,2,'2EB30714K13686353','pay'),(23,43,4586,186,2,'2RN568295K9399005','pay'),(24,44,1047.5,47.5,2,'27Y313365X369920E','pay'),(25,45,475,25,2,'0SH59684A2381870U','pay'),(26,46,1245,55,2,'6VN27194UX806464J','pay'),(27,47,397.5,22.5,2,'04U19279XB343901J','pay'),(28,47,278,8,2,'7BD91217S4293782R','refund');
 /*!40000 ALTER TABLE `payment` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -340,7 +340,7 @@ CREATE TABLE `payment_method` (
   `ratio` double NOT NULL,
   `addition` double NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -390,7 +390,7 @@ CREATE TABLE `reservation` (
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `reservation_booker_id_idx` (`user_id`),
   CONSTRAINT `reservation_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -399,7 +399,7 @@ CREATE TABLE `reservation` (
 
 LOCK TABLES `reservation` WRITE;
 /*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
-INSERT INTO `reservation` VALUES (24,3,'7VCIXV','2013-04-22 20:57:52','paid','Truong','Nguyen','','truongns@live.com'),(25,NULL,NULL,'2013-04-27 08:33:22','unpaid','Hải','Nguyễn Lương','','hainl60335@fpt.edu.vn'),(26,NULL,'67GR3P','2013-04-27 09:26:52','pending','Hải','Nguyễn Lương','','hainl60335@fpt.edu.vn'),(27,NULL,'9YF8QD','2013-04-27 09:29:13','pending','Trường','Nguyễn Sơn','','truongns60466@fpt.edu.vn');
+INSERT INTO `reservation` VALUES (24,3,'7VCIXV','2013-04-22 20:57:52','departed','Truong','Nguyen','','truongns@live.com'),(25,NULL,NULL,'2013-04-27 08:33:22','unpaid','Hải','Nguyễn Lương','','hainl60335@fpt.edu.vn'),(26,NULL,'67GR3P','2013-04-27 09:26:52','pending','Hải','Nguyễn Lương','','hainl60335@fpt.edu.vn'),(27,NULL,'9YF8QD','2013-04-27 09:29:13','pending','Trường','Nguyễn Sơn','','truongns60466@fpt.edu.vn'),(28,1,'5DOLAA','2013-05-01 08:11:22','pending','Customer','1','','hainl60335@fpt.edu.vn'),(29,1,'7N21WQ','2013-05-01 08:14:28','departed','First','Customer','','hainl60335@fpt.edu.vn'),(30,1,'6X22ZI','2013-05-01 08:16:53','paid','First','Customer','','hainl60335@fpt.edu.vn'),(31,1,'5XO8A3','2013-05-01 08:18:47','paid','First','Customer','','hainl60335@fpt.edu.vn'),(32,1,'5D36PZ','2013-05-03 08:22:16','refunded','First','Customer','','tramntb60153@fpt.edu.vn');
 /*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -521,7 +521,7 @@ CREATE TABLE `seat_position` (
 
 LOCK TABLES `seat_position` WRITE;
 /*!40000 ALTER TABLE `seat_position` DISABLE KEYS */;
-INSERT INTO `seat_position` VALUES (35,'A1','active'),(35,'A2','active'),(35,'B1','active'),(35,'D1','active'),(35,'E1','active'),(36,'A1','active'),(36,'A2','active'),(36,'B1','active'),(36,'B2','active'),(37,'B3','active'),(38,'A1','active'),(39,'A1','active'),(40,'B1','active'),(41,'B1','active'),(42,'A1','active');
+INSERT INTO `seat_position` VALUES (35,'A1','active'),(35,'A2','active'),(35,'B1','active'),(35,'D1','active'),(35,'E1','active'),(36,'A1','active'),(36,'A2','active'),(36,'B1','active'),(36,'B2','active'),(37,'B3','active'),(38,'A1','active'),(39,'A1','active'),(40,'B1','active'),(41,'B1','active'),(42,'A1','active'),(43,'A7','active'),(43,'A8','active'),(43,'C7','active'),(43,'C8','active'),(43,'E7','active'),(44,'A3','active'),(44,'A4','active'),(44,'B3','active'),(44,'D3','active'),(44,'E3','active'),(45,'A1','active'),(45,'C1','active'),(45,'E1','active'),(46,'C1','active'),(46,'D11','active'),(47,'A7','active'),(47,'C7','active'),(47,'E7','active');
 /*!40000 ALTER TABLE `seat_position` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -608,6 +608,20 @@ INSERT INTO `segment` VALUES (26,3,35),(31,3,38),(28,5,7),(24,5,35),(23,7,5),(29
 UNLOCK TABLES;
 
 --
+-- Temporary table structure for view `segment_count`
+--
+
+DROP TABLE IF EXISTS `segment_count`;
+/*!50001 DROP VIEW IF EXISTS `segment_count`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `segment_count` (
+  `route_id` int(11),
+  `segment_numbers` bigint(21)
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Table structure for table `segment_travel_time`
 --
 
@@ -651,7 +665,7 @@ CREATE TABLE `station` (
   PRIMARY KEY (`id`),
   KEY `station_city_id_idx` (`location_id`),
   CONSTRAINT `station_location_id` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -660,7 +674,7 @@ CREATE TABLE `station` (
 
 LOCK TABLES `station` WRITE;
 /*!40000 ALTER TABLE `station` DISABLE KEYS */;
-INSERT INTO `station` VALUES (1,'Bến xe Hà Tĩnh',39,'Hà Tĩnh','active'),(2,'Bến xe Bến Tre',75,'Bến Tre','active'),(3,'Bến xe Miền Đông',8,'TP. Hồ Chí Minh','active'),(5,'Bến xe Đà Nẵng',511,'Đà Nẵng','active'),(6,'Bến xe Hải Phòng',31,'Hải Phòng','active'),(7,'Bến xe Huế',54,'Thừa Thiên Huế','active'),(8,'Bến xe Hà Nội',4,'Hà Nội','active'),(9,'Bến xe Lào Cai',20,'Lào Cai','active'),(10,'Bến xe Lạng Sơn',25,'Lạng Sơn','active'),(11,'Bến xe Yên Bái',29,'Yên Bái','active'),(12,'Bến xe Đồng Nai',61,'Đồng Nai','active'),(13,'Bến xe Lâm Đồng',63,'Lâm Đồng','active'),(14,'Bến xe Vũng Tàu',64,'Vũng Tàu','active'),(15,'Bến xe Tây Ninh',66,'Tây Ninh','active'),(16,'Bến xe Long An',72,'Long An','active'),(17,'Bến xe An Giang',76,'An Giang','active'),(28,'Bến xe Vinh',38,'Vinh','active'),(29,'Bến xe Thanh Hoá',37,'Thanh Hoá','active'),(30,'Bến xe Đồng Hới',52,'Quảng Bình','active'),(31,'Bến xe Quảng Ngãi',55,'Quảng Ngãi','active'),(32,'Bến xe Quy Nhơn',56,'Quy Nhơn','active'),(33,'Bến xe Vạn Giã',58,'Vạn Giã','active'),(34,'Bến xe Nha Trang',513,'Nha Trang','active'),(35,'Bến xe Phan Thiết',62,'Phan Thiết','active'),(36,'Bến xe Bà Rịa',512,'Bà Rịa','active'),(37,'Bến xe Đà Lạt',63,'Đà Lạt','active'),(38,'Bến xe Buôn Ma Thuột',500,'Đăk Lăk','active'),(39,'Bến xe Pleiku',59,'Gia Lai','active'),(40,'Bến xe Miền Tây',8,'TP. Hồ Chí Minh','active');
+INSERT INTO `station` VALUES (1,'Bến xe Hà Tĩnh',39,'Hà Tĩnh','active'),(2,'Bến xe Bến Tre',75,'Bến Tre','active'),(3,'Bến xe Miền Đông',8,'TP. Hồ Chí Minh','active'),(5,'Bến xe Đà Nẵng',511,'Đà Nẵng','active'),(6,'Bến xe Hải Phòng',31,'Hải Phòng','active'),(7,'Bến xe Huế',54,'Thừa Thiên Huế','active'),(8,'Bến xe Hà Nội',4,'Hà Nội','active'),(9,'Bến xe Lào Cai',20,'Lào Cai','active'),(10,'Bến xe Lạng Sơn',25,'Lạng Sơn','active'),(11,'Bến xe Yên Bái',29,'Yên Bái','active'),(12,'Bến xe Đồng Nai',61,'Đồng Nai','active'),(13,'Bến xe Đà Lạt',63,'Lâm Đồng','active'),(14,'Bến xe Vũng Tàu',64,'Vũng Tàu','active'),(15,'Bến xe Tây Ninh',66,'Tây Ninh','active'),(16,'Bến xe Tân An',72,'Long An','active'),(17,'Bến xe An Giang',76,'An Giang','active'),(28,'Bến xe Vinh',38,'Vinh','active'),(29,'Bến xe Thanh Hoá',37,'Thanh Hoá','active'),(30,'Bến xe Đồng Hới',52,'Quảng Bình','active'),(31,'Bến xe Quảng Ngãi',55,'Quảng Ngãi','active'),(32,'Bến xe Quy Nhơn',56,'Bình Định','active'),(33,'Bến xe Vạn Giã',58,'Vạn Giã','active'),(34,'Bến xe Nha Trang',513,'Nha Trang','active'),(35,'Bến xe Phan Thiết',62,'Phan Thiết','active'),(36,'Bến xe Bà Rịa',512,'Bà Rịa','active'),(37,'Bến xe Đà Lạt',63,'Đà Lạt','active'),(38,'Bến xe Buôn Ma Thuột',500,'Đăk Lăk','active'),(39,'Bến xe Pleiku',59,'Gia Lai','active'),(40,'Bến xe Miền Tây',8,'TP. Hồ Chí Minh','active'),(41,'Bến xe Cần Thơ',71,'Cần Thơ','active'),(42,'Bến xe Mỹ Tho',73,'Tiền Giang','active'),(43,'Bến xe Vĩnh Long',70,'Vĩnh Long','active'),(44,'Bến xe Gia Nghĩa',501,'Đăk Nông','active');
 /*!40000 ALTER TABLE `station` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -752,7 +766,7 @@ CREATE TABLE `ticket` (
   PRIMARY KEY (`id`),
   KEY `ticket_reservation_id_idx` (`reservation_id`),
   CONSTRAINT `ticket_reservation_id` FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -761,7 +775,7 @@ CREATE TABLE `ticket` (
 
 LOCK TABLES `ticket` WRITE;
 /*!40000 ALTER TABLE `ticket` DISABLE KEYS */;
-INSERT INTO `ticket` VALUES (35,24,'active'),(36,24,'active'),(37,25,'active'),(38,25,'active'),(39,26,'pending'),(40,26,'pending'),(41,27,'pending'),(42,27,'pending');
+INSERT INTO `ticket` VALUES (35,24,'departed'),(36,24,'departed'),(37,25,'active'),(38,25,'active'),(39,26,'pending'),(40,26,'pending'),(41,27,'pending'),(42,27,'pending'),(43,28,'pending'),(44,29,'departed'),(45,30,'active'),(46,31,'active'),(47,32,'refunded');
 /*!40000 ALTER TABLE `ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -821,7 +835,7 @@ CREATE TABLE `trip_in_ticket` (
 
 LOCK TABLES `trip_in_ticket` WRITE;
 /*!40000 ALTER TABLE `trip_in_ticket` DISABLE KEYS */;
-INSERT INTO `trip_in_ticket` VALUES (36,1906),(37,1911),(39,1911),(41,1911),(37,1912),(39,1912),(41,1912),(37,1913),(39,1913),(41,1913),(37,1914),(39,1914),(41,1914),(35,1923),(40,1935),(42,1935),(40,1936),(42,1936),(40,1937),(42,1937),(40,1938),(42,1938),(38,2055),(38,2056),(38,2057),(38,2058);
+INSERT INTO `trip_in_ticket` VALUES (47,1862),(44,1890),(36,1906),(37,1911),(39,1911),(41,1911),(37,1912),(39,1912),(41,1912),(37,1913),(39,1913),(41,1913),(37,1914),(39,1914),(41,1914),(35,1923),(40,1935),(42,1935),(40,1936),(42,1936),(40,1937),(42,1937),(40,1938),(42,1938),(43,1995),(43,1996),(43,1997),(43,1998),(38,2055),(38,2056),(38,2057),(38,2058),(45,2291),(46,2322),(46,2323),(46,2324);
 /*!40000 ALTER TABLE `trip_in_ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -1262,11 +1276,11 @@ DELIMITER ;;
                            -- IN BUS_TYPE INT,
 							  IN MIN_DATE VARCHAR(20))
 BEGIN
-SELECT  dept.bus_status_id,
+SELECT  dept.bus_status_id				AS bus_status_id,
 		dept.city_name       			AS departure_city,
 	    dept.station_name    			AS departure_station_name,
 	    dept.station_address 			AS departure_station_address,
-        dept.departure_time,
+        dept.departure_time				AS departure_time,
 		arrv.city_name       			AS arrival_city,
         arrv.station_name    			AS arrival_station_name,
 		arrv.station_address 			AS arrival_station_address,
@@ -1277,8 +1291,11 @@ SELECT  dept.bus_status_id,
 		rmst.number_of_remained_seats 	AS remained_seats,
 		dept.route_id					AS route,
 		btyp.name					    AS bus_type,
-		btyp.id							AS bus_type_id
-		
+		btyp.id							AS bus_type_id,
+	--  number of trips in each journey
+		count(ftrp.id)					AS trip_numbers,
+    --  number of segments in each route
+		scnt.segment_numbers			AS segment_numbers
 FROM   
 	-- departure trip information (first trip in journey)
 	    (SELECT dtrp.bus_status_id,
@@ -1349,6 +1366,9 @@ FROM
 	  ON rmst.start_location_id = DEPT_CITY AND 
 		 rmst.end_location_id = ARRV_CITY AND 
 		 rmst.bus_status_id = dept.bus_status_id
+-- count number of segment in each route
+	INNER JOIN segment_count scnt
+	  ON scnt.route_id = dept.route_id
 WHERE   -- departure date is in range of valid fare dates
         trff.valid_from IN (SELECT MAX(ttrf.valid_from) 
                             FROM   tariff ttrf 
@@ -1419,6 +1439,25 @@ DELIMITER ;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
 /*!50001 VIEW `route_terminal` AS select `rds_from`.`route_id` AS `id`,`seg_from`.`departure_station_id` AS `start_terminal_id`,`seg_to`.`arrival_station_id` AS `end_terminal_id` from ((`route_details` `rds_from` join `segment` `seg_from` on((`seg_from`.`id` = `rds_from`.`segment_id`))) left join (`route_details` `rds_to` join `segment` `seg_to` on((`seg_to`.`id` = `rds_to`.`segment_id`))) on((`rds_from`.`route_id` = `rds_to`.`route_id`))) where ((`rds_from`.`id` = (select min(`rds1`.`id`) from `route_details` `rds1` where (`rds_from`.`route_id` = `rds1`.`route_id`))) and (`rds_to`.`id` = (select max(`rds2`.`id`) from `route_details` `rds2` where (`rds_from`.`route_id` = `rds2`.`route_id`)))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `segment_count`
+--
+
+/*!50001 DROP TABLE IF EXISTS `segment_count`*/;
+/*!50001 DROP VIEW IF EXISTS `segment_count`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `segment_count` AS select `route_details`.`route_id` AS `route_id`,count(`route_details`.`id`) AS `segment_numbers` from `route_details` group by `route_details`.`route_id` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -1508,4 +1547,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-04-27  9:54:13
+-- Dump completed on 2013-04-29 23:32:37
