@@ -441,12 +441,20 @@ public class BookingAction extends BaseAction implements SessionAware {
                         nwOutSeat += string + ";";
                     }
                 }
+            }else{
+            	for (String string : listOutSeats) {
+                    nwOutSeat += string + ";";
+                }
             }
             if (listReturnDouble != null) {
                 for (String string : listReturnSeats) {
                     if (!listReturnDouble.contains(string)) {
                         nwReturnSeat += string + ";";
                     }
+                }
+            }else{
+            	for (String string : listReturnSeats) {                
+                    nwReturnSeat += string + ";";                
                 }
             }
             this.selectedOutSeat = nwOutSeat;
@@ -466,7 +474,7 @@ public class BookingAction extends BaseAction implements SessionAware {
         if (listReturnTripBean != null) {
             seatMapReturn = buildSeatMap(listReturnTripBean);
             rtnRouteName = listReturnTripBean.get(0).getRouteDetails().getSegment().getStartAt().getCity().getName() + " - " +
-            		listReturnTripBean.get(listOutTripBean.size()-1).getRouteDetails().getSegment().getEndAt().getCity().getName();
+            		listReturnTripBean.get(listReturnTripBean.size()-1).getRouteDetails().getSegment().getEndAt().getCity().getName();
         }
         maxSeatNumber = systemSettingDAO.getMaxSeatNumber()+"";
         		

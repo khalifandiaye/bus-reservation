@@ -47,8 +47,12 @@
 		    $('#listTicketForm').submit();
 		    return false;
 		    });
+	    $("#scheduleTable").dataTable({
+    		"aoColumnDefs": [
+               	{ 'bSortable': false, 'aTargets': [ 4,5,6 ] }  
+            ]
 		});
-	 
+	});
 </script>
 </head>
 <body>

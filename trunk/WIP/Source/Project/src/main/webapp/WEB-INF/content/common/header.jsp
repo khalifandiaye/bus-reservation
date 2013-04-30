@@ -61,22 +61,22 @@
 							href="<%=request.getContextPath()%>/rsv/rsv01010.html">VÉ CỦA
 								TÔI</a></li>   
 						<li class="dropdown operator admin hidden"><a href="#" class="dropdown-toggle"
-							data-toggle="dropdown">QUẢN LÝ <b class="caret"></b></a>
+							data-toggle="dropdown">MANAGE <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li class="operator hidden"><a href="<%=request.getContextPath()%>/bus/list.html">XE
+								<li class="operator hidden"><a href="<%=request.getContextPath()%>/bus/list.html">MANAGE
 										BUS</a></li>
-								<li class="operator hidden"><a href="<%=request.getContextPath()%>/route/list.html">TUYẾN
-										ĐƯỜNG</a></li>
+								<li class="operator hidden"><a href="<%=request.getContextPath()%>/route/list.html">MANAGE
+										ROUTE</a></li>
 								<li class="operator hidden"><a
-									href="<%=request.getContextPath()%>/schedule/list.html">LỊCH
-										XE CHẠY</a></li>
+									href="<%=request.getContextPath()%>/schedule/list.html">MANAGE
+										SCHEDULE</a></li>
 								<li class="operator hidden"><a
-									href="<%=request.getContextPath()%>/segment/list.html">CHẶNG ĐI</a></li>
+									href="<%=request.getContextPath()%>/segment/list.html">MANAGE SEGMENT</a></li>
 								<li class="admin hidden"><a
-									href="<%=request.getContextPath()%>/admin/user-management.html">THÀNH
-										VIÊN</a></li>
+									href="<%=request.getContextPath()%>/admin/user-management.html">MANAGE
+										USER</a></li>
 								<li class="admin hidden"><a
-									href="<%=request.getContextPath()%>/admin/settings.html">Configuration</a></li>
+									href="<%=request.getContextPath()%>/admin/settings.html">CONFIGURATION</a></li>
 							</ul></li>
 					</ul>
 				</div>

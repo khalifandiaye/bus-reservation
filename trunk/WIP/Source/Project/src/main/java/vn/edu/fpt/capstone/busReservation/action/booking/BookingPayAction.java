@@ -227,7 +227,7 @@ public class BookingPayAction extends BaseAction implements SessionAware {
 						listReturnSeat.add(string);
 					}
 				}
-				boolean canBook = reservationDAO.getBusSeatCountByEmail(inputEmail,listOutTripBean,listOutSeat.size());
+				boolean canBook = reservationDAO.getBusSeatCountByEmail(inputEmail,listReturnTripBean,listReturnSeat.size());
 				boolean isStaff = false;
 				if(userBean != null){
 					if(userBean.getRole().getId() == 2){
