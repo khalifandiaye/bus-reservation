@@ -673,18 +673,19 @@ Date.prototype.toMyString = function () {
    						this.plateNumber,
    						'<button type="button" data-id="'+ this.id +'" class="btn btn-danger btn-small">Delete</button>' ]);
    						$("#busDetailTable tr button[data-id="+ this.id+ "]").click(
-   						function() {
-   							$('#busDetailbusPlate').attr('disabled',false);
-   	                        $("#addBusError").text("");
-   							$("#busDetailAdd").addClass("btn-primary");    
-   			               	$("#busDetailAdd").removeAttr("disabled");
-   							var td = this.parentNode;
-   							var tr = td.parentNode;
-   							var aPos = busDetailTable.dataTable().fnGetPosition(td);
-   							var data = busDetailTable.fnGetData(tr);
-   							$('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
-   							busDetailTable.dataTable().fnDeleteRow(aPos[0]);
-   						});
+	   						function() {
+	   							$('#busDetailbusPlate').attr('disabled',false);
+	   	                        $("#addBusError").text("");
+	   							$("#busDetailAdd").addClass("btn-primary");    
+	   			               	$("#busDetailAdd").removeAttr("disabled");
+	   							var td = this.parentNode;
+	   							var tr = td.parentNode;
+	   							var aPos = busDetailTable.dataTable().fnGetPosition(td);
+	   							var data = busDetailTable.fnGetData(tr);
+	   							$('#busDetailbusPlate').append('<option value="'+ data[0] +'">'+ data[1]+ '</option>');
+	   							busDetailTable.dataTable().fnDeleteRow(aPos[0]);
+	   						}
+   						);
    					} else {
    		            busDetailTable.dataTable().fnAddData([
    		               this.id,
@@ -694,8 +695,11 @@ Date.prototype.toMyString = function () {
    				});
 
 					$('#busDetailbusPlate').empty();
-					$.each(busNotInRoute,function() {$('#busDetailbusPlate').append(
+					$.each(busNotInRoute,function() {
+						$('#busDetailbusPlate').append(
 						'<option value="'+ this.id +'">'+ this.plateNumber + '</option>');
+						$('#busDetailbusPlate').attr('disabled',false);
+						$("#addBusError").text("");
 					});
 					
 					if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
