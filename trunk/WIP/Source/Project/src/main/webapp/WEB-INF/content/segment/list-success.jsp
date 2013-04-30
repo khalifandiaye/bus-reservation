@@ -18,6 +18,14 @@
 <script src="<%=request.getContextPath()%>/js/jquery-ui.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.ui.datepicker-vi.js"></script>
 <script type="text/javascript">
+   function checkSegmentTime() {
+	   var value = $("#duration").val();
+	   value = value.replace(':', '');
+		if (isNaN(value) || parseInt(value,10) < 100) {
+			$("#duration").val('01:00');
+		}
+   }
+
 Date.prototype.toMyString = function () {
 
     function padZero(obj) {
@@ -234,7 +242,7 @@ Date.prototype.toMyString = function () {
                </tr>
                <tr>
                   <td>Duration (hh:mm)</td>
-                  <td><input type="text" id="duration" name="duration" value="01:00"></td>
+                  <td><input type="text" id="duration" name="duration" value="01:00" onblur="checkSegmentTime()"></td>
                </tr>
             </table>
             <div><input type="checkbox" id="addPriceRevRoute" name="addPriceRevRoute" style="margin-top: -4px;"/> Edit duration for reverse route too?</div>

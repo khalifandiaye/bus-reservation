@@ -21,7 +21,15 @@
 <script src="<%=request.getContextPath()%>/js/jquery.ui.datepicker-vi.js"></script>
 <script src="<%=request.getContextPath()%>/js/route/route-detail-list.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.maskedinput.min.js"></script><script type="text/javascript">
-
+   function validateSegmentPrice(params){ 
+	   var price = params.value;
+	   if (price.trim() == '' ||  parseInt(price) < 50) {
+		   params.value = 50;
+	   } else if (parseInt(price) > 1000) {
+		   params.value = 1000;
+	   }
+   };
+   
 	function showTripDialogBusPlate(){
 		var rb1 = $("input[name='avaiBusList']:checked").val();
 		
@@ -33,7 +41,7 @@
 			$('#tripDialogBusPlate').addClass('hidden');
 		}
 		checkButton();
-	}
+	};
    
    function getStation(el, des, stationEndAtKey) {
       cityId = $('#' + el).val();
@@ -294,9 +302,10 @@ Date.prototype.toMyString = function () {
 	function validate(evt) {
 		var theEvent = evt || window.event;
 		var key = theEvent.keyCode || theEvent.which;
-		key = String.fromCharCode(key);
+		var charCode = theEvent.charCode;
+		var charac = String.fromCharCode(key);
 		var regex = /[0-9]/;
-		if (!regex.test(key)) {
+		if (charCode != 0 && !regex.test(charac)) {
 			theEvent.returnValue = false;
 			if (theEvent.preventDefault)
 				theEvent.preventDefault();
@@ -1247,6 +1256,7 @@ Date.prototype.toMyString = function () {
                   </td>
                </tr>
             </table>
+            <p>Input Price must be from 50.000 VNĐ to 1.000.000 VNĐ</p>
             <table id="editSegmentTable" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
                <thead>
                   <tr>
@@ -1260,7 +1270,8 @@ Date.prototype.toMyString = function () {
                      <tr>
                         <td><s:property value="startAt.name" /></td>
                         <td><s:property value="endAt.name" /></td>
-                        <td><input id="<s:property value='id'/>" type="text" value="" maxlength="7" style="text-align: right;margin: 0" /> .000</td>
+                        <td><input id="<s:property value='id'/>" type="text" value="" maxlength="7" style="text-align: right;margin: 0" 
+                           onblur="validateSegmentPrice(this)"/> .000</td>
                      </tr>
                   </s:iterator>
                </tbody>
