@@ -186,16 +186,13 @@
 													</span>
 												</td>
 												</td>
-												<s:if test="%{#segmentNumbers == #tripNumbers}">
+												<s:if test="%{segmentNumbers == tripNumbers}">
 													<td class="row choose-item">
-														<span class="tooltip" data-placement="top" 
-															  title="Chuyến này đã được giảm giá">
 															<s:property value="getText('{0,number,#,##0}',{(fare - (fare * discountFullRoute)) * 1000})" />
-														</span>
 													</td>
 												</s:if>
 												<s:else>
-													<td class="row choose-item"><s:property value="getText('{0,number,#,##0}',{(fare * 1000})" /></td>
+													<td class="row choose-item"><s:property value="getText('{0,number,#,##0}',{fare * 1000})" /></td>
 												</s:else>
 												<td class="row choose-item"><s:property value="remainedSeats"/></td>
 												<td class="row out-journey-rdo choose-item">
@@ -282,15 +279,13 @@
 													<span href="#trip-details" role="button" data-toggle="modal" class="trip-details return view-details-icon" title="Xem thông tin chi tiết chuyến đi">
 													</span>
 												</td>
-												<s:if test="%{#segmentNumbers == #tripNumbers}">
+												<s:if test="%{segmentNumbers == tripNumbers}">
 													<td class="row choose-item discount">
-														<span class="tooltip" data-placement="top" 
-															  title="Chuyến này đã được giảm giá">
-															<s:property value="getText('{0,number,#,##0}',{(fare - (fare * discountFullRoute)) * 1000})" />
-															</span></td>
+														<s:property value="getText('{0,number,#,##0}',{(fare - (fare * discountFullRoute)) * 1000})" />
+													</td>
 												</s:if>
 												<s:else>
-													<td class="row choose-item"><s:property value="getText('{0,number,#,##0}',{(fare * 1000})" /></td>
+													<td class="row choose-item"><s:property value="getText('{0,number,#,##0}',{fare * 1000})" /></td>
 												</s:else>
 												<td class="row choose-item"><s:property value="remainedSeats"/></td>
 												<td class="row rtn-journey-rdo choose-item">
