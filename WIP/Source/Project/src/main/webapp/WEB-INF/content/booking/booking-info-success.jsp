@@ -178,7 +178,7 @@
 					</tr>
 				</table>
 			</div>
-			<div style="color:red;font-size: 10px;padding-top:20px;">Sau khi bấm nút <span class="label label-info">Thanh Toán</span> quý khách có 15 phút để thanh toán vé xe. Nếu sau 15 phút quý khách không thanh toán hệ thống sẽ tự động hủy vé quý khách đã chọn.</div>
+			<div style="color:red;font-size: 15px;padding-top:20px; width:95%">Sau khi bấm nút <span class="label label-info">Thanh Toán</span> quý khách có 15 phút để thanh toán vé xe. Nếu sau 15 phút quý khách không thanh toán hệ thống sẽ tự động hủy vé quý khách đã chọn.</div>
 		</div>
 	</div>
 	</section>
