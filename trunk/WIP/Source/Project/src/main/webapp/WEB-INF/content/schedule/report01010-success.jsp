@@ -23,7 +23,6 @@
 	<jsp:include page="../common/dataTableText.jsp" />
 		<div class="container">
 			<div class="well">
-				<button class="btn btn-large btn-primary" id="btnPrint">Print</button>
 				<jsp:include page="report01010-content.jsp" />
 			</div>
 		</div>

@@ -80,7 +80,8 @@ function getStation(el, des, stationEndAtKey) {
 	   var routeTable = $('#routeTable').dataTable({ bSort : false });
 	   var segmentTable = $('#segmentTable').dataTable({ 
 		   bSort : false , 
-		   bPaginate : false 
+		   bPaginate : false,
+		   bInfo : false
 	   });
 
 	   //SELECT 2
@@ -88,6 +89,10 @@ function getStation(el, des, stationEndAtKey) {
 	   $("#endAt").select2();
 	   $("#stationStartAt").select2({minimumResultsForSearch : 5});
 	   $("#stationEndAt").select2({minimumResultsForSearch : 5});
+	   $('.select2-input').on('focusin.anti-modal', function(e){
+			 e.stopPropagation();
+		 });
+	   
     $('#addRoute').bind('click', function(event) {
   	  $(".alert.fade.in").hide();
   	   giCount = 0;
