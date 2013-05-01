@@ -61,6 +61,11 @@
    margin-left: -450px;
    margin-top: -24px;
 }
+
+#editBusDialog .modal-body {
+	max-height: none;
+}
+
 .header-table
 {
 	width: 100%;
@@ -270,8 +275,10 @@
          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
          <h3 id="editBusDialogLabel">Edit Route</h3>
       </div>
-      <label style="color: red;margin-left: 42px;margin-top: 5px;" id="errorMessage"></label>
       <div class="modal-body">
+      	<div class="alert alert-info fade in" style="display:none;"><button type="button" class="close" data-dismiss="alert">×</button>
+				<span id="errorMessage"></span>
+		</div>
          <div class="post" style="margin: 0px auto; width: 95%;">
             <table class="header-table">
             	<thead>

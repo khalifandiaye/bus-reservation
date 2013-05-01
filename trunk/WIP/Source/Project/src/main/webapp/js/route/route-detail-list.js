@@ -259,17 +259,6 @@ function getStation(el, des, stationEndAtKey) {
                 $('#' + des).select2('enable');
             }
             $('#' + des).trigger('change');
-//            if ($('#stationStartAt option[value="' + $("#stationStartAt").val() + '"]').length <= 0) {
-//           	 if ($('#stationStartAt option').length > 0) {
-//           		 $('#stationStartAt').val($('#stationStartAt option')[0].val());
-//           		 console.log('changed');
-//           	 } else {
-//           		 $('#stationStartAt').val('');
-//           	     $("#stationStartAt").prop("disabled", true);
-//           		 console.log($('#stationStartAt option'));
-//           	 }
-//                $("#stationStartAt").trigger('change');
-//            }
         });
    }
 };
@@ -348,13 +337,14 @@ $(document).ready(function() {
     		 value.appendTo('#endAt');
     	 });
      }
+     $("#startAt").trigger('change');
      // sort end at
      $('#endAt').html($('option', $('#endAt')).sort(function(a, b) {
     	 return a.text == b.text ? 0 : a.text < b.text ? -1 : 1;
      }));
-     $("#startAt").trigger('change');
      $("#duration").val('01:00');
      $("#errorMessage").text('');
+     $("#errorMessage").parent().hide();
      //$('#stationStartAt').empty();
      //$('#stationEndAt').empty();
      //$("#endAt option").show();
@@ -469,7 +459,7 @@ $(document).ready(function() {
         //getStation('startAt', 'stationStartAt', stationEndAtKey, true);
         $("#startAt").trigger('change');
                       
-        $("#endAt option[value=" + endAtKey + "]").remove();
+        //$("#endAt option[value=" + endAtKey + "]").remove();
         //$("#endAt").val(-1);
         $("#endAt").trigger('change');
         $("#duration").val('01:00');
@@ -486,6 +476,7 @@ $(document).ready(function() {
 
         if (giCount == 5) {
            $("#errorMessage").text("Maximum segment added!");
+           $("#errorMessage").parent().show();
         }
  });
 
