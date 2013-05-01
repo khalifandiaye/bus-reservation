@@ -36,7 +36,7 @@
 					<div class="item">
 					<s:if test="%{reservationInfo.code != null && reservationInfo.code != ''}">
 						<label><s:text name="reservation.code" /></label>
-						<span><s:property value="reservationInfo.code"/></span>
+						<span class="label label-important"><s:property value="reservationInfo.code"/></span>
 					</s:if>
 					</div>
 					<div class="item">
@@ -169,7 +169,7 @@
 		<div class="modal-footer">
 			<button id="btnClose" class="btn close-model-btn btn-primary hidden"><s:text name="button.close" /></button>
 			<button id="btnNo" class="btn close-model-btn"><s:text name="button.close" /></button>
-			<button id="btnCancel" class="btn btn-danger"><s:text name="cancel" /></button>
+			<button id="btnCancel" class="btn btn-danger"><s:text name="button.yes" /></button>
 		</div>
 	</div>
 	</div>

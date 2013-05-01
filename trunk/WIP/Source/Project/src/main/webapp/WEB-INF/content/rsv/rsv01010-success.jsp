@@ -86,7 +86,7 @@
 		<div class="modal-footer">
 			<button id="btnClose" class="btn close-model-btn btn-primary hidden"><s:text name="button.close" /></button>
 			<button id="btnNo" class="btn close-model-btn"><s:text name="button.close" /></button>
-			<button id="btnCancel" class="btn btn-danger"><s:text name="cancel" /></button>
+			<button id="btnCancel" class="btn btn-danger"><s:text name="button.yes" /></button>
 		</div>
 	</div>
 </body>

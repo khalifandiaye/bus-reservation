@@ -79,7 +79,7 @@
 		width: 20%;
 	}
 	.reservation-details .general-info .item span {
-		width: 60%;
+		display: inline;
 	}
 	.reservation-details .general-info .item.long span {
 		width: 80%;
@@ -201,4 +201,8 @@
 		background-color: rgb(84, 250, 217);
 		border-color: rgb(24, 85, 80);
 	}
+	.alert span.label {
+		display: inline;
+	}
+	
 }
