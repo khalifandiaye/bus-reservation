@@ -32,7 +32,7 @@ public class GetAutoReturnArrivalTimeAction extends BaseAction {
 	public String execute() {
 		try {
 			Date fromDate = FormatUtils.deFormatDate(departureTime,
-					"hh:mm - dd/MM/yyyy", CommonConstant.LOCALE_US,
+					"HH:mm - dd/MM/yyyy", CommonConstant.LOCALE_US,
 					CommonConstant.DEFAULT_TIME_ZONE);
 			List<RouteDetailsBean> routeDetailsList = routeDAO.getById(routeId).getRouteDetails();
 			

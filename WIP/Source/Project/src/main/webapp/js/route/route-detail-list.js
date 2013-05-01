@@ -807,17 +807,27 @@ Date.prototype.toMyString = function () {
 				var selectedBusType = $("#tripDialogBusType").val();
 				var busPlate = $('#tripDialogBusPlate').val();
 				var busPlateExtends = $('#tripDialogBusPlateExtends').val();
+				
+				var rb = $("input[name='avaiBusList']:checked").val();
 				var form = $('#addNewTripForm');
 
 				if (selectedRouteId == -1
 						|| departureTime == ''
 						|| !selectedBusType
-						|| selectedBusType == -1
-						|| !busPlateExtends || busPlateExtends == ''
-						|| !busPlate || busPlate == '') {
+						|| selectedBusType == -1) {
 					return;
 				}
-
+				
+				if( rb = "busInRoute"){
+					if (!busPlateExtends || busPlateExtends == ''){
+						return;
+					}
+				} else {
+				 	if (!busPlate || busPlate == ''){
+				 		return;
+				 	}
+				}
+				
 				event.preventDefault();
 				$.ajax({
 					type : "POST",

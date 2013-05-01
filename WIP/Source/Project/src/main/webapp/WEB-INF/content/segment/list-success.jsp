@@ -245,7 +245,7 @@ Date.prototype.toMyString = function () {
                   <td><input type="text" id="duration" name="duration" value="01:00" onblur="checkSegmentTime()"></td>
                </tr>
             </table>
-            <div><input type="checkbox" id="addPriceRevRoute" name="addPriceRevRoute" style="margin-top: -4px;"/> Edit duration for reverse route too?</div>
+            <div><input type="checkbox" id="addPriceRevRoute" name="addPriceRevRoute" style="margin-top: -4px;"/> Edit duration for reverse segment too?</div>
             <label id="preUpdateDuration"></label>
          </form>
       </div>
