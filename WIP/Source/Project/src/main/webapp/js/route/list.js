@@ -78,7 +78,10 @@ function getStation(el, des, stationEndAtKey) {
  $(document).ready(function() {
     
 	   var routeTable = $('#routeTable').dataTable({ bSort : false });
-	   var segmentTable = $('#segmentTable').dataTable({ bSort : false , bPaginate : false });
+	   var segmentTable = $('#segmentTable').dataTable({ 
+		   bSort : false , 
+		   bPaginate : false 
+	   });
 
 	   //SELECT 2
 	   $("#startAt").select2();
