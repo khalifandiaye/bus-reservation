@@ -49,7 +49,13 @@
 		
 		$('#busAddDialogOk').click(function(){
 		   var plateNumber = $('#plateNumber').val();
+		   var regex = /^\d{2}[a-zA-Z]{1}-\d{3}(\.\d{2}|\d{1})$/;
 		   var busType = $('#busType').val();
+		   if (!regex.test($('#plateNumber').val())) {
+			   console.log($('#plateNumber').val());
+			   $('#addResult').text("Please enter correct bus plate number! ");
+			   return;
+		   }
 		   if (plateNumber.trim() == '' || busType == -1) {
 			   $('#addResult').text("Please enter bus plate number! ");
 			   return;
@@ -92,8 +98,8 @@
 				Manage bus  
 				<input class="btn btn-primary pull-right" id="addBus" type="button"
 					value="Add New Bus" />  
-				<a class="btn btn-primary pull-right" style="margin-right: 10px;" href="list.html">View Current Location</a>
-				<a class="btn btn-primary pull-right" style="margin-right: 10px;" href="?showType=last" >View Last Location</a>
+				<a class="btn btn-primary pull-right" style="margin-right: 10px; font-weight: normal;" href="list.html">View Current Location</a>
+				<a class="btn btn-primary pull-right" style="margin-right: 10px; font-weight:normal;" href="?showType=last" >View Last Location</a>
 			</h3>  
 			
 			<table id="busTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
@@ -183,7 +189,7 @@
 					<tbody>
 						<tr>
 							<td>
-							  Plate Number : <input type="text" id="plateNumber" name="plateNumber" value="">
+							  Plate Number : <input type="text" id="plateNumber" name="plateNumber" value="" placeholder="53N-000.01">
 								<span style="color: red; font-size: 22px;">*</span>
 								<p id="addResult" style="color: red; "></p>
 							</td>

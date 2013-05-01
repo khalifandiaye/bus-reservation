@@ -53,7 +53,7 @@ public class SaveAction extends ActionSupport {
 	public String execute() {
 		try {
 			Date fromDate = FormatUtils.deFormatDate(tripDialogDepartureTime,
-					"hh:mm - dd/MM/yyyy", CommonConstant.LOCALE_US,
+					"HH:mm - dd/MM/yyyy", CommonConstant.LOCALE_US,
 					CommonConstant.DEFAULT_TIME_ZONE);
 			BusBean busBean = new BusBean();
 			
@@ -90,7 +90,7 @@ public class SaveAction extends ActionSupport {
 			if ("on".equals(autoReturnBus)) {
 
 				Date fromDateReturn = FormatUtils.deFormatDate(
-						autoReturnDepartureTime, "hh:mm - dd/MM/yyyy",
+						autoReturnDepartureTime, "HH:mm - dd/MM/yyyy",
 						CommonConstant.LOCALE_US,
 						CommonConstant.DEFAULT_TIME_ZONE);
 				RouteBean reverseRoute = routeDAO.getById(routeDAO.getRouteTerminal(routeBeans).get(1));

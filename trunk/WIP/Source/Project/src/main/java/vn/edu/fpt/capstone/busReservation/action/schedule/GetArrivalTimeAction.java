@@ -38,7 +38,7 @@ public class GetArrivalTimeAction extends BaseAction {
 			Date startDate = FormatUtils.deFormatDate(departureTime,
 					"HH:mm - dd/MM/yyyy", CommonConstant.LOCALE_US,
 					CommonConstant.DEFAULT_TIME_ZONE);
-			long delayTime = (long) systemSettingDAO.getStationDelayTime() * 60;
+			long delayTime = (long) systemSettingDAO.getStationDelayTime() * 60 * 1000;
 			
 			long traTime = 0;
 			RouteBean routeBean = routeDAO.getById(routeId);

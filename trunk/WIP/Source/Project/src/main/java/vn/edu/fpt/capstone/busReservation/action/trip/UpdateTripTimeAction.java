@@ -21,19 +21,20 @@ public class UpdateTripTimeAction extends ActionSupport {
 
 	private static final long serialVersionUID = -1900533216154623510L;
 	private BusDAO busDAO;
-	public void setBusDAO(BusDAO busDAO) {
-		this.busDAO = busDAO;
-	}
 
 	private List<BusBean> busBeans = new ArrayList<BusBean>();
 
 	public String execute() throws ParseException {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		String dateString = request.getParameter("date");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd hh:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		Date date = sdf.parse(dateString);
 		List<Integer> busyBusIds = busDAO.getBusyBus(date);
 		return SUCCESS;
+	}
+
+	public void setBusDAO(BusDAO busDAO) {
+		this.busDAO = busDAO;
 	}
 
 	public List<BusBean> getBusBeans() {
