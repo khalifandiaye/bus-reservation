@@ -127,8 +127,8 @@ table {
 	               <td><s:select id="endAt" list="cityBeans"
 	                     name="routeBeans" listKey="id" listValue="name">
 	                     </s:select></td>
-	               <td rowspan="2"><input type="text" style="width: 98px; text-align: center;" id="duration" value="01:00"/></td>
-	               <td rowspan="2"><input class="btn btn-primary" type="button" id="add" value="Add" disabled="disabled" 
+	               <td rowspan="2" align="center"><input type="text" style="width: 98px; text-align: center;" id="duration" value="01:00"/></td>
+	               <td rowspan="2" style="padding-bottom: 15px;"><input class="btn btn-primary" type="button" id="add" value="Add" disabled="disabled" 
 	                  style="margin-top: 10px;;margin-bottom: 10px; margin-left: 10px; margin-right: 0; width: 75px;"/>
 	               </td>
 	            </tr>

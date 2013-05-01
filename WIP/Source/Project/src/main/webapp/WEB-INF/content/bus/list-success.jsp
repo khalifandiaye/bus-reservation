@@ -21,8 +21,7 @@
    
 	$(document).ready(function() {		
 		
-		var busTable = $("#busTable").dataTable({
-		}); 
+		var busTable = $("#busTable").dataTable({}); 
 		
 		$('#addBus').bind().bind('click', function(event) {
 			  $('#plateNumber').val('');

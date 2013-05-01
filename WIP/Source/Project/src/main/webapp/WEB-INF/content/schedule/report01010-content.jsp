@@ -5,12 +5,13 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <s:if test="%{model != null}">
-<h3>
+<legend>
 	<s:text name="label.routeFromTo" >
 		<s:param value="%{model.from}" />
 		<s:param value="%{model.to}" />
 	</s:text>
-</h3>
+	<img id="btnPrint" class="click-able" src="../images/print.png" alt="in" style="margin-left: 40px;">
+</legend>
 <s:iterator value="model.segmentTicketList">
 <div style="width: 50%; float: left;">
 	<h4>
@@ -19,7 +20,7 @@
 			<s:param value="%{to}" />
 		</s:text>
 	</h4>
-	<table>
+	<table class="table table-striped table-bordered dataTable" style="width:50%;">
 		<thead>
 			<tr>
 				<th><s:text name="label.reservationCode" /></th>
