@@ -12,11 +12,12 @@
 <link href="<%=request.getContextPath()%>/styles/route/jquery-ui-1.10.1.custom.min.css" rel="stylesheet">
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/styles/select2.css" />
+<link rel="stylesheet" href="<%=request.getContextPath()%>/styles/custom-data-table.css" />
+	
 <script src="<%=request.getContextPath()%>/js/jquery.dataTables.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.maskedinput.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/accounting.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js"></script>
-<link rel="stylesheet" href="<%=request.getContextPath()%>/styles/custom-data-table.css" />
 <script src="<%=request.getContextPath()%>/js/common/custom-data-table.js"></script>
 <script src="<%=request.getContextPath()%>/js/select2.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/route/list.js"></script>
@@ -137,7 +138,7 @@ table {
 	            </tr>
             </tbody>
          </table>
-		<table id="segmentTable">
+		<table id="segmentTable" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
 			<thead>
 				<tr>
 					<th>Start At</th>
