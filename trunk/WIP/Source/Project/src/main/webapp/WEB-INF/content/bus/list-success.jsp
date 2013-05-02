@@ -20,8 +20,21 @@
    };
    
 	$(document).ready(function() {		
-		
+	
 		var busTable = $("#busTable").dataTable({}); 
+		
+		if(location.search == '') {
+			$('#current-loc').addClass('active');
+			$('#current-loc').removeClass('btn-primary');
+			$('#last-loc').addClass('btn-primary');
+			$('#last-loc').removeClass('active');
+		}
+		else {
+			$('#last-loc').addClass('active');
+			$('#last-loc').removeClass('btn-primary');
+			$('#current-loc').addClass('btn-primary');
+			$('#current-loc').removeClass('active');
+		}
 		
 		$('#addBus').bind().bind('click', function(event) {
 			  $('#plateNumber').val('');
@@ -72,6 +85,8 @@
                }
             });
 		});
+		
+
 	});
 </script>
 <style type="text/css">
@@ -96,9 +111,11 @@
 			<h3 style="border-bottom: 1px solid #ddd; margin-bottom: 20px;">    
 				Manage bus  
 				<input class="btn btn-primary pull-right" id="addBus" type="button"
-					value="Add New Bus" />  
-				<a class="btn btn-primary pull-right" style="margin-right: 10px; font-weight: normal;" href="list.html">View Current Location</a>
-				<a class="btn btn-primary pull-right" style="margin-right: 10px; font-weight:normal;" href="?showType=last" >View Last Location</a>
+					value="Add New Bus" /> 
+				<span class="btn-group" style="float:right"> 
+					<a id="current-loc" class="btn btn-primary" style="font-weight: normal;" href="list.html">View Current Location</a>
+					<a id="last-loc" class="btn btn-primary" style="margin-right: 10px; font-weight:normal;" href="?showType=last" >View Last Location</a>
+				</span>
 			</h3>  
 			
 			<table id="busTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
@@ -188,7 +205,7 @@
 					<tbody>
 						<tr>
 							<td>
-							  Plate Number : <input type="text" id="plateNumber" name="plateNumber" value="" placeholder="53N-000.01">
+							  Plate Number : <input type="text" id="plateNumber" name="plateNumber" value="" placeholder="50N-000.01">
 								<span style="color: red; font-size: 22px;">*</span>
 								<p id="addResult" style="color: red; "></p>
 							</td>

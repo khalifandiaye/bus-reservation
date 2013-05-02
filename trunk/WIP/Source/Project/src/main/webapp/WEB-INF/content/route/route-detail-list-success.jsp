@@ -248,7 +248,7 @@
                   </tr>
                <thead>
                <tbody>
-                  <s:iterator value="segmentBeans">
+                  <s:iterator value="segmentBeans">          
                      <tr>
                         <td><s:property value="startAt.name" /></td>
                         <td><s:property value="endAt.name" /></td>
@@ -368,10 +368,10 @@
             </select>
             <div id="trip-plate-number">
 					<label style="width: 50%; float: left;"><input type="radio" name="avaiBusList" value="busInRoute" checked="checked" onclick="showTripDialogBusPlate()" style="margin-top: 0">
-						<span style="margin-left:10px; ">Available Bus in Route</span>
+						<span style="margin-left:5px; ">Available bus in route</span>
 					</label>
 					<label style="width: 50%; float: left;"><input type="radio" name="avaiBusList" value="busInStation" onclick="showTripDialogBusPlate()">
-						<span style="margin-left:10px; ">Available Bus in this Station</span>
+						<span style="margin-left:5px; ">Available bus in <s:property value="segmentBeans[0].startAt.name"/></span>
 					</label>
 					<label for="routeSelect">Bus Plate Number</label>
 					<select id='tripDialogBusPlate' name='tripDialogBusPlate'></select>					
@@ -380,7 +380,7 @@
 				</div>
             <div id="tripDialogStatus"></div>
             <div>
-            <input style="margin-top: -3px;" type="checkbox" id="autoReturnBus" name="autoReturnBus"/> Auto-return to start station. 
+            <input style="margin-top: -3px;" type="checkbox" id="autoReturnBus" name="autoReturnBus"/> Auto-return to <s:property value="segmentBeans[0].startAt.name"/>. 
             <div id="autoReturnDiv" style="display: none;">
                <input style="margin-top: -3px;" type="checkbox" id="allowBooking" name="allowBooking" checked="checked"/> Allow booking. 
                
