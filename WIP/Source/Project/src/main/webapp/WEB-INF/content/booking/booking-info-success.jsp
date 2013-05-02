@@ -45,6 +45,16 @@
 	<!-- End notify message -->
 	<!-- Start information content -->
 	<section>
+	<!-- Start alert -->	
+		<div class="alert alert-info alert-block">
+		 <button type="button" class="close" data-dismiss="alert">&times;</button>
+		 <ul>
+		 	<li>
+		 		Sau khi bấm nút <span class="label label-info">Thanh Toán</span> quý khách có <span class="label label-important">15 phút</span> để thanh toán vé xe. Nếu sau <span class="label label-important">15 phút</span> quý khách không thanh toán hệ thống sẽ tự động hủy vé quý khách đã chọn.
+		 	</li>	
+		 </ul>
+	</div>
+	<!-- End alert -->
 	<div class="well" style="overflow: hidden;">
 		<div
 			style="border-bottom: 1px solid #e5e5e5; font-size: 21px; line-height: 41px; margin: 0 25px 20px 25px;">Hoàn
@@ -117,12 +127,6 @@
 					<s:hidden id="selectedReturnSeat" name="selectedReturnSeat"></s:hidden>
 				</fieldset>
 			</form>
-			<a class="btn btn-large" href="#"
-				onclick="history.go(-1);return false;" style="margin-left: 30px;">Chọn lại ghế</a>
-			<button style="margin-left: 36px;" id="booking-info-submit"
-				class="btn btn-large btn-primary" type="submit">
-				<s:text name="pay" />
-			</button>
 		</div>
 		<div style="width: 50%; float: right;">
 			<div class="reservationInfo">
@@ -178,8 +182,15 @@
 					</tr>
 				</table>
 			</div>
-			<div style="color:red;font-size: 15px;padding-top:20px; width:95%">Sau khi bấm nút <span class="label label-info">Thanh Toán</span> quý khách có 15 phút để thanh toán vé xe. Nếu sau 15 phút quý khách không thanh toán hệ thống sẽ tự động hủy vé quý khách đã chọn.</div>
 		</div>
+		<div style="width:100%; overflow:hidden;">
+			<button style="margin-right: 10px;" id="booking-info-submit"
+				class="btn btn-large btn-primary pull-right" type="submit">
+				<s:text name="pay" />
+			</button>
+			<a class="btn btn-large pull-right" href="#"
+				onclick="history.go(-1);return false;" style="margin-right: 30px;">Chọn lại ghế</a>
+	</div>
 	</div>
 	</section>
 

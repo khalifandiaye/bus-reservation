@@ -221,8 +221,8 @@ function validateSegmentPrice(params){
 	   var price = params.value;
 	   if (price.trim() == '' ||  parseInt(price) < 50) {
 		   params.value = 50;
-	   } else if (parseInt(price) > 1000) {
-		   params.value = 1000;
+	   } else if (parseInt(price) > 10000) {
+		   params.value = 10000	;
 	   }
 };
 
@@ -345,6 +345,8 @@ $(document).ready(function() {
      $("#duration").val('01:00');
      $("#errorMessage").text('');
      $("#errorMessage").parent().hide();
+     $("#editRouteSave").prop('disabled',true);
+     $("#editRouteSave").removeClass('btn-primary');
      //$('#stationStartAt').empty();
      //$('#stationEndAt').empty();
      //$("#endAt option").show();
@@ -478,6 +480,8 @@ $(document).ready(function() {
            $("#errorMessage").text("Maximum segment added!");
            $("#errorMessage").parent().show();
         }
+        $("#editRouteSave").addClass('btn-primary');
+        $("#editRouteSave").prop('disabled',false);
  });
 
  $("#editRouteSave").bind('click', 

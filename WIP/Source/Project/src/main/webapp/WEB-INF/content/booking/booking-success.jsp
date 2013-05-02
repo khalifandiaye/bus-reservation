@@ -257,12 +257,12 @@
 				<s:hidden id="returnSeats" name="returnSeats"></s:hidden>
 			</form>
 			<div style="overflow: hidden; width: 100%;">
-				<a style="margin-top: 15px; margin-right: 30px;"
-					class="btn btn-large pull-left" href="#"
-					onclick="history.go(-1);return false;">Quay lại</a>
 				<button id="booking-submit"
 					class="btn btn-large pull-right btn-primary"
-					style="margin-top: 15px; margin-right: 30px;">Tiếp Tục</button>
+					style="margin-top: 15px; margin-right: 10px;">Tiếp Tục</button>
+				<a style="margin-top: 15px; margin-right: 30px;"
+					class="btn btn-large pull-right" href="#"
+					onclick="history.go(-1);return false;">Quay lại</a>
 			</div>
 			<s:hidden id="isNew" name="isNew" value="new"></s:hidden>
 			<s:hidden id="message" name="message"></s:hidden>

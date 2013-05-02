@@ -150,7 +150,7 @@
 					</s:if>
 				</div>
 				<s:url action="rsv01010.html" var="urlBack"></s:url>
-	  			<s:a cssClass="btn btn-large" href="%{#urlBack}"><s:text name="button.back" /></s:a>
+	  			<s:a cssClass="btn btn-large pull-right" href="%{#urlBack}"><s:text name="button.back" /></s:a>
 			</div>
 		</div>
 	</div>
