@@ -237,7 +237,6 @@
                   </td>
                </tr>
             </table>
-            <p>Input Price must be from 50.000 VNĐ to 1.000.000 VNĐ</p>
             <table id="editSegmentTable" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
                <thead>
                   <tr>
