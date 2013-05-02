@@ -992,20 +992,27 @@ Date.prototype.toMyString = function () {
 						$("#addBusError").text("");
 					});
 					
-					if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
-						$("#busDetailbusPlate").attr("disabled","disabled");
-						$("#addBusError").text("There're no free bus at the moment!");
-		                $("#busDetailAdd").removeClass("btn-primary");
-		                $("#busDetailAdd").attr("disabled","disabled");
-		            } else {
-		            	$("#busDetailAdd").attr("disabled",false);
-		                $("#busDetailAdd").addClass("btn-primary");    
-		                $("#busDetailAdd").removeAttr("disabled");
-		            }
+					checkAvailableBus();
 					$("#busDetailDialog").modal();
 				}
 			});
 		});
+		
+		function checkAvailableBus() {
+			if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
+				$("#busDetailbusPlate").attr("disabled","disabled");
+				$("#addBusError").text("There is no unassigned bus.");
+				$("#bus-list-error").show();
+                $("#busDetailAdd").removeClass("btn-primary");
+                $("#busDetailAdd").attr("disabled","disabled");
+                console.log('aaa');
+            } else {
+            	$("#busDetailAdd").attr("disabled",false);
+                $("#busDetailAdd").addClass("btn-primary");    
+                $("#busDetailAdd").removeAttr("disabled");
+                $("#bus-list-error").hide();
+            }
+		}
 
 		$("#busDetailAdd").click(function() {
 				var busId = $("#busDetailbusPlate").val();
@@ -1027,18 +1034,19 @@ Date.prototype.toMyString = function () {
 					$('#busDetailbusPlate').attr('disabled',false);
                     $("#addBusError").text("");
 				});
-				if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
+				/*if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
 		               $("#busDetailbusPlate").attr("disabled","disabled");
 		      } else {
 		    	  $("#busDetailbusPlate").attr("disabled",false);
-		      }
+		      }*/
+				checkAvailableBus();
 		});
 
 		$("#busDetailAdd").bind('click', function(){
 			var busId = $("#busDetailbusPlate").val();
 			if (busId == null || busId == '') {
 				$("#busDetailbusPlate").attr("disabled","disabled");
-				$("#addBusError").text("There're no free bus at the moment!");
+				$("#addBusError").text("There is no unassigned bus.");
 				$("#busDetailbusPlate").attr("disabled","disabled");
 				$("#busDetailAdd").removeClass("btn-primary");
 	         $("#busDetailAdd").attr("disabled","disabled");
@@ -1167,17 +1175,7 @@ Date.prototype.toMyString = function () {
                $.each(busNotInRoute,function() {$('#busDetailbusPlate').append(
                   '<option value="'+ this.id +'">'+ this.plateNumber + '</option>');
                });
-               if ($("#busDetailbusPlate").val() == null || $("#busDetailbusPlate").val() == '') {
-            	   $("#busDetailbusPlate").attr("disabled","disabled");
-				   $("#addBusError").text("There're no free bus at the moment!");
-                   $("#busDetailAdd").removeClass("btn-primary");
-                   $("#busDetailAdd").attr("disabled","disabled");
-               } else {
-            	   $('#busDetailbusPlate').attr('disabled',false);
-                   $("#addBusError").text("");
-                   $("#busDetailAdd").addClass("btn-primary");    
-                   $("#busDetailAdd").removeAttr("disabled");
-              }
+              checkAvailableBus();
             }
          });
       });
@@ -1288,7 +1286,7 @@ Date.prototype.toMyString = function () {
             	addNewSchedule.removeAttr("disabled"); 
             	$("#schedule-error").hide();
             } else { 
-            	$("#addScheduleError").text("There is no available bus at this time. Please select other time or click cancel!");
+            	$("#addScheduleError").text("There is no available bus at this time. Please select other time or click cancel.");
             	$("#schedule-error").show();
             	addNewSchedule.removeClass('btn-primary');
             	addNewSchedule.attr("disabled","disabled");
@@ -1300,7 +1298,7 @@ Date.prototype.toMyString = function () {
             	addNewSchedule.removeAttr("disabled"); 
             	$("#schedule-error").hide();
             } else { 
-            	$("#addScheduleError").text("There is no available bus at this time. Please select other time or click cancel!");
+            	$("#addScheduleError").text("There is no available bus at this time. Please select other time or click cancel.");
             	$("#schedule-error").show();
             	addNewSchedule.removeClass('btn-primary');
             	addNewSchedule.attr("disabled","disabled");

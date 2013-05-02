@@ -186,6 +186,9 @@
          <h3 id="busDetailDialogLabel">List Bus In Route</h3>
       </div>
       <div class="modal-body">
+         <div class="alert alert-info fade in" id="bus-list-error" style="display:none;">
+         	<label id="addBusError"></label>
+         </div>
          <table>
             <tr>
                <td>Bus Type : </td>
@@ -195,7 +198,6 @@
                <td><button style="margin-top: -8px;" type="button" id="busDetailAdd" class="btn btn-primary">Add</button></td>
             </tr>
          </table>
-         <label id="addBusError" style="margin-left: 297px; color: red;"></label>
          <table id="busDetailTable" align="center" class="table table-striped table-bordered dataTable" style="margin-top:20px;background-color: #fff">
             <thead>
                <tr>
@@ -275,7 +277,7 @@
          <h3 id="editBusDialogLabel">Edit Route</h3>
       </div>
       <div class="modal-body">
-      	<div class="alert alert-info fade in" style="display:none;"><button type="button" class="close" data-dismiss="alert">×</button>
+      	<div class="alert alert-info fade in" style="display:none;">
 				<span id="errorMessage"></span>
 		</div>
          <div class="post" style="margin: 0px auto; width: 95%;">
@@ -340,7 +342,7 @@
             <h3 id="tripEditDialogLabel"></h3>
          </div>
          <div class="modal-body">
-         <div class="alert fade in" id="schedule-error" style="display:none;"><button type="button" class="close" data-dismiss="alert">×</button>
+         <div class="alert alert-info fade in" id="schedule-error" style="display:none;">
          <label id="addScheduleError"></label>
          </div>
          	<div style="overflow: hidden;">
