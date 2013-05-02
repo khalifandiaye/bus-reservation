@@ -76,7 +76,7 @@
 						<th>From Date</th>
 						<th>To Date</th>
 						<th></th>
-						<th></th>
+						<th style="display:none;"></th>
 						<th></th>
 					</tr>
 				</thead>
@@ -87,14 +87,14 @@
 							<td><s:property value="bus.plateNumber" /></td>
 							<td><s:date name="fromDate" format="HH:mm - dd/MM/yyyy" /></td>
 							<td><s:date name="toDate" format="HH:mm - dd/MM/yyyy" /></td>
-							<td style="width:6%"><input class="btn btn-info btn-small"
+							<td style="text-align:center;"><input class="btn btn-info btn-small"
 								type="button" value="View Details" 
 								onclick='javascript: loadDetails(<s:property value='id'/>)' /></td>
-							<td><input data-delete="<s:property value='id'/>"
-								class="btn btn-danger btn-small" type="button" value="Delete"  
+							<td style="display:none;"><input data-delete="<s:property value='id'/>"
+								class="btn btn-danger btn-small" type="button" value="Delete" 
 								onclick='javascript: deleteTrip(<s:property value='id'/>)' /></td>
-							<td>
-								<input class="btn btn-info btn-small btnListTicket" type="submit" value="List Tickets"/>
+							<td style="text-align:center;">
+								<input class="btn btn-success btn-small btnListTicket" type="submit" value="List Tickets"/>
 							</td>
 						</tr>
 					</s:iterator>

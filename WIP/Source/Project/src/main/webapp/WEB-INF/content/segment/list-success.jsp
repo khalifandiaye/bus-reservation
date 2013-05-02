@@ -211,7 +211,7 @@ Date.prototype.toMyString = function () {
                      <td><s:property value="startAtName" /></td>
                      <td><s:property value="endAtName" /></td>
                      <td style="text-align: center;"><s:property value="duration"/></td>
-                     <td style="padding-right:100px; text-align: right"><s:property value="price"/></td>
+                     <td style="padding-right:20px; text-align: right"><s:property value="price"/></td>
                      <td style="width: 6%"><input class="btn btn-danger btn-small" type="button" value="Edit"
                         onclick='javascript: changeDuration(<s:property value='id'/>)' /></td>
                   </tr>
