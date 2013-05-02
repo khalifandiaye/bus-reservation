@@ -13,6 +13,9 @@ import vn.edu.fpt.capstone.busReservation.dao.bean.ArrangedReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationInfoBean;
 import vn.edu.fpt.capstone.busReservation.dao.bean.TripBean;
+import vn.edu.fpt.capstone.busReservation.dao.bean.ReservationBean.ReservationStatus;
+import vn.edu.fpt.capstone.busReservation.dao.bean.TicketBean.TicketStatus;
+import vn.edu.fpt.capstone.busReservation.util.CommonConstant;
 
 public class ReservationDAO extends GenericDAO<Integer, ReservationBean> {
 
@@ -194,7 +197,8 @@ public class ReservationDAO extends GenericDAO<Integer, ReservationBean> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public boolean getBusSeatCountByEmail(String email, List<TripBean> trips,int seatSelectNum) {
+	public boolean getBusSeatCountByEmail(String email, List<TripBean> trips,
+			int seatSelectNum) {
 		List<Integer> result = null;
 		Query query = null;
 		String queryString = null;
@@ -203,23 +207,34 @@ public class ReservationDAO extends GenericDAO<Integer, ReservationBean> {
 		session = sessionFactory.getCurrentSession();
 		// create from date
 		List<Integer> listId = new ArrayList<Integer>();
-		
+		Calendar timeLimit = null;
+
 		for (int i = 0; i < trips.size(); i++) {
 			listId.add(trips.get(i).getId());
 		}
-		
+
 		try {
 			// perform database access (query, insert, update, etc) here
+			timeLimit = Calendar.getInstance();
+            timeLimit.add(Calendar.MINUTE, -CommonConstant.RESERVATION_TIMEOUT);
 			queryString = "SELECT COUNT(*) FROM ReservationBean AS res"
 					+ " 	LEFT JOIN res.tickets AS tic"
 					+ " 	LEFT JOIN tic.trips as trip"
 					+ " 	LEFT JOIN tic.seatPositions as seat"
 					+ " WHERE res.email = :email"
 					+ " 	AND trip.id IN :listId"
+					+ " AND (res.status = :statusPaid OR res.status = :statusPending OR (res.status = :statusUnpaid AND res.bookTime > :timeLimit))"
+					+ " AND (tic.status = :statusTicActive OR tic.status = :statusTicPending)"
 					+ " GROUP BY trip.id";
 			query = session.createQuery(queryString);
 			query.setString("email", email);
 			query.setParameterList("listId", listId);
+			query.setString("statusPending", ReservationStatus.PENDING.getValue());
+            query.setString("statusPaid", ReservationStatus.PAID.getValue());
+            query.setString("statusUnpaid", ReservationStatus.UNPAID.getValue());
+            query.setTimestamp("timeLimit", timeLimit.getTime());
+            query.setString("statusTicActive", TicketStatus.ACTIVE.getValue());
+            query.setString("statusTicPending", TicketStatus.PENDING.getValue());
 			result = query.list();
 			// commit transaction
 			// session.getTransaction().commit();
@@ -227,10 +242,11 @@ public class ReservationDAO extends GenericDAO<Integer, ReservationBean> {
 			exceptionHandling(e, session);
 		}
 		// return result, if needed
-		if(result.size() == 0)return true;
-		
+		if (result.size() == 0)
+			return true;
+
 		for (int i = 0; i < result.size(); i++) {
-			if(Integer.parseInt(result.get(i)+"") + seatSelectNum <= 5){
+			if (Integer.parseInt(result.get(i) + "") + seatSelectNum <= 5) {
 				return true;
 			}
 		}

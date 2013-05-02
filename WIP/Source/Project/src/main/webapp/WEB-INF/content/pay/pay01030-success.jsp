@@ -39,7 +39,7 @@
 	</div>
 	<div class="alert alert-info">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
-        <ul><li><strong><s:text name="message.pay010030Note" /></strong></li></ul>
+        <ul><li><strong><s:text name="message.pay01030Note" /></strong></li></ul>
 	</div>
 	<div class="reservation-details">
 		<div class="container">
@@ -60,7 +60,7 @@
 					</div>
 					<div class="item">
 						<label><s:text name="reservation.code" /></label>
-						<span><s:property value="reservationInfo.code"/></span>
+						<span class="label label-important"><s:property value="reservationInfo.code"/></span>
 					</div>
 					<div class="item">
 						<label><s:text name="reservation.phone" /></label>
