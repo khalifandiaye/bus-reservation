@@ -63,7 +63,7 @@ public interface CommonConstant {
      * GMT+07
      */
     public final static TimeZone DEFAULT_TIME_ZONE = TimeZone
-            .getTimeZone("Asia/Ho_Chi_Minh");
+            .getTimeZone("Asia/Bangkok");
     /**
      * GMT
      */
