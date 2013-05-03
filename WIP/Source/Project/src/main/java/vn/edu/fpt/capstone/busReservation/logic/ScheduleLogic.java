@@ -95,7 +95,10 @@ public class ScheduleLogic extends BaseLogic {
             routeTicketList = new RouteTicketList(allSegments.get(0)
                     .getSegment().getStartAt().getCity().getName(), allSegments
                     .get(allSegments.size() - 1).getSegment().getEndAt()
-                    .getCity().getName());
+                    .getCity().getName(), tickets.get(0).getTrips().get(0)
+                    .getBusStatus().getTrips().get(0).getDepartureTime(),
+                    tickets.get(0).getTrips().get(0).getBusStatus().getBus()
+                            .getPlateNumber());
             tripMap = new HashMap<Integer, SegmentTicket>();
             seats = new StringBuilder();
             for (TicketBean ticket : tickets) {

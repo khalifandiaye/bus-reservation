@@ -28,6 +28,8 @@
 					<s:text name="label.routeFromTo" >
 						<s:param value="%{model.from}" />
 						<s:param value="%{model.to}" />
+						<s:param value="%{model.busPlate}" />
+						<s:param value="%{model.fromDateStr}" />
 					</s:text>
 					<img id="btnPrint" class="click-able" src="../images/print.png" alt="in" style="margin-left: 40px;">
 				</legend>
